@@ -39,12 +39,13 @@ async function probeBackend(timeoutMs = 2000) {
 /**
  * 获取注意力权重（自动降级）
  * @param {object} params
- * @param {string} params.text   输入文本
- * @param {number} params.layer  层索引（0-based）
- * @param {number} params.head   头索引
+ * @param {string} params.text         输入文本
+ * @param {number} params.layer        层索引（0-based）
+ * @param {number} params.head         头索引
+ * @param {number} params.temperature  温度参数（>0）
  * @returns {Promise<{status, data, source}>}
  */
-export async function getAttention({ text, layer = 0, head = 0 }) {
+export async function getAttention({ text, layer = 0, head = 0, temperature = 1.0 }) {
   // 1. 后端在线
   try {
     const online = await probeBackend()
@@ -52,7 +53,7 @@ export async function getAttention({ text, layer = 0, head = 0 }) {
       const res = await fetch(`${API_BASE}/attention`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, layer, head }),
+        body: JSON.stringify({ text, layer, head, temperature }),
       })
       if (res.ok) {
         const json = await res.json()
