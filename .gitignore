@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Build
+dist/
+build/
+.vite/
+
+# Env & secrets
+.env
+.env.local
+*.key
+
+# Model / data caches (large, not committed)
+backend/data/models/
+*.onnx
+*.safetensors
+*.bin
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
