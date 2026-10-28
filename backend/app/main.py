@@ -1,6 +1,6 @@
 """FastAPI 应用入口。
 
-Attention Lab 后端：
+CScope 后端（当前负责 Attention 实验的模型计算）：
 - /api/v1/health     健康检查（供前端降级探测）
 - /api/v1/attention  获取指定层/头的注意力权重（真实计算）
 
@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
 
-app = FastAPI(title="Attention Lab API", version="0.1.0")
+app = FastAPI(title="CScope API", version="0.2.0")
 
 # 允许前端本地开发跨域（Vite 5173）
 app.add_middleware(
@@ -27,4 +27,4 @@ app.include_router(router, prefix="/api/v1")
 
 @app.get("/")
 def root():
-    return {"service": "Attention Lab API", "docs": "/docs"}
+    return {"service": "CScope API", "docs": "/docs"}

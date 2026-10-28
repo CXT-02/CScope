@@ -20,7 +20,7 @@ class AttentionRequest(BaseModel):
 @router.get("/health")
 def health():
     """健康检查，供前端降级探测。"""
-    return {"status": "ok", "service": "attention-lab-backend"}
+    return {"status": "ok", "service": "cscope-backend"}
 
 
 @router.post("/attention")
