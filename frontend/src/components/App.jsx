@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import AttentionExperiment from './AttentionExperiment'
+import DijkstraExperiment from './DijkstraExperiment'
 import ExperimentHub from './ExperimentHub'
 import { experiments } from '../lib/experimentRegistry'
 import './app.css'
 
 const experimentComponents = {
   attention: AttentionExperiment,
+  dijkstra: DijkstraExperiment,
 }
 
 export default function App() {
