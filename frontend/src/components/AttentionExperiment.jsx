@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { getAttention, getBackendStatus } from '../lib/attentionService'
 import AttentionCanvas from './AttentionCanvas'
 import AttentionHeatmap from './AttentionHeatmap'
+import LearningCycle from './LearningCycle'
 
 export default function AttentionExperiment({ experiment }) {
   const [text, setText] = useState('我喜欢学习深度学习')
@@ -13,6 +14,7 @@ export default function AttentionExperiment({ experiment }) {
   const [loading, setLoading] = useState(false)
   const [backendOnline, setBackendOnline] = useState(false)
   const [error, setError] = useState(null)
+  const observation = useMemo(() => strongestAttention(result, layer, head), [result, layer, head])
 
   useEffect(() => {
     getBackendStatus().then((status) => setBackendOnline(status.online)).catch(() => setBackendOnline(false))
@@ -50,6 +52,18 @@ export default function AttentionExperiment({ experiment }) {
           {result && !loading && view === 'heatmap' && <AttentionHeatmap tokens={result.data.tokens} weights={result.data.weights} />}
         </section>
       </div>
+      <LearningCycle
+        experimentId="attention"
+        prediction={{
+          question: '把温度调高后，注意力通常会怎样变化？',
+          options: ['更集中在少数 token', '分布更加均匀', 'token 数量减少'],
+          answer: '分布更加均匀',
+          explanation: ' 温度升高会减小分数之间的相对差距。',
+        }}
+        operation={{ title: '比较不同层和注意力头', instruction: '保持文本不变，分别观察 Layer 1 与 Layer 12，再切换两个不同的 Head。' }}
+        observation={observation}
+        summaryPrompt="不同层或不同头的关注模式有什么区别？"
+      />
     </>
   )
 }
@@ -64,4 +78,14 @@ function RangeField({ label, value, display, onChange, ...rangeProps }) {
 
 function sourceLabel(source) {
   return ({ live: '真实权重', precomputed: '预计算数据', sample: '示例数据' }[source] || '等待数据')
+}
+
+function strongestAttention(result, layer, head) {
+  if (!result?.data?.weights?.length) return '等待注意力权重计算。'
+  const { tokens, weights } = result.data
+  let strongest = { value: -1, from: 0, to: 0 }
+  weights.forEach((row, from) => row.forEach((value, to) => {
+    if (from !== to && value > strongest.value) strongest = { value, from, to }
+  }))
+  return `Layer ${layer + 1} · Head ${head + 1} 中，当前最强的非自身关系是“${tokens[strongest.from]} → ${tokens[strongest.to]}”，权重 ${strongest.value.toFixed(3)}。`
 }

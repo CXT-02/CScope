@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { ExperimentHeader } from './AttentionExperiment'
+import LearningCycle from './LearningCycle'
 
 const initialProcesses = [{ id: 'P1', burst: 6 }, { id: 'P2', burst: 3 }, { id: 'P3', burst: 8 }, { id: 'P4', burst: 2 }]
 const colors = ['#6757d9', '#138a72', '#df6c3f', '#3675c5']
@@ -64,6 +65,18 @@ export default function SchedulingExperiment({ experiment }) {
           <div className="algorithm-note"><strong>{algorithm === 'fcfs' ? '先来先服务' : algorithm === 'sjf' ? '短作业优先' : '时间片轮转'}</strong><p>{algorithm === 'fcfs' ? '按进入队列的顺序执行，实现简单，但长任务可能让后续短任务等待很久。' : algorithm === 'sjf' ? '优先执行运行时间短的任务，通常能降低平均等待时间，但长任务可能被推迟。' : '每个进程轮流获得一小段 CPU 时间，响应更公平，但时间片过小会带来频繁切换。'}</p></div>
         </section>
       </div>
+      <LearningCycle
+        experimentId="scheduling"
+        prediction={{
+          question: '所有进程同时到达时，哪种算法通常能降低平均等待时间？',
+          options: ['FCFS 先来先服务', 'SJF 短作业优先', '随机选择'],
+          answer: 'SJF 短作业优先',
+          explanation: ' 让短任务先完成，可以减少更多任务的累计等待。',
+        }}
+        operation={{ title: '比较三种调度策略', instruction: '保持四个进程不变，依次切换 FCFS、SJF 和 RR，并在 RR 中改变时间片。' }}
+        observation={`${algorithm.toUpperCase()} 当前平均等待时间为 ${result.averageWait.toFixed(2)}，发生 ${Math.max(0, result.timeline.length - 1)} 次上下文切换。`}
+        summaryPrompt="平均等待时间和调度公平性之间存在什么取舍？"
+      />
     </>
   )
 }

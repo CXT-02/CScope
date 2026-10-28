@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { ExperimentHeader } from './AttentionExperiment'
+import LearningCycle from './LearningCycle'
 
 const nodes = [
   { id: 'A', x: 90, y: 190 }, { id: 'B', x: 230, y: 80 }, { id: 'C', x: 240, y: 285 },
@@ -79,6 +80,18 @@ export default function DijkstraExperiment({ experiment }) {
           <div className="distance-table">{nodes.map((node) => <div key={node.id}><span>{node.id}</span><strong>{step.distances[node.id] === Infinity ? '∞' : step.distances[node.id]}</strong></div>)}</div>
         </section>
       </div>
+      <LearningCycle
+        experimentId="dijkstra"
+        prediction={{
+          question: 'Dijkstra 下一步应优先选择哪个未确定节点？',
+          options: ['边数最少的节点', '当前候选距离最小的节点', '字母顺序最靠前的节点'],
+          answer: '当前候选距离最小的节点',
+          explanation: ' 贪心选择使这个节点的最短距离可以被正式确定。',
+        }}
+        operation={{ title: '逐步运行并更换起点', instruction: '先从 A 运行到最后，再把起点改成 C，比较节点确定顺序和距离表。' }}
+        observation={`${step.message} 当前已确定 ${step.visited.length}/${nodes.length} 个节点。`}
+        summaryPrompt="为什么已经确定的节点以后不需要重新计算？"
+      />
     </>
   )
 }
