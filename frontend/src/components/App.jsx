@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import AttentionExperiment from './AttentionExperiment'
 import DijkstraExperiment from './DijkstraExperiment'
 import ExperimentHub from './ExperimentHub'
+import SchedulingExperiment from './SchedulingExperiment'
 import { experiments } from '../lib/experimentRegistry'
 import './app.css'
 
 const experimentComponents = {
   attention: AttentionExperiment,
   dijkstra: DijkstraExperiment,
+  scheduling: SchedulingExperiment,
 }
 
 export default function App() {
