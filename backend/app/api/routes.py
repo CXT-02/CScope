@@ -4,6 +4,8 @@
 """
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
+import math
+import re
 
 from app.core.attention import compute_attention
 
@@ -48,11 +50,24 @@ def attention(req: AttentionRequest):
 
 
 def _sample_response(req: AttentionRequest):
-    """模型未配置时的占位权重（示意数据），保持接口形状一致。"""
-    tokens = list(req.text)
+    """模型不可用时生成随输入参数变化的模拟权重，保持离线交互有效。"""
+    tokens = re.findall(r"[A-Za-z0-9]+|[\u4e00-\u9fff]|[^\s]", req.text)[:14]
+    tokens = tokens or ["请", "输", "入", "文", "本"]
     n = len(tokens)
-    weights = [[0.0] * n for _ in range(n)]
+    depth = min(req.layer, 11) / 11
+    weights = []
     for i in range(n):
+        scores = []
         for j in range(n):
-            weights[i][j] = round(1.0 / n, 4)
-    return {"tokens": tokens, "weights": weights, "shape": [1, n, n], "layer": req.layer, "head": req.head}
+            distance = abs(i - j)
+            locality = math.exp(-distance / (1.1 + depth * 3.2)) * (1.2 - depth * 0.45)
+            self_focus = 0.8 - depth * 0.35 if i == j else 0
+            direction = ((req.head % 4) - 1.5) * (j - i) * 0.045
+            echo = 0.65 + depth if tokens[i] == tokens[j] and i != j else 0
+            seed = sum((index + 1) * ord(char) for index, char in enumerate(f"{req.text}|{req.layer}|{req.head}|{i}|{j}"))
+            variation = (seed % 1000) / 1000 * (0.55 + depth * 0.55)
+            scores.append(max(0.01, locality + self_focus + direction + echo + variation))
+        powered = [math.exp((score - max(scores)) / req.temperature) for score in scores]
+        total = sum(powered)
+        weights.append([round(value / total, 6) for value in powered])
+    return {"tokens": tokens, "weights": weights, "shape": [1, n, n], "layer": req.layer, "head": req.head, "temperature": req.temperature}

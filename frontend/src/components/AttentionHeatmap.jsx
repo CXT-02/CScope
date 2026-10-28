@@ -20,9 +20,9 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
   // 颜色插值：低权重→浅蓝，高权重→深蓝
   function heatColor(v) {
     const t = v / maxW
-    const r = Math.round(240 - t * 210)
-    const g = Math.round(246 - t * 180)
-    const b = Math.round(255 - t * 90)
+    const r = Math.round(246 - t * 146)
+    const g = Math.round(247 - t * 160)
+    const b = Math.round(255 - t * 25)
     return `rgb(${r},${g},${b})`
   }
 
@@ -47,6 +47,7 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
             {row.map((w, j) => (
               <div
                 key={`c-${i}-${j}`}
+                className="heatmap-cell"
                 style={{
                   width: cellSize,
                   height: cellSize,
@@ -59,6 +60,7 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
                   borderRadius: 3,
                   margin: 1,
                   fontWeight: 600,
+                  transition: 'background-color 420ms cubic-bezier(.2,.8,.2,1), color 300ms ease, transform 180ms ease',
                 }}
                 title={`${tokens[i]} → ${tokens[j]}: ${w.toFixed(3)}`}
               >
@@ -70,7 +72,7 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
       </div>
       <div style={styles.legend}>
         <span style={{ color: '#8a94a6', fontSize: 12 }}>权重：低</span>
-        <span style={{ width: 80, height: 10, display: 'inline-block', background: 'linear-gradient(to right, rgb(240,246,255), rgb(30,66,165))', borderRadius: 4, margin: '0 6px' }} />
+        <span style={{ width: 90, height: 11, display: 'inline-block', background: 'linear-gradient(to right, rgb(246,247,255), rgb(100,87,230))', borderRadius: 6, margin: '0 8px' }} />
         <span style={{ color: '#8a94a6', fontSize: 12 }}>高</span>
       </div>
     </div>

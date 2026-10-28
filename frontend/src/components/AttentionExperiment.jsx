@@ -6,9 +6,11 @@ import LearningCycle from './LearningCycle'
 
 export default function AttentionExperiment({ experiment }) {
   const [text, setText] = useState('我喜欢学习深度学习')
+  const debouncedText = useDebouncedValue(text, 220)
   const [layer, setLayer] = useState(0)
   const [head, setHead] = useState(0)
   const [temperature, setTemperature] = useState(1)
+  const [edgeLimit, setEdgeLimit] = useState(3)
   const [view, setView] = useState('graph')
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -24,12 +26,12 @@ export default function AttentionExperiment({ experiment }) {
     let cancelled = false
     setLoading(true)
     setError(null)
-    getAttention({ text, layer, head, temperature })
+    getAttention({ text: debouncedText, layer, head, temperature })
       .then((response) => { if (!cancelled) setResult(response) })
       .catch((requestError) => { if (!cancelled) setError(String(requestError)) })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [text, layer, head, temperature])
+  }, [debouncedText, layer, head, temperature])
 
   return (
     <>
@@ -41,15 +43,16 @@ export default function AttentionExperiment({ experiment }) {
           <RangeField label="层 Layer" value={layer} display={layer + 1} min={0} max={11} onChange={setLayer} />
           <RangeField label="头 Head" value={head} display={head + 1} min={0} max={11} onChange={setHead} />
           <RangeField label="温度 Temperature" value={temperature} display={temperature.toFixed(1)} min={0.1} max={3} step={0.1} onChange={setTemperature} />
+          <RangeField label="每个 Token 显示 Top K" value={edgeLimit} display={edgeLimit} min={1} max={6} onChange={setEdgeLimit} />
           <div className="segmented-control"><button className={view === 'graph' ? 'active' : ''} type="button" onClick={() => setView('graph')}>连线图</button><button className={view === 'heatmap' ? 'active' : ''} type="button" onClick={() => setView('heatmap')}>热力图</button></div>
           <div className="tip-box"><strong>观察提示</strong><p>尝试切换浅层与深层，比较模型关注局部词形和完整语义时的差异。</p></div>
         </aside>
-        <section className="visual-panel">
-          <div className="visual-toolbar"><div><strong>{view === 'graph' ? 'Token 注意力连线' : '注意力权重矩阵'}</strong><span>{result ? `${result.data.tokens?.length || 0} tokens · Layer ${layer + 1} · Head ${head + 1}` : '等待数据'}</span></div><span className="source-chip">{sourceLabel(result?.source)}</span></div>
-          {loading && <div className="empty-state">正在计算注意力权重…</div>}
+        <section className={`visual-panel ${loading && result ? 'is-updating' : ''}`}>
+          <div className="visual-toolbar"><div><strong>{view === 'graph' ? 'Token 注意力连线' : '注意力权重矩阵'}</strong><span>{result ? `${result.data.tokens?.length || 0} tokens · Layer ${layer + 1} · Head ${head + 1}` : '等待数据'}</span></div><span className={`source-chip ${loading ? 'updating' : ''}`}>{loading ? '正在更新' : sourceLabel(result?.source)}</span></div>
+          {loading && !result && <div className="empty-state">正在生成注意力图…</div>}
           {error && <div className="error-state">计算失败：{error}</div>}
-          {result && !loading && view === 'graph' && <AttentionCanvas tokens={result.data.tokens} weights={result.data.weights} />}
-          {result && !loading && view === 'heatmap' && <AttentionHeatmap tokens={result.data.tokens} weights={result.data.weights} />}
+          {result && view === 'graph' && <AttentionCanvas tokens={result.data.tokens} weights={result.data.weights} topK={edgeLimit} />}
+          {result && view === 'heatmap' && <AttentionHeatmap tokens={result.data.tokens} weights={result.data.weights} />}
         </section>
       </div>
       <LearningCycle
@@ -77,7 +80,16 @@ function RangeField({ label, value, display, onChange, ...rangeProps }) {
 }
 
 function sourceLabel(source) {
-  return ({ live: '真实权重', precomputed: '预计算数据', sample: '示例数据' }[source] || '等待数据')
+  return ({ live: '真实模型', precomputed: '预计算数据', sample: '后端模拟', simulated: '本地动态模拟' }[source] || '等待数据')
+}
+
+function useDebouncedValue(value, delay) {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebounced(value), delay)
+    return () => window.clearTimeout(timer)
+  }, [value, delay])
+  return debounced
 }
 
 function strongestAttention(result, layer, head) {

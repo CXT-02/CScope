@@ -12,16 +12,6 @@
 
 const API_BASE = '/api/v1'
 
-// 内置示例权重：一个简单句子的 [1 head, 5 token, 5 token] 注意力矩阵（示意数据）
-const SAMPLE_TOKENS = ['我', '喜欢', '学习', '深度', '学习']
-const SAMPLE_WEIGHTS = [
-  [0.30, 0.20, 0.15, 0.20, 0.15],
-  [0.20, 0.35, 0.10, 0.15, 0.20],
-  [0.15, 0.10, 0.40, 0.20, 0.15],
-  [0.20, 0.15, 0.20, 0.30, 0.15],
-  [0.15, 0.20, 0.15, 0.20, 0.30],
-]
-
 // 后端可用性探测（带超时）
 async function probeBackend(timeoutMs = 800) {
   const controller = new AbortController()
@@ -85,18 +75,12 @@ export async function getAttention({ text, layer = 0, head = 0, temperature = 1.
     // 降级到示例
   }
 
-  // 3. 示例权重（标注为示意）
+  // 3. 本地模拟权重：随文本、层、头和温度动态变化，保证离线教学交互有效。
+  const simulated = createSimulatedAttention({ text, layer, head, temperature })
   return {
     status: 'degraded',
-    data: {
-      tokens: SAMPLE_TOKENS,
-      weights: scaleTemperature(SAMPLE_WEIGHTS, temperature),
-      shape: [1, 5, 5],
-      layer,
-      head,
-      temperature,
-    },
-    source: 'sample',
+    data: simulated,
+    source: 'simulated',
   }
 }
 
@@ -115,4 +99,45 @@ function scaleTemperature(weights, temperature) {
     const sum = powered.reduce((total, value) => total + value, 0)
     return powered.map((value) => value / sum)
   })
+}
+
+function createSimulatedAttention({ text, layer, head, temperature }) {
+  const tokens = tokenizeForPreview(text)
+  const depth = layer / 11
+  const rawWeights = tokens.map((source, sourceIndex) => {
+    const scores = tokens.map((target, targetIndex) => {
+      const distance = Math.abs(sourceIndex - targetIndex)
+      const locality = Math.exp(-distance / (1.1 + depth * 3.2)) * (1.2 - depth * 0.45)
+      const selfFocus = sourceIndex === targetIndex ? 0.8 - depth * 0.35 : 0
+      const direction = ((head % 4) - 1.5) * (targetIndex - sourceIndex) * 0.045
+      const semanticEcho = source === target && sourceIndex !== targetIndex ? 0.65 + depth : 0
+      const seededVariation = pseudoRandom(`${text}|${layer}|${head}|${sourceIndex}|${targetIndex}`) * (0.55 + depth * 0.55)
+      return Math.max(0.01, locality + selfFocus + semanticEcho + direction + seededVariation)
+    })
+    return softmax(scores)
+  })
+  const weights = scaleTemperature(rawWeights, temperature)
+  return { tokens, weights, shape: [1, tokens.length, tokens.length], layer, head, temperature }
+}
+
+function tokenizeForPreview(text) {
+  const matches = String(text || '').trim().match(/[\p{Script=Han}]|[A-Za-z0-9]+|[^\s]/gu) || []
+  const tokens = matches.slice(0, 14)
+  return tokens.length ? tokens : ['请', '输', '入', '文', '本']
+}
+
+function softmax(scores) {
+  const max = Math.max(...scores)
+  const exponents = scores.map((score) => Math.exp(score - max))
+  const sum = exponents.reduce((total, value) => total + value, 0)
+  return exponents.map((value) => value / sum)
+}
+
+function pseudoRandom(seed) {
+  let hash = 2166136261
+  for (let index = 0; index < seed.length; index += 1) {
+    hash ^= seed.charCodeAt(index)
+    hash = Math.imul(hash, 16777619)
+  }
+  return ((hash >>> 0) % 10000) / 10000
 }

@@ -10,7 +10,7 @@ import React, { useMemo, useState } from 'react'
  *  - 悬停/点击 token 节点：高亮该 token 指向其他 token 的连线
  *  - 显示权重数值
  */
-export default function AttentionCanvas({ tokens = [], weights = [], width = 720, height = 420 }) {
+export default function AttentionCanvas({ tokens = [], weights = [], width = 720, height = 420, topK = 3 }) {
   const [focus, setFocus] = useState(null) // 聚焦的 token 索引
   const [hoverEdge, setHoverEdge] = useState(null)
 
@@ -42,6 +42,14 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
     return m || 1
   }, [weights])
 
+  const visibleTargets = useMemo(() => weights.map((row) => new Set(
+    row
+      .map((weight, index) => ({ weight, index }))
+      .sort((a, b) => b.weight - a.weight)
+      .slice(0, Math.min(topK, row.length))
+      .map((item) => item.index)
+  )), [weights, topK])
+
   if (tokens.length === 0) {
     return <div style={styles.empty}>暂无数据，请先输入文本</div>
   }
@@ -52,6 +60,7 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
       <g>
         {weights.map((row, i) =>
           row.map((w, j) => {
+            if (!visibleTargets[i]?.has(j)) return null
             const a = layout[i]
             const b = layout[j]
             if (!a || !b) return null
@@ -61,10 +70,12 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
             const opacity = isFocused ? 0.35 + 0.65 * normalized : 0.06
             const strokeW = 0.6 + normalized * 6
             return (
-              <line
+              <path
                 key={`${i}-${j}`}
-                x1={a.sx} y1={a.sy} x2={b.tx} y2={b.ty}
-                stroke={isHover ? '#e0663b' : '#3b6fd4'}
+                className="attention-edge"
+                d={`M ${a.sx} ${a.sy} C ${a.sx} 190, ${b.tx} 230, ${b.tx} ${b.ty}`}
+                fill="none"
+                stroke={isHover ? '#ee6c4d' : '#6558e8'}
                 strokeWidth={isHover ? strokeW + 1 : strokeW}
                 strokeOpacity={isHover ? 1 : opacity}
                 strokeLinecap="round"
@@ -81,10 +92,10 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
         {layout.map((n, i) => {
           const active = focus === i
           return (
-            <g key={`s-${i}`} transform={`translate(${n.sx},${n.sy})`} style={{ cursor: 'pointer' }}>
-              <circle r={active ? 16 : 12} fill={active ? '#e0663b' : '#3b6fd4'} />
+            <g key={`s-${i}`} className="attention-node" transform={`translate(${n.sx},${n.sy})`} style={{ cursor: 'pointer' }}>
+              <circle r={active ? 16 : 12} fill={active ? '#ee6c4d' : '#6558e8'} />
               <circle r={active ? 16 : 12} fill="none" stroke="#fff" strokeWidth="2" />
-              <text y="26" textAnchor="middle" fontSize="13" fill="#1a2b4a" fontWeight={active ? 700 : 500}>
+              <text y="-22" textAnchor="middle" fontSize="13" fill="#1a2b4a" fontWeight={active ? 700 : 500}>
                 {n.token}
               </text>
             </g>
@@ -97,9 +108,9 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
         {layout.map((n, i) => {
           const active = focus === i
           return (
-            <g key={`t-${i}`} transform={`translate(${n.tx},${n.ty})`} style={{ cursor: 'pointer' }}>
-              <circle r={active ? 14 : 10} fill={active ? '#e0663b' : '#1a7f37'} onClick={() => setFocus(focus === i ? null : i)} onMouseEnter={() => setFocus(focus === i ? null : i)} />
-              <text y="-10" textAnchor="middle" fontSize="12" fill="#1a2b4a" fontWeight={active ? 700 : 500}>
+            <g key={`t-${i}`} className="attention-node" transform={`translate(${n.tx},${n.ty})`} style={{ cursor: 'pointer' }}>
+              <circle r={active ? 14 : 10} fill={active ? '#ee6c4d' : '#159a83'} onClick={() => setFocus(focus === i ? null : i)} onMouseEnter={() => setFocus(focus === i ? null : i)} />
+              <text y="29" textAnchor="middle" fontSize="12" fill="#1a2b4a" fontWeight={active ? 700 : 500}>
                 {n.token}
               </text>
             </g>
@@ -112,7 +123,7 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
         <text
           x={(layout[hoverEdge.i].sx + layout[hoverEdge.j].tx) / 2}
           y={(layout[hoverEdge.i].sy + layout[hoverEdge.j].ty) / 2}
-          textAnchor="middle" fontSize="13" fill="#e0663b" fontWeight="700"
+          textAnchor="middle" fontSize="13" fill="#ee6c4d" fontWeight="700"
         >
           {weights[hoverEdge.i][hoverEdge.j].toFixed(3)}
         </text>
@@ -120,7 +131,7 @@ export default function AttentionCanvas({ tokens = [], weights = [], width = 720
 
       {/* 底部提示 */}
       <text x={width / 2} y={height - 10} textAnchor="middle" fontSize="12" fill="#8a94a6">
-        连线粗细 = 注意力权重 · 点击/悬停下方节点聚焦观察
+        每个 token 展示 Top {topK} 关系 · 连线粗细 = 注意力权重 · 点击下方节点聚焦
       </text>
     </svg>
   )
