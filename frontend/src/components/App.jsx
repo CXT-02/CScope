@@ -39,7 +39,6 @@ export default function App() {
         </button>
         <nav className="topbar-nav" aria-label="主导航">
           <button className={!activeExperiment ? 'active' : ''} type="button" onClick={() => navigate(null)}>实验大厅</button>
-          <span className="phase-badge">比赛版 · 3 个实验</span>
         </nav>
       </header>
       {Experiment && experiment ? (

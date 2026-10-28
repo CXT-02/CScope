@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { ExperimentHeader } from './AttentionExperiment'
 import LearningCycle from './LearningCycle'
+import TheoryPrimer from './TheoryPrimer'
 
 const nodes = [
   { id: 'A', x: 90, y: 190 }, { id: 'B', x: 230, y: 80 }, { id: 'C', x: 240, y: 285 },
@@ -53,11 +54,23 @@ export default function DijkstraExperiment({ experiment }) {
   return (
     <>
       <ExperimentHeader experiment={experiment} eyebrow="算法实验 02" />
+      <TheoryPrimer
+        title="Dijkstra 为什么能找到最短路径？"
+        intro="它维护一张“从起点到每个节点目前最短要走多远”的距离表。每一步选择候选距离最小的未确定节点，再尝试通过它缩短邻居的距离，这个过程叫作松弛。"
+        formula="候选距离 = 到当前节点的距离 + 当前边的权重"
+        concepts={[
+          { term: '候选距离', description: '目前已经发现的最好路线长度，但在节点被确定前仍可能继续变小。' },
+          { term: '确定节点', description: '未确定节点中距离最小者；在边权非负时，它的最短距离以后不会再改变。' },
+          { term: '松弛操作', description: '比较旧距离和“绕过当前节点”的新距离，若新路线更短就更新。' },
+        ]}
+        goal="逐步运行时，先预测下一个被确定的节点，再观察距离表如何更新；更换起点后比较确定顺序是否改变。"
+      />
       <div className="lab-layout">
         <aside className="control-panel">
           <div className="panel-title"><span>运行控制</span><i>逐步模式</i></div>
-          <label className="field-block"><span>起点</span><select value={start} onChange={changeStart}>{nodes.map((node) => <option key={node.id}>{node.id}</option>)}</select></label>
+          <label className="field-block"><span>起点</span><small>算法从这里开始，起点到自身距离为 0，其他节点初始为 ∞。</small><select value={start} onChange={changeStart}>{nodes.map((node) => <option key={node.id}>{node.id}</option>)}</select></label>
           <div className="step-counter"><span>当前步骤</span><strong>{stepIndex} / {steps.length - 1}</strong></div>
+          <p className="control-help">拖动进度条可快速查看任意一步；使用按钮适合逐步理解每次松弛。</p>
           <input className="step-slider" type="range" min="0" max={steps.length - 1} value={stepIndex} onChange={(event) => setStepIndex(Number(event.target.value))} />
           <div className="step-buttons"><button type="button" disabled={stepIndex === 0} onClick={() => setStepIndex((value) => value - 1)}>← 上一步</button><button type="button" disabled={stepIndex === steps.length - 1} onClick={() => setStepIndex((value) => value + 1)}>下一步 →</button></div>
           <div className="explanation-box"><strong>这一步发生了什么？</strong><p>{step.message}</p></div>
