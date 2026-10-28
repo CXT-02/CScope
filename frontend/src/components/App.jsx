@@ -43,7 +43,7 @@ export default function App() {
         </nav>
       </header>
       {Experiment && experiment ? (
-        <main className="experiment-page">
+        <main className="experiment-page" key={activeExperiment}>
           <div className="breadcrumb">
             <button type="button" onClick={() => navigate(null)}>实验大厅</button>
             <span>/</span><span>{experiment.title}</span>

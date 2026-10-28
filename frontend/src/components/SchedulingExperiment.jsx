@@ -3,7 +3,7 @@ import { ExperimentHeader } from './AttentionExperiment'
 import LearningCycle from './LearningCycle'
 
 const initialProcesses = [{ id: 'P1', burst: 6 }, { id: 'P2', burst: 3 }, { id: 'P3', burst: 8 }, { id: 'P4', burst: 2 }]
-const colors = ['#6757d9', '#138a72', '#df6c3f', '#3675c5']
+const colors = ['#6558e8', '#159a83', '#ee6c4d', '#3977c3']
 
 function schedule(processes, algorithm, quantum) {
   let timeline = []
