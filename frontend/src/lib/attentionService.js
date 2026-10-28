@@ -57,7 +57,12 @@ export async function getAttention({ text, layer = 0, head = 0, temperature = 1.
       })
       if (res.ok) {
         const json = await res.json()
-        return { status: 'ok', data: json.data, source: 'live' }
+        return {
+          status: json.status || 'ok',
+          data: json.data,
+          source: json.source || 'live',
+          message: json.message,
+        }
       }
     }
   } catch (e) {

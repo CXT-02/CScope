@@ -1,0 +1,67 @@
+import React, { useEffect, useState } from 'react'
+import { getAttention, getBackendStatus } from '../lib/attentionService'
+import AttentionCanvas from './AttentionCanvas'
+import AttentionHeatmap from './AttentionHeatmap'
+
+export default function AttentionExperiment({ experiment }) {
+  const [text, setText] = useState('我喜欢学习深度学习')
+  const [layer, setLayer] = useState(0)
+  const [head, setHead] = useState(0)
+  const [temperature, setTemperature] = useState(1)
+  const [view, setView] = useState('graph')
+  const [result, setResult] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [backendOnline, setBackendOnline] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    getBackendStatus().then((status) => setBackendOnline(status.online)).catch(() => setBackendOnline(false))
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(null)
+    getAttention({ text, layer, head, temperature })
+      .then((response) => { if (!cancelled) setResult(response) })
+      .catch((requestError) => { if (!cancelled) setError(String(requestError)) })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [text, layer, head, temperature])
+
+  return (
+    <>
+      <ExperimentHeader experiment={experiment} eyebrow="人工智能实验 01" />
+      <div className="lab-layout">
+        <aside className="control-panel">
+          <div className="panel-title"><span>实验参数</span><i className={backendOnline ? 'online' : ''}>{backendOnline ? '真实模型' : '演示模式'}</i></div>
+          <label className="field-block"><span>输入文本</span><textarea value={text} onChange={(event) => setText(event.target.value)} rows={4} placeholder="输入一句话" /></label>
+          <RangeField label="层 Layer" value={layer} display={layer + 1} min={0} max={11} onChange={setLayer} />
+          <RangeField label="头 Head" value={head} display={head + 1} min={0} max={11} onChange={setHead} />
+          <RangeField label="温度 Temperature" value={temperature} display={temperature.toFixed(1)} min={0.1} max={3} step={0.1} onChange={setTemperature} />
+          <div className="segmented-control"><button className={view === 'graph' ? 'active' : ''} type="button" onClick={() => setView('graph')}>连线图</button><button className={view === 'heatmap' ? 'active' : ''} type="button" onClick={() => setView('heatmap')}>热力图</button></div>
+          <div className="tip-box"><strong>观察提示</strong><p>尝试切换浅层与深层，比较模型关注局部词形和完整语义时的差异。</p></div>
+        </aside>
+        <section className="visual-panel">
+          <div className="visual-toolbar"><div><strong>{view === 'graph' ? 'Token 注意力连线' : '注意力权重矩阵'}</strong><span>{result ? `${result.data.tokens?.length || 0} tokens · Layer ${layer + 1} · Head ${head + 1}` : '等待数据'}</span></div><span className="source-chip">{sourceLabel(result?.source)}</span></div>
+          {loading && <div className="empty-state">正在计算注意力权重…</div>}
+          {error && <div className="error-state">计算失败：{error}</div>}
+          {result && !loading && view === 'graph' && <AttentionCanvas tokens={result.data.tokens} weights={result.data.weights} />}
+          {result && !loading && view === 'heatmap' && <AttentionHeatmap tokens={result.data.tokens} weights={result.data.weights} />}
+        </section>
+      </div>
+    </>
+  )
+}
+
+export function ExperimentHeader({ experiment, eyebrow }) {
+  return <header className="experiment-header" style={{ '--accent': experiment.accent }}><div><span className="eyebrow">{eyebrow}</span><h1>{experiment.title}</h1><p>{experiment.description}</p></div><span className="experiment-icon">{experiment.icon}</span></header>
+}
+
+function RangeField({ label, value, display, onChange, ...rangeProps }) {
+  return <label className="range-field"><span><b>{label}</b><i>{display}</i></span><input type="range" value={value} onChange={(event) => onChange(Number(event.target.value))} {...rangeProps} /></label>
+}
+
+function sourceLabel(source) {
+  return ({ live: '真实权重', precomputed: '预计算数据', sample: '示例数据' }[source] || '等待数据')
+}
