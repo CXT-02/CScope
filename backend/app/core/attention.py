@@ -67,8 +67,14 @@ def compute_attention(text: str, layer: int = 0, head: int = 0, temperature: flo
 
     head_weights = attn_layer[head]  # (seq, seq)
 
-    # 温度缩放：softmax 后缩放会破坏归一化，这里仅记录参数供前端展示，
-    # 权重仍以模型原始输出为准（真实权重保真）。
+    # 注意力输出已经是概率。log(p) 可还原与原始 logits 只相差一个行常数，
+    # 因此 softmax(log(p) / T) 等价于对 logits 做温度缩放，并保持每行归一化。
+    if temperature != 1.0:
+        head_weights = torch.softmax(
+            torch.log(head_weights.clamp_min(1e-12)) / temperature,
+            dim=-1,
+        )
+
     weights = head_weights.tolist()
     weights = [[round(float(v), 6) for v in row] for row in weights]
 

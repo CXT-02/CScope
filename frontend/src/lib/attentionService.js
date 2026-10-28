@@ -23,7 +23,7 @@ const SAMPLE_WEIGHTS = [
 ]
 
 // 后端可用性探测（带超时）
-async function probeBackend(timeoutMs = 2000) {
+async function probeBackend(timeoutMs = 800) {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
@@ -75,7 +75,11 @@ export async function getAttention({ text, layer = 0, head = 0, temperature = 1.
     const res = await fetch(`/precomputed/${encodeURIComponent(text)}.json`)
     if (res.ok) {
       const json = await res.json()
-      return { status: 'ok', data: json, source: 'precomputed' }
+      return {
+        status: 'ok',
+        data: { ...json, weights: scaleTemperature(json.weights, temperature), temperature },
+        source: 'precomputed',
+      }
     }
   } catch (e) {
     // 降级到示例
@@ -86,8 +90,11 @@ export async function getAttention({ text, layer = 0, head = 0, temperature = 1.
     status: 'degraded',
     data: {
       tokens: SAMPLE_TOKENS,
-      weights: SAMPLE_WEIGHTS,
+      weights: scaleTemperature(SAMPLE_WEIGHTS, temperature),
       shape: [1, 5, 5],
+      layer,
+      head,
+      temperature,
     },
     source: 'sample',
   }
@@ -99,4 +106,13 @@ export async function getAttention({ text, layer = 0, head = 0, temperature = 1.
 export async function getBackendStatus() {
   const online = await probeBackend()
   return { online }
+}
+
+function scaleTemperature(weights, temperature) {
+  if (!Array.isArray(weights) || temperature === 1) return weights
+  return weights.map((row) => {
+    const powered = row.map((value) => Math.pow(Math.max(value, 1e-12), 1 / temperature))
+    const sum = powered.reduce((total, value) => total + value, 0)
+    return powered.map((value) => value / sum)
+  })
 }
