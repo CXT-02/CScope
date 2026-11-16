@@ -30,18 +30,18 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
     <div style={styles.wrap}>
       <div style={styles.grid}>
         {/* 顶部 token 标签行 */}
-        <div style={{ width: cellSize * 1.4, height: cellSize, display: 'inline-flex', alignItems: 'flex-end', justifyContent: 'flex-end', paddingRight: 4, fontSize: 11, color: '#66738c', whiteSpace: 'nowrap' }}>
+        <div style={{ width: cellSize * 1.5, height: cellSize, display: 'inline-flex', alignItems: 'flex-end', justifyContent: 'flex-end', paddingRight: 6, fontSize: 14, fontWeight: 700, color: '#4d5b74', whiteSpace: 'nowrap' }}>
           源\目标
         </div>
         {tokens.map((t, j) => (
-          <div key={`th-${j}`} style={{ width: cellSize, height: cellSize, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#334', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 2px' }}>
+          <div key={`th-${j}`} style={{ width: cellSize, height: cellSize, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: '#1a2b4a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0 2px' }}>
             {t}
           </div>
         ))}
         <div style={{ clear: 'both' }} />
         {weights.map((row, i) => (
           <div key={`row-${i}`} style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ width: cellSize * 1.4, height: cellSize, display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 6, fontSize: 12, fontWeight: 600, color: '#1a2b4a', whiteSpace: 'nowrap' }}>
+            <div style={{ width: cellSize * 1.5, height: cellSize, display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 8, fontSize: 14, fontWeight: 700, color: '#1a2b4a', whiteSpace: 'nowrap' }}>
               {tokens[i]}
             </div>
             {row.map((w, j) => (
@@ -55,11 +55,11 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 10,
+                  fontSize: Math.max(12, Math.floor(cellSize * 0.34)),
                   color: w > maxW / 2 ? '#fff' : '#1a2b4a',
-                  borderRadius: 3,
+                  borderRadius: 4,
                   margin: 1,
-                  fontWeight: 600,
+                  fontWeight: 700,
                   transition: 'background-color 420ms cubic-bezier(.2,.8,.2,1), color 300ms ease, transform 180ms ease',
                 }}
                 title={`${tokens[i]} → ${tokens[j]}: ${w.toFixed(3)}`}
@@ -71,17 +71,17 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
         ))}
       </div>
       <div style={styles.legend}>
-        <span style={{ color: '#8a94a6', fontSize: 12 }}>权重：低</span>
-        <span style={{ width: 90, height: 11, display: 'inline-block', background: 'linear-gradient(to right, rgb(246,247,255), rgb(100,87,230))', borderRadius: 6, margin: '0 8px' }} />
-        <span style={{ color: '#8a94a6', fontSize: 12 }}>高</span>
+        <span style={{ color: '#4d5b74', fontSize: 14, fontWeight: 700 }}>权重：低</span>
+        <span style={{ width: 110, height: 13, display: 'inline-block', background: 'linear-gradient(to right, rgb(246,247,255), rgb(100,87,230))', borderRadius: 7, margin: '0 10px' }} />
+        <span style={{ color: '#4d5b74', fontSize: 14, fontWeight: 700 }}>高</span>
       </div>
     </div>
   )
 }
 
 const styles = {
-  wrap: { padding: '8px 4px' },
+  wrap: { padding: '12px 6px' },
   grid: { lineHeight: 1 },
-  empty: { padding: '40px', textAlign: 'center', color: '#8a94a6', fontSize: '14px' },
-  legend: { display: 'flex', alignItems: 'center', marginTop: '12px', fontSize: 12, color: '#66738c' },
+  empty: { padding: '40px', textAlign: 'center', color: '#4d5b74', fontSize: '16px' },
+  legend: { display: 'flex', alignItems: 'center', marginTop: '16px', fontSize: 14, color: '#4d5b74' },
 }
