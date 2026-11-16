@@ -508,8 +508,19 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .matrix-grid span.zero{color:#94a3b8 !important;background:#131c2b !important;border-color:#334155 !important}
 
 /* 像素矩阵 0 与 1 亮暗极致对比 */
-.matrix-grid.is-pixel-matrix span.pixel-one{color:#090d16 !important;background:#f8fafc !important;border-color:#ffffff !important;font-weight:900 !important;box-shadow:0 0 18px rgba(255,255,255,.55),inset 0 0 6px rgba(255,255,255,.9)}
-.matrix-grid.is-pixel-matrix span.pixel-zero{color:#cbd5e1 !important;background:#0d1420 !important;border-color:#2a384c !important;font-weight:900 !important}
+.matrix-grid.pixel-5x5{width:320px;gap:7px}
+.matrix-grid.pixel-5x5 span{font-size:23px !important;border-radius:10px}
+.matrix-grid.is-pixel-matrix span.pixel-one{color:#000000 !important;background:#ffffff !important;border:2px solid #ffffff !important;font-weight:900 !important;box-shadow:0 0 20px rgba(255,255,255,.7),inset 0 0 6px rgba(255,255,255,.9) !important}
+.matrix-grid.is-pixel-matrix span.pixel-zero{color:#5a687d !important;background:#050911 !important;border:2px solid #16202e !important;font-weight:800 !important}
+
+/* 导学步骤 1：像素图像与图例卡片 */
+.cnn-story-pixels{display:flex;align-items:center;gap:32px}
+.pixel-legend-row{display:flex;align-items:center;gap:10px;margin:10px 0 6px}
+.legend-chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;padding:4px 10px;border-radius:6px}
+.legend-chip.dark{background:#090e17;border:1px solid #1e293b;color:#94a3b8}
+.legend-chip.dark i{display:inline-block;width:12px;height:12px;background:#050911;border:1px solid #334155;border-radius:3px}
+.legend-chip.bright{background:#ffffff;border:1px solid #ffffff;color:#090e17}
+.legend-chip.bright i{display:inline-block;width:12px;height:12px;background:#ffffff;border:1px solid #cbd5e1;border-radius:3px;box-shadow:0 0 6px rgba(255,255,255,.9)}
 
 /* 导学步骤 4：对应相乘再求和面板整体美化 */
 .cnn-story-calc{display:flex;align-items:center;justify-content:center;gap:20px;padding:10px 0}

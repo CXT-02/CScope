@@ -213,10 +213,15 @@ function CnnStoryVisual({ step, image, kernel, feature, pooled, position, slideP
   if (step === 0) {
     return (
       <div className="cnn-story-pixels">
-        <MatrixGrid values={image} isPixel />
+        <MatrixGrid values={image} isPixel pixel5 />
         <div className="story-caption-card">
           <span>每个格子都是一个像素值</span>
-          <strong>0 = 纯黑暗区　1 = 纯白亮区</strong>
+          <strong>0 = 纯黑暗区 · 1 = 纯白亮区</strong>
+          <div className="pixel-legend-row">
+            <span className="legend-chip dark"><i /> 0：暗区（黑）</span>
+            <span className="legend-chip bright"><i /> 1：亮区（白）</span>
+          </div>
+          <small>计算机底层以 0~1 的数值矩阵来记录图像中明暗轮廓分布（左侧两列为暗，右侧三列为亮）</small>
         </div>
       </div>
     )
@@ -290,9 +295,9 @@ function FeatureGrid({ values, active = -1, onSelect, small }) {
   const flat = values.flat(); const max = Math.max(...flat.map(Math.abs), .001)
   return <div className={`feature-grid ${small ? 'small' : ''}`} style={{ '--size': values.length }}>{flat.map((value, index) => <button type="button" disabled={!onSelect} onClick={() => onSelect?.(index)} key={index} className={index === active ? 'active' : ''} style={{ '--strength': Math.abs(value) / max, '--tone': value < 0 ? '238,108,77' : '101,88,232' }}>{format(value)}</button>)}</div>
 }
-function MatrixGrid({ values, compact, signed, isPixel, large }) {
+function MatrixGrid({ values, compact, signed, isPixel, large, pixel5 }) {
   return (
-    <div className={`matrix-grid ${compact ? 'compact' : ''} ${large ? 'large' : ''} ${isPixel ? 'is-pixel-matrix' : ''}`} style={{ '--size': values.length }}>
+    <div className={`matrix-grid ${compact ? 'compact' : ''} ${large ? 'large' : ''} ${pixel5 ? 'pixel-5x5' : ''} ${isPixel ? 'is-pixel-matrix' : ''}`} style={{ '--size': values.length }}>
       {values.flat().map((value, index) => {
         let cls = ''
         if (isPixel) {
