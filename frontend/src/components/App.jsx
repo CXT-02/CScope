@@ -104,7 +104,7 @@ export default function App() {
         </button>
         <nav className="topbar-nav" aria-label="主导航">
           <button className={route.kind === 'home' ? 'active' : ''} type="button" onClick={goHome}>
-            首页封面
+            首页
           </button>
           <button className={route.kind === 'courses' ? 'active' : ''} type="button" onClick={openCourses}>
             课程知识库
