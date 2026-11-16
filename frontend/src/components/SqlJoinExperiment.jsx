@@ -26,11 +26,195 @@ export default function SqlJoinExperiment({ experiment }) {
   const comparisons = trace.slice(0, step + 1).reduce((sum, item) => sum + (item.comparisons || 0), 0)
   return <>
     <ExperimentHeader experiment={experiment} eyebrow="数据库实验 02" />
-    <DatabaseStory title="一条 JOIN，背后可能是三种完全不同的数据流" subtitle="让两张小表分别通过嵌套循环、哈希连接和排序合并，观察它们如何寻找相同键。" steps={STORY} badge={<><strong>R ⋈ S</strong><span>ON R.id = S.sid</span></>} />
+    <DatabaseStory
+      title="一条 JOIN，背后可能是三种完全不同的数据流"
+      subtitle="让两张小表分别通过嵌套循环、哈希连接和排序合并，观察它们如何寻找相同键。"
+      steps={STORY}
+      badge={<><strong>R ⋈ S</strong><span>ON R.id = S.sid</span></>}
+      renderVisual={(s) => <SqlJoinStoryVisual stageIndex={s} />}
+    />
     <div className="explore-heading"><span>自由探索 · 切换物理连接算法</span><h2>让学生表和成绩表完成一次等值连接</h2><p>逐步查看当前扫描行、哈希桶或双指针位置；三种算法输出相同结果，但中间过程和比较代价不同。</p></div>
     <div className="lab-layout db-layout"><aside className="control-panel"><div className="panel-title"><span>执行计划</span><i>{algorithmLabel(algorithm)}</i></div><label className="field-block"><span>物理连接算法</span><select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}><option value="nested">嵌套循环连接</option><option value="hash">哈希连接</option><option value="merge">排序合并连接</option></select></label><div className="mapping-help"><strong>{algorithmLabel(algorithm)}</strong><p>{algorithm === 'nested' ? '学生表作为外表，每一行都依次与成绩表比较。' : algorithm === 'hash' ? '先按学生 id 构建哈希表，再用成绩表 sid 探测桶。' : '两表先按连接键排序，双指针只向前移动。'}</p></div><div className="join-sql"><span>逻辑 SQL</span><code>SELECT name, course, score<br />FROM Student S JOIN Score C<br />ON S.id = C.sid;</code></div><div className="step-counter"><span>执行微步骤</span><strong>{step + 1}/{trace.length}</strong></div><input className="step-slider" type="range" min="0" max={trace.length - 1} value={step} onChange={(e) => { setStep(Number(e.target.value)); setPlaying(false) }} /><div className="step-buttons"><button disabled={!step} onClick={() => setStep(step - 1)}>← 上一步</button><button disabled={step === trace.length - 1} onClick={() => setStep(step + 1)}>下一步 →</button></div><button className="tree-play" onClick={() => { if (step === trace.length - 1) setStep(0); setPlaying((value) => !value) }}>{playing ? '暂停执行' : '▶ 执行计划'}</button><div className="live-explanation"><span>{current.phase}</span><strong>{current.title}</strong><p>{current.message}</p></div></aside><section className="visual-panel join-visual"><div className="visual-toolbar"><div><strong>JOIN 数据流</strong><span>橙色行为当前输入，绿色行已成功连接，灰色行尚未处理。</span></div><span className="source-chip">{results.length} 条结果</span></div><div className="join-inputs"><DataTable title="Student 学生表" columns={['id', 'name', 'dept']} rows={STUDENTS} active={current.left} /><div className="join-operator"><span>{algorithm === 'nested' ? '双层循环' : algorithm === 'hash' ? '# 哈希桶' : '⇄ 双指针'}</span><strong>id = sid</strong><small>{current.workspace || '准备执行'}</small></div><DataTable title="Score 成绩表" columns={['sid', 'course', 'score']} rows={SCORES} active={current.right} /></div>{algorithm === 'hash' && <div className="hash-buckets"><span>内存哈希表</span>{[0, 1, 2, 3].map((bucket) => <div className={current.bucket === bucket ? 'active' : ''} key={bucket}><b>桶 {bucket}</b><code>{STUDENTS.filter((row) => row.id % 4 === bucket).map((row) => `${row.id}:${row.name}`).join(' / ') || '空'}</code></div>)}</div>}<div className="join-results"><header><span>name</span><span>course</span><span>score</span></header>{results.length ? results.map((row, index) => <div key={`${row.name}-${row.course}-${index}`}><strong>{row.name}</strong><span>{row.course}</span><span>{row.score}</span></div>) : <p>匹配结果会随执行步骤出现在这里</p>}</div><div className="join-metrics"><div><span>输入规模</span><strong>4 + 5 行</strong></div><div><span>已完成比较 / 探测</span><strong>{comparisons}</strong></div><div><span>输出结果</span><strong>{results.length}</strong></div><div><span>算法特点</span><strong>{algorithm === 'nested' ? '通用' : algorithm === 'hash' ? '等值快' : '顺序读'}</strong></div></div></section></div>
     <LearningCycle experimentId="sql-join" prediction={{ question: '大表之间进行无索引的等值连接，通常哪种算法更有优势？', options: ['哈希连接', '逐行嵌套循环', '随机选择'], answer: '哈希连接', explanation: ' 哈希连接先建立键到记录的快速映射，再线性探测另一张表，避免大量重复扫描。' }} operation={{ title: '比较三种执行过程', instruction: '依次选择三种算法并运行到最后，观察比较次数、工作区和最终结果是否变化。' }} observation={`当前使用${algorithmLabel(algorithm)}，已执行 ${step + 1} 个微步骤，产生 ${results.length} 条结果，累计 ${comparisons} 次比较或探测。`} summaryPrompt="为什么不同连接算法能得到相同结果，却可能有完全不同的执行代价？" />
   </>
+}
+
+function SqlJoinStoryVisual({ stageIndex }) {
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      {/* 阶段 1: 连接含义 */}
+      {stageIndex === 0 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>关系代数连接：从笛卡尔积到等值筛选</span>
+            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              Student ⋈ Score
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #38bdf8', textAlign: 'center' }}>
+              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.85rem' }}>Student (学生表)</div>
+              <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px' }}>[id: 1, 姓名: 林悦]</div>
+            </div>
+
+            <div style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '1.1rem' }}>+ 连接条件 (id = sid) ➔</div>
+
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #10b981', textAlign: 'center' }}>
+              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.85rem' }}>Score (成绩表)</div>
+              <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px' }}>[sid: 1, 课程: 算法, 88]</div>
+            </div>
+
+            <span style={{ color: '#fff', fontWeight: 'bold' }}>=</span>
+
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #a855f7', textAlign: 'center' }}>
+              <div style={{ color: '#a855f7', fontWeight: 'bold', fontSize: '0.85rem' }}>组合宽表行</div>
+              <div style={{ fontSize: '0.75rem', color: '#34d399', marginTop: '4px' }}>林悦 · 算法 · 88 分</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 2: 嵌套循环连接 */}
+      {stageIndex === 1 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>嵌套循环连接 (Nested Loop Join)</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              O(M × N)
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ fontFamily: 'monospace', background: '#0f172a', padding: '12px', borderRadius: '6px', fontSize: '0.82rem', color: '#e2e8f0' }}>
+              <span style={{ color: '#38bdf8' }}>for each row R in OuterTable (外表驱动):</span><br />
+              &nbsp;&nbsp;<span style={{ color: '#f59e0b' }}>for each row S in InnerTable (内表扫描):</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;if (R.id == S.sid) emit(R, S);
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '0.8rem', color: '#cbd5e1' }}>
+              <span>• 适用：小表驱动大表，或内表连接列有 B+ 树索引 (Index NLJ)</span>
+              <span style={{ color: '#f87171' }}>• 无索引大表相遇时代价灾难</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 3: 哈希连接 */}
+      {stageIndex === 2 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>哈希连接 (Hash Join)：Build 与 Probe 两阶段</span>
+            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              O(M + N) 近似线性
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #3b82f6' }}>
+              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.85rem' }}>1. Build 阶段 (建表)</div>
+              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '4px' }}>
+                将较小表 (Student) 在内存中建立哈希表：<br />
+                <code>hash(id) ➔ [Bucket 0..3]</code>
+              </div>
+            </div>
+
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #10b981' }}>
+              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.85rem' }}>2. Probe 阶段 (探测)</div>
+              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '4px' }}>
+                流式扫描较大表 (Score)，计算 <code>hash(sid)</code>：<br />
+                O(1) 命中对应桶，完成快速拼接！
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: '10px', fontSize: '0.82rem', color: '#34d399', textAlign: 'center' }}>
+            等值连接王者算法！无需预先建索引，海量数据场景极度高效。
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 4: 排序合并连接 */}
+      {stageIndex === 3 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#a855f7', fontSize: '1rem', fontWeight: 'bold' }}>排序合并连接 (Sort Merge Join)</span>
+            <span style={{ background: '#a855f7', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              双指针归并
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <div style={{ background: '#0f172a', padding: '6px 12px', borderRadius: '4px', border: '1px solid #38bdf8', color: '#38bdf8', fontSize: '0.85rem' }}>
+                左指针 P1 ➔ [1, 2, 3, 4]
+              </div>
+              <span style={{ color: '#a855f7', fontWeight: 'bold' }}>双指针同步推进</span>
+              <div style={{ background: '#0f172a', padding: '6px 12px', borderRadius: '4px', border: '1px solid #10b981', color: '#10b981', fontSize: '0.85rem' }}>
+                右指针 P2 ➔ [1, 1, 3, 4, 5]
+              </div>
+            </div>
+
+            <div style={{ background: '#0f172a', padding: '8px 12px', borderRadius: '6px', fontSize: '0.82rem', color: '#cbd5e1' }}>
+              若 <code>P1.id == P2.sid</code>：输出匹配行；<br />
+              若 <code>P1.id &lt; P2.sid</code>：P1 前移；若 <code>P1.id &gt; P2.sid</code>：P2 前移。<br />
+              <strong>优势：</strong>无需将全表装入内存，极适合已按连接键排好序的输入流！
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 5: 执行代价与优化器抉择 */}
+      {stageIndex === 4 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>基于代价的优化器 (CBO - Cost-Based Optimizer)</span>
+            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+              算子自动选择
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', background: '#1e293b', padding: '12px', borderRadius: '8px', textAlign: 'center' }}>
+            <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px', border: '1px solid #ef4444' }}>
+              <strong style={{ color: '#ef4444', fontSize: '0.85rem' }}>Nested Loop</strong>
+              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>内表有索引、或外表过滤后只剩极少数行</div>
+            </div>
+            <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px', border: '1px solid #10b981' }}>
+              <strong style={{ color: '#10b981', fontSize: '0.85rem' }}>Hash Join</strong>
+              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>大规模等值连接，内存充裕，无现成索引</div>
+            </div>
+            <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px', border: '1px solid #a855f7' }}>
+              <strong style={{ color: '#a855f7', fontSize: '0.85rem' }}>Sort Merge</strong>
+              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>两表输入自带序，或内存不足以容纳哈希表</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 6: 结果语义与外连接 */}
+      {stageIndex === 5 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>逻辑语义：INNER JOIN vs OUTER JOIN</span>
+            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              NULL 值补齐
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #3b82f6' }}>
+                <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.85rem' }}>INNER JOIN (内连接)</div>
+                <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '2px' }}>严格只输出两侧均匹配的记录，抛弃未选课学生与无名成绩。</div>
+              </div>
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #f59e0b' }}>
+                <div style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '0.85rem' }}>LEFT JOIN (左外连接)</div>
+                <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '2px' }}>保留左表所有学生；若某学生暂无成绩，右侧成绩列用 <code>NULL</code> 补齐。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 function DataTable({ title, columns, rows, active }) { return <div className="mini-data-table"><strong>{title}</strong><header>{columns.map((column) => <span key={column}>{column}</span>)}</header>{rows.map((row, index) => <div className={active === index ? 'active' : ''} key={index}>{columns.map((column) => <span key={column}>{row[column]}</span>)}</div>)}</div> }

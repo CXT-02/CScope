@@ -52,7 +52,314 @@ function toBits(value, length) { return (value >>> 0).toString(2).padStart(lengt
 function clampFloat(value) { const number = Number(value); return Number.isFinite(number) ? Math.max(-3.4e38, Math.min(3.4e38, number)) : 0 }
 function formatNumber(value) { return Math.abs(value) >= 1e7 || (Math.abs(value) > 0 && Math.abs(value) < 1e-6) ? value.toExponential(8) : Number(value.toPrecision(10)).toString() }
 
+function NumberStoryVisual({ stageIndex }) {
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      {/* 阶段 1: 位模式 */}
+      {stageIndex === 0 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>比特本身无意义，解释规则赋予价值</span>
+            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              位模式二重性
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+            <div style={{ color: '#94a3b8', fontSize: '0.85rem', marginBottom: '8px' }}>同一个 8 位比特串 (Bit Pattern)</div>
+            <div style={{ display: 'inline-flex', gap: '6px', padding: '10px 16px', background: '#0f172a', borderRadius: '6px', border: '2px solid #38bdf8', marginBottom: '16px' }}>
+              {['1', '1', '1', '1', '1', '1', '1', '1'].map((b, i) => (
+                <span key={i} style={{ width: '28px', height: '34px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#1e293b', color: '#f8fafc', fontWeight: 'bold', fontSize: '1.1rem', borderRadius: '4px' }}>{b}</span>
+              ))}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', textAlign: 'left' }}>
+              <div style={{ background: '#0f172a', padding: '12px', borderRadius: '6px', borderLeft: '4px solid #10b981' }}>
+                <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.95rem' }}>无符号解释 (Unsigned)</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#fff', margin: '4px 0' }}>= 255</div>
+                <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>全部 8 位均代表正权值：128 + 64 + ... + 1</div>
+              </div>
+
+              <div style={{ background: '#0f172a', padding: '12px', borderRadius: '6px', borderLeft: '4px solid #ef4444' }}>
+                <div style={{ color: '#f87171', fontWeight: 'bold', fontSize: '0.95rem' }}>有符号补码 (Two&apos;s Complement)</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#fff', margin: '4px 0' }}>= -1</div>
+                <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>最高位权值为 -128，其余为正：-128 + 127 = -1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 2: 符号表示与原码的缺陷 */}
+      {stageIndex === 1 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>原码符号位的致命硬伤：双重零</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              +0 与 -0
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', background: '#1e293b', padding: '16px', borderRadius: '8px' }}>
+            <div style={{ background: '#0f172a', padding: '12px', borderRadius: '6px', border: '1px solid #475569', textAlign: 'center' }}>
+              <div style={{ color: '#94a3b8', fontSize: '0.82rem' }}>原码正零 (+0)</div>
+              <div style={{ fontSize: '1.1rem', fontFamily: 'monospace', color: '#38bdf8', margin: '6px 0', fontWeight: 'bold' }}>0000 0000</div>
+              <div style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>符号位为 0，数值为 0</div>
+            </div>
+
+            <div style={{ background: '#0f172a', padding: '12px', borderRadius: '6px', border: '1px solid #ef4444', textAlign: 'center' }}>
+              <div style={{ color: '#f87171', fontSize: '0.82rem' }}>原码负零 (-0)</div>
+              <div style={{ fontSize: '1.1rem', fontFamily: 'monospace', color: '#ef4444', margin: '6px 0', fontWeight: 'bold' }}>1000 0000</div>
+              <div style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>符号位为 1，数值仍为 0</div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '12px', background: '#334155', padding: '10px', borderRadius: '6px', fontSize: '0.82rem', color: '#fca5a5' }}>
+            缺陷：原码运算中，硬件在做判断 (x == 0) 时必须做两次比对；且正负数相加不能直接通过纯加法器计算，电路极为繁琐。
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 3: 二进制补码的优雅 */}
+      {stageIndex === 2 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>补码：取反加一与减法变加法</span>
+            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              模 256 运算回绕
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ textAlign: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px' }}>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>原值 +5</span>
+                <div style={{ fontFamily: 'monospace', color: '#38bdf8', fontWeight: 'bold' }}>0000 0101</div>
+              </div>
+              <span style={{ color: '#10b981', fontWeight: 'bold' }}>➔ 按位取反 ➔</span>
+              <div style={{ textAlign: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px' }}>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>反码</span>
+                <div style={{ fontFamily: 'monospace', color: '#f59e0b', fontWeight: 'bold' }}>1111 1010</div>
+              </div>
+              <span style={{ color: '#10b981', fontWeight: 'bold' }}>➔ +1 ➔</span>
+              <div style={{ textAlign: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', border: '1px solid #10b981' }}>
+                <span style={{ fontSize: '0.75rem', color: '#34d399' }}>补码 -5</span>
+                <div style={{ fontFamily: 'monospace', color: '#10b981', fontWeight: 'bold' }}>1111 1011</div>
+              </div>
+            </div>
+
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', fontSize: '0.85rem', color: '#e2e8f0' }}>
+              计算 7 - 5 = 7 + (-5)：<br />
+              <code style={{ color: '#38bdf8' }}>0000 0111 (7) + 1111 1011 (-5) = [1] 0000 0010 (2)</code><br />
+              <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>最高进位溢出模数被丢弃，纯加法器即可完美执行减法！</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 4: 溢出判断 */}
+      {stageIndex === 3 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>有符号整数溢出判定 (Overflow)</span>
+            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+              同号相加产生异号
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #ef4444' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#f87171', fontWeight: 'bold', fontSize: '0.9rem' }}>正溢出案例：100 + 60 = -96</span>
+                  <span style={{ background: '#ef4444', color: '#fff', fontSize: '0.75rem', padding: '2px 6px', borderRadius: '3px' }}>OVERFLOW</span>
+                </div>
+                <div style={{ fontFamily: 'monospace', color: '#cbd5e1', fontSize: '0.85rem', marginTop: '4px' }}>
+                  0110 0100 (100) + 0011 1100 (60) = 1010 0000 (-96)
+                </div>
+                <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
+                  两个正数相加，结果符号位却变成了 1（负数）！超出 8 位最大表示值 +127。
+                </div>
+              </div>
+
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #38bdf8' }}>
+                <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.9rem' }}>硬件溢出逻辑门判据</div>
+                <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
+                  令最高位进位为 C_out，次高位进位为 C_in：<br />
+                  <code style={{ color: '#f59e0b', fontWeight: 'bold' }}>Overflow = C_out XOR C_in</code> （两者不同即发生溢出）
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 5: 科学计数法与浮点表示 */}
+      {stageIndex === 4 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>二进制科学计数法：把小数点“浮动”起来</span>
+            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              动态范围扩展
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '8px' }}>十进制：123.45 = +1.2345 × 10²</div>
+            <div style={{ fontSize: '1.2rem', fontFamily: 'monospace', color: '#38bdf8', fontWeight: 'bold', marginBottom: '14px' }}>
+              十进制 13.25 = 二进制 1101.01B = (-1)⁰ × 1.10101 × 2³
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', textAlign: 'center' }}>
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #3b82f6' }}>
+                <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.9rem' }}>符号位 S</div>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>0 为正，1 为负</div>
+              </div>
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #10b981' }}>
+                <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.9rem' }}>阶码 E (指数)</div>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>决定数值数量级规模</div>
+              </div>
+              <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #f59e0b' }}>
+                <div style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '0.9rem' }}>尾数 M (有效数)</div>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>决定计算的精度位数</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 6: IEEE 754 标准格式 */}
+      {stageIndex === 5 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#a855f7', fontSize: '1rem', fontWeight: 'bold' }}>IEEE 754 32位单精度标准结构</span>
+            <span style={{ background: '#a855f7', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              Bias = 127
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ display: 'flex', height: '52px', borderRadius: '6px', overflow: 'hidden', border: '2px solid #475569', marginBottom: '12px' }}>
+              <div style={{ width: '12%', background: '#3b82f6', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>S</span>
+                <span style={{ fontSize: '0.7rem' }}>1位 符号</span>
+              </div>
+              <div style={{ width: '33%', background: '#10b981', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Exponent (阶码)</span>
+                <span style={{ fontSize: '0.7rem' }}>8位 偏置值 (+127)</span>
+              </div>
+              <div style={{ width: '55%', background: '#f59e0b', color: '#1e293b', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Fraction (尾数)</span>
+                <span style={{ fontSize: '0.7rem' }}>23位 (隐含最高位1)</span>
+              </div>
+            </div>
+
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', textAlign: 'center' }}>
+              <div style={{ color: '#cbd5e1', fontSize: '0.85rem', fontFamily: 'monospace' }}>
+                V = (-1)^S × (1 + Fraction) × 2^(Exponent - 127)
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '4px' }}>
+                偏置码 127 保证指数无符号化存储，便于硬件直接通过无符号比较器快速比大小！
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 阶段 7: 浮点精度代价与舍入误差 */}
+      {stageIndex === 6 && (
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>精度代价：为什么 0.1 + 0.2 != 0.3</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+              无限循环小数截断
+            </span>
+          </div>
+
+          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', marginBottom: '10px', borderLeft: '4px solid #f59e0b' }}>
+              <div style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '0.85rem' }}>十进制 0.1 在二进制中的真实形态：</div>
+              <div style={{ fontFamily: 'monospace', color: '#ef4444', fontSize: '0.85rem', margin: '4px 0' }}>
+                0.0001100110011001100110011... (无限循环)
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                尾数只有 23 位，只能强制截断舍入为：0.100000001490116119384765625
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.82rem', color: '#cbd5e1' }}>
+              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px' }}>
+                <strong style={{ color: '#ef4444' }}>严禁直接比较相等：</strong><br />
+                <code>if (a == 0.3) ❌</code><br />
+                应写成 <code>fabs(a - 0.3) &lt; 1e-6</code>
+              </div>
+              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px' }}>
+                <strong style={{ color: '#10b981' }}>大数吃小数现象：</strong><br />
+                对阶时小数右移导致尾数丢失，例如 <code>1e8 + 1 - 1e8 = 0</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function NumberStory() {
   const [step, setStep] = useState(0)
-  return <section className="transformer-story number-story"><header className="story-intro"><div><span className="story-kicker">动画导学 · 约 4 分钟</span><h2>比特没有正负和小数点，规则赋予它们含义</h2><p>先用补码统一整数加减，再用 IEEE 754 把有限的 32 位分配给范围与精度。</p></div><div className="number-story-badge"><span>11010110</span><b>→</b><strong>整数 / 浮点数</strong></div></header><nav className="story-timeline" style={{ '--story-steps': STORY.length }}>{STORY.map((item, index) => <button className={`${step === index ? 'active' : ''} ${index < step ? 'passed' : ''}`} key={item[0]} onClick={() => setStep(index)}><i>{index < step ? '✓' : index + 1}</i><span>{item[0]}</span></button>)}</nav><div className="story-stage"><div className="story-copy"><span>0{step + 1} · 数值表示</span><h3>{STORY[step][1]}</h3><p>{['位模式 11111111 按无符号数解释是 255，按 8 位补码解释却是 -1。上下文决定含义。','符号位加绝对值最直观，但会同时出现 00000000 和 10000000 两个零，加法器也更复杂。','n 位补码可以看作模 2ⁿ 的循环：负数 -x 对应 2ⁿ-x，因此减法可以转化为加法。','8 位补码范围只有 -128～127。最高位进位不能单独判断溢出，必须检查操作数和结果符号。','类似十进制 1.25×10³，二进制浮点写成 1.f×2ᵉ，指数扩大范围，尾数保存有效数字。','单精度的三个字段分别回答：正负、数量级、有效数字；它们按统一公式解码。','有限的 23 位尾数必须舍入无限二进制小数，所以 0.1+0.2 可能不等于精确的 0.3。'][step]}</p><aside><strong>这一点为什么重要？</strong><p>{STORY[step][2]}</p></aside></div><div className="story-visual"><div className="number-mini"><div className="mini-bits">{['1','0','1','1','0','1','1','0'].map((bit, index) => <i className={index === step % 8 ? 'active' : ''} key={index}>{bit}</i>)}</div><div className="mini-interpret"><span>补码：-74</span><span>无符号：182</span></div></div></div></div><footer className="story-controls"><button disabled={!step} onClick={() => setStep(step - 1)}>← 上一步</button><button className="story-play" onClick={() => setStep((step + 1) % STORY.length)}>播放下一幕</button><button disabled={step === STORY.length - 1} onClick={() => setStep(step + 1)}>下一步 →</button></footer></section>
+  return (
+    <section className="transformer-story number-story">
+      <header className="story-intro">
+        <div>
+          <span className="story-kicker">动画导学 · 约 4 分钟</span>
+          <h2>比特没有正负和小数点，规则赋予它们含义</h2>
+          <p>先用补码统一整数加减，再用 IEEE 754 把有限的 32 位分配给范围与精度。</p>
+        </div>
+        <div className="number-story-badge">
+          <span>11010110</span>
+          <b>→</b>
+          <strong>整数 / 浮点数</strong>
+        </div>
+      </header>
+      <nav className="story-timeline" style={{ '--story-steps': STORY.length }}>
+        {STORY.map((item, index) => (
+          <button
+            className={`${step === index ? 'active' : ''} ${index < step ? 'passed' : ''}`}
+            key={item[0]}
+            onClick={() => setStep(index)}
+          >
+            <i>{index < step ? '✓' : index + 1}</i>
+            <span>{item[0]}</span>
+          </button>
+        ))}
+      </nav>
+      <div className="story-stage">
+        <div className="story-copy">
+          <span>0{step + 1} · 数值表示</span>
+          <h3>{STORY[step][1]}</h3>
+          <p>{[
+            '位模式 11111111 按无符号数解释是 255，按 8 位补码解释却是 -1。上下文决定含义。',
+            '符号位加绝对值最直观，但会同时出现 00000000 和 10000000 两个零，加法器也更复杂。',
+            'n 位补码可以看作模 2ⁿ 的循环：负数 -x 对应 2ⁿ-x，因此减法可以转化为加法。',
+            '8 位补码范围只有 -128～127。最高位进位不能单独判断溢出，必须检查操作数和结果符号。',
+            '类似十进制 1.25×10³，二进制浮点写成 1.f×2ᵉ，指数扩大范围，尾数保存有效数字。',
+            '单精度的三个字段分别回答：正负、数量级、有效数字；它们按统一公式解码。',
+            '有限的 23 位尾数必须舍入无限二进制小数，所以 0.1+0.2 可能不等于精确的 0.3。',
+          ][step]}</p>
+          <aside>
+            <strong>这一点为什么重要？</strong>
+            <p>{STORY[step][2]}</p>
+          </aside>
+        </div>
+        <div className="story-visual">
+          <NumberStoryVisual stageIndex={step} />
+        </div>
+      </div>
+      <footer className="story-controls">
+        <button disabled={!step} onClick={() => setStep(step - 1)}>← 上一步</button>
+        <button className="story-play" onClick={() => setStep((step + 1) % STORY.length)}>播放下一幕</button>
+        <button disabled={step === STORY.length - 1} onClick={() => setStep(step + 1)}>下一步 →</button>
+      </footer>
+    </section>
+  )
 }
