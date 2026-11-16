@@ -92,109 +92,136 @@ function lineName(index, mode) { return mode === 'set' ? `组${Math.floor(index 
 function emptyState(mode) { return { address: 0, block: 0, set: 0, target: 0, lineIndex: -1, hit: false, replaced: null, reason: '输入访问序列后开始模拟。', lines: Array.from({ length: 4 }, () => ({ block: null, tag: null })) , mode } }
 
 function CacheStoryVisual({ stageIndex }) {
+  const [clockTick, setClockTick] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setClockTick(c => (c + 1) % 4)
+    }, 1100)
+    return () => clearInterval(timer)
+  }, [stageIndex])
+
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <style>{`
+        @keyframes cachePulse {
+          0%, 100% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.25); }
+          50% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.7); }
+        }
+        @keyframes hitGlow {
+          0%, 100% { background: rgba(16, 185, 129, 0.2); border-color: #10b981; }
+          50% { background: rgba(16, 185, 129, 0.45); border-color: #34d399; box-shadow: 0 0 18px rgba(16, 185, 129, 0.7); }
+        }
+        @keyframes missClash {
+          0%, 100% { border-color: #ef4444; }
+          50% { border-color: #f87171; box-shadow: 0 0 18px rgba(239, 68, 68, 0.7); }
+        }
+        @keyframes rayScan {
+          0% { stroke-dashoffset: 30; }
+          100% { stroke-dashoffset: 0; }
+        }
+      `}</style>
+
       {/* 阶段 1: 速度鸿沟与存储金字塔 */}
       {stageIndex === 0 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>存储体系的“速度鸿沟” (Memory Wall)</span>
-            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              阶梯访问延迟
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>存储体系的“速度鸿沟” (Memory Wall)</span>
+            <span style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>
+              阶梯延迟动态流速
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', background: '#1e293b', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #38bdf8' }}>
-              <div style={{ width: '90px', fontWeight: 'bold', color: '#38bdf8', fontSize: '0.95rem' }}>CPU 核心</div>
-              <div style={{ flex: 1, color: '#94a3b8', fontSize: '0.85rem' }}>单时钟周期 ~0.5 ns，需要连续高速吞吐指令与数据</div>
-              <span style={{ background: '#0284c7', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>0.5 ns</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', borderLeft: '4px solid #38bdf8', animation: 'cachePulse 2s infinite' }}>
+              <div style={{ width: '85px', fontWeight: 'bold', color: '#38bdf8', fontSize: '0.9rem' }}>CPU 核心</div>
+              <div style={{ flex: 1, color: '#cbd5e1', fontSize: '0.8rem' }}>单时钟周期 ~0.5 ns，超高速吞吐指令与数据</div>
+              <span style={{ background: '#0284c7', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace' }}>0.5 ns ⚡</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', background: '#1e293b', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #10b981' }}>
-              <div style={{ width: '90px', fontWeight: 'bold', color: '#10b981', fontSize: '0.95rem' }}>Cache (SRAM)</div>
-              <div style={{ flex: 1, color: '#94a3b8', fontSize: '0.85rem' }}>容量通常几十KB~数十MB，延迟极低，抵挡 90%+ 访存请求</div>
-              <span style={{ background: '#059669', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>1 ~ 5 ns</span>
+            <div style={{ display: 'flex', alignItems: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', borderLeft: '4px solid #10b981', animation: 'hitGlow 2.5s infinite' }}>
+              <div style={{ width: '85px', fontWeight: 'bold', color: '#10b981', fontSize: '0.9rem' }}>Cache(SRAM)</div>
+              <div style={{ flex: 1, color: '#cbd5e1', fontSize: '0.8rem' }}>延迟极低，抵挡 90%+ 访存请求</div>
+              <span style={{ background: '#059669', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace' }}>1 ~ 5 ns</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', background: '#1e293b', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #f59e0b' }}>
-              <div style={{ width: '90px', fontWeight: 'bold', color: '#f59e0b', fontSize: '0.95rem' }}>主存 (DRAM)</div>
-              <div style={{ flex: 1, color: '#94a3b8', fontSize: '0.85rem' }}>容量 8GB~64GB，但访问延迟高达数十至上百周期</div>
-              <span style={{ background: '#d97706', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>50 ~ 100 ns</span>
+            <div style={{ display: 'flex', alignItems: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', borderLeft: '4px solid #f59e0b' }}>
+              <div style={{ width: '85px', fontWeight: 'bold', color: '#fbbf24', fontSize: '0.9rem' }}>主存 (DRAM)</div>
+              <div style={{ flex: 1, color: '#cbd5e1', fontSize: '0.8rem' }}>容量大，但访问延迟高达数十至上百周期</div>
+              <span style={{ background: '#d97706', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace' }}>50 ~ 100 ns 🐢</span>
             </div>
           </div>
-          <div style={{ marginTop: '12px', fontSize: '0.85rem', color: '#38bdf8', textAlign: 'center' }}>
-            若直接从主存读写，CPU 绝大部分时间都将处于停摆空转等待（Memory Stall）！
+          <div style={{ marginTop: '10px', fontSize: '0.78rem', color: '#38bdf8', textAlign: 'center', background: 'rgba(56, 189, 248, 0.08)', padding: '6px', borderRadius: '4px' }}>
+            若直接从主存读写，CPU 将绝大部分时间处于停摆空转等待（Memory Stall）！
           </div>
         </div>
       )}
 
       {/* 阶段 2: 局部性原理 */}
       {stageIndex === 1 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>局部性原理 (Locality of Reference)</span>
-            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              时间 + 空间
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#10b981', fontSize: '0.95rem', fontWeight: 'bold' }}>局部性原理：时间与空间双重奏</span>
+            <span style={{ background: '#10b981', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              命中率保障基石
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid #3b82f6' }}>
-              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.95rem', marginBottom: '6px' }}>时间局部性 (Temporal)</div>
-              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#e2e8f0', marginBottom: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', border: '1px solid #3b82f6', animation: 'cachePulse 2.8s infinite' }}>
+              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.88rem', marginBottom: '4px' }}>时间局部性 (Temporal)</div>
+              <div style={{ background: '#1e293b', padding: '6px 8px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '0.75rem', color: '#cbd5e1', marginBottom: '6px' }}>
                 while (i &lt; 1000) {'{'}<br />
-                &nbsp;&nbsp;sum += arr[i]; // 变量 sum<br />
+                &nbsp;&nbsp;<span style={{ color: '#fbbf24', fontWeight: 'bold' }}>sum</span> += arr[i];<br />
                 &nbsp;&nbsp;i++;<br />
                 {'}'}
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>刚被访问过的指令或数据，在不久的将来极大概率被再次访问（保存在 Cache 内）。</p>
+              <p style={{ fontSize: '0.74rem', color: '#94a3b8', margin: 0 }}>被访问过的指令或数据，短期内极大概率被再次访问（保存在 Cache 内）。</p>
             </div>
 
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid #10b981' }}>
-              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.95rem', marginBottom: '6px' }}>空间局部性 (Spatial)</div>
-              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#e2e8f0', marginBottom: '8px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', border: '1px solid #10b981', animation: 'hitGlow 3s infinite' }}>
+              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.88rem', marginBottom: '4px' }}>空间局部性 (Spatial)</div>
+              <div style={{ background: '#1e293b', padding: '6px 8px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '0.75rem', color: '#cbd5e1', marginBottom: '6px' }}>
                 arr[0] ➔ arr[1] ➔ arr[2]<br />
-                Cache 块一次性调入<br />
-                整个块 [arr[0] ~ arr[7]]
+                <span style={{ color: '#34d399', fontWeight: 'bold' }}>整块调入 [arr[0]~arr[7]]</span>
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>一旦访问了某个存储单元，其附近相连的单元不久后也会被访问（以 Cache 行整块调入）。</p>
+              <p style={{ fontSize: '0.74rem', color: '#94a3b8', margin: 0 }}>访问某存储单元，其附近相连单元随后也极可能被访问（以 Cache 行整块调入）。</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 3: 地址拆分 */}
+      {/* 阶段 3: 地址三段式解构 */}
       {stageIndex === 2 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>主存地址的三段式解构</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>主存物理地址的三段式解构</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               Tag | Index | Offset
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '16px', borderRadius: '8px' }}>
-            <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '8px' }}>示例：8 位内存地址 (例如 0110 01 10B)</div>
-            <div style={{ display: 'flex', height: '52px', borderRadius: '6px', overflow: 'hidden', border: '2px solid #475569' }}>
-              <div style={{ flex: 4, background: '#a855f7', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>Tag (标记)</span>
-                <span style={{ fontSize: '0.75rem' }}>高 4 位: 0110</span>
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginBottom: '6px' }}>示例：8 位内存地址 (0110 01 10B) 寻址分解</div>
+            <div style={{ display: 'flex', height: '44px', borderRadius: '6px', overflow: 'hidden', border: '2px solid #475569' }}>
+              <div style={{ flex: 4, background: 'linear-gradient(135deg, #7e22ce, #9333ea)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>Tag (标记)</span>
+                <span style={{ fontSize: '0.7rem' }}>高 4 位: 0110</span>
               </div>
-              <div style={{ flex: 2, background: '#3b82f6', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>Index (索引)</span>
-                <span style={{ fontSize: '0.75rem' }}>中间 2 位: 01</span>
+              <div style={{ flex: 2, background: 'linear-gradient(135deg, #1d4ed8, #2563eb)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>Index (索引)</span>
+                <span style={{ fontSize: '0.7rem' }}>中 2 位: 01</span>
               </div>
-              <div style={{ flex: 2, background: '#10b981', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>Offset (偏移)</span>
-                <span style={{ fontSize: '0.75rem' }}>低 2 位: 10</span>
+              <div style={{ flex: 2, background: 'linear-gradient(135deg, #059669, #10b981)', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>Offset (偏移)</span>
+                <span style={{ fontSize: '0.7rem' }}>低 2 位: 10</span>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '4fr 2fr 2fr', gap: '6px', marginTop: '10px', fontSize: '0.8rem', color: '#cbd5e1', textAlign: 'center' }}>
-              <span>用于与 Cache 行中 Tag 比对，核实验对身份</span>
-              <span>直接定位到第几行 (或第几组)</span>
-              <span>定位行内哪一个字节 (Byte)</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '4fr 2fr 2fr', gap: '6px', marginTop: '8px', fontSize: '0.74rem', color: '#cbd5e1', textAlign: 'center' }}>
+              <span>用于与 Cache 行的 Tag 比对验证身份</span>
+              <span>直接定位到 Cache 第几行 (或组)</span>
+              <span>定位 Cache 块内具体字节</span>
             </div>
           </div>
         </div>
@@ -202,81 +229,76 @@ function CacheStoryVisual({ stageIndex }) {
 
       {/* 阶段 4: 直接映射 */}
       {stageIndex === 3 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>直接映射 (Direct Mapped)</span>
-            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              行号 = 块号 mod 行数
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#ef4444', fontSize: '0.95rem', fontWeight: 'bold' }}>直接映射 (Direct Mapped)：行号 = 块号 mod 行数</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              严重冲突颠簸
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.3fr 1.2fr', alignItems: 'center', gap: '10px', background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ fontSize: '0.82rem', color: '#94a3b8', textAlign: 'center' }}>主存块 (Memory Blocks)</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.3fr 1.1fr', alignItems: 'center', gap: '8px', background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>主存块 (mod 4 均等于 0)</div>
               {['块 0 (Tag 0)', '块 4 (Tag 1)', '块 8 (Tag 2)', '块 12 (Tag 3)'].map((name, i) => (
-                <div key={i} style={{ background: '#334155', color: '#f8fafc', padding: '6px 10px', borderRadius: '4px', fontSize: '0.85rem', textAlign: 'center', border: '1px solid #ef4444' }}>
+                <div key={i} style={{ background: '#1e293b', color: '#f8fafc', padding: '4px 6px', borderRadius: '4px', fontSize: '0.75rem', textAlign: 'center', border: '1px solid #ef4444' }}>
                   {name}
                 </div>
               ))}
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ef4444', fontWeight: 'bold', fontSize: '1.2rem' }}>
-              ➔<br />全部映射到
+            <div style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '1.1rem', textAlign: 'center' }}>
+              ➔<br />全挤入
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ fontSize: '0.82rem', color: '#94a3b8', textAlign: 'center' }}>4 行 Cache</div>
-              <div style={{ background: '#ef4444', color: '#fff', padding: '8px', borderRadius: '4px', fontSize: '0.9rem', fontWeight: 'bold', textAlign: 'center' }}>
-                Cache 行 0 (严重冲突颠簸!)
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>4 行 Cache</div>
+              <div style={{ background: 'rgba(239, 68, 68, 0.25)', border: '1.5px solid #ef4444', color: '#fca5a5', padding: '6px', borderRadius: '4px', fontSize: '0.78rem', fontWeight: 'bold', textAlign: 'center', animation: 'missClash 1.2s infinite' }}>
+                Cache 行 0 (冲突颠簸!)
               </div>
-              <div style={{ background: '#1e293b', color: '#64748b', padding: '6px', borderRadius: '4px', fontSize: '0.8rem', textAlign: 'center', border: '1px dashed #475569' }}>
+              <div style={{ background: '#1e293b', color: '#64748b', padding: '4px', borderRadius: '4px', fontSize: '0.72rem', textAlign: 'center', border: '1px dashed #475569' }}>
                 Cache 行 1 (空闲)
               </div>
-              <div style={{ background: '#1e293b', color: '#64748b', padding: '6px', borderRadius: '4px', fontSize: '0.8rem', textAlign: 'center', border: '1px dashed #475569' }}>
+              <div style={{ background: '#1e293b', color: '#64748b', padding: '4px', borderRadius: '4px', fontSize: '0.72rem', textAlign: 'center', border: '1px dashed #475569' }}>
                 Cache 行 2 (空闲)
               </div>
-              <div style={{ background: '#1e293b', color: '#64748b', padding: '6px', borderRadius: '4px', fontSize: '0.8rem', textAlign: 'center', border: '1px dashed #475569' }}>
+              <div style={{ background: '#1e293b', color: '#64748b', padding: '4px', borderRadius: '4px', fontSize: '0.72rem', textAlign: 'center', border: '1px dashed #475569' }}>
                 Cache 行 3 (空闲)
               </div>
             </div>
           </div>
-          <div style={{ marginTop: '10px', fontSize: '0.82rem', color: '#fca5a5', textAlign: 'center' }}>
-            优点：硬件极简，无需查找；缺点：映射固定，极易发生“冲突缺失 (Conflict Miss)”。
+          <div style={{ marginTop: '8px', fontSize: '0.75rem', color: '#fca5a5', textAlign: 'center' }}>
+            优点：硬件极简，无需比对；致命缺点：位置固定，交替访问时引发大量冲突缺失！
           </div>
         </div>
       )}
 
       {/* 阶段 5: 全相联映射 */}
       {stageIndex === 4 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#a855f7', fontSize: '1rem', fontWeight: 'bold' }}>全相联映射 (Fully Associative)</span>
-            <span style={{ background: '#a855f7', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              任意块可存入任意行
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#c084fc', fontSize: '0.95rem', fontWeight: 'bold' }}>全相联映射 (Fully Associative)：任意块进任意行</span>
+            <span style={{ background: '#c084fc', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              并行比较器 (CAM)
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <div style={{ background: '#3b82f6', color: '#fff', padding: '8px 12px', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                目标主存块 B8
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <div style={{ background: '#2563eb', color: '#fff', padding: '6px 10px', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.85rem' }}>
+                目标块 B8
               </div>
-              <div style={{ color: '#a855f7', fontSize: '1.1rem', fontWeight: 'bold' }}>
-                自由选择 ➔
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', flex: 1, marginLeft: '14px' }}>
-                <div style={{ background: '#10b981', color: '#fff', padding: '6px', borderRadius: '4px', textAlign: 'center', fontSize: '0.8rem' }}>Line 0 (B1)</div>
-                <div style={{ background: '#10b981', color: '#fff', padding: '6px', borderRadius: '4px', textAlign: 'center', fontSize: '0.8rem' }}>Line 1 (B4)</div>
-                <div style={{ background: '#a855f7', color: '#fff', padding: '6px', borderRadius: '4px', textAlign: 'center', fontSize: '0.85rem', fontWeight: 'bold' }}>Line 2 (装入 B8)</div>
-                <div style={{ background: '#334155', color: '#94a3b8', padding: '6px', borderRadius: '4px', textAlign: 'center', fontSize: '0.8rem' }}>Line 3 (空闲)</div>
+              <div style={{ color: '#c084fc', fontSize: '0.95rem', fontWeight: 'bold' }}>自由装载 ➔</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', flex: 1, marginLeft: '10px' }}>
+                <div style={{ background: '#1e293b', border: '1px solid #10b981', color: '#34d399', padding: '4px', borderRadius: '4px', textAlign: 'center', fontSize: '0.72rem' }}>Line 0 (B1)</div>
+                <div style={{ background: '#1e293b', border: '1px solid #10b981', color: '#34d399', padding: '4px', borderRadius: '4px', textAlign: 'center', fontSize: '0.72rem' }}>Line 1 (B4)</div>
+                <div style={{ background: 'rgba(192, 132, 252, 0.25)', border: '1.5px solid #c084fc', color: '#fff', padding: '4px', borderRadius: '4px', textAlign: 'center', fontSize: '0.75rem', fontWeight: 'bold', animation: 'cachePulse 2s infinite' }}>Line 2 (装载B8)</div>
+                <div style={{ background: '#1e293b', color: '#64748b', padding: '4px', borderRadius: '4px', textAlign: 'center', fontSize: '0.72rem', border: '1px dashed #475569' }}>Line 3 (空)</div>
               </div>
             </div>
 
-            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #64748b' }}>
-              <div style={{ color: '#f59e0b', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '4px' }}>检索代价：并行比较器 (CAM)</div>
-              <div style={{ color: '#cbd5e1', fontSize: '0.82rem' }}>
-                因为无 Index 限制，查找目标块时必须同时将目标 Tag 与 Cache 内<strong>所有行</strong>的 Tag 进行并行比对！硬件开销极大，适合容量小的 TLB。
-              </div>
+            <div style={{ background: '#1e293b', padding: '8px', borderRadius: '6px', fontSize: '0.75rem', color: '#cbd5e1' }}>
+              <strong style={{ color: '#fbbf24' }}>硬件检索代价：</strong>因为无 Index，查找时必须将目标 Tag 与<strong>所有行</strong>的 Tag 同时并行比对，硬件电路成本高，常用于小容量 TLB。
             </div>
           </div>
         </div>
@@ -284,49 +306,49 @@ function CacheStoryVisual({ stageIndex }) {
 
       {/* 阶段 6: 组相联映射 */}
       {stageIndex === 5 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>二路组相联 (2-Way Set Associative)</span>
-            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              组间直接映射 · 组内全相联
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#10b981', fontSize: '0.95rem', fontWeight: 'bold' }}>二路组相联 (2-Way Set Associative)</span>
+            <span style={{ background: '#10b981', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              工业界黄金折中
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1.5px solid #38bdf8' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <strong style={{ color: '#38bdf8', fontSize: '0.95rem' }}>Set 0 (组号 0)</strong>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>块号 mod 2 = 0</span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', border: '1.5px solid #38bdf8', animation: 'hitGlow 2.5s infinite' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <strong style={{ color: '#38bdf8', fontSize: '0.85rem' }}>Set 0 (组号 0)</strong>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>块号 mod 2 = 0</span>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <div style={{ flex: 1, background: '#0f172a', padding: '8px', borderRadius: '4px', textAlign: 'center', border: '1px solid #475569' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Way 0 (路0)</div>
-                  <strong style={{ color: '#38bdf8', fontSize: '0.9rem' }}>块 B0</strong>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ flex: 1, background: '#1e293b', padding: '6px', borderRadius: '4px', textAlign: 'center', border: '1px solid #475569' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Way 0</div>
+                  <strong style={{ color: '#38bdf8', fontSize: '0.8rem' }}>块 B0</strong>
                 </div>
-                <div style={{ flex: 1, background: '#0f172a', padding: '8px', borderRadius: '4px', textAlign: 'center', border: '1px solid #475569' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Way 1 (路1)</div>
-                  <strong style={{ color: '#38bdf8', fontSize: '0.9rem' }}>块 B4</strong>
+                <div style={{ flex: 1, background: '#1e293b', padding: '6px', borderRadius: '4px', textAlign: 'center', border: '1px solid #475569' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Way 1</div>
+                  <strong style={{ color: '#38bdf8', fontSize: '0.8rem' }}>块 B4</strong>
                 </div>
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#34d399', marginTop: '6px' }}>B0 和 B4 可以同时共存，不再冲突！</div>
+              <div style={{ fontSize: '0.72rem', color: '#34d399', marginTop: '6px' }}>B0 与 B4 并存，消除冲突缺失！</div>
             </div>
 
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1.5px solid #a855f7' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <strong style={{ color: '#a855f7', fontSize: '0.95rem' }}>Set 1 (组号 1)</strong>
-                <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>块号 mod 2 = 1</span>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', border: '1.5px solid #c084fc' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <strong style={{ color: '#c084fc', fontSize: '0.85rem' }}>Set 1 (组号 1)</strong>
+                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>块号 mod 2 = 1</span>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <div style={{ flex: 1, background: '#0f172a', padding: '8px', borderRadius: '4px', textAlign: 'center', border: '1px solid #475569' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Way 0 (路0)</div>
-                  <strong style={{ color: '#a855f7', fontSize: '0.9rem' }}>块 B1</strong>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ flex: 1, background: '#1e293b', padding: '6px', borderRadius: '4px', textAlign: 'center', border: '1px solid #475569' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Way 0</div>
+                  <strong style={{ color: '#c084fc', fontSize: '0.8rem' }}>块 B1</strong>
                 </div>
-                <div style={{ flex: 1, background: '#0f172a', padding: '8px', borderRadius: '4px', textAlign: 'center', border: '1px dashed #64748b' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Way 1 (路1)</div>
-                  <span style={{ color: '#64748b', fontSize: '0.85rem' }}>空闲</span>
+                <div style={{ flex: 1, background: '#1e293b', padding: '6px', borderRadius: '4px', textAlign: 'center', border: '1px dashed #64748b' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Way 1</div>
+                  <span style={{ color: '#64748b', fontSize: '0.75rem' }}>空闲</span>
                 </div>
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '6px' }}>只需 2 个比较器，硬件性价比最优方案</div>
+              <div style={{ fontSize: '0.72rem', color: '#cbd5e1', marginTop: '6px' }}>组内仅需 2 个比较器，性价比最高方案。</div>
             </div>
           </div>
         </div>
@@ -334,30 +356,30 @@ function CacheStoryVisual({ stageIndex }) {
 
       {/* 阶段 7: 命中与替换 */}
       {stageIndex === 6 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>命中 (Hit) 与缺失替换 (Miss & Replace)</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>命中 (Hit) 与缺失替换 (Miss & Replace)</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               LRU 算法仲裁
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #10b981' }}>
-              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.95rem' }}>Cache 命中流程 (Hit)</div>
-              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
-                1. 检查对应行的有效位 Valid == 1<br />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', borderLeft: '4px solid #10b981', animation: 'hitGlow 2.5s infinite' }}>
+              <div style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.88rem' }}>Cache 命中流程 (HIT ⚡)</div>
+              <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px', lineHeight: '1.5' }}>
+                1. 检查对应行有效位 Valid == 1<br />
                 2. Tag 匹配一致 ➔ 命中<br />
-                3. 根据 Offset 提取对应字直接送入 CPU
+                3. 按 Offset 提取字直接送入 CPU
               </div>
             </div>
 
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #ef4444' }}>
-              <div style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '0.95rem' }}>Cache 缺失流程 (Miss)</div>
-              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', borderLeft: '4px solid #ef4444', animation: 'missClash 2.5s infinite' }}>
+              <div style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '0.88rem' }}>Cache 缺失流程 (MISS ⚠️)</div>
+              <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px', lineHeight: '1.5' }}>
                 1. CPU 发生停顿 (Stall)<br />
-                2. 向主存发起整块读取 (例如 4 字节块)<br />
-                3. 若组已满，采用 <strong>LRU (近期最少使用)</strong> 淘汰最久未访问的旧行
+                2. 向主存发起整块读取 (如 4 字节块)<br />
+                3. 若组已满，采用 <strong>LRU 淘汰</strong>最久未用行
               </div>
             </div>
           </div>
