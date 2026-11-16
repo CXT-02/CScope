@@ -167,7 +167,7 @@ export default function DeadlockExperiment({ experiment }) {
       const currentResIdx = RESOURCES.indexOf(resource)
       const maxHeldIdx = heldResources.length > 0 ? Math.max(...heldResources.map(r => RESOURCES.indexOf(r))) : -1
       if (heldResources.length > 0 && currentResIdx <= maxHeldIdx) {
-        setMessage(`⚠️【预防规则拦截】有序分配法规定必须递增申请！${process} 已持有较高编号资源，禁止逆向申请 ${resource}！`)
+        setMessage(`[预防规则拦截] 有序分配法规定必须递增申请！${process} 已持有较高编号资源，禁止逆向申请 ${resource}！`)
         return
       }
     }
@@ -181,15 +181,15 @@ export default function DeadlockExperiment({ experiment }) {
       // 成功获得空闲资源
       setOwners((prev) => ({ ...prev, [resource]: process }))
       setWaiting((prev) => prev.filter((x) => !(x.process === process && x.resource === resource)))
-      setMessage(`✅ ${process} 成功获得空闲资源 ${resource}。`)
+      setMessage(`[分配成功] ${process} 获得空闲资源 ${resource}。`)
     } else {
       // 被占用，进入阻塞等待
       const alreadyWaiting = waiting.some((x) => x.process === process && x.resource === resource)
       if (alreadyWaiting) {
-        setMessage(`⏳ ${process} 已在等待队列中排队等待 ${resource}。`)
+        setMessage(`[队列排队] ${process} 已在等待队列中排队等待 ${resource}。`)
       } else {
         setWaiting((prev) => [...prev, { process, resource }])
-        setMessage(`⚠️ ${resource} 正被 ${owner} 持有，${process} 进入阻塞等待队列。`)
+        setMessage(`[资源冲突] ${resource} 正被 ${owner} 持有，${process} 进入阻塞等待队列。`)
       }
     }
   }
@@ -197,7 +197,7 @@ export default function DeadlockExperiment({ experiment }) {
   // 释放资源并唤醒等待者
   function handleRelease() {
     if (owners[resource] !== process) {
-      setMessage(`❌ ${process} 当前并未持有 ${resource}，无法释放。`)
+      setMessage(`[操作受限] ${process} 当前并未持有 ${resource}，无法释放。`)
       return
     }
 
@@ -206,10 +206,10 @@ export default function DeadlockExperiment({ experiment }) {
       // 唤醒最先等待该资源的进程
       setOwners((prev) => ({ ...prev, [resource]: waiter.process }))
       setWaiting((prev) => prev.filter((x) => x !== waiter))
-      setMessage(`🔓 ${process} 释放了 ${resource}，等待中的 ${waiter.process} 获得资源并成功被唤醒！`)
+      setMessage(`[释放唤醒] ${process} 释放了 ${resource}，等待中的 ${waiter.process} 获得资源并成功被唤醒！`)
     } else {
       setOwners((prev) => ({ ...prev, [resource]: null }))
-      setMessage(`🔓 ${process} 释放了 ${resource}，该资源现已完全空闲。`)
+      setMessage(`[释放资源] ${process} 释放了 ${resource}，该资源现已完全空闲。`)
     }
   }
 
@@ -233,7 +233,7 @@ export default function DeadlockExperiment({ experiment }) {
 
     setOwners(nextOwners)
     setWaiting(nextWaiting)
-    setMessage(`🧹 已释放 ${targetP} 的全部持有资源，等待它的进程已被唤醒！`)
+    setMessage(`[重置释放] 已释放 ${targetP} 的全部持有资源，等待它的进程已被唤醒！`)
   }
 
   // 解除死锁：一键强行剥夺资源打破环
@@ -244,7 +244,7 @@ export default function DeadlockExperiment({ experiment }) {
     }
     const victim = cycle[0] // 选环中第一个进程作为牺牲者
     handleReleaseProcess(victim)
-    setMessage(`🔪【死锁解除成功】已强制终止/剥夺牺牲进程 ${victim}，等待闭环已被切断，系统死锁解除！`)
+    setMessage(`[死锁解除] 已强制终止/剥夺牺牲进程 ${victim}，等待闭环已被切断，系统恢复安全状态！`)
   }
 
   // 银行家算法模拟请求
@@ -299,21 +299,21 @@ export default function DeadlockExperiment({ experiment }) {
           className={`tab-btn ${activeTab === 'detection' ? 'active' : ''}`}
           onClick={() => setActiveTab('detection')}
         >
-          🔍 资源分配图与死锁检测 (RAG)
+          资源分配图与死锁检测 (RAG)
         </button>
         <button
           type="button"
           className={`tab-btn ${activeTab === 'prevention' ? 'active' : ''}`}
           onClick={() => setActiveTab('prevention')}
         >
-          🛡️ 死锁预防机制 (Prevention)
+          死锁预防机制 (Prevention)
         </button>
         <button
           type="button"
           className={`tab-btn ${activeTab === 'banker' ? 'active' : ''}`}
           onClick={() => setActiveTab('banker')}
         >
-          🏦 银行家算法安全性检查 (Banker's Algorithm)
+          银行家算法 (Banker's Algorithm)
         </button>
       </div>
 
@@ -323,7 +323,7 @@ export default function DeadlockExperiment({ experiment }) {
             <div className="panel-title">
               <span>资源分配操作</span>
               <i className={cycle.length ? 'danger' : 'online'}>
-                {cycle.length ? '🚨 检测到死锁环' : '✅ 状态安全'}
+                {cycle.length ? '检测到死锁环' : '状态安全'}
               </i>
             </div>
 
@@ -362,7 +362,7 @@ export default function DeadlockExperiment({ experiment }) {
 
             {cycle.length > 0 && (
               <button type="button" className="btn-break-cycle-pulse" onClick={handleBreakDeadlock}>
-                🔪 强行解除死锁 (斩断环路)
+                一键解除死锁 (强制剥夺)
               </button>
             )}
 
@@ -416,7 +416,7 @@ export default function DeadlockExperiment({ experiment }) {
                   <p key={p}>
                     <b>{p}</b>
                     <strong className={cycle.includes(p) ? 'danger' : blocked.has(p) ? 'waiting' : 'running'}>
-                      {cycle.includes(p) ? '死锁中 💥' : blocked.has(p) ? '阻塞等待 ⏳' : '可运行 ✓'}
+                      {cycle.includes(p) ? '死锁中' : blocked.has(p) ? '阻塞等待' : '可运行'}
                     </strong>
                   </p>
                 ))}
@@ -593,7 +593,7 @@ export default function DeadlockExperiment({ experiment }) {
               <div className={`safety-status-card ${safetyResult.isSafe ? 'safe' : 'unsafe'}`}>
                 <div className="status-title">
                   <span>安全性算法检查结论</span>
-                  <strong>{safetyResult.isSafe ? '系统处于安全状态 (Safe)' : '系统处于不安全状态 (Unsafe) ⚠️'}</strong>
+                  <strong>{safetyResult.isSafe ? '系统处于安全状态 (Safe)' : '系统处于不安全状态 (Unsafe)'}</strong>
                 </div>
                 {safetyResult.isSafe ? (
                   <div className="safe-seq-result">
@@ -1016,7 +1016,7 @@ function DeadlockStoryVisual({ step }) {
               { id: 0, title: '阶段 1: 各自申请' },
               { id: 1, title: '阶段 2: 成功持有' },
               { id: 2, title: '阶段 3: 单向等待 (安全)' },
-              { id: 3, title: '阶段 4: 闭环形成 💥 死锁！' },
+              { id: 3, title: '阶段 4: 闭环形成 (死锁爆发)' },
             ].map((st) => (
               <button
                 key={st.id}
@@ -1044,7 +1044,7 @@ function DeadlockStoryVisual({ step }) {
                   {evoStage === 0 && <span className="stage-tip">双方刚启动</span>}
                   {evoStage === 1 && <span className="stage-tip safe">各自拿到 1 个资源</span>}
                   {evoStage === 2 && <span className="stage-tip warn">P1 等待 R2 (单向依赖，仍安全)</span>}
-                  {evoStage === 3 && <span className="stage-tip danger-pulse">🚨 等待形成闭环！双向死锁！</span>}
+                  {evoStage === 3 && <span className="stage-tip danger-pulse">等待形成闭环 (双向死锁)</span>}
                 </div>
 
                 <div className={`rag-node p-node p2 ${evoStage === 3 ? 'deadlocked-node' : ''}`}>
@@ -1074,22 +1074,21 @@ function DeadlockStoryVisual({ step }) {
                 )}
                 {evoStage === 3 && (
                   <div className="rag-link req req-p2-r1 deadly-close">
-                    <span className="link-tag req-tag deadly">💥 申请: P2 ┄┄▶ R1 (被 P1 占用阻塞)</span>
+                    <span className="link-tag req-tag deadly">申请: P2 ┄┄▶ R1 (被 P1 占用阻塞)</span>
                   </div>
                 )}
               </div>
 
               <div className="rag-row rag-resources">
                 <div className={`rag-node r-node r1 ${evoStage >= 1 ? 'owned' : ''}`}>
-                  <span className="res-icon">🖨️</span>
-                  <span className="node-id">R1 (打印机)</span>
+                  <span className="node-id">R1 (资源1)</span>
                   <small className="res-owner-tag">{evoStage >= 1 ? 'P1 正在占用' : '空闲'}</small>
                 </div>
 
                 <div className="rag-row-center-note">
                   {evoStage === 3 ? (
                     <div className="cycle-loop-warning">
-                      <strong>🔄 闭环拓扑闭合：</strong>
+                      <strong>闭环拓扑闭合：</strong>
                       <code>P1 ➔ 等待 R2 ➔ 持有者 P2 ➔ 等待 R1 ➔ 持有者 P1</code>
                     </div>
                   ) : (
@@ -1098,8 +1097,7 @@ function DeadlockStoryVisual({ step }) {
                 </div>
 
                 <div className={`rag-node r-node r2 ${evoStage >= 1 ? 'owned' : ''}`}>
-                  <span className="res-icon">📷</span>
-                  <span className="node-id">R2 (扫描仪)</span>
+                  <span className="node-id">R2 (资源2)</span>
                   <small className="res-owner-tag">{evoStage >= 1 ? 'P2 正在占用' : '空闲'}</small>
                 </div>
               </div>
