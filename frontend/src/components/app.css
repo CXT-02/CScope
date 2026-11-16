@@ -635,3 +635,30 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .tree-canvas.is-dragging{cursor:grabbing !important}
 .tree-node{cursor:grab;transition:transform .1s ease}
 .tree-node.dragging{cursor:grabbing !important;filter:drop-shadow(0 0 16px rgba(99,102,241,.85))}
+
+/* 18. 栈与队列应用场景全幅大画幅深度重构（占据画幅 65%+） */
+.sq-use-map-hero{width:96%;max-width:720px;min-width:540px;margin:0 auto;display:flex;flex-direction:column;gap:12px;animation:story-operation-pulse .4s ease}
+.sq-hero-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.sq-hero-col{background:#111926;border:1.5px solid #2a3a50;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.hero-col-header{display:flex;align-items:center;gap:10px;border-bottom:1px solid #202e42;padding-bottom:8px}
+.hero-col-header .col-icon{font-size:24px}
+.hero-col-header strong{display:block;font-size:16px;font-weight:900;color:#f8fafc}
+.hero-col-header small{display:block;font-size:12px;color:#94a3b8;margin-top:2px}
+.hero-app-cards{display:flex;flex-direction:column;gap:7px}
+.app-item-card{background:#172233;border:1.5px solid #2c3e56;border-radius:9px;padding:8px 10px;cursor:pointer;transition:all .25s ease}
+.app-item-card:hover{background:#1e2d42;border-color:#4d6486}
+.app-item-card.is-active{background:linear-gradient(135deg,rgba(255,103,69,.18),#1d293d);border-color:#ff6745;box-shadow:0 0 16px rgba(255,103,69,.25);transform:scale(1.02)}
+.queue-col .app-item-card.is-active{background:linear-gradient(135deg,rgba(99,102,241,.2),#1d293d);border-color:#818cf8;box-shadow:0 0 16px rgba(99,102,241,.25)}
+.card-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.card-title-row strong{font-size:14px;font-weight:800;color:#f1f5f9}
+.card-tag{font-size:11px;font-weight:800;padding:2px 7px;border-radius:99px;background:rgba(255,255,255,.07);color:#cbd5e1}
+.card-desc{font-size:12px;color:#94a3b8;line-height:1.45;margin:0}
+.app-item-card.is-active .card-desc{color:#e2e8f0}
+
+.sq-hero-focus-banner{background:linear-gradient(180deg,#162132,#0e1522);border:1.5px solid #364964;border-radius:12px;padding:12px 16px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.focus-header-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.focus-pill{font-size:15px;font-weight:900;color:#ff9d85}
+.focus-rule-tag{font-size:12px;font-weight:800;color:#a5b4fc;background:rgba(99,102,241,.16);padding:2px 8px;border-radius:99px;border:1px solid rgba(99,102,241,.3)}
+.focus-detail-text{font-size:15px;line-height:1.65;color:#f8fafc;margin:0;font-weight:600}
+
+.sq-step-stage{display:flex;flex-direction:column;align-items:center;width:100%}
