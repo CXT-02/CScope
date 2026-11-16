@@ -3,8 +3,141 @@ import { ExperimentHeader } from './AttentionExperiment'
 import LearningCycle from './LearningCycle'
 import TheoryPrimer from './TheoryPrimer'
 
-const initialProcesses = [{ id: 'P1', burst: 6 }, { id: 'P2', burst: 3 }, { id: 'P3', burst: 8 }, { id: 'P4', burst: 2 }]
+const initialProcesses = [
+  { id: 'P1', arrival: 0, burst: 6 },
+  { id: 'P2', arrival: 0, burst: 3 },
+  { id: 'P3', arrival: 0, burst: 8 },
+  { id: 'P4', arrival: 0, burst: 2 }
+]
+const staggeredProcesses = [
+  { id: 'P1', arrival: 0, burst: 6 },
+  { id: 'P2', arrival: 2, burst: 3 },
+  { id: 'P3', arrival: 4, burst: 8 },
+  { id: 'P4', arrival: 6, burst: 2 }
+]
 const colors = ['#6558e8', '#159a83', '#ee6c4d', '#3977c3']
+
+function scheduleProcesses(processes, algorithm, quantum) {
+  const n = processes.length
+  let timeline = []
+  let currentTime = 0
+
+  if (algorithm === 'fcfs') {
+    const queue = [...processes].sort((a, b) => a.arrival - b.arrival || a.id.localeCompare(b.id))
+    queue.forEach((p) => {
+      if (currentTime < p.arrival) {
+        timeline.push({ id: 'IDLE', start: currentTime, end: p.arrival, isIdle: true })
+        currentTime = p.arrival
+      }
+      timeline.push({ ...p, start: currentTime, end: currentTime + p.burst })
+      currentTime += p.burst
+    })
+  } else if (algorithm === 'sjf') {
+    const remaining = processes.map((p) => ({ ...p, completed: false }))
+    let completedCount = 0
+    while (completedCount < n) {
+      const available = remaining.filter((p) => !p.completed && p.arrival <= currentTime)
+      if (available.length === 0) {
+        const nextArrival = Math.min(...remaining.filter((p) => !p.completed).map((p) => p.arrival))
+        timeline.push({ id: 'IDLE', start: currentTime, end: nextArrival, isIdle: true })
+        currentTime = nextArrival
+        continue
+      }
+      available.sort((a, b) => a.burst - b.burst || a.arrival - b.arrival)
+      const chosen = available[0]
+      timeline.push({ ...chosen, start: currentTime, end: currentTime + chosen.burst })
+      currentTime += chosen.burst
+      chosen.completed = true
+      completedCount++
+    }
+  } else {
+    // RR 时间片轮转算法
+    const procMap = processes.map((p) => ({ ...p, remaining: p.burst }))
+    let readyQueue = []
+    let completedCount = 0
+    const sorted = [...procMap].sort((a, b) => a.arrival - b.arrival)
+    let arrivedIdx = 0
+
+    while (completedCount < n) {
+      while (arrivedIdx < sorted.length && sorted[arrivedIdx].arrival <= currentTime) {
+        readyQueue.push(sorted[arrivedIdx])
+        arrivedIdx++
+      }
+
+      if (readyQueue.length === 0) {
+        if (arrivedIdx < sorted.length) {
+          const nextTime = sorted[arrivedIdx].arrival
+          timeline.push({ id: 'IDLE', start: currentTime, end: nextTime, isIdle: true })
+          currentTime = nextTime
+          continue
+        } else {
+          break
+        }
+      }
+
+      const current = readyQueue.shift()
+      const slice = Math.min(quantum, current.remaining)
+      timeline.push({ ...current, start: currentTime, end: currentTime + slice })
+      currentTime += slice
+      current.remaining -= slice
+
+      while (arrivedIdx < sorted.length && sorted[arrivedIdx].arrival <= currentTime) {
+        readyQueue.push(sorted[arrivedIdx])
+        arrivedIdx++
+      }
+
+      if (current.remaining > 0) {
+        readyQueue.push(current)
+      } else {
+        completedCount++
+      }
+    }
+  }
+
+  const completionMap = {}
+  timeline.forEach((block) => {
+    if (!block.isIdle) {
+      completionMap[block.id] = block.end
+    }
+  })
+
+  const processStats = processes.map((p) => {
+    const comp = completionMap[p.id] ?? (p.arrival + p.burst)
+    const turnaround = comp - p.arrival
+    const waiting = turnaround - p.burst
+    const weightedTurnaround = (turnaround / p.burst).toFixed(2)
+    return {
+      ...p,
+      completion: comp,
+      turnaround,
+      waiting,
+      weightedTurnaround,
+    }
+  })
+
+  const avgWait = processStats.reduce((acc, p) => acc + p.waiting, 0) / n
+  const avgTurnaround = processStats.reduce((acc, p) => acc + p.turnaround, 0) / n
+  const avgWeightedTurnaround = processStats.reduce((acc, p) => acc + Number(p.weightedTurnaround), 0) / n
+  const validBlocks = timeline.filter((b) => !b.isIdle)
+  const contextSwitches = validBlocks.length > 0 ? validBlocks.length - 1 : 0
+
+  const waitSum = processStats.reduce((a, b) => a + b.waiting, 0)
+  const turnaroundSum = processStats.reduce((a, b) => a + b.turnaround, 0)
+  const waitFormula = `(${processStats.map((p) => `${p.id}:${p.waiting}`).join(' + ')}) ÷ ${n} = ${waitSum} ÷ ${n} = ${avgWait.toFixed(2)}`
+  const turnaroundFormula = `(${processStats.map((p) => `${p.id}:${p.turnaround}`).join(' + ')}) ÷ ${n} = ${turnaroundSum} ÷ ${n} = ${avgTurnaround.toFixed(2)}`
+
+  return {
+    timeline,
+    total: currentTime,
+    processStats,
+    averageWait: avgWait,
+    averageTurnaround: avgTurnaround,
+    averageWeightedTurnaround: avgWeightedTurnaround,
+    contextSwitches,
+    waitFormula,
+    turnaroundFormula,
+  }
+}
 
 const SCHED_STORY = [
   ['就绪队列与分派', 'CPU 只有一个，但多个就绪进程同时想运行', '调度器的核心职责就是从就绪队列挑选最合适的进程分配给 CPU。'],
@@ -459,10 +592,25 @@ export default function SchedulingExperiment({ experiment }) {
   const [processes, setProcesses] = useState(initialProcesses)
   const [algorithm, setAlgorithm] = useState('fcfs')
   const [quantum, setQuantum] = useState(2)
-  const result = useMemo(() => schedule(processes, algorithm, quantum), [processes, algorithm, quantum])
+  const [arrivalMode, setArrivalMode] = useState('simultaneous') // 'simultaneous' | 'staggered'
+
+  const result = useMemo(() => scheduleProcesses(processes, algorithm, quantum), [processes, algorithm, quantum])
 
   function updateBurst(index, burst) {
-    setProcesses((current) => current.map((process, processIndex) => processIndex === index ? { ...process, burst: Math.max(1, burst) } : process))
+    setProcesses((current) => current.map((p, i) => i === index ? { ...p, burst: Math.max(1, burst) } : p))
+  }
+
+  function updateArrival(index, arrival) {
+    setProcesses((current) => current.map((p, i) => i === index ? { ...p, arrival: Math.max(0, arrival) } : p))
+  }
+
+  function switchArrivalMode(mode) {
+    setArrivalMode(mode)
+    if (mode === 'simultaneous') {
+      setProcesses((current) => current.map((p) => ({ ...p, arrival: 0 })))
+    } else {
+      setProcesses(staggeredProcesses)
+    }
   }
 
   return (
@@ -482,27 +630,291 @@ export default function SchedulingExperiment({ experiment }) {
       />
       <div className="explore-heading">
         <span>自由探索 · 参数化甘特图时序实验</span>
-        <h2>动态调整任务长度，透视三种调度算法的实际表现</h2>
-        <p>自定义各进程的 CPU 需求时长与时间片，观察实时甘特图时序、平均等待时间与上下文切换次数的敏捷变化。</p>
+        <h2>动态调整到达与运行时间，透视不同算法的指标计算</h2>
+        <p>自定义各进程的到达时间 (Arrival) 与运行时间 (Burst)，观察实时甘特图时序、进程指标数据表与公式代入展开过程。</p>
       </div>
+
       <div className="lab-layout">
         <aside className="control-panel">
-          <div className="panel-title"><span>调度参数</span><i>全部同时到达</i></div>
-          <label className="field-block"><span>调度算法</span><small>{algorithmHelp(algorithm)}</small><select value={algorithm} onChange={(event) => setAlgorithm(event.target.value)}><option value="fcfs">FCFS 先来先服务</option><option value="sjf">SJF 短作业优先</option><option value="rr">RR 时间片轮转</option></select></label>
-          {algorithm === 'rr' && <label className="range-field"><span><b>时间片 Quantum</b><i>{quantum}</i></span><small>每个进程一次最多运行多久。越小越公平，但上下文切换通常越频繁。</small><input type="range" min="1" max="5" value={quantum} onChange={(event) => setQuantum(Number(event.target.value))} /></label>}
-          <div className="process-editor"><span>CPU 运行时间</span><small>修改每个进程完成任务需要的 CPU 时间，右侧甘特图和指标会立即重算。</small>{processes.map((process, index) => <label key={process.id}><b style={{ background: colors[index] }}>{process.id}</b><input type="number" min="1" max="12" value={process.burst} onChange={(event) => updateBurst(index, Number(event.target.value))} /><i>单位</i></label>)}</div>
-          <div className="live-explanation" key={`${algorithm}-${quantum}`}><span>你当前选择的是</span><strong>{algorithm === 'fcfs' ? '先来先服务：简单，但可能让短任务久等' : algorithm === 'sjf' ? '短作业优先：平均等待时间通常更低' : `时间片轮转：每次最多运行 ${quantum} 个单位`}</strong><p>观察右侧平均等待时间和上下文切换次数，它们会随着算法和参数实时变化。</p></div>
-        </aside>
-        <section className="visual-panel scheduling-panel">
-          <div className="visual-toolbar"><div><strong>CPU 调度甘特图</strong><span>{algorithm.toUpperCase()} · 总运行时间 {result.total}</span></div></div>
-          <div className="metric-grid"><div><span>平均等待时间</span><strong>{result.averageWait.toFixed(2)}</strong></div><div><span>上下文切换</span><strong>{Math.max(0, result.timeline.length - 1)}</strong></div><div><span>完成进程</span><strong>{processes.length}</strong></div></div>
-          <div className="gantt-wrap">
-            <div className="gantt-chart">{result.timeline.map((block, index) => { const processIndex = processes.findIndex((process) => process.id === block.id); return <div key={`${block.id}-${index}`} className="gantt-block" style={{ width: `${((block.end - block.start) / result.total) * 100}%`, background: colors[processIndex] }} title={`${block.id}: ${block.start} → ${block.end}`}><strong>{block.id}</strong><span>{block.end - block.start}</span></div> })}</div>
-            <div className="gantt-axis"><span>0</span>{result.timeline.map((block, index) => <span key={`${block.id}-time-${index}`} style={{ left: `${(block.end / result.total) * 100}%` }}>{block.end}</span>)}</div>
+          <div className="panel-title">
+            <span>调度参数配置</span>
+            <i>{arrivalMode === 'simultaneous' ? '全部同时到达 (t=0)' : '错峰动态到达'}</i>
           </div>
-          <div className="algorithm-note"><strong>{algorithm === 'fcfs' ? '先来先服务' : algorithm === 'sjf' ? '短作业优先' : '时间片轮转'}</strong><p>{algorithm === 'fcfs' ? '按进入队列的顺序执行，实现简单，但长任务可能让后续短任务等待很久。' : algorithm === 'sjf' ? '优先执行运行时间短的任务，通常能降低平均等待时间，但长任务可能被推迟。' : '每个进程轮流获得一小段 CPU 时间，响应更公平，但时间片过小会带来频繁切换。'}</p></div>
+
+          <div className="sched-mode-toggle-group">
+            <button
+              type="button"
+              className={`mode-btn ${arrivalMode === 'simultaneous' ? 'active' : ''}`}
+              onClick={() => switchArrivalMode('simultaneous')}
+            >
+              ⚡ 全部同时到达 (t=0)
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${arrivalMode === 'staggered' ? 'active' : ''}`}
+              onClick={() => switchArrivalMode('staggered')}
+            >
+              ⏱️ 错峰动态到达
+            </button>
+          </div>
+
+          <label className="field-block">
+            <span>调度算法</span>
+            <small>{algorithmHelp(algorithm)}</small>
+            <select value={algorithm} onChange={(event) => setAlgorithm(event.target.value)}>
+              <option value="fcfs">FCFS 先来先服务</option>
+              <option value="sjf">SJF 短作业优先 (非抢占)</option>
+              <option value="rr">RR 时间片轮转</option>
+            </select>
+          </label>
+
+          {algorithm === 'rr' && (
+            <label className="range-field">
+              <span><b>时间片 Quantum</b><i>{quantum} 单位</i></span>
+              <small>每个进程一次最多运行多久。越小越公平，但上下文切换通常越频繁。</small>
+              <input type="range" min="1" max="5" value={quantum} onChange={(event) => setQuantum(Number(event.target.value))} />
+            </label>
+          )}
+
+          <div className="process-editor enhanced-proc-editor">
+            <div className="editor-title-row">
+              <span>作业时序参数设置</span>
+              <small>自由微调到达与运行耗时</small>
+            </div>
+            {processes.map((process, index) => (
+              <div className="proc-edit-row" key={process.id}>
+                <b className="proc-color-tag" style={{ background: colors[index] }}>{process.id}</b>
+                <div className="proc-input-pair">
+                  <label className="sub-input-label">
+                    <span>到达</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="20"
+                      value={process.arrival}
+                      onChange={(e) => updateArrival(index, Number(e.target.value))}
+                    />
+                  </label>
+                  <label className="sub-input-label">
+                    <span>运行</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max="16"
+                      value={process.burst}
+                      onChange={(e) => updateBurst(index, Number(e.target.value))}
+                    />
+                  </label>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="live-explanation" key={`${algorithm}-${quantum}-${arrivalMode}`}>
+            <span>当前策略分析</span>
+            <strong>
+              {algorithm === 'fcfs'
+                ? '先来先服务：完全按到达时间排队，长任务霸占 CPU 时短任务等待时间长。'
+                : algorithm === 'sjf'
+                ? '短作业优先：在已到达的任务中挑选最短者，平均等待时间通常最低。'
+                : `时间片轮转：每次最多轮流运行 ${quantum} 个时间片，兼顾各作业响应速度。`}
+            </strong>
+            <p>下方数据表会根据你的参数改动，实时更新每个作业的完成、周转与等待时间指标！</p>
+          </div>
+        </aside>
+
+        <section className="visual-panel scheduling-panel">
+          <div className="visual-toolbar">
+            <div>
+              <strong>CPU 调度甘特图 (Gantt Chart)</strong>
+              <span>{algorithm.toUpperCase()} · 总完成时刻 {result.total} · 上下文切换 {result.contextSwitches} 次</span>
+            </div>
+          </div>
+
+          {/* 顶部指标统计栏 */}
+          <div className="metric-grid sched-metric-grid">
+            <div className="metric-box-highlight">
+              <span>平均等待时间</span>
+              <strong>{result.averageWait.toFixed(2)}</strong>
+              <small>各作业等待时长均值</small>
+            </div>
+            <div className="metric-box-highlight">
+              <span>平均周转时间</span>
+              <strong>{result.averageTurnaround.toFixed(2)}</strong>
+              <small>从到达至完成全流程均值</small>
+            </div>
+            <div>
+              <span>上下文切换</span>
+              <strong>{result.contextSwitches} 次</strong>
+              <small>进程切换保存/恢复开销</small>
+            </div>
+            <div>
+              <span>CPU 总时长</span>
+              <strong>{result.total} 单位</strong>
+              <small>甘特图终点时间</small>
+            </div>
+          </div>
+
+          {/* 甘特图渲染 */}
+          <div className="gantt-wrap enhanced-gantt-wrap">
+            <div className="gantt-chart">
+              {result.timeline.map((block, index) => {
+                const processIndex = processes.findIndex((p) => p.id === block.id)
+                const widthPercent = result.total > 0 ? ((block.end - block.start) / result.total) * 100 : 0
+                if (block.isIdle) {
+                  return (
+                    <div
+                      key={`idle-${index}`}
+                      className="gantt-block idle-block"
+                      style={{ width: `${widthPercent}%` }}
+                      title={`CPU 空闲: ${block.start} → ${block.end}`}
+                    >
+                      <strong>IDLE</strong>
+                      <span>空闲 {block.end - block.start}</span>
+                    </div>
+                  )
+                }
+                return (
+                  <div
+                    key={`${block.id}-${index}`}
+                    className="gantt-block"
+                    style={{ width: `${widthPercent}%`, background: colors[processIndex] }}
+                    title={`${block.id}: ${block.start} → ${block.end} (运行 ${block.end - block.start} 单位)`}
+                  >
+                    <strong>{block.id}</strong>
+                    <span>{block.end - block.start}</span>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="gantt-axis">
+              <span>0</span>
+              {result.timeline.map((block, index) => (
+                <span
+                  key={`${block.id}-time-${index}`}
+                  style={{ left: `${result.total > 0 ? (block.end / result.total) * 100 : 0}%` }}
+                >
+                  {block.end}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* 1. 详细作业调度与执行数据表 */}
+          <div className="sched-detail-table-container">
+            <div className="table-caption-bar">
+              <div className="table-title">
+                <strong>📊 每个作业到达、运行、完成与等待时间明细表</strong>
+                <span>根据甘特图执行时序实时精确计算</span>
+              </div>
+              <span className="table-mode-badge">{arrivalMode === 'simultaneous' ? '全部 t=0 同时到达' : '错峰动态到达'}</span>
+            </div>
+
+            <table className="sched-process-table">
+              <thead>
+                <tr>
+                  <th>作业 / 进程</th>
+                  <th>到达时间 (Arrival)</th>
+                  <th>运行时间 (Burst)</th>
+                  <th>完成时刻 (Completion)</th>
+                  <th>周转时间 (Turnaround)</th>
+                  <th>等待时间 (Waiting)</th>
+                  <th>带权周转时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                {result.processStats.map((p, idx) => (
+                  <tr key={p.id}>
+                    <td>
+                      <div className="td-proc-cell">
+                        <span className="dot" style={{ background: colors[idx] }} />
+                        <strong>{p.id}</strong>
+                      </div>
+                    </td>
+                    <td><span className="num-pill">{p.arrival}</span></td>
+                    <td><span className="num-pill">{p.burst}</span></td>
+                    <td><strong className="hl-num">{p.completion}</strong></td>
+                    <td><span className="num-result">{p.turnaround}</span></td>
+                    <td><strong className="hl-wait">{p.waiting}</strong></td>
+                    <td><span>{p.weightedTurnaround}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="summary-foot-row">
+                  <td colSpan={4}><strong>平均统计均值 (Average Metrics)</strong></td>
+                  <td><strong className="avg-val">{result.averageTurnaround.toFixed(2)}</strong></td>
+                  <td><strong className="avg-val hl-wait-avg">{result.averageWait.toFixed(2)}</strong></td>
+                  <td><strong>{result.averageWeightedTurnaround.toFixed(2)}</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          {/* 2. 核心公式与代入展开过程板 */}
+          <div className="sched-formulas-card">
+            <div className="formulas-card-header">
+              <strong>📐 进程调度核心计算公式与当前代入演算过程</strong>
+              <span>考研与操作系统实验核心考点</span>
+            </div>
+
+            <div className="formulas-definitions-grid">
+              <div className="formula-def-item">
+                <span className="def-tag">周转时间 (Turnaround Time)</span>
+                <code>周转时间 $T_i$ = 完成时刻 $C_i$ − 到达时刻 $A_i$</code>
+                <small>作业从提交进入系统到完全结束的总历时</small>
+              </div>
+
+              <div className="formula-def-item">
+                <span className="def-tag">等待时间 (Waiting Time)</span>
+                <code>等待时间 $W_i$ = 周转时间 $T_i$ − 实际运行时间 $B_i$</code>
+                <small>作业在就绪队列中排队等待 CPU 的累计净时间</small>
+              </div>
+
+              <div className="formula-def-item">
+                <span className="def-tag">带权周转时间 (Weighted Turnaround)</span>
+                <code>带权周转时间 $W'_i$ = 周转时间 $T_i$ ÷ 实际运行时间 $B_i$</code>
+                <small>反映作业等待相对耗时比率（越接近 1 越理想）</small>
+              </div>
+            </div>
+
+            {/* 动态带入公式演算栏 */}
+            <div className="formula-step-derivations">
+              <div className="derivation-row">
+                <div className="derivation-label">
+                  <strong>平均等待时间 (Avg Waiting) 代入展开：</strong>
+                  <span>{'公式：Avg W = ∑(各作业等待时间) ÷ 进程数 = (W1 + W2 + W3 + W4) ÷ 4'}</span>
+                </div>
+                <div className="derivation-calc-box">
+                  <code>{result.waitFormula}</code>
+                </div>
+              </div>
+
+              <div className="derivation-row">
+                <div className="derivation-label">
+                  <strong>平均周转时间 (Avg Turnaround) 代入展开：</strong>
+                  <span>{'公式：Avg T = ∑(各作业周转时间) ÷ 进程数 = (T1 + T2 + T3 + T4) ÷ 4'}</span>
+                </div>
+                <div className="derivation-calc-box">
+                  <code>{result.turnaroundFormula}</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="algorithm-note enhanced-note">
+            <strong>{algorithm === 'fcfs' ? '先来先服务 (FCFS)' : algorithm === 'sjf' ? '短作业优先 (SJF)' : '时间片轮转 (RR)'}</strong>
+            <p>
+              {algorithm === 'fcfs'
+                ? '按到达时刻排序一直运行至完成，无抢占。简单易实现，但长作业在前面会导致后续短任务等待时间激增（护航效应）。'
+                : algorithm === 'sjf'
+                ? '在已到达的任务中挑选 Burst 最小的执行。能拉低平均等待时间，但若短任务源源不断到来，长任务可能面临无限期饥饿。'
+                : '按时间片 Q 轮流分派 CPU，保证各进程都有机会前进。时间片过大退化为 FCFS，时间片过小导致上下文切换频繁消耗算力。'}
+            </p>
+          </div>
         </section>
       </div>
+
       <LearningCycle
         experimentId="scheduling"
         prediction={{
@@ -511,8 +923,8 @@ export default function SchedulingExperiment({ experiment }) {
           answer: 'SJF 短作业优先',
           explanation: ' 让短任务先完成，可以减少更多任务的累计等待。',
         }}
-        operation={{ title: '比较三种调度策略', instruction: '保持四个进程不变，依次切换 FCFS、SJF 和 RR，并在 RR 中改变时间片。' }}
-        observation={`${algorithm.toUpperCase()} 当前平均等待时间为 ${result.averageWait.toFixed(2)}，发生 ${Math.max(0, result.timeline.length - 1)} 次上下文切换。`}
+        operation={{ title: '比较三种调度策略与到达时序', instruction: '切换为“错峰动态到达”，调整到达与运行时间，观察数据表各项指标和公式代入演算的变化。' }}
+        observation={`${algorithm.toUpperCase()} 当前平均等待时间为 ${result.averageWait.toFixed(2)}，发生 ${result.contextSwitches} 次上下文切换。`}
         summaryPrompt="平均等待时间和调度公平性之间存在什么取舍？"
       />
     </>
