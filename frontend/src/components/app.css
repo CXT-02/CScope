@@ -495,3 +495,35 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .edge-weight-badge rect{transition:all .2s ease}
 .edge-weight-badge:hover rect{fill:#312e81;stroke:#818cf8;filter:drop-shadow(0 0 6px rgba(129,140,248,.6))}
 .edge-weight-badge:hover text{fill:#fff}
+
+/* 15. CNN 导学网格、卷积核与乘加计算超高清晰度与大字号重构 */
+.matrix-grid{width:220px;gap:6px}
+.matrix-grid.large{width:290px;gap:8px}
+.matrix-grid span{aspect-ratio:1;display:flex !important;align-items:center !important;justify-content:center !important;text-align:center !important;border:2px solid #3d4d65;border-radius:9px;color:#f1f5f9;background:#182233;font:900 20px/1 "Cascadia Code",Consolas,monospace !important;box-sizing:border-box;transition:all .2s ease}
+.matrix-grid.large span{font-size:26px !important;border-radius:12px}
+
+/* 卷积核正负权重与零高辨识度着色 */
+.matrix-grid span.positive{color:#e0e7ff !important;background:rgba(99,102,241,.32) !important;border-color:#818cf8 !important;text-shadow:0 0 10px rgba(129,140,248,.7);box-shadow:inset 0 0 14px rgba(99,102,241,.3)}
+.matrix-grid span.negative{color:#ffe4e6 !important;background:rgba(239,68,68,.3) !important;border-color:#f43f5e !important;text-shadow:0 0 10px rgba(244,63,94,.7);box-shadow:inset 0 0 14px rgba(239,68,68,.25)}
+.matrix-grid span.zero{color:#94a3b8 !important;background:#131c2b !important;border-color:#334155 !important}
+
+/* 像素矩阵 0 与 1 亮暗极致对比 */
+.matrix-grid.is-pixel-matrix span.pixel-one{color:#090d16 !important;background:#f8fafc !important;border-color:#ffffff !important;font-weight:900 !important;box-shadow:0 0 18px rgba(255,255,255,.55),inset 0 0 6px rgba(255,255,255,.9)}
+.matrix-grid.is-pixel-matrix span.pixel-zero{color:#cbd5e1 !important;background:#0d1420 !important;border-color:#2a384c !important;font-weight:900 !important}
+
+/* 导学步骤 4：对应相乘再求和面板整体美化 */
+.cnn-story-calc{display:flex;align-items:center;justify-content:center;gap:20px;padding:10px 0}
+.calc-col-unit{display:flex;flex-direction:column;align-items:center;gap:10px}
+.calc-col-unit .unit-label{font-size:14px;font-weight:800;color:#ff9d85;letter-spacing:.05em;background:rgba(255,90,50,.1);padding:4px 12px;border-radius:99px;border:1px solid rgba(255,90,50,.25)}
+.calc-math-op{color:#ff7656;font-size:32px;font-weight:900;line-height:1;text-shadow:0 0 14px rgba(255,118,86,.45)}
+.calc-sum-card{min-width:145px;padding:18px 24px;border:2px solid #ff6745;border-radius:16px;text-align:center;background:linear-gradient(135deg,rgba(255,103,69,.22),rgba(238,108,77,.1));box-shadow:0 8px 24px rgba(255,103,69,.25)}
+.calc-sum-card span{display:block;color:#ffb5a3;font-size:14px;font-weight:800}
+.calc-sum-card strong{display:block;margin-top:8px;color:#ffffff;font-size:32px;font-weight:900;font-family:monospace;text-shadow:0 0 16px rgba(255,255,255,.7)}
+.calc-sum-card small{display:block;margin-top:6px;color:#cbd5e1;font-size:12px}
+
+/* 导学步骤 2：卷积核说明卡片提升 */
+.cnn-story-kernel{display:flex;align-items:center;gap:30px}
+.story-caption-card{padding:22px 26px;border-left:4px solid #ff6745;background:rgba(255,90,50,.12);border-radius:0 16px 16px 0;border:1px solid rgba(255,90,50,.2);border-left-width:4px}
+.story-caption-card span{display:block;color:#ff9d85;font-size:15px;font-weight:800}
+.story-caption-card strong{display:block;margin-top:8px;color:#ffffff;font-size:21px;font-weight:900}
+.story-caption-card small{display:block;margin-top:8px;color:#cbd5e1;font-size:13.5px}

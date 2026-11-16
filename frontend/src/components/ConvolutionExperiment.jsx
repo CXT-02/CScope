@@ -210,8 +210,29 @@ function ConvolutionStory({ image, kernel, feature, pooled, position, calculatio
 }
 
 function CnnStoryVisual({ step, image, kernel, feature, pooled, position, slidePos = 0, onSelectSlidePos, slideAuto, onToggleSlideAuto, calculation }) {
-  if (step === 0) return <div className="cnn-story-pixels"><MatrixGrid values={image} /><div><span>每个格子都是一个像素值</span><strong>0 = 暗　1 = 亮</strong></div></div>
-  if (step === 1) return <div className="cnn-story-kernel"><MatrixGrid values={kernel} signed /><div><span>9 个可学习权重</span><strong>共同描述一种局部模式</strong></div></div>
+  if (step === 0) {
+    return (
+      <div className="cnn-story-pixels">
+        <MatrixGrid values={image} isPixel />
+        <div className="story-caption-card">
+          <span>每个格子都是一个像素值</span>
+          <strong>0 = 纯黑暗区　1 = 纯白亮区</strong>
+        </div>
+      </div>
+    )
+  }
+  if (step === 1) {
+    return (
+      <div className="cnn-story-kernel">
+        <MatrixGrid values={kernel} signed large />
+        <div className="story-caption-card">
+          <span>9 个可学习权重（3×3 矩阵）</span>
+          <strong>共同描述一种局部模式（如垂直边缘）</strong>
+          <small>负值抑制左侧亮区 · 正值强化右侧亮区</small>
+        </div>
+      </div>
+    )
+  }
   if (step === 2) {
     const sRow = Math.floor(slidePos / 3)
     const sCol = slidePos % 3
@@ -236,7 +257,27 @@ function CnnStoryVisual({ step, image, kernel, feature, pooled, position, slideP
       </div>
     )
   }
-  if (step === 3) return <div className="cnn-story-calc"><MatrixGrid values={calculation.patch} /><b>×</b><MatrixGrid values={kernel} signed /><b>→</b><div><span>求和</span><strong>{calculation.sum.toFixed(3)}</strong></div></div>
+  if (step === 3) {
+    return (
+      <div className="cnn-story-calc">
+        <div className="calc-col-unit">
+          <span className="unit-label">当前感受野像素</span>
+          <MatrixGrid values={calculation.patch} isPixel />
+        </div>
+        <b className="calc-math-op">×</b>
+        <div className="calc-col-unit">
+          <span className="unit-label">卷积核权重</span>
+          <MatrixGrid values={kernel} signed />
+        </div>
+        <b className="calc-math-op">→</b>
+        <div className="calc-sum-card">
+          <span>对应相乘求和</span>
+          <strong>{calculation.sum.toFixed(3)}</strong>
+          <small>写入特征图相应位置</small>
+        </div>
+      </div>
+    )
+  }
   if (step === 4) return <div className="cnn-story-feature"><FeatureGrid values={feature} active={position} /><div><span>每个输出格</span><strong>对应输入中的一个局部区域</strong></div></div>
   if (step === 5) return <div className="cnn-story-relu"><div><span>卷积原值</span><strong>{calculation.sum.toFixed(3)}</strong></div><b>ReLU<br />max(0, x)</b><div className="hot"><span>激活后</span><strong>{Math.max(0, calculation.sum).toFixed(3)}</strong></div></div>
   return <div className="cnn-story-pool"><FeatureGrid values={feature} /><b>2×2<br />最大池化</b><FeatureGrid values={pooled} small /></div>
@@ -249,7 +290,25 @@ function FeatureGrid({ values, active = -1, onSelect, small }) {
   const flat = values.flat(); const max = Math.max(...flat.map(Math.abs), .001)
   return <div className={`feature-grid ${small ? 'small' : ''}`} style={{ '--size': values.length }}>{flat.map((value, index) => <button type="button" disabled={!onSelect} onClick={() => onSelect?.(index)} key={index} className={index === active ? 'active' : ''} style={{ '--strength': Math.abs(value) / max, '--tone': value < 0 ? '238,108,77' : '101,88,232' }}>{format(value)}</button>)}</div>
 }
-function MatrixGrid({ values, compact, signed }) { return <div className={`matrix-grid ${compact ? 'compact' : ''}`} style={{ '--size': values.length }}>{values.flat().map((value, index) => <span className={signed ? value > 0 ? 'positive' : value < 0 ? 'negative' : '' : ''} key={index}>{format(value)}</span>)}</div> }
+function MatrixGrid({ values, compact, signed, isPixel, large }) {
+  return (
+    <div className={`matrix-grid ${compact ? 'compact' : ''} ${large ? 'large' : ''} ${isPixel ? 'is-pixel-matrix' : ''}`} style={{ '--size': values.length }}>
+      {values.flat().map((value, index) => {
+        let cls = ''
+        if (isPixel) {
+          cls = value >= 0.5 ? 'pixel-one' : 'pixel-zero'
+        } else if (signed) {
+          cls = value > 0 ? 'positive' : value < 0 ? 'negative' : 'zero'
+        }
+        return (
+          <span className={cls} key={index}>
+            {format(value)}
+          </span>
+        )
+      })}
+    </div>
+  )
+}
 
 function convolve(image, kernel) { return Array.from({ length: 3 }, (_, r) => Array.from({ length: 3 }, (_, c) => patchCalculation(image, kernel, r, c).sum)) }
 function patchCalculation(image, kernel, row, col) { const patch = Array.from({ length: 3 }, (_, r) => Array.from({ length: 3 }, (_, c) => image[row + r][col + c])); const products = patch.flatMap((line, r) => line.map((value, c) => value * kernel[r][c])); return { patch, products, sum: products.reduce((sum, value) => sum + value, 0) } }
