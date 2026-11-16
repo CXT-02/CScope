@@ -437,3 +437,61 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .dijkstra-story-chain span.active{background:#113831;color:#54e2c3;border-color:#159a83;box-shadow:0 0 10px rgba(21,154,131,.3)}
 .dijkstra-story-chain span.curr{background:#54251b;color:#ffa189;border-color:#ee6c4d}
 .dijkstra-story-chain i{font-style:normal;color:#617088;font-size:12px}
+
+/* 14. Dijkstra 自定义图、边数与边权编辑器 */
+.dijkstra-custom-card{background:linear-gradient(180deg,#151f2e,#111824);border:1px solid #2e3e55;border-radius:14px;padding:12px;margin:6px 0 14px 0;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.dijkstra-custom-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;background:#1e2a3c;border:1px solid #3d4f6a;border-radius:10px;padding:9px 12px;color:#e2e8f0;font-size:14px;font-weight:700;cursor:pointer;transition:.2s}
+.dijkstra-custom-toggle:hover{background:#26354b;border-color:#5c7398;color:#fff}
+.dijkstra-custom-toggle.active{background:#223249;border-color:#6558e8;color:#a5b4fc}
+.dijkstra-custom-toggle .badge-pill{font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(99,102,241,.18);color:#c7d2fe;border:1px solid rgba(99,102,241,.3)}
+.dijkstra-custom-tip{font-size:12.5px;color:#94a3b8;line-height:1.55;margin:8px 2px 2px 2px}
+.dijkstra-custom-tip strong{color:#ff9073}
+
+.dijkstra-config-drawer{margin-top:12px;display:flex;flex-direction:column;gap:12px;border-top:1px dashed #2b394f;padding-top:12px}
+.config-sub-block{display:flex;flex-direction:column;gap:7px}
+.config-sub-header{display:flex;align-items:center;justify-content:space-between}
+.config-sub-label{font-size:13px;font-weight:700;color:#cbd5e1}
+.mini-reset-btn{background:transparent;border:1px solid #3c4b62;border-radius:6px;color:#94a3b8;padding:2px 8px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s}
+.mini-reset-btn:hover{color:#fff;border-color:#64748b;background:#1e293b}
+
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.preset-btn{background:#16202e;border:1px solid #2d3b50;border-radius:8px;padding:7px 8px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:.2s}
+.preset-btn strong{font-size:12.5px;color:#cbd5e1}
+.preset-btn small{font-size:11px;color:#64748b}
+.preset-btn:hover{background:#1e2d42;border-color:#4b607d}
+.preset-btn.active{background:#1d2942;border-color:#6558e8;box-shadow:inset 0 0 0 1px #6558e8}
+.preset-btn.active strong{color:#a5b4fc}
+
+.edge-list-scroll{max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;padding-right:4px}
+.edge-list-scroll::-webkit-scrollbar{width:4px}
+.edge-list-scroll::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
+.edge-edit-item{display:flex;align-items:center;justify-content:space-between;background:#172232;border:1px solid #2b3a4e;border-radius:6px;padding:4px 8px}
+.edge-name-tag{font-size:13px;font-weight:800;color:#93c5fd;font-family:monospace;width:55px}
+.edge-stepper{display:flex;align-items:center;gap:3px}
+.edge-stepper button{width:22px;height:22px;border:1px solid #37475d;border-radius:4px;background:#202e42;color:#cbd5e1;cursor:pointer;font-weight:800;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.15s}
+.edge-stepper button:hover:not(:disabled){background:#324765;color:#fff}
+.edge-stepper button:disabled{opacity:.4;cursor:not-allowed}
+.edge-stepper input{width:42px;height:22px;text-align:center;border:1px solid #37475d;border-radius:4px;background:#0f1724;color:#f8fafc;font-size:13px;font-weight:700}
+
+.edge-del-btn{width:22px;height:22px;border:1px solid #452424;border-radius:4px;background:rgba(239,68,68,.12);color:#f87171;cursor:pointer;font-size:14px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;transition:.15s}
+.edge-del-btn:hover:not(:disabled){background:rgba(239,68,68,.3);color:#fff}
+.edge-del-btn:disabled{opacity:.3;cursor:not-allowed}
+
+.add-edge-form{display:flex;flex-direction:column;gap:6px;background:#151e2b;border:1px solid #28374a;border-radius:8px;padding:8px}
+.edge-select-pair{display:flex;align-items:center;gap:6px}
+.edge-select-pair select{flex:1;background:#0d141e;border:1px solid #354760;border-radius:6px;color:#f1f5f9;padding:4px 6px;font-size:13px;font-weight:700}
+.edge-select-pair span{font-size:13px;color:#64748b;font-weight:700}
+.edge-val-input{display:flex;align-items:center;gap:8px}
+.edge-val-input label{font-size:12.5px;color:#94a3b8}
+.edge-val-input input{flex:1;background:#0d141e;border:1px solid #354760;border-radius:6px;color:#f1f5f9;padding:4px 8px;font-size:13px;font-weight:700}
+.add-edge-btn{background:#312e81;border:1px solid #4f46e5;color:#e0e7ff;border-radius:6px;padding:6px;font-size:12.5px;font-weight:700;cursor:pointer;transition:.2s}
+.add-edge-btn:hover:not(:disabled){background:#4338ca;color:#fff}
+.add-edge-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.graph-stats-tag{font-size:13px;font-weight:700;color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:4px 10px;border-radius:8px}
+.graph-canvas.is-dragging{cursor:grabbing !important}
+.graph-node{cursor:grab;transition:transform .1s ease}
+.graph-node.dragging{cursor:grabbing !important;filter:drop-shadow(0 0 16px rgba(99,102,241,.8))}
+.edge-weight-badge rect{transition:all .2s ease}
+.edge-weight-badge:hover rect{fill:#312e81;stroke:#818cf8;filter:drop-shadow(0 0 6px rgba(129,140,248,.6))}
+.edge-weight-badge:hover text{fill:#fff}

@@ -3,60 +3,258 @@ import { ExperimentHeader } from './AttentionExperiment'
 import LearningCycle from './LearningCycle'
 import TheoryPrimer from './TheoryPrimer'
 
-const nodes = [
-  { id: 'A', x: 90, y: 190 }, { id: 'B', x: 230, y: 80 }, { id: 'C', x: 240, y: 285 },
-  { id: 'D', x: 410, y: 100 }, { id: 'E', x: 430, y: 270 }, { id: 'F', x: 590, y: 185 },
-]
-const edges = [
-  ['A', 'B', 4], ['A', 'C', 2], ['B', 'C', 1], ['B', 'D', 5],
-  ['C', 'D', 8], ['C', 'E', 10], ['D', 'E', 2], ['D', 'F', 6], ['E', 'F', 3],
-]
+const PRESET_GRAPHS = {
+  '6-classic': {
+    name: '经典 6 节点网格图',
+    nodes: [
+      { id: 'A', x: 90, y: 190 }, { id: 'B', x: 230, y: 80 }, { id: 'C', x: 240, y: 285 },
+      { id: 'D', x: 410, y: 95 }, { id: 'E', x: 430, y: 275 }, { id: 'F', x: 590, y: 185 },
+    ],
+    edges: [
+      ['A', 'B', 4], ['A', 'C', 2], ['B', 'C', 1], ['B', 'D', 5],
+      ['C', 'D', 8], ['C', 'E', 10], ['D', 'E', 2], ['D', 'F', 6], ['E', 'F', 3],
+    ],
+  },
+  '4-diamond': {
+    name: '4 节点经典菱形',
+    nodes: [
+      { id: 'A', x: 110, y: 190 }, { id: 'B', x: 340, y: 75 },
+      { id: 'C', x: 340, y: 300 }, { id: 'D', x: 570, y: 190 },
+    ],
+    edges: [
+      ['A', 'B', 5], ['A', 'C', 2], ['B', 'C', 1], ['B', 'D', 3], ['C', 'D', 7],
+    ],
+  },
+  '5-pentagon': {
+    name: '5 节点环弦图',
+    nodes: [
+      { id: 'A', x: 95, y: 190 }, { id: 'B', x: 250, y: 75 }, { id: 'C', x: 250, y: 305 },
+      { id: 'D', x: 450, y: 95 }, { id: 'E', x: 570, y: 230 },
+    ],
+    edges: [
+      ['A', 'B', 3], ['A', 'C', 6], ['B', 'C', 2], ['B', 'D', 4],
+      ['C', 'E', 5], ['D', 'E', 1], ['C', 'D', 3],
+    ],
+  },
+  '7-complex': {
+    name: '7 节点深层拓扑',
+    nodes: [
+      { id: 'A', x: 75, y: 190 }, { id: 'B', x: 195, y: 75 }, { id: 'C', x: 195, y: 305 },
+      { id: 'D', x: 340, y: 190 }, { id: 'E', x: 485, y: 75 }, { id: 'F', x: 485, y: 305 },
+      { id: 'G', x: 605, y: 190 },
+    ],
+    edges: [
+      ['A', 'B', 2], ['A', 'C', 5], ['B', 'C', 2], ['B', 'D', 4], ['C', 'D', 1],
+      ['B', 'E', 7], ['C', 'F', 6], ['D', 'E', 3], ['D', 'F', 2], ['E', 'G', 2], ['F', 'G', 5],
+    ],
+  },
+}
 
-function buildSteps(start) {
-  const distances = Object.fromEntries(nodes.map((node) => [node.id, Infinity]))
+function buildSteps(currentNodes, currentEdges, startNodeId) {
+  const nodeIds = currentNodes.map((n) => n.id)
+  const distances = Object.fromEntries(nodeIds.map((id) => [id, Infinity]))
   const previous = {}
   const visited = new Set()
   const steps = []
+
+  const start = distances[startNodeId] !== undefined ? startNodeId : nodeIds[0] || 'A'
   distances[start] = 0
-  steps.push({ current: null, distances: { ...distances }, visited: [], previous: {}, message: `初始化：起点 ${start} 的距离设为 0，其余节点设为 ∞。`, phase: '初始化距离表', line: 2, activeEdge: null })
-  while (visited.size < nodes.length) {
-    const current = nodes.map((node) => node.id).filter((id) => !visited.has(id)).sort((a, b) => distances[a] - distances[b])[0]
+  steps.push({
+    current: null,
+    distances: { ...distances },
+    visited: [],
+    previous: {},
+    message: `初始化：起点 ${start} 的距离设为 0，其余节点设为 ∞。`,
+    phase: '初始化距离表',
+    line: 2,
+    activeEdge: null,
+  })
+
+  while (visited.size < nodeIds.length) {
+    const unvisited = nodeIds.filter((id) => !visited.has(id)).sort((a, b) => distances[a] - distances[b])
+    const current = unvisited[0]
     if (!current || distances[current] === Infinity) break
-    steps.push({ current, distances: { ...distances }, visited: [...visited], previous: { ...previous }, message: `在所有未确定节点中，${current} 的候选距离 ${distances[current]} 最小，选择它。`, phase: '选择最小节点', line: 4, activeEdge: null })
+
+    steps.push({
+      current,
+      distances: { ...distances },
+      visited: [...visited],
+      previous: { ...previous },
+      message: `在所有未确定节点中，${current} 的候选距离 ${distances[current]} 最小，选择它。`,
+      phase: '选择最小节点',
+      line: 4,
+      activeEdge: null,
+    })
+
     visited.add(current)
-    steps.push({ current, distances: { ...distances }, visited: [...visited], previous: { ...previous }, message: `节点 ${current} 正式确定；非负边权保证它以后不可能再被更短路线改写。`, phase: '确定最短距离', line: 5, activeEdge: null })
-    edges.forEach(([a, b, weight]) => {
+    steps.push({
+      current,
+      distances: { ...distances },
+      visited: [...visited],
+      previous: { ...previous },
+      message: `节点 ${current} 正式确定；非负边权保证它以后不可能再被更短路线改写。`,
+      phase: '确定最短距离',
+      line: 5,
+      activeEdge: null,
+    })
+
+    currentEdges.forEach(([a, b, weight]) => {
       const neighbor = a === current ? b : b === current ? a : null
-      if (!neighbor || visited.has(neighbor)) return
-      const candidate = distances[current] + weight
+      if (!neighbor || visited.has(neighbor) || distances[neighbor] === undefined) return
+      const candidate = distances[current] + Number(weight)
       const oldDistance = distances[neighbor]
-      steps.push({ current, distances: { ...distances }, visited: [...visited], previous: { ...previous }, message: `尝试经过 ${current} 到达 ${neighbor}：${distances[current]} + ${weight} = ${candidate}，与旧距离 ${oldDistance === Infinity ? '∞' : oldDistance} 比较。`, phase: '松弛相邻边', line: 7, activeEdge: [current, neighbor].sort().join('-') })
+      const edgeKey = [current, neighbor].sort().join('-')
+
+      steps.push({
+        current,
+        distances: { ...distances },
+        visited: [...visited],
+        previous: { ...previous },
+        message: `尝试经过 ${current} 到达 ${neighbor}：${distances[current]} + ${weight} = ${candidate}，与旧距离 ${oldDistance === Infinity ? '∞' : oldDistance} 比较。`,
+        phase: '松弛相邻边',
+        line: 7,
+        activeEdge: edgeKey,
+      })
+
       if (candidate < distances[neighbor]) {
         distances[neighbor] = candidate
         previous[neighbor] = current
-        steps.push({ current, distances: { ...distances }, visited: [...visited], previous: { ...previous }, message: `新路线更短：把 ${neighbor} 的距离更新为 ${candidate}，前驱改为 ${current}。`, phase: '更新距离与前驱', line: 8, activeEdge: [current, neighbor].sort().join('-') })
+        steps.push({
+          current,
+          distances: { ...distances },
+          visited: [...visited],
+          previous: { ...previous },
+          message: `新路线更短：把 ${neighbor} 的距离更新为 ${candidate}，前驱改为 ${current}。`,
+          phase: '更新距离与前驱',
+          line: 8,
+          activeEdge: edgeKey,
+        })
       }
     })
   }
-  steps.push({ current: null, distances: { ...distances }, visited: [...visited], previous: { ...previous }, message: '所有可达节点都已确定，前驱关系组成从起点出发的最短路径树。', phase: '算法完成', line: 10, activeEdge: null })
+
+  steps.push({
+    current: null,
+    distances: { ...distances },
+    visited: [...visited],
+    previous: { ...previous },
+    message: visited.size === nodeIds.length
+      ? '所有可达节点都已确定，前驱关系组成从起点出发的最短路径树。'
+      : `已确定 ${visited.size} 个连通节点，剩余节点不可达。`,
+    phase: '算法完成',
+    line: 10,
+    activeEdge: null,
+  })
   return steps
 }
 
 export default function DijkstraExperiment({ experiment }) {
+  const [presetKey, setPresetKey] = useState('6-classic')
+  const [nodes, setNodes] = useState(PRESET_GRAPHS['6-classic'].nodes)
+  const [edges, setEdges] = useState(PRESET_GRAPHS['6-classic'].edges)
   const [start, setStart] = useState('A')
   const [stepIndex, setStepIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [speed, setSpeed] = useState(1)
-  const steps = useMemo(() => buildSteps(start), [start])
+  const [showConfig, setShowConfig] = useState(false)
+  const [draggingNode, setDraggingNode] = useState(null)
+
+  // 添加新边表单状态
+  const [newU, setNewU] = useState('A')
+  const [newV, setNewV] = useState('D')
+  const [newW, setNewW] = useState(3)
+
+  const steps = useMemo(() => buildSteps(nodes, edges, start), [nodes, edges, start])
   const step = steps[Math.min(stepIndex, steps.length - 1)]
   const pathEdges = new Set(Object.entries(step.previous).map(([to, from]) => [from, to].sort().join('-')))
 
-  useEffect(() => { if (!playing) return undefined; const timer = window.setInterval(() => setStepIndex((value) => { if (value >= steps.length - 1) { setPlaying(false); return value } return value + 1 }), 900 / speed); return () => window.clearInterval(timer) }, [playing, speed, steps.length])
+  useEffect(() => {
+    if (!playing) return undefined
+    const timer = window.setInterval(() => setStepIndex((value) => {
+      if (value >= steps.length - 1) {
+        setPlaying(false)
+        return value
+      }
+      return value + 1
+    }), 900 / speed)
+    return () => window.clearInterval(timer)
+  }, [playing, speed, steps.length])
+
+  // 保证 start 属于 nodes
+  useEffect(() => {
+    if (!nodes.some((n) => n.id === start)) {
+      setStart(nodes[0]?.id || 'A')
+      setStepIndex(0)
+    }
+    if (nodes.length > 0) {
+      if (!nodes.some((n) => n.id === newU)) setNewU(nodes[0].id)
+      if (!nodes.some((n) => n.id === newV)) setNewV(nodes[Math.min(1, nodes.length - 1)].id)
+    }
+  }, [nodes, start])
 
   function changeStart(event) {
     setStart(event.target.value)
     setStepIndex(0)
     setPlaying(false)
+  }
+
+  function applyPreset(key) {
+    setPresetKey(key)
+    const preset = PRESET_GRAPHS[key]
+    setNodes(preset.nodes.map((n) => ({ ...n })))
+    setEdges(preset.edges.map((e) => [...e]))
+    setStart(preset.nodes[0].id)
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  function updateEdgeWeight(index, rawVal) {
+    const val = Math.max(1, Math.min(99, Number(rawVal) || 1))
+    setEdges((prev) => prev.map((e, i) => (i === index ? [e[0], e[1], val] : e)))
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  function removeEdge(index) {
+    if (edges.length <= 1) return
+    setEdges((prev) => prev.filter((_, i) => i !== index))
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  function handleAddEdge() {
+    if (newU === newV) return
+    const w = Math.max(1, Math.min(99, Number(newW) || 1))
+    const edgeKey = [newU, newV].sort().join('-')
+    const exists = edges.some(([a, b]) => [a, b].sort().join('-') === edgeKey)
+    if (exists) {
+      setEdges((prev) => prev.map(([a, b, oldW]) => [a, b].sort().join('-') === edgeKey ? [a, b, w] : [a, b, oldW]))
+    } else {
+      setEdges((prev) => [...prev, [newU, newV, w]])
+    }
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  // 节点拖拽处理
+  function handleNodeMouseDown(nodeId, e) {
+    e.stopPropagation()
+    setDraggingNode(nodeId)
+  }
+
+  function handleMouseMove(e) {
+    if (!draggingNode) return
+    const svg = e.currentTarget
+    const rect = svg.getBoundingClientRect()
+    const x = Math.round(((e.clientX - rect.left) / rect.width) * 680)
+    const y = Math.round(((e.clientY - rect.top) / rect.height) * 380)
+    const clampedX = Math.max(45, Math.min(635, x))
+    const clampedY = Math.max(45, Math.min(335, y))
+    setNodes((prev) => prev.map((n) => (n.id === draggingNode ? { ...n, x: clampedX, y: clampedY } : n)))
+  }
+
+  function handleMouseUp() {
+    setDraggingNode(null)
   }
 
   return (
@@ -77,6 +275,117 @@ export default function DijkstraExperiment({ experiment }) {
       <div className="lab-layout">
         <aside className="control-panel">
           <div className="panel-title"><span>运行控制</span><i>{playing ? '动画播放中' : '逐步模式'}</i></div>
+
+          {/* 用户自定义图、点数、边数与边权 */}
+          <div className="dijkstra-custom-card">
+            <button
+              type="button"
+              className={`dijkstra-custom-toggle ${showConfig ? 'active' : ''}`}
+              onClick={() => setShowConfig((v) => !v)}
+            >
+              <span>⚙ 自定义图形态与边权</span>
+              <span className="badge-pill">{showConfig ? '收起配置 ▲' : '展开自定义 ▼'}</span>
+            </button>
+            <p className="dijkstra-custom-tip">
+              💡 预设 4~7 点拓扑，也可<strong>在右侧画布直接拖拽圆点</strong>任意排布图样！
+            </p>
+
+            {showConfig && (
+              <div className="dijkstra-config-drawer">
+                <div className="config-sub-block">
+                  <span className="config-sub-label">1. 切换点数与图样</span>
+                  <div className="preset-grid">
+                    {Object.entries(PRESET_GRAPHS).map(([k, p]) => (
+                      <button
+                        key={k}
+                        type="button"
+                        className={`preset-btn ${presetKey === k ? 'active' : ''}`}
+                        onClick={() => applyPreset(k)}
+                      >
+                        <strong>{p.name}</strong>
+                        <small>{p.desc}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="config-sub-block">
+                  <div className="config-sub-header">
+                    <span className="config-sub-label">2. 调整每条边权 ({edges.length} 条边)</span>
+                    <button
+                      type="button"
+                      className="mini-reset-btn"
+                      onClick={() => applyPreset(presetKey)}
+                      title="重置为当前预设边权"
+                    >
+                      ↺ 恢复默认
+                    </button>
+                  </div>
+                  <div className="edge-list-scroll">
+                    {edges.map(([a, b, w], idx) => (
+                      <div key={`${a}-${b}-${idx}`} className="edge-edit-item">
+                        <span className="edge-name-tag">{a} ↔ {b}</span>
+                        <div className="edge-stepper">
+                          <button type="button" onClick={() => updateEdgeWeight(idx, w - 1)} disabled={w <= 1}>-</button>
+                          <input
+                            type="number"
+                            min="1"
+                            max="99"
+                            value={w}
+                            onChange={(e) => updateEdgeWeight(idx, e.target.value)}
+                          />
+                          <button type="button" onClick={() => updateEdgeWeight(idx, w + 1)} disabled={w >= 99}>+</button>
+                        </div>
+                        <button
+                          type="button"
+                          className="edge-del-btn"
+                          onClick={() => removeEdge(idx)}
+                          disabled={edges.length <= 1}
+                          title="删除边"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="config-sub-block">
+                  <span className="config-sub-label">3. 添加连接边 / 自定义加边</span>
+                  <div className="add-edge-form">
+                    <div className="edge-select-pair">
+                      <select value={newU} onChange={(e) => setNewU(e.target.value)}>
+                        {nodes.map((n) => <option key={n.id} value={n.id}>{n.id}</option>)}
+                      </select>
+                      <span>↔</span>
+                      <select value={newV} onChange={(e) => setNewV(e.target.value)}>
+                        {nodes.map((n) => <option key={n.id} value={n.id}>{n.id}</option>)}
+                      </select>
+                    </div>
+                    <div className="edge-val-input">
+                      <label>权值:</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={newW}
+                        onChange={(e) => setNewW(e.target.value)}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="add-edge-btn"
+                      onClick={handleAddEdge}
+                      disabled={newU === newV}
+                    >
+                      + 连结 / 更新边
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           <label className="field-block"><span>起点</span><small>算法从这里开始，起点到自身距离为 0，其他节点初始为 ∞。</small><select value={start} onChange={changeStart}>{nodes.map((node) => <option key={node.id}>{node.id}</option>)}</select></label>
           <div className="step-counter"><span>当前步骤</span><strong>{stepIndex} / {steps.length - 1}</strong></div>
           <p className="control-help">拖动进度条可快速查看任意一步；使用按钮适合逐步理解每次松弛。</p>
@@ -88,17 +397,87 @@ export default function DijkstraExperiment({ experiment }) {
           <div className="tip-box"><strong>核心规律</strong><p>每一步都选择尚未确定、且当前距离最小的节点。边权不能为负数。</p></div>
         </aside>
         <section className="visual-panel">
-          <div className="visual-toolbar"><div><strong>图的最短路径搜索</strong><span>绿色：已确定 · 橙色：当前节点</span></div><button className="text-button" type="button" onClick={() => setStepIndex(0)}>重新开始</button></div>
-          <svg className="graph-canvas" viewBox="0 0 680 380" role="img" aria-label="Dijkstra 最短路径图">
-            {edges.map(([a, b, weight]) => {
+          <div className="visual-toolbar">
+            <div>
+              <strong>图的最短路径搜索</strong>
+              <span>{draggingNode ? `正在拖拽节点 ${draggingNode} 改变图样...` : '绿色：已确定 · 橙色：当前节点 · 支持直接拖拽节点改变布局'}</span>
+            </div>
+            <div className="toolbar-actions">
+              <span className="graph-stats-tag">点数: {nodes.length} · 边数: {edges.length}</span>
+              <button className="text-button" type="button" onClick={() => setStepIndex(0)}>重新开始</button>
+            </div>
+          </div>
+          <svg
+            className={`graph-canvas ${draggingNode ? 'is-dragging' : ''}`}
+            viewBox="0 0 680 380"
+            role="img"
+            aria-label="Dijkstra 最短路径图"
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
+            {edges.map(([a, b, weight], idx) => {
               const from = nodes.find((node) => node.id === a)
               const to = nodes.find((node) => node.id === b)
-              const edgeId = [a, b].sort().join('-'); const selected = pathEdges.has(edgeId); const active = step.activeEdge === edgeId
-              return <g key={`${a}-${b}`}><line x1={from.x} y1={from.y} x2={to.x} y2={to.y} className={`${selected ? 'path-edge' : ''} ${active ? 'active-edge' : ''}`} /><text x={(from.x + to.x) / 2} y={(from.y + to.y) / 2 - 8}>{weight}</text></g>
+              if (!from || !to) return null
+              const edgeId = [a, b].sort().join('-')
+              const selected = pathEdges.has(edgeId)
+              const active = step.activeEdge === edgeId
+              return (
+                <g key={`${a}-${b}-${idx}`} className="canvas-edge-item">
+                  <line
+                    x1={from.x}
+                    y1={from.y}
+                    x2={to.x}
+                    y2={to.y}
+                    className={`${selected ? 'path-edge' : ''} ${active ? 'active-edge' : ''}`}
+                  />
+                  <g
+                    className="edge-weight-badge"
+                    onClick={() => updateEdgeWeight(idx, weight >= 15 ? 1 : weight + 1)}
+                    style={{ cursor: 'pointer' }}
+                    title="点击可微调权重 (+1)"
+                  >
+                    <rect
+                      x={(from.x + to.x) / 2 - 13}
+                      y={(from.y + to.y) / 2 - 16}
+                      width="26"
+                      height="18"
+                      rx="4"
+                      fill="#1e293b"
+                      stroke="#475569"
+                      strokeWidth="1"
+                    />
+                    <text
+                      x={(from.x + to.x) / 2}
+                      y={(from.y + to.y) / 2 - 3}
+                      textAnchor="middle"
+                      fill="#e2e8f0"
+                      fontSize="12"
+                      fontWeight="bold"
+                    >
+                      {weight}
+                    </text>
+                  </g>
+                </g>
+              )
             })}
             {nodes.map((node) => {
               const state = step.current === node.id ? 'current' : step.visited.includes(node.id) ? 'visited' : ''
-              return <g key={node.id} className={`graph-node ${state}`} transform={`translate(${node.x},${node.y})`}><circle r="28" /><text y="5">{node.id}</text><text className="distance" y="47">{step.distances[node.id] === Infinity ? '∞' : step.distances[node.id]}</text></g>
+              const isDraggingThis = draggingNode === node.id
+              return (
+                <g
+                  key={node.id}
+                  className={`graph-node ${state} ${isDraggingThis ? 'dragging' : ''}`}
+                  transform={`translate(${node.x},${node.y})`}
+                  onMouseDown={(e) => handleNodeMouseDown(node.id, e)}
+                  style={{ cursor: isDraggingThis ? 'grabbing' : 'grab' }}
+                >
+                  <circle r="28" />
+                  <text y="5">{node.id}</text>
+                  <text className="distance" y="47">{step.distances[node.id] === Infinity ? '∞' : step.distances[node.id]}</text>
+                </g>
+              )
             })}
           </svg>
           <div className="distance-table">{nodes.map((node) => <div key={node.id}><span>{node.id}</span><strong>{step.distances[node.id] === Infinity ? '∞' : step.distances[node.id]}</strong></div>)}</div>
