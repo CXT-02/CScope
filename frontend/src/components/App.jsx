@@ -26,6 +26,7 @@ import AiTutorAgent from './AiTutorAgent'
 import CheatSheetHub from './CheatSheetHub'
 import ExperimentWorkshop from './ExperimentWorkshop'
 import CommunityHub from './CommunityHub'
+import KnowledgeGalaxy3D from './KnowledgeGalaxy3D'
 import SidebarNav from './SidebarNav'
 import LoginGate from './LoginGate'
 import { useLearningProfile } from './LearningProfileContext'
@@ -119,6 +120,7 @@ export default function App() {
         onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
         onSelectNav={(key) => {
           if (key === 'console') goConsole()
+          else if (key === 'galaxy') navigate('#/galaxy')
           else if (key === 'checkin') navigate('#/checkin')
           else if (key === 'courses') openCourses()
           else if (key === 'workshop') navigate('#/workshop')
@@ -146,6 +148,7 @@ export default function App() {
               控制台
             </button>
             {route.kind !== 'console' && <span className="crumb-sep">/</span>}
+            {route.kind === 'galaxy' && <span className="crumb-current">3D 思维知识星图 · 三维神经网络</span>}
             {route.kind === 'checkin' && <span className="crumb-current">每日研习打卡 · 脑力负荷</span>}
             {route.kind === 'courses' && <span className="crumb-current">课程知识中心</span>}
             {route.kind === 'workshop' && <span className="crumb-current">微观交互仿真工坊</span>}
@@ -221,14 +224,19 @@ export default function App() {
               onOpenProfile={openProfile}
               onOpenExperiment={openExperiment}
             />
+          ) : route.kind === 'galaxy' ? (
+            /* 2. 3D 思维知识星图 (空间三维神经网络与交互) */
+            <KnowledgeGalaxy3D
+              onOpenExperiment={openExperiment}
+            />
           ) : route.kind === 'checkin' ? (
-            /* 2. 每日研习打卡（复刻 SmartFit 运动打卡体验） */
+            /* 3. 每日研习打卡（复刻 SmartFit 运动打卡体验） */
             <DailyCheckin
               onOpenExperiment={openExperiment}
               onOpenCourses={openCourses}
             />
           ) : route.kind === 'courses' ? (
-            /* 3. 课程知识库视图 */
+            /* 4. 课程知识库视图 */
             <ExperimentHub
               courses={courses}
               activeCourseId={activeCourseId}
@@ -239,33 +247,33 @@ export default function App() {
               onLogin={() => {}}
             />
           ) : route.kind === 'workshop' ? (
-            /* 4. 微观仿真工坊分类检索 */
+            /* 5. 微观仿真工坊分类检索 */
             <ExperimentWorkshop
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'exam' ? (
-            /* 5. 408 考研真题测评中心 */
+            /* 6. 408 考研真题测评中心 */
             <ExamArena
               onOpenExperiment={openExperiment}
               onBackHome={goConsole}
             />
           ) : route.kind === 'mistakes' ? (
-            /* 6. 靶向错题本与消错实验 */
+            /* 7. 靶向错题本与消错实验 */
             <MistakeNotebook
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'cheatsheet' ? (
-            /* 7. 408 速查宝典与计算器 */
+            /* 8. 408 速查宝典与计算器 */
             <CheatSheetHub
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'aitutor' ? (
-            /* 8. AI 计算机私教 */
+            /* 9. AI 计算机私教 */
             <AiTutorAgent
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'profile' ? (
-            /* 9. 个人中心与资料、安全问题管理（参考图 127.0.0.1:5173/profile） */
+            /* 10. 个人中心与资料、安全问题管理（参考图 127.0.0.1:5173/profile） */
             <LearningDashboard
               experiments={experiments}
               courses={courses}
@@ -274,7 +282,7 @@ export default function App() {
               initialTab="profile"
             />
           ) : route.kind === 'analytics' ? (
-            /* 10. 学情数据与能力画像 */
+            /* 11. 学情数据与能力画像 */
             <LearningDashboard
               experiments={experiments}
               courses={courses}
@@ -283,12 +291,12 @@ export default function App() {
               initialTab="analytics"
             />
           ) : route.kind === 'community' ? (
-            /* 11. 极客学术社区广场 */
+            /* 12. 极客学术社区广场 */
             <CommunityHub
               onOpenExperiment={openExperiment}
             />
           ) : Experiment && experiment ? (
-            /* 12. 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
+            /* 13. 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
             <main className="experiment-page" key={activeExperiment}>
               <Experiment experiment={experiment} />
             </main>
@@ -307,6 +315,7 @@ export default function App() {
 }
 
 function readRouteFromHash() {
+  if (window.location.hash === '#/galaxy') return { kind: 'galaxy', id: null }
   if (window.location.hash === '#/checkin') return { kind: 'checkin', id: null }
   if (window.location.hash === '#/workshop') return { kind: 'workshop', id: null }
   if (window.location.hash === '#/mistakes') return { kind: 'mistakes', id: null }

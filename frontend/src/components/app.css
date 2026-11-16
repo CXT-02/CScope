@@ -5385,3 +5385,320 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .switch-toggle input:checked + .slider:before {
   transform: translateX(20px);
 }
+
+/* ======================================================== */
+/* 28. 3D 思维知识星图 (KnowledgeGalaxy3D · 空间神经网络可视化) */
+/* ======================================================== */
+
+.knowledge-galaxy-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.galaxy-viewport-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 110px);
+  min-height: 640px;
+  background: #060a12;
+  border: 1.5px solid #1e293b;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+}
+.galaxy-viewport-wrapper:active {
+  cursor: grabbing;
+}
+
+.galaxy-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 顶部悬浮控制栏 (与参考图一致) */
+.galaxy-top-controls {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 20;
+}
+.galaxy-title-badge {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 16px;
+  border-radius: 99px;
+  color: #f8fafc;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+.live-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+.galaxy-title-badge strong {
+  font-size: 13.5px;
+  letter-spacing: -0.01em;
+}
+.node-count-tag {
+  font-size: 11px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.galaxy-action-buttons {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.galaxy-btn {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.galaxy-btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.galaxy-btn.active {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.4);
+}
+.galaxy-btn.reset {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+/* 底部 3D 空间漫游交互提示 (参考图样式) */
+.galaxy-bottom-hints {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 18px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  color: #94a3b8;
+  pointer-events: none;
+  z-index: 20;
+}
+.galaxy-bottom-hints .dot {
+  color: #475569;
+}
+
+/* 右侧浮动学情面板 (参考图样式) */
+.galaxy-right-stat-panel {
+  position: absolute;
+  top: 74px;
+  right: 20px;
+  width: 200px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+  color: #f8fafc;
+  z-index: 20;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.panel-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.panel-box-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.panel-box-header .panel-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.stat-metric-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+}
+.metric-row strong {
+  color: #f8fafc;
+}
+.metric-row strong.green {
+  color: #10b981;
+}
+.divider-line {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 12px 0 10px;
+}
+.legend-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.legend-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.legend-dot.red { background: #f43f5e; box-shadow: 0 0 6px #f43f5e; }
+.legend-dot.gold { background: #fbbf24; box-shadow: 0 0 6px #fbbf24; }
+.legend-dot.green { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.legend-dot.gray { background: #94a3b8; }
+
+/* 节点飞入详情卡片 (Node Inspector Card) */
+.node-inspector-floating-card {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  max-width: 360px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 12px 36px rgba(2, 132, 199, 0.35);
+  border-radius: 16px;
+  padding: 18px 20px;
+  color: #ffffff;
+  z-index: 30;
+  animation: floatIn 0.25s ease-out;
+}
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.close-inspector-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+}
+.close-inspector-btn:hover {
+  color: #ffffff;
+}
+.inspector-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.inspector-badge-row .course-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: #cbd5e1;
+}
+.inspector-badge-row .status-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.inspector-badge-row .status-tag.weak {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+}
+.inspector-badge-row .status-tag.mastered {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+.inspector-badge-row .status-tag.core {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fde047;
+}
+.inspector-title {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.inspector-desc {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  color: #94a3b8;
+  line-height: 1.55;
+}
+.inspector-action-row {
+  display: flex;
+}
+.launch-lab-btn {
+  width: 100%;
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+}
+.launch-lab-btn:hover {
+  background: #0369a1;
+  transform: translateY(-1px);
+}
