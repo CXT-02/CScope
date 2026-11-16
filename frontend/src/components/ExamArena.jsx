@@ -328,7 +328,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                         transition: 'all 0.15s'
                       }}
                     >
-                      {isSelected ? '🔘 ' : '⚪ '} {opt.label}
+                      {opt.label}
                     </button>
                   )
                 })}
@@ -349,9 +349,10 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
               {/* 快捷题量按钮 */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '12px' }}>
                 {[
-                  { count: 3, label: '3 题 (极速抽测)' },
-                  { count: 5, label: '5 题 (标准自检 · 推荐)' },
-                  { count: 10, label: '10 题 (深度专项模考)' },
+                  { count: 5, label: '5 题 (快速自测)' },
+                  { count: 10, label: '10 题 (标准模考 · 推荐)' },
+                  { count: 15, label: '15 题 (专项突破)' },
+                  { count: 20, label: '20 题 (全真大模拟)' },
                   { count: availableQuestionCount, label: `全部题库 (${availableQuestionCount} 题)` }
                 ].filter(item => item.count <= availableQuestionCount).map(item => (
                   <button
