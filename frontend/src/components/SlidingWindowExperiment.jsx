@@ -683,12 +683,20 @@ export default function SlidingWindowExperiment({ experiment }) {
             {playing ? '暂停' : step.done ? '重新播放' : '▶ 自动步进传输'}
           </button>
 
-          <div className="live-explanation" style={{ marginTop: '14px', background: '#f8fafc', borderLeft: '4px solid #2563eb', padding: '12px 14px', borderRadius: '6px' }}>
+          <div className="live-explanation" style={{ marginTop: '14px', background: '#f8fafc', borderLeft: '4px solid #2563eb', padding: '12px 14px', borderRadius: '8px' }}>
             <span style={{ fontSize: '0.85rem', color: '#2563eb', fontWeight: 'bold' }}>{step.event}</span>
             <strong style={{ display: 'block', fontSize: '1.05rem', margin: '4px 0', color: '#1e293b' }}>{step.message}</strong>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0 }}>
-              当前有效发送窗口 = min(rwnd {rwnd}, cwnd {step.cwnd}) = <strong>{Math.min(rwnd, step.cwnd)}</strong>。
-            </p>
+            <div style={{ marginTop: '8px', padding: '8px 10px', background: '#ffffff', borderRadius: '6px', border: '1px solid #e2e8f0', fontSize: '0.85rem', color: '#334155' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span style={{ color: '#64748b', fontSize: '0.82rem' }}>有效发送窗口计算</span>
+                <span style={{ fontWeight: 700, color: '#1d4ed8', background: '#dbeafe', padding: '1px 8px', borderRadius: '4px', fontFamily: 'Consolas, monospace', fontSize: '0.88rem' }}>
+                  {Math.min(rwnd, step.cwnd)}
+                </span>
+              </div>
+              <div style={{ fontFamily: 'Consolas, monospace', fontSize: '0.82rem', color: '#475569', background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>
+                min(rwnd: {rwnd}, cwnd: {step.cwnd}) = {Math.min(rwnd, step.cwnd)}
+              </div>
+            </div>
           </div>
         </aside>
 
