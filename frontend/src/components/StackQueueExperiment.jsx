@@ -9,21 +9,531 @@ export default function StackQueueExperiment({experiment}){
   function add(){const next=value.trim().slice(0,3);if(!next||items.length>=7)return;setItems((current)=>[...current,next]);setLast(mode==='stack'?`${next} 从栈顶入栈（Push）`:`${next} 从队尾入队（Enqueue）`);setValue('')}
   function remove(){if(!items.length)return;const removed=mode==='stack'?items.at(-1):items[0];setItems((current)=>mode==='stack'?current.slice(0,-1):current.slice(1));setLast(mode==='stack'?`${removed} 从栈顶出栈（Pop）`:`${removed} 从队首出队（Dequeue）`)}
   function switchMode(next){setMode(next);setItems(['A','B','C']);setLast(next==='stack'?'切换到栈：只能操作栈顶':'切换到队列：队尾进入、队首离开')}
-  return <><ExperimentHeader experiment={experiment} eyebrow="算法实验 05"/><SqStory/><div className="explore-heading"><span>自由探索 · 用同一组元素比较两种规则</span><h2>谁应该先离开？由数据结构决定</h2><p>添加和移除元素，观察操作端点、元素移动方向以及最终输出顺序。</p></div><div className="lab-layout sq-layout"><aside className="control-panel"><div className="panel-title"><span>结构控制</span><i>{mode==='stack'?'LIFO':'FIFO'}</i></div><div className="nn-neuron-tabs"><button className={mode==='stack'?'active':''} type="button" onClick={()=>switchMode('stack')}>栈 Stack</button><button className={mode==='queue'?'active':''} type="button" onClick={()=>switchMode('queue')}>队列 Queue</button></div><label className="field-block"><span>新元素</span><small>最多保存 7 个元素，输入后从允许的入口加入。</small><input value={value} onChange={(e)=>setValue(e.target.value)} onKeyDown={(e)=>{if(e.key==='Enter')add()}} placeholder="例如 D"/></label><div className="sq-actions"><button type="button" disabled={!value.trim()||items.length>=7} onClick={add}>{mode==='stack'?'Push 入栈':'Enqueue 入队'}</button><button type="button" disabled={!items.length} onClick={remove}>{mode==='stack'?'Pop 出栈':'Dequeue 出队'}</button></div><button className="gd-reset" type="button" onClick={()=>{setItems(['A','B','C']);setLast('结构已恢复初始状态')}}>恢复初始状态</button><div className="live-explanation" key={`${mode}-${items.join('')}-${last}`}><span>刚才的操作</span><strong>{last}</strong><p>{mode==='stack'?'当前只能访问最上方元素；更早进入的元素被压在下面。':'当前从右侧队尾加入，从左侧队首移除；先到者优先。'}</p></div></aside><section className="visual-panel sq-visual"><div className="visual-toolbar"><div><strong>{mode==='stack'?'栈的 LIFO 数据流':'队列的 FIFO 数据流'}</strong><span>{mode==='stack'?'入口与出口都在栈顶':'入口在队尾，出口在队首'}</span></div><span className="source-chip">容量 {items.length}/7</span></div>{mode==='stack'?<StackView items={items}/>:<QueueView items={items}/>}<div className="sq-state"><div><span>{mode==='stack'?'栈底 → 栈顶':'队首 → 队尾'}</span><strong>{items.length?items.join(' → '):'空结构'}</strong></div><div><span>下一次移除</span><strong>{items.length?(mode==='stack'?items.at(-1):items[0]):'无'}</strong></div></div><div className="sq-applications"><article><span>栈的典型应用</span><strong>函数调用、撤销操作、括号匹配、深度优先搜索</strong></article><article><span>队列的典型应用</span><strong>任务调度、消息缓冲、打印队列、广度优先搜索</strong></article></div></section></div><StackQueueCodeDemo mode={mode} last={last}/><LearningCycle experimentId="stack-queue" prediction={{question:'依次加入 A、B、C 后，栈执行一次 Pop 会移除谁？',options:['A','B','C'],answer:'C',explanation:' C 最后进入且位于栈顶，因此最先离开。'}} operation={{title:'比较相同输入的输出顺序',instruction:'分别在栈和队列中加入 D，再连续移除所有元素，记录两种结构的输出顺序。'}} observation={`${mode==='stack'?'栈':'队列'}中当前有 ${items.length} 个元素，下一次将移除 ${items.length?(mode==='stack'?items.at(-1):items[0]):'无'}。`} summaryPrompt="LIFO 和 FIFO 分别适合解决哪类顺序问题？"/></>
+  return <><ExperimentHeader experiment={experiment} eyebrow="算法实验 05"/><SqStory/><div className="explore-heading"><span>自由探索 · 用同一组元素比较两种规则</span><h2>谁应该先离开？由数据结构决定</h2><p>添加和移除元素，观察操作端点、元素移动方向以及最终输出顺序。</p></div><div className="lab-layout sq-layout"><aside className="control-panel"><div className="panel-title"><span>结构控制</span><i>{mode==='stack'?'LIFO':'FIFO'}</i></div><div className="nn-neuron-tabs"><button className={mode==='stack'?'active':''} type="button" onClick={()=>switchMode('stack')}>栈 Stack</button><button className={mode==='queue'?'active':''} type="button" onClick={()=>switchMode('queue')}>队列 Queue</button></div><label className="field-block"><span>新元素</span><small>最多保存 7 个元素，输入后从允许的入口加入。</small><input value={value} onChange={(e)=>setValue(e.target.value)} onKeyDown={(e)=>{if(e.key==='Enter')add()}} placeholder="例如 D"/></label><div className="sq-actions"><button type="button" disabled={!value.trim()||items.length>=7} onClick={add}>{mode==='stack'?'Push 入栈':'Enqueue 入队'}</button><button type="button" disabled={!items.length} onClick={remove}>{mode==='stack'?'Pop 出栈':'Dequeue 出队'}</button></div><button className="gd-reset" type="button" onClick={()=>{setItems(['A','B','C']);setLast('结构已恢复初始状态')}}>恢复初始状态</button><div className="live-explanation" key={`${mode}-${items.join('')}-${last}`}><span>刚才的操作</span><strong>{last}</strong><p>{mode==='stack'?'当前只能访问最上方元素；更早进入的元素被压在下面。':'当前从右侧队尾加入，从左侧队首移除；先到者优先。'}</p></div></aside><section className="visual-panel sq-visual"><div className="visual-toolbar"><div><strong>{mode==='stack'?'栈的 LIFO 数据流':'队列的 FIFO 数据流'}</strong><span>{mode==='stack'?'入口与出口都在栈顶':'入口在队尾，出口在队首'}</span></div><span className="source-chip">容量 {items.length}/7</span></div>{mode==='stack'?<StackView items={items}/>:<QueueView items={items}/>}<div className="sq-state"><div><span>{mode==='stack'?'栈底 → 栈顶':'队首 → 队尾'}</span><strong>{items.length?items.join(' → '):'空结构'}</strong></div><div><span>下一次移除</span><strong>{items.length?(mode==='stack'?items.at(-1):items[0]):'无'}</strong></div></div><div className="sq-applications"><article><span>栈的典型应用</span><strong>函数调用、撤销操作、括号匹配、深度优先搜索</strong></article><article><span>队列的典型应用</span><strong>任务调度、消息缓冲、打印队列、广度优先搜索</strong></article></div></section></div><StackQueueCodeDemo mode={mode} last={last} items={items}/><LearningCycle experimentId="stack-queue" prediction={{question:'依次加入 A、B、C 后，栈执行一次 Pop 会移除谁？',options:['A','B','C'],answer:'C',explanation:' C 最后进入且位于栈顶，因此最先离开。'}} operation={{title:'比较相同输入的输出顺序',instruction:'分别在栈和队列中加入 D，再连续移除所有元素，记录两种结构的输出顺序。'}} observation={`${mode==='stack'?'栈':'队列'}中当前有 ${items.length} 个元素，下一次将移除 ${items.length?(mode==='stack'?items.at(-1):items[0]):'无'}。`} summaryPrompt="LIFO 和 FIFO 分别适合解决哪类顺序问题？"/></>
 }
-const SQ_CODE={
- stack:{
-  Python:[['setup','class Stack:'],['setup','    def __init__(self): self.data = []'],['push','    def push(self, value):'],['push','        self.data.append(value)'],['pop','    def pop(self):'],['pop','        if not self.data: raise IndexError("empty stack")'],['pop','        return self.data.pop()'],['peek','    def peek(self):'],['peek','        if not self.data: raise IndexError("empty stack")'],['peek','        return self.data[-1]']],
-  Java:[['setup','class Stack<T> {'],['setup','    private final ArrayList<T> data = new ArrayList<>();'],['push','    void push(T value) { data.add(value); }'],['pop','    T pop() {'],['pop','        if (data.isEmpty()) throw new NoSuchElementException();'],['pop','        return data.remove(data.size() - 1);'],['pop','    }'],['peek','    T peek() {'],['peek','        if (data.isEmpty()) throw new NoSuchElementException();'],['peek','        return data.get(data.size() - 1);'],['peek','    }'],['setup','}']],
-  'C++':[['setup','template<class T> class Stack {'],['setup','    vector<T> data;'],['push','public: void push(const T& value) { data.push_back(value); }'],['pop','    T pop() {'],['pop','        if (data.empty()) throw underflow_error("empty stack");'],['pop','        T value = data.back(); data.pop_back(); return value;'],['pop','    }'],['peek','    const T& peek() const {'],['peek','        if (data.empty()) throw underflow_error("empty stack");'],['peek','        return data.back();'],['peek','    }'],['setup','};']],
- },
- queue:{
-  Python:[['setup','from collections import deque'],['setup','class Queue:'],['setup','    def __init__(self): self.data = deque()'],['push','    def enqueue(self, value):'],['push','        self.data.append(value)'],['pop','    def dequeue(self):'],['pop','        if not self.data: raise IndexError("empty queue")'],['pop','        return self.data.popleft()'],['peek','    def front(self):'],['peek','        if not self.data: raise IndexError("empty queue")'],['peek','        return self.data[0]']],
-  Java:[['setup','class Queue<T> {'],['setup','    private final ArrayDeque<T> data = new ArrayDeque<>();'],['push','    void enqueue(T value) { data.addLast(value); }'],['pop','    T dequeue() {'],['pop','        if (data.isEmpty()) throw new NoSuchElementException();'],['pop','        return data.removeFirst();'],['pop','    }'],['peek','    T front() {'],['peek','        if (data.isEmpty()) throw new NoSuchElementException();'],['peek','        return data.getFirst();'],['peek','    }'],['setup','}']],
-  'C++':[['setup','template<class T> class Queue {'],['setup','    deque<T> data;'],['push','public: void enqueue(const T& value) { data.push_back(value); }'],['pop','    T dequeue() {'],['pop','        if (data.empty()) throw underflow_error("empty queue");'],['pop','        T value = data.front(); data.pop_front(); return value;'],['pop','    }'],['peek','    const T& front() const {'],['peek','        if (data.empty()) throw underflow_error("empty queue");'],['peek','        return data.front();'],['peek','    }'],['setup','};']],
- }
+const SQ_STRUCTURE_CONFIGS = {
+  linked: {
+    id: 'linked',
+    label: '🔗 单向链表链式实现',
+    subtitle: '指针动态链接 · 离散堆内存 · 零扩容复制',
+    code: {
+      stack: {
+        Python: [
+          ['setup', 'class Node:'],
+          ['setup', '    def __init__(self, val, next=None):'],
+          ['setup', '        self.val = val; self.next = next'],
+          ['setup', 'class LinkedStack:'],
+          ['setup', '    def __init__(self):'],
+          ['setup', '        self.head = None; self.size = 0'],
+          ['push',  '    def push(self, val):  # 头插法入栈: O(1)'],
+          ['push',  '        self.head = Node(val, self.head)'],
+          ['push',  '        self.size += 1'],
+          ['pop',   '    def pop(self):        # 头删法出栈: O(1)'],
+          ['pop',   '        if not self.head: raise IndexError("empty stack")'],
+          ['pop',   '        val, self.head = self.head.val, self.head.next'],
+          ['pop',   '        self.size -= 1; return val'],
+          ['peek',  '    def peek(self):'],
+          ['peek',  '        if not self.head: raise IndexError("empty stack")'],
+          ['peek',  '        return self.head.val'],
+        ],
+        Java: [
+          ['setup', 'class LinkedStack<T> {'],
+          ['setup', '    private static class Node<T> {'],
+          ['setup', '        T val; Node<T> next; Node(T v, Node<T> n){ val=v; next=n; }'],
+          ['setup', '    }'],
+          ['setup', '    private Node<T> head = null; private int size = 0;'],
+          ['push',  '    void push(T val) { head = new Node<>(val, head); size++; } // 头插 O(1)'],
+          ['pop',   '    T pop() {'],
+          ['pop',   '        if (head == null) throw new NoSuchElementException("empty stack");'],
+          ['pop',   '        T val = head.val; head = head.next; size--; return val;'],
+          ['pop',   '    }'],
+          ['peek',  '    T peek() {'],
+          ['peek',  '        if (head == null) throw new NoSuchElementException();'],
+          ['peek',  '        return head.val;'],
+          ['peek',  '    }'],
+          ['setup', '}'],
+        ],
+        'C++': [
+          ['setup', 'template<typename T> class LinkedStack {'],
+          ['setup', '    struct Node { T val; Node* next; Node(T v, Node* n): val(v), next(n){} };'],
+          ['setup', '    Node* head = nullptr; size_t count = 0;'],
+          ['push',  'public: void push(const T& val) { head = new Node(val, head); count++; }'],
+          ['pop',   '    T pop() {'],
+          ['pop',   '        if (!head) throw runtime_error("empty stack");'],
+          ['pop',   '        Node* old = head; T v = old->val; head = head->next; delete old;'],
+          ['pop',   '        count--; return v;'],
+          ['pop',   '    }'],
+          ['peek',  '    const T& peek() const {'],
+          ['peek',  '        if (!head) throw runtime_error("empty stack"); return head->val;'],
+          ['peek',  '    }'],
+          ['setup', '};'],
+        ],
+      },
+      queue: {
+        Python: [
+          ['setup', 'class Node:'],
+          ['setup', '    def __init__(self, val): self.val, self.next = val, None'],
+          ['setup', 'class LinkedQueue:'],
+          ['setup', '    def __init__(self): self.head = self.tail = None; self.size = 0'],
+          ['push',  '    def enqueue(self, val):  # 尾插法入队: O(1)'],
+          ['push',  '        node = Node(val)'],
+          ['push',  '        if not self.tail: self.head = self.tail = node'],
+          ['push',  '        else: self.tail.next = node; self.tail = node'],
+          ['push',  '        self.size += 1'],
+          ['pop',   '    def dequeue(self):       # 头删法出队: O(1)'],
+          ['pop',   '        if not self.head: raise IndexError("empty queue")'],
+          ['pop',   '        val, self.head = self.head.val, self.head.next'],
+          ['pop',   '        if not self.head: self.tail = None'],
+          ['pop',   '        self.size -= 1; return val'],
+          ['peek',  '    def front(self):'],
+          ['peek',  '        if not self.head: raise IndexError("empty queue")'],
+          ['peek',  '        return self.head.val'],
+        ],
+        Java: [
+          ['setup', 'class LinkedQueue<T> {'],
+          ['setup', '    private static class Node<T> { T val; Node<T> next; Node(T v){ val = v; } }'],
+          ['setup', '    private Node<T> head = null, tail = null; int size = 0;'],
+          ['push',  '    void enqueue(T val) {'],
+          ['push',  '        Node<T> n = new Node<>(val);'],
+          ['push',  '        if (tail == null) head = tail = n; else { tail.next = n; tail = n; }'],
+          ['push',  '        size++;'],
+          ['push',  '    }'],
+          ['pop',   '    T dequeue() {'],
+          ['pop',   '        if (head == null) throw new NoSuchElementException("empty queue");'],
+          ['pop',   '        T val = head.val; head = head.next; if (head == null) tail = null;'],
+          ['pop',   '        size--; return val;'],
+          ['pop',   '    }'],
+          ['peek',  '    T front() { return head != null ? head.val : null; }'],
+          ['setup', '}'],
+        ],
+        'C++': [
+          ['setup', 'template<typename T> class LinkedQueue {'],
+          ['setup', '    struct Node { T val; Node* next; Node(T v): val(v), next(nullptr){} };'],
+          ['setup', '    Node *head = nullptr, *tail = nullptr; size_t count = 0;'],
+          ['push',  'public: void enqueue(const T& val) {'],
+          ['push',  '        Node* n = new Node(val);'],
+          ['push',  '        if (!tail) head = tail = n; else { tail->next = n; tail = n; }'],
+          ['push',  '        count++;'],
+          ['push',  '    }'],
+          ['pop',   '    T dequeue() {'],
+          ['pop',   '        if (!head) throw runtime_error("empty queue");'],
+          ['pop',   '        Node* old = head; T v = old->val; head = head->next;'],
+          ['pop',   '        if (!head) tail = nullptr; delete old; count--; return v;'],
+          ['pop',   '    }'],
+          ['peek',  '    const T& front() const { if(!head) throw runtime_error("empty"); return head->val; }'],
+          ['setup', '};'],
+        ],
+      },
+    },
+    metrics: {
+      push: 'O(1) 严格',
+      pop: 'O(1) 严格',
+      peek: 'O(1) 严格',
+      space: 'O(n) + 指针',
+      detail: '基于指针链接。入栈/入队直接 new Node，无须预分配固定内存，绝无动态数组扩容时的 O(n) 内存数据搬移与耗时抖动。'
+    }
+  },
+  array: {
+    id: 'array',
+    label: '📦 动态数组实现',
+    subtitle: '紧凑物理连续内存 · CPU L1/L2 Cache 友好',
+    code: {
+      stack: {
+        Python: [
+          ['setup', 'class Stack:'],
+          ['setup', '    def __init__(self): self.data = []'],
+          ['push',  '    def push(self, value):'],
+          ['push',  '        self.data.append(value)  # 均摊 O(1)'],
+          ['pop',   '    def pop(self):'],
+          ['pop',   '        if not self.data: raise IndexError("empty stack")'],
+          ['pop',   '        return self.data.pop()   # O(1)'],
+          ['peek',  '    def peek(self):'],
+          ['peek',  '        if not self.data: raise IndexError("empty stack")'],
+          ['peek',  '        return self.data[-1]'],
+        ],
+        Java: [
+          ['setup', 'class Stack<T> {'],
+          ['setup', '    private final ArrayList<T> data = new ArrayList<>();'],
+          ['push',  '    void push(T value) { data.add(value); }'],
+          ['pop',   '    T pop() {'],
+          ['pop',   '        if (data.isEmpty()) throw new NoSuchElementException();'],
+          ['pop',   '        return data.remove(data.size() - 1);'],
+          ['pop',   '    }'],
+          ['peek',  '    T peek() {'],
+          ['peek',  '        if (data.isEmpty()) throw new NoSuchElementException();'],
+          ['peek',  '        return data.get(data.size() - 1);'],
+          ['peek',  '    }'],
+          ['setup', '}'],
+        ],
+        'C++': [
+          ['setup', 'template<class T> class Stack {'],
+          ['setup', '    vector<T> data;'],
+          ['push',  'public: void push(const T& value) { data.push_back(value); }'],
+          ['pop',   '    T pop() {'],
+          ['pop',   '        if (data.empty()) throw underflow_error("empty stack");'],
+          ['pop',   '        T value = data.back(); data.pop_back(); return value;'],
+          ['pop',   '    }'],
+          ['peek',  '    const T& peek() const {'],
+          ['peek',  '        if (data.empty()) throw underflow_error("empty stack");'],
+          ['peek',  '        return data.back();'],
+          ['peek',  '    }'],
+          ['setup', '};'],
+        ],
+      },
+      queue: {
+        Python: [
+          ['setup', 'from collections import deque'],
+          ['setup', 'class Queue:'],
+          ['setup', '    def __init__(self): self.data = deque()'],
+          ['push',  '    def enqueue(self, value):'],
+          ['push',  '        self.data.append(value)'],
+          ['pop',   '    def dequeue(self):'],
+          ['pop',   '        if not self.data: raise IndexError("empty queue")'],
+          ['pop',   '        return self.data.popleft()'],
+          ['peek',  '    def front(self):'],
+          ['peek',  '        if not self.data: raise IndexError("empty queue")'],
+          ['peek',  '        return self.data[0]'],
+        ],
+        Java: [
+          ['setup', 'class Queue<T> {'],
+          ['setup', '    private final ArrayDeque<T> data = new ArrayDeque<>();'],
+          ['push',  '    void enqueue(T value) { data.addLast(value); }'],
+          ['pop',   '    T dequeue() {'],
+          ['pop',   '        if (data.isEmpty()) throw new NoSuchElementException();'],
+          ['pop',   '        return data.removeFirst();'],
+          ['pop',   '    }'],
+          ['peek',  '    T front() {'],
+          ['peek',  '        if (data.isEmpty()) throw new NoSuchElementException();'],
+          ['peek',  '        return data.getFirst();'],
+          ['peek',  '    }'],
+          ['setup', '}'],
+        ],
+        'C++': [
+          ['setup', 'template<class T> class Queue {'],
+          ['setup', '    deque<T> data;'],
+          ['push',  'public: void enqueue(const T& value) { data.push_back(value); }'],
+          ['pop',   '    T dequeue() {'],
+          ['pop',   '        if (data.empty()) throw underflow_error("empty queue");'],
+          ['pop',   '        T value = data.front(); data.pop_front(); return value;'],
+          ['pop',   '    }'],
+          ['peek',  '    const T& front() const {'],
+          ['peek',  '        if (data.empty()) throw underflow_error("empty queue");'],
+          ['peek',  '        return data.front();'],
+          ['peek',  '    }'],
+          ['setup', '};'],
+        ],
+      },
+    },
+    metrics: {
+      push: 'O(1) 均摊',
+      pop: 'O(1)',
+      peek: 'O(1)',
+      space: 'O(n) 紧凑',
+      detail: '连续内存分配，元素紧密相连。动态数组扩容时需申请 2 倍新内存并拷贝整段数组；但遍历与连续读取时的缓存命中率极高。'
+    }
+  },
+  circular: {
+    id: 'circular',
+    label: '🔄 循环数组环形实现',
+    subtitle: '定长模运算复用空间 · 解决普通数组假溢出',
+    code: {
+      stack: {
+        Python: [
+          ['setup', 'class BoundedStack:'],
+          ['setup', '    def __init__(self, cap=7):'],
+          ['setup', '        self.buf = [None] * cap; self.top = 0; self.cap = cap'],
+          ['push',  '    def push(self, val):  # 栈顶游标前进: O(1)'],
+          ['push',  '        if self.top >= self.cap: raise OverflowError("stack full")'],
+          ['push',  '        self.buf[self.top] = val; self.top += 1'],
+          ['pop',   '    def pop(self):         # 栈顶游标后退: O(1)'],
+          ['pop',   '        if self.top == 0: raise IndexError("stack empty")'],
+          ['pop',   '        self.top -= 1; return self.buf[self.top]'],
+          ['peek',  '    def peek(self): return self.buf[self.top - 1] if self.top else None'],
+        ],
+        Java: [
+          ['setup', 'class BoundedStack<T> {'],
+          ['setup', '    private final Object[] buf; private int top = 0;'],
+          ['setup', '    public BoundedStack(int cap){ buf = new Object[cap]; }'],
+          ['push',  '    void push(T val) {'],
+          ['push',  '        if (top >= buf.length) throw new IllegalStateException("Stack Full");'],
+          ['push',  '        buf[top++] = val;'],
+          ['push',  '    }'],
+          ['pop',   '    @SuppressWarnings("unchecked") T pop() {'],
+          ['pop',   '        if (top == 0) throw new NoSuchElementException("Stack Empty");'],
+          ['pop',   '        return (T) buf[--top];'],
+          ['pop',   '    }'],
+          ['setup', '}'],
+        ],
+        'C++': [
+          ['setup', 'template<typename T, size_t Cap = 7> class BoundedStack {'],
+          ['setup', '    T buf[Cap]; size_t top = 0;'],
+          ['push',  'public: void push(const T& val) {'],
+          ['push',  '        if(top >= Cap) throw overflow_error("Stack full");'],
+          ['push',  '        buf[top++] = val;'],
+          ['push',  '    }'],
+          ['pop',   '    T pop() {'],
+          ['pop',   '        if(top == 0) throw underflow_error("Stack empty");'],
+          ['pop',   '        return buf[--top];'],
+          ['pop',   '    }'],
+          ['setup', '};'],
+        ],
+      },
+      queue: {
+        Python: [
+          ['setup', 'class CircularQueue:'],
+          ['setup', '    def __init__(self, cap=7):'],
+          ['setup', '        self.buf = [None] * cap; self.front = self.rear = self.count = 0; self.cap = cap'],
+          ['push',  '    def enqueue(self, val):  # 环形模运算: (rear + 1) % cap'],
+          ['push',  '        if self.count == self.cap: raise OverflowError("queue full")'],
+          ['push',  '        self.buf[self.rear] = val'],
+          ['push',  '        self.rear = (self.rear + 1) % self.cap; self.count += 1'],
+          ['pop',   '    def dequeue(self):       # 环形模运算: (front + 1) % cap'],
+          ['pop',   '        if self.count == 0: raise IndexError("queue empty")'],
+          ['pop',   '        val = self.buf[self.front]'],
+          ['pop',   '        self.front = (self.front + 1) % self.cap; self.count -= 1'],
+          ['pop',   '        return val'],
+        ],
+        Java: [
+          ['setup', 'class CircularQueue<T> {'],
+          ['setup', '    private final Object[] buf; private int head = 0, tail = 0, count = 0, cap;'],
+          ['setup', '    public CircularQueue(int cap){ this.cap = cap; buf = new Object[cap]; }'],
+          ['push',  '    void enqueue(T val) {'],
+          ['push',  '        if (count == cap) throw new IllegalStateException("Queue full");'],
+          ['push',  '        buf[tail] = val; tail = (tail + 1) % cap; count++;'],
+          ['push',  '    }'],
+          ['pop',   '    @SuppressWarnings("unchecked") T dequeue() {'],
+          ['pop',   '        if (count == 0) throw new NoSuchElementException("Queue empty");'],
+          ['pop',   '        T val = (T) buf[head]; head = (head + 1) % cap; count--; return val;'],
+          ['pop',   '    }'],
+          ['setup', '}'],
+        ],
+        'C++': [
+          ['setup', 'template<typename T, size_t Cap = 7> class CircularQueue {'],
+          ['setup', '    T buf[Cap]; size_t head = 0, tail = 0, count = 0;'],
+          ['push',  'public: void enqueue(const T& val) {'],
+          ['push',  '        if(count == Cap) throw overflow_error("Queue full");'],
+          ['push',  '        buf[tail] = val; tail = (tail + 1) % Cap; count++;'],
+          ['push',  '    }'],
+          ['pop',   '    T dequeue() {'],
+          ['pop',   '        if(count == 0) throw underflow_error("Queue empty");'],
+          ['pop',   '        T val = buf[head]; head = (head + 1) % Cap; count--; return val;'],
+          ['pop',   '    }'],
+          ['setup', '};'],
+        ],
+      },
+    },
+    metrics: {
+      push: 'O(1) 严格',
+      pop: 'O(1) 严格',
+      peek: 'O(1) 严格',
+      space: 'O(Capacity) 定长',
+      detail: '利用模运算将数组首尾连成环。彻底解决普通数组出队后前端空间被废弃的“假溢出”缺陷，常用于硬件驱动 Ring Buffer、音频采样与消息管道。'
+    }
+  }
+};
+
+function StackQueueCodeDemo({ mode, last, items = [] }) {
+  const [structure, setStructure] = useState('linked');
+  const [language, setLanguage] = useState('Python');
+  const active = last.includes('入栈') || last.includes('入队') ? 'push' : last.includes('出栈') || last.includes('出队') ? 'pop' : 'setup';
+  const label = mode === 'stack' ? '栈 Stack' : '队列 Queue';
+  const currentConfig = SQ_STRUCTURE_CONFIGS[structure];
+  const codeLines = currentConfig.code[mode][language] || [];
+  const metrics = currentConfig.metrics;
+
+  // 构造链式拓扑显示用的节点列表
+  // stack 是头插法，head 指向最新进入的元素 (items 的最后一位)
+  // queue 是尾插法头删法，head 指向最先进入的元素 (items 的第 0 位)
+  const linkedNodes = mode === 'stack' ? [...items].reverse() : [...items];
+
+  return (
+    <section className="structure-code-demo">
+      <header className="structure-code-header-enhanced">
+        <div className="code-header-title-wrap">
+          <div className="code-kicker-row">
+            <span>底层存储结构切换</span>
+            <small className="structure-badge-pill">{currentConfig.subtitle}</small>
+          </div>
+          <h2>{label} · {currentConfig.label}</h2>
+          <p>
+            数据结构分为<strong>逻辑结构</strong>（LIFO / FIFO）与<strong>物理存储结构</strong>（链表 / 连续数组 / 循环环）。
+            在此切换底层形态，观察指针拓扑、内存模型与同步代码高亮！
+          </p>
+        </div>
+
+        <div className="code-header-controls">
+          <div className="structure-type-tabs" role="tablist" aria-label="数据结构实现形态">
+            {Object.values(SQ_STRUCTURE_CONFIGS).map((cfg) => (
+              <button
+                key={cfg.id}
+                type="button"
+                className={`struct-tab-btn ${structure === cfg.id ? 'active' : ''}`}
+                onClick={() => setStructure(cfg.id)}
+              >
+                {cfg.label}
+              </button>
+            ))}
+          </div>
+
+          <nav className="lang-tabs" aria-label="编程语言选择">
+            {Object.keys(currentConfig.code[mode]).map((item) => (
+              <button
+                type="button"
+                className={language === item ? 'active' : ''}
+                onClick={() => setLanguage(item)}
+                key={item}
+              >
+                {item}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      {/* 链表 / 数组 内存指针拓扑微图 */}
+      <div className="structure-topology-container">
+        <div className="topo-header">
+          <div className="topo-title">
+            <strong>{structure === 'linked' ? '🔗 链表内存指针实时映射 (Linked Topology)' : structure === 'circular' ? '🔄 环形缓冲槽位状态 (Ring Buffer)' : '📦 物理连续内存槽位映射 (Contiguous Array)'}</strong>
+            <span>根据上方元素自由探索实时联动更新</span>
+          </div>
+          <span className="topo-count-badge">当前节点数: {items.length} / 7</span>
+        </div>
+
+        {structure === 'linked' && (
+          <div className="linked-topology-canvas">
+            <div className="topo-node-chain">
+              <div className="topo-head-marker">
+                <span className="ptr-name">{mode === 'stack' ? 'head (栈顶指针)' : 'head (队首指针)'}</span>
+                <span className="ptr-arrow">──▶</span>
+              </div>
+
+              {linkedNodes.length === 0 ? (
+                <div className="topo-null-node">None / nullptr (空链表)</div>
+              ) : (
+                linkedNodes.map((val, idx) => (
+                  <div className="topo-node-wrapper" key={`${val}-${idx}`}>
+                    <div className={`topo-node-card ${idx === 0 && (active === 'push' || active === 'pop') ? 'highlight-pulse' : ''}`}>
+                      <div className="node-val-zone">
+                        <small>val</small>
+                        <strong>{val}</strong>
+                      </div>
+                      <div className="node-next-zone">
+                        <small>next</small>
+                        <i>•</i>
+                      </div>
+                    </div>
+                    {mode === 'queue' && idx === linkedNodes.length - 1 && (
+                      <span className="topo-tail-marker">▲ tail (队尾)</span>
+                    )}
+                    <span className="node-pointer-arrow">──▶</span>
+                  </div>
+                ))
+              )}
+
+              {linkedNodes.length > 0 && (
+                <div className="topo-null-node">None / nullptr</div>
+              )}
+            </div>
+            <div className="topo-linked-tips">
+              {mode === 'stack' ? (
+                <p>💡 <strong>单链表实现栈</strong>：每次入栈执行 <code>head = Node(val, head)</code>（头插法），严格 <strong>O(1)</strong>；出栈仅需 <code>head = head.next</code>（头删法），内存即时释放，绝无连续内存搬移。</p>
+              ) : (
+                <p>💡 <strong>双指针单链表实现队列</strong>：维护 <code>head</code> 与 <code>tail</code>。新元素从 <code>tail.next</code> 接入并更新 <code>tail</code>（严格 O(1)），出队从 <code>head</code> 摘除（严格 O(1)）。</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {structure === 'array' && (
+          <div className="array-topology-canvas">
+            <div className="array-slots-row">
+              {Array.from({ length: 7 }).map((_, idx) => {
+                const hasItem = idx < items.length;
+                const val = items[idx];
+                const isStackTop = mode === 'stack' && idx === items.length - 1;
+                const isQueueHead = mode === 'queue' && idx === 0 && items.length > 0;
+                const isQueueTail = mode === 'queue' && idx === items.length - 1;
+                return (
+                  <div className={`array-slot-box ${hasItem ? 'filled' : 'empty'}`} key={idx}>
+                    <span className="slot-idx">[{idx}]</span>
+                    <strong className="slot-val">{hasItem ? val : '—'}</strong>
+                    <div className="slot-role-tag">
+                      {isStackTop && <span className="tag-top">栈顶</span>}
+                      {isQueueHead && <span className="tag-head">队首</span>}
+                      {isQueueTail && <span className="tag-tail">队尾</span>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="topo-array-tips">
+              💡 <strong>连续内存布局</strong>：每个槽位在物理内存中首尾紧随，通过 <code>base_addr + index × sizeof(T)</code> 实现真正常数级随机寻址。当 7 槽存满触发再扩容时，底层需要申请更大块全新内存并将原数据完整拷贝过去。
+            </p>
+          </div>
+        )}
+
+        {structure === 'circular' && (
+          <div className="circular-topology-canvas">
+            <div className="circular-slots-row">
+              {Array.from({ length: 7 }).map((_, idx) => {
+                const hasItem = idx < items.length;
+                const val = items[idx];
+                return (
+                  <div className={`ring-slot-box ${hasItem ? 'active' : ''}`} key={idx}>
+                    <span className="ring-idx">Slot {idx}</span>
+                    <strong className="ring-val">{hasItem ? val : '空闲'}</strong>
+                    <small className="ring-math">模 (i+1)%7</small>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="topo-circular-tips">
+              💡 <strong>循环环形队列/缓冲</strong>：队尾指针 <code>tail = (tail + 1) % cap</code>，队首指针 <code>head = (head + 1) % cap</code>。空间逻辑首尾相接，无须整体前移数据，是操作系统环形 IO 队列的核心。
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="structure-code-body">
+        <pre>
+          <code>
+            {codeLines.map(([key, line], index) => (
+              <span className={active === key ? 'active' : ''} key={`${structure}-${language}-${index}`}>
+                <i>{String(index + 1).padStart(2, '0')}</i>
+                {line}
+              </span>
+            ))}
+          </code>
+        </pre>
+        <aside>
+          <div className="complexity-grid vertical">
+            <span>
+              <small>{mode === 'stack' ? 'Push (压入)' : 'Enqueue (进入)'}</small>
+              <strong>{metrics.push}</strong>
+            </span>
+            <span>
+              <small>{mode === 'stack' ? 'Pop (弹出)' : 'Dequeue (离开)'}</small>
+              <strong>{metrics.pop}</strong>
+            </span>
+            <span>
+              <small>{mode === 'stack' ? 'Peek (查顶)' : 'Front (查首)'}</small>
+              <strong>{metrics.peek}</strong>
+            </span>
+            <span>
+              <small>空间复杂度</small>
+              <strong>{metrics.space}</strong>
+            </span>
+          </div>
+          <div className="structure-detail-panel">
+            <h4>形态选型剖析</h4>
+            <p>{metrics.detail}</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  );
 }
-function StackQueueCodeDemo({mode,last}){const[language,setLanguage]=useState('Python');const active=last.includes('入栈')||last.includes('入队')?'push':last.includes('出栈')||last.includes('出队')?'pop':'setup';const label=mode==='stack'?'栈 Stack':'队列 Queue';return <section className="structure-code-demo"><header><div><span>正式代码 · 操作同步</span><h2>{label} 的数组/双端队列实现</h2><p>点击上方操作按钮后，对应的 push、pop、enqueue 或 dequeue 语句会同步高亮。</p></div><nav>{Object.keys(SQ_CODE[mode]).map((item)=><button type="button" className={language===item?'active':''} onClick={()=>setLanguage(item)} key={item}>{item}</button>)}</nav></header><div className="structure-code-body"><pre><code>{SQ_CODE[mode][language].map(([key,line],index)=><span className={active===key?'active':''} key={`${language}-${index}`}><i>{String(index+1).padStart(2,'0')}</i>{line}</span>)}</code></pre><aside><div className="complexity-grid vertical"><span><small>{mode==='stack'?'Push':'Enqueue'}</small><strong>O(1) 均摊</strong></span><span><small>{mode==='stack'?'Pop':'Dequeue'}</small><strong>O(1)</strong></span><span><small>{mode==='stack'?'Peek':'Front'}</small><strong>O(1)</strong></span><span><small>存储 n 个元素</small><strong>O(n)</strong></span></div><p>{mode==='stack'?'动态数组尾部就是栈顶；扩容偶尔需要 O(n)，因此 Push 是均摊 O(1)。':'使用双端队列从尾部加入、头部删除，避免普通数组头删导致的 O(n) 搬移。'}</p></aside></div></section>}
 function StackView({items}){return <div className="stack-view"><span className="sq-arrow">Push / Pop<br/>↓ ↑</span><div className="stack-container">{[...items].reverse().map((item,index)=><i className={index===0?'next':''} key={`${item}-${items.length-index}`}>{item}<b>{index===0?'栈顶':''}</b></i>)}{!items.length&&<small>空栈</small>}</div><strong>栈底</strong></div>}
 function QueueView({items}){return <div className="queue-view"><span>Dequeue 出队 ←</span><div>{items.map((item,index)=><i className={index===0?'next':''} key={`${item}-${index}`}>{item}<b>{index===0?'队首':index===items.length-1?'队尾':''}</b></i>)}{!items.length&&<small>空队列</small>}</div><span>← Enqueue 入队</span></div>}
 function SqStory(){const [step,setStep]=useState(0),[playing,setPlaying]=useState(false);useEffect(()=>{if(!playing)return;const t=setTimeout(()=>setStep((v)=>{if(v===STORY.length-1){setPlaying(false);return v}return v+1}),2600);return()=>clearTimeout(t)},[playing,step]);return <section className="transformer-story sq-story"><header className="story-intro"><div><span className="story-kicker">动画导学 · 约 2 分钟</span><h2>入口和出口的位置，决定元素离开的顺序</h2><p>用同一组 A、B、C 比较栈与队列，不再把 LIFO、FIFO 当作孤立缩写。</p></div><div className="sq-story-badge"><strong>Stack</strong><span>LIFO</span><b>对比</b><strong>Queue</strong><span>FIFO</span></div></header><nav className="story-timeline" style={{'--story-steps':STORY.length}}>{STORY.map((item,index)=><button key={item[0]} type="button" className={`${step===index?'active':''} ${index<step?'passed':''}`} onClick={()=>{setStep(index);setPlaying(false)}}><i>{index<step?'✓':index+1}</i><span>{item[0]}</span></button>)}</nav><div className="story-stage" key={step}><div className="story-copy"><span>0{step+1} · 核心概念</span><h3>{STORY[step][1]}</h3><p>{sqStoryText(step)}</p><aside><strong>为什么这样设计？</strong><p>{STORY[step][2]}</p></aside></div><div className="story-visual"><SqStoryVisual step={step}/></div></div><footer className="story-controls"><button disabled={step===0} onClick={()=>setStep(step-1)}>← 上一步</button><button className="story-play" onClick={()=>{if(step===STORY.length-1)setStep(0);setPlaying((v)=>!v)}}>{playing?'暂停讲解':'▶ 自动播放'}</button><button disabled={step===STORY.length-1} onClick={()=>setStep(step+1)}>下一步 →</button></footer></section>}
