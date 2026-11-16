@@ -538,3 +538,63 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .story-caption-card span{display:block;color:#ff9d85;font-size:15px;font-weight:800}
 .story-caption-card strong{display:block;margin-top:8px;color:#ffffff;font-size:21px;font-weight:900}
 .story-caption-card small{display:block;margin-top:8px;color:#cbd5e1;font-size:13.5px}
+
+/* 16. 二叉树遍历导学全步骤可控动画与递归调用栈双向联动系统 */
+.story-micro-controller{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:680px;margin-top:14px;padding:8px 14px;background:#151f2e;border:1px solid #2e3e56;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.micro-meta{display:flex;align-items:center;gap:10px;min-width:0}
+.micro-step-pill{font-size:13px;font-weight:800;color:#ff967d;background:rgba(255,90,50,.14);border:1px solid rgba(255,90,50,.3);padding:3px 10px;border-radius:99px;white-space:nowrap}
+.micro-hint{font-size:13px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.micro-btn-group{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.micro-btn-group button{background:#1d293a;border:1px solid #3c4f69;color:#e2e8f0;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.micro-btn-group button:hover:not(:disabled){background:#28384f;border-color:#5a7398;color:#fff}
+.micro-btn-group button:disabled{opacity:.35;cursor:not-allowed}
+.micro-btn-group button.micro-play-btn{background:#312e81;border-color:#6366f1;color:#e0e7ff}
+.micro-btn-group button.micro-play-btn:hover{background:#4338ca}
+.micro-btn-group button.micro-play-btn.playing{background:#b91c1c;border-color:#ef4444;color:#fee2e2}
+
+/* 步骤 0：展开树结构 */
+.tree-step0-stage{display:flex;flex-direction:column;align-items:center;width:100%}
+.step-caption-pill{margin:10px 0;font-size:14.5px;font-weight:700;color:#cbd5e1;background:rgba(255,255,255,.05);padding:6px 16px;border-radius:99px;border:1px solid rgba(255,255,255,.1)}
+
+/* 步骤 1：递归深度透视舞台 */
+.recursion-deep-stage{display:flex;flex-direction:column;align-items:center;width:100%;max-width:680px;gap:10px}
+.recursion-tree-canvas-wrap{width:100%;background:radial-gradient(circle at center,rgba(255,255,255,.03),transparent 75%),#0f1724;border:1px solid #28374d;border-radius:14px;padding:4px}
+.recursion-mini-svg{width:100%;height:190px;overflow:visible}
+.call-dim-line{stroke:#2d3a4d;stroke-width:2.5;transition:.3s}
+.call-active-line{stroke:#ff6745;stroke-width:4.5;stroke-dasharray:7 5;animation:tree-dash .8s linear infinite;filter:drop-shadow(0 0 6px rgba(255,103,69,.7))}
+.rec-node circle{fill:#151f2e;stroke:#3f516a;stroke-width:2.5;transition:all .25s ease}
+.rec-node text{fill:#cbd5e1;font-size:17px;font-weight:900;text-anchor:middle;dominant-baseline:central}
+.rec-node.is-in-stack circle{fill:#1e1b4b;stroke:#818cf8;stroke-width:3;filter:drop-shadow(0 0 8px rgba(99,102,241,.5))}
+.rec-node.is-in-stack text{fill:#e0e7ff}
+.rec-node.is-current circle{fill:#451a03;stroke:#ff6745;stroke-width:4;filter:drop-shadow(0 0 14px rgba(255,103,69,.8))}
+.rec-node.is-current text{fill:#ffffff}
+.rec-badge-text{font-size:12px;font-weight:800;fill:#ff9073;text-anchor:middle}
+.rec-badge-text.wait{fill:#a5b4fc}
+
+/* 调用栈可视化底板 */
+.recursion-stack-board{width:100%;background:#131c2a;border:1px solid #2a3a50;border-radius:12px;padding:10px 14px}
+.stack-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.stack-header-row strong{font-size:13.5px;color:#e2e8f0;font-weight:800}
+.stack-header-row span{font-size:12px;color:#8594a6}
+.stack-frames-track{display:flex;align-items:stretch;gap:10px;min-height:86px;overflow-x:auto;padding-bottom:4px}
+.stack-empty-chip{width:100%;display:grid;place-items:center;border:1px dashed #34445c;border-radius:8px;color:#64748b;font-size:13px}
+.call-frame-card{flex:1;min-width:145px;background:#182333;border:1.5px solid #364761;border-radius:9px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;gap:4px;transition:all .25s ease}
+.call-frame-card.is-top{border-color:#ff6745;background:linear-gradient(135deg,rgba(255,103,69,.15),#1e293b);box-shadow:0 0 14px rgba(255,103,69,.25)}
+.frame-top-bar{display:flex;align-items:center;justify-content:space-between}
+.frame-func{font-size:14px;font-weight:900;color:#f8fafc;font-family:monospace}
+.frame-role{font-size:11px;font-weight:700;color:#94a3b8;background:#0f1722;padding:1px 6px;border-radius:4px}
+.call-frame-card.is-top .frame-role{color:#ff967d;background:rgba(255,90,50,.2)}
+.frame-wait-desc{font-size:11.5px;color:#cbd5e1;line-height:1.4;margin:0}
+.top-indicator{font-size:11px;font-weight:800;color:#ff8566;display:inline-block}
+.wait-indicator{font-size:11px;font-weight:700;color:#94a3b8;display:inline-block}
+
+/* 核心解析条 */
+.recursion-explain-banner{width:100%;background:#101724;border:1px solid #233145;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:5px}
+.flow-badge{align-self:flex-start;font-size:12.5px;font-weight:800;color:#ff9073;background:rgba(255,90,50,.12);border:1px solid rgba(255,90,50,.28);padding:3px 10px;border-radius:99px}
+.desc-text{font-size:13.5px;color:#e2e8f0;line-height:1.55;margin:0}
+.desc-text strong{color:#ff9073}
+.why-text{font-size:13px;color:#a5b4fc;background:rgba(99,102,241,.1);padding:6px 10px;border-radius:6px;border:1px solid rgba(99,102,241,.25);line-height:1.5}
+.why-text strong{color:#c7d2fe}
+
+/* 遍历与对比控制容器 */
+.tree-traversal-stage,.tree-compare-stage{display:flex;flex-direction:column;align-items:center;width:100%}
