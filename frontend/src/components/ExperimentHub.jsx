@@ -59,6 +59,67 @@ function CourseCatalog({ courses, onOpen, onSelectCourse, user, records, onShowP
 
       <PersonalLearning user={user} records={records} courses={courses} onOpen={onOpen} onShowProfile={onShowProfile} onLogin={onLogin} />
 
+      {/* 408 考研真题与智能测评中心横幅推荐 */}
+      <section style={{
+        margin: '24px 0',
+        padding: '20px 24px',
+        borderRadius: '14px',
+        background: 'linear-gradient(135deg, #1e1b4b, #312e81)',
+        color: '#fff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '16px',
+        border: '1px solid #4338ca',
+        boxShadow: '0 4px 15px rgba(49, 46, 129, 0.25)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            borderRadius: '12px',
+            background: 'rgba(255, 255, 255, 0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.5rem',
+            flexShrink: 0
+          }}>
+            🎯
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <span style={{ background: '#4f46e5', color: '#fff', padding: '1px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 800 }}>
+                备战 408 统考专项
+              </span>
+              <strong style={{ fontSize: '1.1rem', color: '#f8fafc' }}>计算机考研 408 真题智能测评中心</strong>
+            </div>
+            <p style={{ margin: 0, fontSize: '0.88rem', color: '#cbd5e1' }}>
+              精选历年 408 统考经典真题，做错一键直达可视化实验推演，构建“学-练-测-诊”闭环！
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => { window.location.hash = '#/exam' }}
+          style={{
+            background: '#ffffff',
+            color: '#312e81',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            border: 'none',
+            fontWeight: 800,
+            fontSize: '0.92rem',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+          }}
+        >
+          立即开始测试 ➔
+        </button>
+      </section>
+
       <section className="course-library">
         <div className="course-section-heading">
           <div><span className="eyebrow">COURSE LIBRARY</span><h2>课程知识地图</h2></div>

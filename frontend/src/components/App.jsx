@@ -18,6 +18,7 @@ import TransactionExperiment from './TransactionExperiment'
 import NormalizationExperiment from './NormalizationExperiment'
 import AccountDialog from './AccountDialog'
 import LearningDashboard from './LearningDashboard'
+import ExamArena from './ExamArena'
 import { useLearningProfile } from './LearningProfileContext'
 import MemoryPartitionExperiment from './MemoryPartitionExperiment'
 import NeuralNetworkExperiment from './NeuralNetworkExperiment'
@@ -90,6 +91,7 @@ export default function App() {
   const openExperiment = (experimentId) => navigate(`#\/lab\/${experimentId}`)
   const openCourse = (courseId) => navigate(`#\/course\/${courseId}`)
   const openProfile = () => navigate('#/profile')
+  const openExam = () => navigate('#/exam')
 
   return (
     <div className="app-shell">
@@ -100,10 +102,17 @@ export default function App() {
         </button>
         <nav className="topbar-nav" aria-label="主导航">
           <button className={route.kind === 'home' ? 'active' : ''} type="button" onClick={goHome}>课程首页</button>
+          <button className={route.kind === 'exam' ? 'active' : ''} type="button" onClick={openExam} style={{ color: '#2563eb', fontWeight: 'bold' }}>
+            🎯 408考研测评
+          </button>
           {user ? <div className="account-menu-wrap"><button className={`profile-trigger ${route.kind === 'profile' ? 'active' : ''}`} type="button" onClick={() => setAccountMenuOpen((value) => !value)}><span>{user.name.slice(0, 1).toUpperCase()}</span><strong>{user.name}</strong><i>⌄</i></button>{accountMenuOpen && <div className="account-menu"><button type="button" onClick={() => { setAccountMenuOpen(false); openProfile() }}><span>◎</span><div><strong>我的学习中心</strong><small>进度、记录与个性推荐</small></div></button><button type="button" onClick={() => { setAccountMenuOpen(false); logout(); goHome() }}><span>↪</span><div><strong>退出当前账户</strong><small>记录仍保存在本机</small></div></button></div>}</div> : <button className="login-trigger" type="button" onClick={() => setAccountOpen(true)}>登录 / 注册</button>}
         </nav>
       </header>
-      {route.kind === 'profile' ? <LearningDashboard experiments={experiments} courses={courses} onOpen={openExperiment} onBack={goHome} /> : Experiment && experiment ? (
+      {route.kind === 'profile' ? (
+        <LearningDashboard experiments={experiments} courses={courses} onOpen={openExperiment} onBack={goHome} />
+      ) : route.kind === 'exam' ? (
+        <ExamArena onOpenExperiment={openExperiment} onBackHome={goHome} />
+      ) : Experiment && experiment ? (
         <main className="experiment-page" key={activeExperiment}>
           <div className="breadcrumb">
             <button type="button" onClick={goHome}>全部课程</button>
@@ -120,6 +129,7 @@ export default function App() {
 
 function readRouteFromHash() {
   if (window.location.hash === '#/profile') return { kind: 'profile', id: null }
+  if (window.location.hash === '#/exam') return { kind: 'exam', id: null }
   const labMatch = window.location.hash.match(/^#\/lab\/([a-z-]+)$/)
   if (experiments.some((item) => item.id === labMatch?.[1])) return { kind: 'lab', id: labMatch[1] }
   const courseMatch = window.location.hash.match(/^#\/course\/([a-z-]+)$/)
