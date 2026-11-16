@@ -1050,3 +1050,181 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .insight-badge{font-size:14px;font-weight:900;color:#a5b4fc;margin-bottom:6px}
 .ps-realworld-insight p{margin:0;font-size:13.5px;line-height:1.65;color:#e0e7ff}
 .ps-realworld-insight strong{color:#38bdf8}
+
+/* ======================================================== */
+/* 21. 知识点卡片与理论预热全局大字号、高对比度与间距放大 */
+/* ======================================================== */
+.knowledge-brief{padding:32px 36px;border-radius:24px}
+.knowledge-brief-intro span{font-size:14px;font-weight:900;letter-spacing:.08em}
+.knowledge-brief-intro h2{font-size:30px;margin:8px 0 6px;letter-spacing:-.015em}
+.knowledge-brief-intro p{font-size:16px;line-height:1.75;color:#334155}
+.knowledge-brief-grid{gap:16px;margin-top:22px}
+.knowledge-brief-grid article{padding:18px 22px;border-radius:16px;background:rgba(255,255,255,.9);border:1.5px solid rgba(0,0,0,.06)}
+.knowledge-brief-grid article i{font-size:15px;font-weight:900;color:var(--brief-accent,#6558e8);margin-top:2px}
+.knowledge-brief-grid strong{font-size:17px;font-weight:900;color:#0f172a;display:block;margin-bottom:6px}
+.knowledge-brief-grid p{font-size:15px;line-height:1.7;color:#334155;margin:0}
+
+.theory-primer{padding:34px 38px;border-radius:24px;margin-bottom:32px}
+.theory-step{padding:6px 14px;font-size:13.5px;font-weight:900}
+.theory-heading h2{font-size:30px;line-height:1.3;margin:12px 0 8px}
+.theory-heading>p{font-size:16px;line-height:1.8;color:#334155}
+.theory-formula{padding:22px 26px;border-radius:18px}
+.theory-formula span{font-size:13.5px;font-weight:900;letter-spacing:.08em;margin-bottom:8px}
+.theory-formula code{font-size:16px;line-height:1.6;font-weight:700}
+.theory-concepts{gap:14px}
+.theory-concepts article{padding:18px 20px;border-radius:16px;border:1.5px solid rgba(20,33,61,.08);background:#fff}
+.theory-concepts article>span{font-size:14px;font-weight:900}
+.theory-concepts strong{font-size:17px;font-weight:900;color:#0f172a}
+.theory-concepts p{font-size:15px;line-height:1.7;color:#334155;margin-top:6px}
+.theory-goal{padding:16px 22px;border-radius:14px;border-left-width:5px}
+.theory-goal strong{font-size:15px;font-weight:900;color:#047857}
+.theory-goal p{font-size:15px;line-height:1.7;color:#1e293b}
+
+/* ======================================================== */
+/* 22. CPU 进程调度导学 (SchedulingStory) 6 大动态可视化场景 */
+/* ======================================================== */
+.sched-story-badge{display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding:12px 18px;border-radius:12px;background:#0d1522;border:1px solid #1e293b}
+.sched-story-badge span{font-size:11.5px;font-weight:800;color:#38bdf8}
+.sched-story-badge strong{font-size:16px;color:#f8fafc;font-family:monospace}
+.sched-story-badge small{font-size:11px;color:#94a3b8}
+
+.sched-story-canvas{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:12px}
+.sched-sc{display:flex;flex-direction:column;gap:14px;width:100%;animation:fadeIn .25s ease}
+.sched-sc-header{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:10px}
+.sched-tag{font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px;background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.3);font-family:monospace}
+.sched-tag.danger{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}
+.sched-tag.success{background:rgba(16,185,129,.15);color:#34d399;border-color:rgba(16,185,129,.3)}
+.sched-tag.rr{background:rgba(168,85,247,.15);color:#c084fc;border-color:rgba(168,85,247,.3)}
+.sched-tag.tradeoff{background:rgba(245,158,11,.15);color:#fbbf24;border-color:rgba(245,158,11,.3)}
+.sched-tag.summary{background:rgba(99,102,241,.15);color:#a5b4fc;border-color:rgba(99,102,241,.3)}
+.sched-sc-header strong{font-size:16px;color:#f8fafc}
+
+.sched-footer-tip{font-size:14px;line-height:1.65;color:#94a3b8;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 14px}
+.sched-footer-tip strong{color:#38bdf8}
+.sched-footer-tip.danger strong{color:#f87171}
+.sched-footer-tip.success strong{color:#34d399}
+
+/* 场景 01: 就绪队列与单核 CPU */
+.sched-queue-pipeline{display:grid;grid-template-columns:1.2fr 110px 1fr;gap:12px;align-items:center}
+.sched-box-col{background:#0e1626;border:1.5px solid #1e293b;border-radius:12px;padding:14px}
+.sched-box-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #1e293b;padding-bottom:8px}
+.sched-box-title span{font-size:13px;font-weight:800;color:#cbd5e1}
+.sched-box-title small{font-size:11.5px;color:#64748b}
+.cpu-busy-badge{color:#f87171;background:rgba(239,68,68,.12);padding:2px 6px;border-radius:4px;font-weight:700}
+.process-queue-cards{display:flex;flex-direction:column;gap:8px}
+.p-card-item{background:#162032;border:1px solid #28374d;border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:10px}
+.p-card-item.p1{border-color:#6558e8}
+.p-card-item.p2{border-color:#159a83}
+.p-card-item.p3{border-color:#ee6c4d}
+.p-badge{width:32px;height:32px;border-radius:8px;background:#1e293b;display:grid;place-items:center;font-weight:900;font-size:14px;color:#f8fafc}
+.p-card-item.p1 .p-badge{background:#6558e8}
+.p-card-item.p2 .p-badge{background:#159a83}
+.p-card-item.p3 .p-badge{background:#ee6c4d}
+.p-meta strong{font-size:13px;color:#f8fafc;display:block}
+.p-meta small{font-size:11px;color:#94a3b8}
+
+.sched-dispatcher-col{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.dispatch-badge{font-size:11px;font-weight:800;color:#94a3b8;background:#1e293b;padding:3px 8px;border-radius:4px}
+.dispatch-arrow-flow{font-size:13px;font-weight:900;color:#38bdf8}
+.dispatch-rule-chip{font-size:11px;color:#f59e0b;background:rgba(245,158,11,.15);padding:2px 6px;border-radius:4px;font-weight:700}
+
+.cpu-core-slot{background:#111c2e;border:2px solid #0284c7;border-radius:10px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 0 20px rgba(2,132,199,.2)}
+.cpu-chip-icon{font-size:32px}
+.running-label{font-size:11px;color:#38bdf8;font-weight:800}
+.running-pname{font-size:16px;color:#f8fafc;font-weight:900;display:block}
+.running-state{font-size:11px;color:#94a3b8}
+
+/* 场景 02: FCFS 护航效应 */
+.convoy-visual-stage{display:flex;flex-direction:column;gap:14px}
+.convoy-road-track{display:flex;align-items:center;gap:14px;background:#0d1524;border:1.5px solid #202d42;border-radius:14px;padding:18px 22px}
+.road-car-large{flex:1.4;background:#2a1419;border:2px solid #ef4444;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.truck-body{display:flex;align-items:center;gap:12px}
+.truck-head{font-size:24px}
+.truck-cargo strong{font-size:18px;color:#f8fafc;font-weight:900;display:block}
+.truck-cargo span{font-size:12px;color:#fca5a5}
+.car-status-tag{font-size:12px;color:#fca5a5;background:rgba(239,68,68,.15);padding:3px 8px;border-radius:4px}
+.convoy-blocked-group{flex:1;display:flex;flex-direction:column;gap:8px}
+.road-car-small{background:#162032;border:1.5px dashed #3b82f6;border-radius:8px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.car-body{font-size:14px;font-weight:800;color:#f8fafc}
+.road-car-small small{font-size:11.5px;color:#94a3b8}
+.wait-badge{font-size:11.5px;color:#f87171;font-weight:800}
+.fcfs-metrics-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metric-col-card{background:#111a29;border:1px solid #1e2a3c;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.metric-col-card.bad{border-color:rgba(239,68,68,.3);background:#221318}
+.metric-col-card.result-card{background:#2a1419;border-color:#ef4444}
+.metric-col-card span{font-size:11.5px;color:#94a3b8}
+.metric-col-card strong{font-size:18px;color:#f8fafc;font-weight:900}
+.metric-col-card small{font-size:10.5px;color:#64748b}
+.metric-col-card.bad strong{color:#f87171}
+.huge-num{font-size:22px !important;color:#f87171}
+
+/* 场景 03: SJF 短作业优先 */
+.sjf-visual-stage{display:flex;flex-direction:column;gap:14px}
+.sjf-reorder-banner{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:10px}
+.sjf-reorder-banner span{font-size:11.5px;font-weight:900;color:#34d399;background:rgba(16,185,129,.15);padding:2px 6px;border-radius:4px}
+.sjf-reorder-banner strong{font-size:13.5px;color:#e2e8f0}
+.sjf-reorder-flow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0d1524;border:1.5px solid #202d42;border-radius:14px;padding:16px}
+.sjf-node{flex:1;background:#132420;border:1.5px solid #10b981;border-radius:10px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.sjf-node.slow-last{background:#162032;border-color:#334155}
+.sjf-badge{font-size:11px;font-weight:800;color:#34d399;background:rgba(16,185,129,.15);padding:2px 8px;border-radius:4px}
+.sjf-badge.gray{color:#94a3b8;background:#1e293b}
+.sjf-node strong{font-size:16px;color:#f8fafc;font-weight:900}
+.sjf-state-chip{font-size:11px;color:#a7f3d0}
+.sjf-arrow{color:#64748b;font-weight:900}
+.sjf-metrics-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metric-col-card.good{border-color:rgba(16,185,129,.3);background:#10221c}
+.metric-col-card.result-card.good{background:#0e2a22;border-color:#10b981}
+.huge-num.good{color:#34d399}
+
+/* 场景 04: RR 时间片轮转 */
+.rr-carousel-stage{display:flex;flex-direction:column;gap:14px}
+.rr-timer-strip{display:flex;justify-content:space-between;align-items:center;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:8px 14px}
+.quantum-badge{font-size:13px;font-weight:900;color:#c084fc}
+.clock-tick-box{font-size:12.5px;color:#e9d5ff}
+.rr-ring-carousel{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0d1524;border:1.5px solid #202d42;border-radius:14px;padding:16px}
+.carousel-slot{flex:1;background:#162032;border:1.5px solid #28374d;border-radius:10px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.carousel-slot.active-turn{border-color:#a855f7;background:#20142e;box-shadow:0 0 16px rgba(168,85,247,.3)}
+.turn-label{font-size:11px;font-weight:800;color:#94a3b8}
+.carousel-slot.active-turn .turn-label{color:#c084fc}
+.carousel-slot strong{font-size:16px;color:#f8fafc;font-weight:900}
+.carousel-slot small{font-size:11px;color:#94a3b8}
+.carousel-arrow{font-size:12px;color:#64748b;font-weight:800}
+.context-switch-alert{display:flex;align-items:center;gap:12px;background:#1a192b;border:1px solid #3b2d56;border-radius:10px;padding:12px 16px}
+.cs-icon{font-size:24px}
+.cs-info strong{font-size:13.5px;color:#c084fc;display:block}
+.cs-info p{margin:2px 0 0;font-size:12.5px;line-height:1.6;color:#cbd5e1}
+
+/* 场景 05: 时间片权衡两难 */
+.tradeoff-stage-grid{display:grid;grid-template-columns:1fr 140px 1fr;gap:12px;align-items:center}
+.tradeoff-side{background:#0e1626;border:1.5px solid #1e293b;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.tradeoff-side.left-danger{border-color:#f59e0b}
+.tradeoff-side.right-danger{border-color:#ef4444}
+.badge-side{font-size:11px;color:#94a3b8;font-weight:700}
+.tradeoff-side h4{margin:2px 0 0;font-size:14px;color:#f8fafc;font-weight:900}
+.side-body{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
+.side-icon{font-size:28px}
+.problem-text{font-size:13.5px;color:#f8fafc}
+.side-body p{margin:0;font-size:12px;color:#94a3b8;line-height:1.55}
+.side-foot-tag.bad{font-size:12px;color:#f87171;font-weight:800;text-align:center}
+.tradeoff-balance-center{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.scale-needle{font-size:13px;font-weight:800;color:#34d399}
+.sweet-spot-card{background:#0e2a22;border:2px solid #10b981;border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.sweet-spot-card strong{font-size:16px;color:#a7f3d0;font-weight:900}
+.sweet-spot-card small{font-size:11px;color:#cbd5e1}
+.sweet-spot-card span{font-size:10px;color:#6ee7b7}
+
+/* 场景 06: 三大算法全景甘特图竞速 */
+.summary-gantt-compare{display:flex;flex-direction:column;gap:10px}
+.gantt-row-item{background:#0e1626;border:1.5px solid #1e293b;border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:160px 1fr 180px;gap:12px;align-items:center}
+.row-label strong{font-size:13.5px;color:#f8fafc;display:block}
+.row-label small{font-size:11.5px;color:#94a3b8}
+.row-label small.good{color:#34d399;font-weight:800}
+.mini-gantt-track{display:flex;height:28px;background:#162032;border-radius:6px;overflow:hidden}
+.mg-bar{display:grid;place-items:center;font-size:11px;font-weight:900;color:#fff}
+.mg-bar.p1{background:#6558e8}
+.mg-bar.p2{background:#159a83}
+.mg-bar.p3{background:#ee6c4d}
+.row-tag{font-size:11.5px;font-weight:800;padding:4px 8px;border-radius:4px;text-align:center}
+.row-tag.bad{background:rgba(239,68,68,.12);color:#f87171}
+.row-tag.good{background:rgba(16,185,129,.12);color:#34d399}
+.row-tag.rr{background:rgba(168,85,247,.12);color:#c084fc}
