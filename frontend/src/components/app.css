@@ -3215,13 +3215,28 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   margin-bottom: 6px;
 }
 .checkin-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 11px;
   font-weight: 800;
   color: #059669;
   background: #d1fae5;
-  padding: 3px 8px;
+  padding: 3px 9px;
   border-radius: 4px;
   letter-spacing: 0.05em;
+}
+.live-clock-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
 .checkin-date-text {
   font-size: 13px;
@@ -3346,123 +3361,172 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .card-title-line h3 {
   font-size: 16.5px;
   font-weight: 800;
   color: #0f172a;
-  margin: 0;
+  margin: 0 0 4px;
 }
-.auto-calc-tag {
+.checkin-subtitle {
   font-size: 12px;
-  background: #fef3c7;
-  color: #92400e;
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid #fde68a;
+  color: #64748b;
 }
-.auto-calc-tag strong {
-  color: #b45309;
-}
-
-.checkin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.checkin-form .form-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.checkin-form .form-item label {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #334155;
-}
-.checkin-select,
-.checkin-input,
-.checkin-textarea {
-  width: 100%;
-  padding: 9px 12px;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 9px;
-  font-size: 13.5px;
-  color: #0f172a;
-  background: #ffffff;
-  outline: none;
-  transition: border-color 0.16s;
-}
-.checkin-select:focus,
-.checkin-input:focus,
-.checkin-textarea:focus {
-  border-color: #059669;
-}
-.duration-slider-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.checkin-slider {
-  flex: 1;
-  accent-color: #059669;
-}
-.duration-badge {
-  font-size: 12px;
+.auto-signed-tag {
+  font-size: 11.5px;
   font-weight: 800;
   background: #ecfdf5;
-  color: #065f46;
-  padding: 3px 8px;
+  color: #059669;
+  padding: 4px 10px;
   border-radius: 6px;
   border: 1px solid #a7f3d0;
-  min-width: 68px;
-  text-align: center;
 }
-.feeling-selector {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.feeling-btn {
-  padding: 8px 10px;
-  border: 1px solid #cbd5e1;
+
+/* 仿真监视器活跃卡片 */
+.active-tracker-box {
   background: #f8fafc;
-  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.tracker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tracker-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 12.5px;
   font-weight: 700;
   color: #475569;
-  cursor: pointer;
-  transition: all 0.15s ease;
 }
-.feeling-btn.active {
-  background: #059669;
-  border-color: #059669;
+.ping-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+.tracker-active-lab strong {
+  font-size: 14px;
+  color: #0284c7;
+  background: #e0f2fe;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #bae6fd;
+}
+.tracker-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed #e2e8f0;
+}
+.tracker-hint {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.45;
+  flex: 1;
+}
+.goto-lab-btn {
+  background: #0284c7;
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
 }
-.checkin-submit-row {
+.goto-lab-btn:hover {
+  background: #0369a1;
+}
+
+/* 随堂心得记录表单 */
+.lab-notes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lab-notes-form h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+.note-select-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.note-select-row label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+}
+.lab-select-input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+}
+.lab-select-input:focus {
+  border-color: #0284c7;
+}
+.lab-note-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.16s;
+}
+.lab-note-textarea:focus {
+  border-color: #0284c7;
+}
+.note-submit-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 6px;
 }
-.checkin-submit-btn {
-  background: #059669;
+.save-note-btn {
+  background: #0f172a;
   color: #ffffff;
   border: none;
-  border-radius: 9px;
-  padding: 10px 22px;
-  font-size: 13.5px;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 13px;
   font-weight: 800;
   cursor: pointer;
   transition: background 0.15s ease;
 }
-.checkin-submit-btn:hover {
-  background: #047857;
+.save-note-btn:hover {
+  background: #1e293b;
 }
-.success-toast {
-  font-size: 12.5px;
+.save-toast-text {
+  font-size: 12px;
   color: #059669;
   font-weight: 700;
 }
@@ -3586,103 +3650,140 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   font-size: 9.5px;
   color: #64748b;
 }
-.pie-legends {
+.donut-legend-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
-.legend-item {
+.donut-legend-item {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 12px;
   color: #334155;
 }
-.legend-item .dot {
-  width: 8px;
-  height: 8px;
+.donut-legend-color {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
 }
-.legend-item .dot-1 { background: #4f46e5; }
-.legend-item .dot-2 { background: #0284c7; }
-.legend-item .dot-3 { background: #10b981; }
-.legend-item .dot-4 { background: #f59e0b; }
+.donut-legend-color.dot-arch { background: #4f46e5; }
+.donut-legend-color.dot-os { background: #0284c7; }
+.donut-legend-color.dot-net { background: #10b981; }
+.donut-legend-color.dot-ds { background: #f59e0b; }
 
-/* 底部历史足迹 */
-.checkin-history-section {
+/* 底部系统自动审计时间流水账单 (Audit Trail) */
+.checkin-audit-section {
   margin-top: 10px;
 }
-.checkin-history-section .section-header {
+.checkin-audit-section .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
-.checkin-history-section .section-header h3 {
+.checkin-audit-section .section-header h3 {
   font-size: 16px;
   font-weight: 800;
   color: #0f172a;
   margin: 0;
 }
-.checkin-history-section .section-hint {
+.checkin-audit-section .section-hint {
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
 }
-.history-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.audit-timeline-list {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
-@media (max-width: 900px) {
-  .history-cards-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.history-item-card {
+.audit-item {
+  display: grid;
+  grid-template-columns: 90px 24px 1fr;
+  align-items: stretch;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 14px 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+@media (max-width: 680px) {
+  .audit-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+.audit-time-col {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  justify-content: center;
 }
-.hist-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.hist-topic {
-  font-size: 13.5px;
+.audit-time {
+  font-size: 14px;
   font-weight: 800;
   color: #0f172a;
+  font-family: monospace;
 }
-.hist-date {
-  font-size: 11.5px;
+.audit-date {
+  font-size: 11px;
   color: #94a3b8;
 }
-.hist-note {
-  margin: 0;
-  font-size: 12.5px;
-  color: #475569;
-  line-height: 1.5;
-}
-.hist-footer {
+.audit-dot-line {
   display: flex;
-  gap: 8px;
-  margin-top: auto;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
-.hist-tag {
+.audit-node-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #0284c7;
+  border: 2px solid #bae6fd;
+  margin-top: 5px;
+}
+.audit-node-line {
+  flex: 1;
+  width: 1px;
+  background: #e2e8f0;
+  margin-top: 4px;
+}
+.audit-content-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+}
+.audit-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.audit-badge {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   padding: 2px 7px;
   border-radius: 4px;
   background: #f1f5f9;
   color: #475569;
 }
-.hist-tag.feeling.hard {
-  background: #fef2f2;
-  color: #b91c1c;
+.audit-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.audit-duration {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0284c7;
+  margin-left: auto;
+}
+.audit-desc {
+  margin: 0;
+  font-size: 12.5px;
+  color: #64748b;
+  line-height: 1.5;
 }
 
 /* --- B. 靶向错题本 (MistakeNotebook) --- */

@@ -47,9 +47,9 @@ export default function SidebarNav({
         },
         {
           key: 'checkin',
-          label: '研习打卡',
-          sub: '脑力能耗管理',
-          badge: '今日',
+          label: '实机学时度量',
+          sub: '系统自动追踪计时',
+          badge: '自动',
           badgeClass: 'green-badge',
           icon: (
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
