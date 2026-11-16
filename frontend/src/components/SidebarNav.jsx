@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function SidebarNav({
-  activeKey, // 'console' | 'checkin' | 'courses' | 'workshop' | 'exam' | 'mistakes' | 'cheatsheet' | 'aitutor' | 'profile' | 'community'
+  activeKey, // 'console' | 'checkin' | 'courses' | 'workshop' | 'exam' | 'mistakes' | 'cheatsheet' | 'aitutor' | 'profile' | 'analytics' | 'community'
   collapsed,
   onToggleCollapse,
   onSelectNav,
@@ -106,7 +106,7 @@ export default function SidebarNav({
       ]
     },
     {
-      sectionTitle: 'AI 伴学与成长',
+      sectionTitle: 'AI 伴学与个性化',
       items: [
         {
           key: 'aitutor',
@@ -124,6 +124,17 @@ export default function SidebarNav({
         },
         {
           key: 'profile',
+          label: '个人中心与设置',
+          sub: '资料·安全·偏好',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          )
+        },
+        {
+          key: 'analytics',
           label: '学情数据画像',
           sub: '掌握度雷达分析',
           icon: (
@@ -163,7 +174,7 @@ export default function SidebarNav({
         </div>
       </div>
 
-      {/* 中部导航菜单（多分组展开） */}
+      {/* 中部导航菜单 */}
       <nav className="sidebar-menu-list">
         {navSections.map((sec, sIdx) => (
           <div key={sIdx} className="sidebar-section-group">
@@ -202,7 +213,7 @@ export default function SidebarNav({
         ))}
       </nav>
 
-      {/* 底部：大模型接入状态徽章 (参考 SmartFit 左下角黄黑科技卡片) */}
+      {/* 底部：大模型接入状态徽章 */}
       {!collapsed && (
         <div className="sidebar-ai-engine-card">
           <div className="ai-chip-header">
@@ -239,21 +250,37 @@ export default function SidebarNav({
         </button>
 
         {user && (
-          <div className="sidebar-user-card">
+          <div
+            className="sidebar-user-card"
+            onClick={() => onSelectNav('profile')}
+            style={{ cursor: 'pointer' }}
+            title="点击前往个人中心"
+          >
             <div className="sidebar-user-avatar">
-              {user.name.slice(0, 1).toUpperCase()}
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                />
+              ) : (
+                user.name.slice(0, 1).toUpperCase()
+              )}
             </div>
             {!collapsed && (
               <div className="sidebar-user-info">
                 <span className="sidebar-user-name" title={user.name}>{user.name}</span>
-                <span className="sidebar-user-tag">408 研习进行中</span>
+                <span className="sidebar-user-tag">{user.major ? `${user.major.slice(0, 4)}·在线` : '408研习中'}</span>
               </div>
             )}
             {!collapsed && (
               <button
                 type="button"
                 className="sidebar-logout-btn"
-                onClick={onLogout}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onLogout()
+                }}
                 title="退出当前登录"
               >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -101,6 +101,7 @@ export default function App() {
   const openExperiment = (experimentId) => navigate(`#/lab/${experimentId}`)
   const openCourse = (courseId) => navigate(`#/course/${courseId}`)
   const openProfile = () => navigate('#/profile')
+  const openAnalytics = () => navigate('#/analytics')
   const openExam = () => navigate('#/exam')
 
   // 1. 若用户未登录，展示登录/建档迎宾门户（满足个性化学习服务门槛要求）
@@ -126,6 +127,7 @@ export default function App() {
           else if (key === 'cheatsheet') navigate('#/cheatsheet')
           else if (key === 'aitutor') navigate('#/aitutor')
           else if (key === 'profile') openProfile()
+          else if (key === 'analytics') openAnalytics()
           else if (key === 'community') navigate('#/community')
         }}
         user={user}
@@ -151,7 +153,8 @@ export default function App() {
             {route.kind === 'mistakes' && <span className="crumb-current">靶向错题本与消错实验</span>}
             {route.kind === 'cheatsheet' && <span className="crumb-current">408 必考速查宝典与公式库</span>}
             {route.kind === 'aitutor' && <span className="crumb-current">AI 计算机私教 (DeepSeek-R1)</span>}
-            {route.kind === 'profile' && <span className="crumb-current">学情画像与学习档案</span>}
+            {route.kind === 'profile' && <span className="crumb-current">个人中心与资料安全管理</span>}
+            {route.kind === 'analytics' && <span className="crumb-current">学情数据画像与能力雷达</span>}
             {route.kind === 'community' && <span className="crumb-current">极客学术社区广场</span>}
             {route.kind === 'course' && (
               <>
@@ -174,10 +177,25 @@ export default function App() {
           </div>
 
           <div className="header-right">
-            <div className="header-user-badge">
-              <span className="header-avatar">{user.name.slice(0, 1).toUpperCase()}</span>
+            <div
+              className="header-user-badge"
+              onClick={openProfile}
+              style={{ cursor: 'pointer' }}
+              title="点击查看/编辑个人资料与安全设置"
+            >
+              <span className="header-avatar">
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  user.name.slice(0, 1).toUpperCase()
+                )}
+              </span>
               <span className="header-name">{user.name}</span>
-              <span className="header-status-pill">408在线研习</span>
+              <span className="header-status-pill">{user.major ? `${user.major.slice(0, 4)}·在线` : '408研习中'}</span>
             </div>
             <button
               type="button"
@@ -242,25 +260,35 @@ export default function App() {
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'aitutor' ? (
-            /* 8. AI 计算机伴学私教 */
+            /* 8. AI 计算机私教 */
             <AiTutorAgent
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'profile' ? (
-            /* 9. 个人学情中心与能力画像 */
+            /* 9. 个人中心与资料、安全问题管理（参考图 127.0.0.1:5173/profile） */
             <LearningDashboard
               experiments={experiments}
               courses={courses}
               onOpen={openExperiment}
               onBack={goConsole}
+              initialTab="profile"
+            />
+          ) : route.kind === 'analytics' ? (
+            /* 10. 学情数据与能力画像 */
+            <LearningDashboard
+              experiments={experiments}
+              courses={courses}
+              onOpen={openExperiment}
+              onBack={goConsole}
+              initialTab="analytics"
             />
           ) : route.kind === 'community' ? (
-            /* 10. 极客学术社区广场 */
+            /* 11. 极客学术社区广场 */
             <CommunityHub
               onOpenExperiment={openExperiment}
             />
           ) : Experiment && experiment ? (
-            /* 11. 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
+            /* 12. 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
             <main className="experiment-page" key={activeExperiment}>
               <Experiment experiment={experiment} />
             </main>
@@ -286,6 +314,7 @@ function readRouteFromHash() {
   if (window.location.hash === '#/aitutor') return { kind: 'aitutor', id: null }
   if (window.location.hash === '#/community') return { kind: 'community', id: null }
   if (window.location.hash === '#/profile') return { kind: 'profile', id: null }
+  if (window.location.hash === '#/analytics') return { kind: 'analytics', id: null }
   if (window.location.hash === '#/exam') return { kind: 'exam', id: null }
   if (window.location.hash === '#/courses') return { kind: 'courses', id: null }
   if (window.location.hash === '#/console') return { kind: 'console', id: null }
