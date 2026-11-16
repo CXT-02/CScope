@@ -48,50 +48,50 @@ const GALAXY_NODES = [
   { id: 'n_neural_net', code: 'AI-02', name: '感知机与反向传播', course: '人工智能与前沿', courseId: 'ai', status: 'unvisited', x: 100, y: -40, z: 140, size: 10, labId: 'neural-network', desc: '多层前馈神经网络与损失函数梯度下降链式求导更新权重。' }
 ]
 
-// 仅保留真正有紧密因果关联的总线连线（严格去伪连线，非盲目乱连）
+// 紧密因果关联总线连线
 const GALAXY_EDGES = [
-  // 1. 计算机组成原理内部硬件总线 (强因果)
+  // 1. 计算机组成原理内部硬件总线
   { source: 'n_cpu_pipe', target: 'n_hazard', domain: 'arch', label: '流水线冒险' },
   { source: 'n_cpu_pipe', target: 'n_inst_cycle', domain: 'arch', label: '时钟节拍' },
   { source: 'n_cpu_pipe', target: 'n_cache', domain: 'arch', label: '访存时钟' },
   { source: 'n_cache', target: 'n_thrash', domain: 'arch', label: '组相联冲突' },
   { source: 'n_inst_cycle', target: 'n_ieee754', domain: 'arch', label: '运算器执行' },
 
-  // 2. 操作系统内核总线 (强因果)
+  // 2. 操作系统内核总线
   { source: 'n_deadlock', target: 'n_deadlock_cond', domain: 'os', label: '死锁判定' },
   { source: 'n_deadlock', target: 'n_sync', domain: 'os', label: '互斥等待' },
   { source: 'n_sync', target: 'n_sched', domain: 'os', label: '阻塞调度' },
   { source: 'n_page_rep', target: 'n_mem_part', domain: 'os', label: '虚实映射' },
 
-  // 3. 计算机网络协议栈总线 (强因果)
+  // 3. 计算机网络协议栈总线
   { source: 'n_tcp_conn', target: 'n_tcp_close', domain: 'net', label: '连接生命期' },
   { source: 'n_tcp_conn', target: 'n_sliding_win', domain: 'net', label: '流量与拥塞' },
   { source: 'n_sliding_win', target: 'n_ip_subnet', domain: 'net', label: '分片路由' },
   { source: 'n_ip_subnet', target: 'n_dns', domain: 'net', label: '域名解析' },
 
-  // 4. 数据结构与算法总线 (强因果)
+  // 4. 数据结构与算法总线
   { source: 'n_tree_rot', target: 'n_dijkstra', domain: 'ds', label: '空间树寻优' },
   { source: 'n_sorting', target: 'n_stack_queue', domain: 'ds', label: '递归调用栈' },
   { source: 'n_tree_rot', target: 'n_sorting', domain: 'ds', label: '树形堆排序' },
 
-  // 5. 数据库与前沿AI总线 (强因果)
+  // 5. 数据库与前沿AI总线
   { source: 'n_bplus_tree', target: 'n_transactions', domain: 'ai', label: '索引行锁' },
   { source: 'n_attention', target: 'n_neural_net', domain: 'ai', label: '参数反向传播' },
 
-  // 6. 极少数 408 统考跨学科经典大题综合连线（虚线标示）
+  // 6. 极少数 408 统考跨学科经典大题综合连线
   { source: 'n_cache', target: 'n_page_rep', domain: 'cross', label: 'TLB+Cache联合访存', isCross: true },
   { source: 'n_sched', target: 'n_cpu_pipe', domain: 'cross', label: '时钟中断与硬件调度', isCross: true }
 ]
 
 export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
   const canvasRef = useRef(null)
-  const [selectedCourse, setSelectedCourse] = useState('all') // 'all' | 'arch' | 'os' | 'net' | 'ds' | 'ai'
+  const [selectedCourse, setSelectedCourse] = useState('all')
   const [selectedNode, setSelectedNode] = useState(null)
   const [hoveredNode, setHoveredNode] = useState(null)
   const [autoRotate, setAutoRotate] = useState(true)
   const [filterWeakOnly, setFilterWeakOnly] = useState(false)
 
-  // 3D 摄像机状态
+  // 3D 摄像机状态（带有目标平滑旋转和缩放）
   const cameraRef = useRef({
     rotX: 0.2,
     rotY: -0.3,
@@ -140,9 +140,19 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
 
   const activeEdges = useMemo(() => {
     if (selectedCourse === 'all') return GALAXY_EDGES
-    // 仅保留属于当前学科内部的总线
     return GALAXY_EDGES.filter(e => e.domain === selectedCourse)
   }, [selectedCourse])
+
+  // 找出与当前选中节点直接相连的邻居节点 ID 集合（用于景深聚焦高亮）
+  const connectedNodeIds = useMemo(() => {
+    if (!selectedNode) return new Set()
+    const set = new Set([selectedNode.id])
+    GALAXY_EDGES.forEach(e => {
+      if (e.source === selectedNode.id) set.add(e.target)
+      if (e.target === selectedNode.id) set.add(e.source)
+    })
+    return set
+  }, [selectedNode])
 
   // 统计指标
   const stats = useMemo(() => {
@@ -167,7 +177,6 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       cam.panX = 0
       cam.panY = 0
     } else {
-      // 计算该学科星团的质心并运镜对准
       const clusterNodes = GALAXY_NODES.filter(n => n.courseId === domainId)
       if (clusterNodes.length) {
         const avgX = clusterNodes.reduce((acc, n) => acc + n.x, 0) / clusterNodes.length
@@ -184,7 +193,7 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
 
         cam.targetRotY = cam.rotY + diffY
         cam.targetRotX = targetRotX
-        cam.targetZoom = 1.55 // 聚焦独立学科星图时放大视野
+        cam.targetZoom = 1.55
         cam.panX = 0
         cam.panY = 0
       }
@@ -223,13 +232,13 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       cam.rotY += (cam.targetRotY - cam.rotY) * 0.08
       cam.zoom += (cam.targetZoom - cam.zoom) * 0.08
 
-      // 1. 清空画布 (微观硅晶圆石板蓝底色)
+      // 1. 清空画布
       ctx.fillStyle = '#060a12'
       ctx.fillRect(0, 0, width, height)
 
       // 绘制微观芯片电路辐射背光
       const bgGlow = ctx.createRadialGradient(width / 2, height / 2, 40, width / 2, height / 2, width * 0.7)
-      bgGlow.addColorStop(0, 'rgba(10, 25, 47, 0.75)')
+      bgGlow.addColorStop(0, selectedNode ? 'rgba(8, 20, 38, 0.85)' : 'rgba(10, 25, 47, 0.75)')
       bgGlow.addColorStop(0.5, 'rgba(6, 15, 30, 0.45)')
       bgGlow.addColorStop(1, '#060a12')
       ctx.fillStyle = bgGlow
@@ -242,11 +251,17 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       const fov = 460
       const cameraDist = 480
 
-      const project = (x, y, z) => {
+      // 3D 投影函数 (支持为选中的节点注入“向前跃升”物理视差)
+      const project = (x, y, z, isPopForward = false) => {
         const x1 = x * cosY - z * sinY
         const z1 = z * cosY + x * sinY
         const y2 = y * cosX - z1 * sinX
-        const z2 = z1 * cosX + y * sinX + cameraDist
+        let z2 = z1 * cosX + y * sinX + cameraDist
+
+        // 核心视觉增强：如果此节点被点中，给它一个朝向相机的向前跃升偏移量（Pop Forward -90）
+        if (isPopForward) {
+          z2 = Math.max(40, z2 - 90)
+        }
 
         const scale = (fov / Math.max(10, z2)) * cam.zoom
         const screenX = width / 2 + x1 * scale + cam.panX
@@ -257,7 +272,7 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
 
       // 2. 绘制微观晶圆坐标刻度环
       ctx.save()
-      ctx.strokeStyle = 'rgba(5, 150, 105, 0.08)'
+      ctx.strokeStyle = selectedNode ? 'rgba(5, 150, 105, 0.04)' : 'rgba(5, 150, 105, 0.08)'
       ctx.lineWidth = 1
       const ringSteps = [90, 170, 250]
       ringSteps.forEach(r => {
@@ -274,21 +289,24 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       })
       ctx.restore()
 
-      // 3. 绘制指令代码微粒
+      // 3. 绘制指令代码微粒 (选中时微粒自动压暗形成景深)
       ctx.save()
       ctx.font = '9px ui-monospace, monospace'
       cyberGridParticles.forEach(p => {
         const proj = project(p.x, p.y, p.z)
         if (proj.zDepth > 20) {
-          ctx.fillStyle = `rgba(100, 116, 139, ${p.alpha * Math.min(1, proj.scale)})`
+          const particleAlpha = selectedNode ? p.alpha * 0.35 : p.alpha
+          ctx.fillStyle = `rgba(100, 116, 139, ${particleAlpha * Math.min(1, proj.scale)})`
           ctx.fillText(p.label, proj.screenX, proj.screenY)
         }
       })
       ctx.restore()
 
-      // 4. 2D 投影与节点映射 (全节点均投影，用于全局或专属星图)
+      // 4. 2D 投影与节点映射
       const projectedNodes = GALAXY_NODES.map(node => {
-        const proj = project(node.x, node.y, node.z)
+        const isSelected = selectedNode && selectedNode.id === node.id
+        // 关键：选中的节点在投影层发生向前跃升 (Pop Forward)！
+        const proj = project(node.x, node.y, node.z, isSelected)
         const isBelong = selectedCourse === 'all' || node.courseId === selectedCourse
         return { ...node, ...proj, isBelong }
       })
@@ -303,12 +321,10 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         const tgt = nodeMap.get(edge.target)
         if (!src || !tgt) return
 
-        // 学科星图过滤：如果选中了具体学科，只展示该学科内部连线，非该学科的连线完全不绘制
         if (selectedCourse !== 'all' && edge.domain !== selectedCourse) {
           return
         }
 
-        // 薄弱节点过滤
         if (filterWeakOnly && src.status !== 'weak' && tgt.status !== 'weak') {
           return
         }
@@ -317,8 +333,12 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           (hoveredNode && (hoveredNode.id === src.id || hoveredNode.id === tgt.id)) ||
           (selectedNode && (selectedNode.id === src.id || selectedNode.id === tgt.id))
 
+        // 景深聚焦：如果有选中节点且本条总线与其无关，则强力压暗虚化
+        const isDimmed = selectedNode && !isHighlight
+
         const avgDepth = (src.zDepth + tgt.zDepth) / 2
-        const depthAlpha = Math.max(0.12, Math.min(0.85, 1 - avgDepth / 850))
+        let depthAlpha = Math.max(0.12, Math.min(0.85, 1 - avgDepth / 850))
+        if (isDimmed) depthAlpha *= 0.25
 
         ctx.save()
         ctx.beginPath()
@@ -326,15 +346,14 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         ctx.lineTo(tgt.screenX, tgt.screenY)
 
         if (edge.isCross) {
-          // 跨学科大题连线用虚线标明
           ctx.setLineDash([4, 4])
         }
 
         if (isHighlight) {
           ctx.strokeStyle = '#059669'
-          ctx.lineWidth = 2.4
+          ctx.lineWidth = 2.8
           ctx.shadowColor = '#10b981'
-          ctx.shadowBlur = 10
+          ctx.shadowBlur = 12
         } else {
           ctx.strokeStyle = edge.isCross
             ? `rgba(148, 163, 184, ${depthAlpha * 0.4})`
@@ -345,20 +364,19 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         ctx.stroke()
         ctx.restore()
 
-        // 仅在当前所属学科总线上流动数据包粒子
         const sig = busSignals[edgeIdx]
-        if (sig && (selectedCourse === 'all' || edge.domain === selectedCourse)) {
+        if (sig && (selectedCourse === 'all' || edge.domain === selectedCourse) && !isDimmed) {
           sig.progress = (sig.progress + sig.speed) % 1.0
           const packetX = src.screenX + (tgt.screenX - src.screenX) * sig.progress
           const packetY = src.screenY + (tgt.screenY - src.screenY) * sig.progress
           ctx.beginPath()
-          ctx.arc(packetX, packetY, isHighlight ? 2.5 : 1.5, 0, Math.PI * 2)
+          ctx.arc(packetX, packetY, isHighlight ? 2.8 : 1.5, 0, Math.PI * 2)
           ctx.fillStyle = isHighlight ? '#34d399' : 'rgba(16, 185, 129, 0.65)'
           ctx.fill()
         }
       })
 
-      // 6. 按深度排序并优先置顶选中节点
+      // 6. 按深度排序：选中的节点强制排在最顶层（绘制在最后面，绝对遮盖一切背景球）
       projectedNodes.sort((a, b) => {
         if (selectedNode) {
           if (a.id === selectedNode.id) return 1
@@ -367,18 +385,27 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         return b.zDepth - a.zDepth
       })
 
-      // 7. 绘制微架构芯片核
+      // 7. 绘制微架构芯片核 (带景深虚化与前置高光冲击)
+      const now = Date.now()
       projectedNodes.forEach(node => {
-        // 如果在独立学科星图中，且该节点不属于该学科，则完全隐藏或极度淡化，突出当前学科独立星图
         if (selectedCourse !== 'all' && !node.isBelong) {
-          return // 彻底实现每个学科各自独立的星图！
+          return
         }
 
         const isHovered = hoveredNode && hoveredNode.id === node.id
         const isSelected = selectedNode && selectedNode.id === node.id
+        const isConnected = selectedNode && connectedNodeIds.has(node.id)
         const isFaded = filterWeakOnly && node.status !== 'weak'
 
-        const baseAlpha = isSelected ? 1.0 : (isFaded ? 0.2 : Math.max(0.35, Math.min(1.0, 1.35 - node.zDepth / 750)))
+        // 景深对比：非选中且非相连的节点透明度压低，形成强烈的“被选中节点在前、其他在深处后退”的层次感
+        let baseAlpha = 1.0
+        if (isSelected) {
+          baseAlpha = 1.0
+        } else if (selectedNode) {
+          baseAlpha = isConnected ? 0.6 : 0.14 // 深度景深虚化
+        } else {
+          baseAlpha = isFaded ? 0.2 : Math.max(0.35, Math.min(1.0, 1.35 - node.zDepth / 750))
+        }
 
         let themeColor = '#10b981'
         let glowColor = 'rgba(16, 185, 129, 0.45)'
@@ -400,36 +427,52 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           glowColor = 'rgba(239, 68, 68, 0.55)'
         }
 
-        const radius = Math.max(4.5, node.size * node.scale * (isSelected ? 1.5 : isHovered ? 1.25 : 1.0))
+        // 视觉效果上有强烈的往前面感觉：选中的节点半径明显放大 (2.1 倍)
+        const radius = Math.max(4.5, node.size * node.scale * (isSelected ? 2.1 : isHovered ? 1.3 : 1.0))
 
-        // 外层光晕
-        if (!isFaded) {
+        // A. 选中的节点专属：前置立体向外脉冲扩散光波 (Pulse Ripple Waves)
+        if (isSelected) {
+          const wavePhase = (now % 1600) / 1600 // 0 -> 1
+          const waveRadius = radius * 1.4 + wavePhase * (radius * 1.8)
+          const waveAlpha = (1 - wavePhase) * 0.75
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(node.screenX, node.screenY, waveRadius, 0, Math.PI * 2)
+          ctx.strokeStyle = `rgba(52, 211, 153, ${waveAlpha})`
+          ctx.lineWidth = 2
+          ctx.stroke()
+          ctx.restore()
+        }
+
+        // B. 外层高能发光光晕
+        if (!isFaded && (!selectedNode || isSelected || isConnected)) {
+          const glowMultiplier = isSelected ? 4.5 : 3.4
           const glowGrad = ctx.createRadialGradient(
-            node.screenX, node.screenY, radius * 0.2,
-            node.screenX, node.screenY, radius * 3.4
+            node.screenX, node.screenY, radius * 0.15,
+            node.screenX, node.screenY, radius * glowMultiplier
           )
-          glowGrad.addColorStop(0, glowColor)
+          glowGrad.addColorStop(0, isSelected ? 'rgba(52, 211, 153, 0.85)' : glowColor)
           glowGrad.addColorStop(1, 'rgba(0,0,0,0)')
           ctx.fillStyle = glowGrad
           ctx.beginPath()
-          ctx.arc(node.screenX, node.screenY, radius * 3.4, 0, Math.PI * 2)
+          ctx.arc(node.screenX, node.screenY, radius * glowMultiplier, 0, Math.PI * 2)
           ctx.fill()
         }
 
-        // 引脚圈
+        // C. 芯片外层引脚刻度圈 (Hardware Pins & Radar Ring)
         ctx.save()
         ctx.strokeStyle = isSelected ? '#ffffff' : themeColor
-        ctx.globalAlpha = baseAlpha * 0.7
-        ctx.lineWidth = isSelected ? 1.8 : 1.0
+        ctx.globalAlpha = baseAlpha * (isSelected ? 0.95 : 0.7)
+        ctx.lineWidth = isSelected ? 2.2 : 1.0
         ctx.beginPath()
-        ctx.arc(node.screenX, node.screenY, radius * 1.5, 0, Math.PI * 2)
+        ctx.arc(node.screenX, node.screenY, radius * 1.45, 0, Math.PI * 2)
         ctx.stroke()
 
-        const pinCount = 6
+        const pinCount = isSelected ? 8 : 6
         for (let p = 0; p < pinCount; p++) {
-          const pAngle = (p / pinCount) * Math.PI * 2
-          const pinR1 = radius * 1.5
-          const pinR2 = radius * 1.8
+          const pAngle = (p / pinCount) * Math.PI * 2 + (isSelected ? (now / 2000) : 0) // 选中时微引脚缓慢自旋
+          const pinR1 = radius * 1.45
+          const pinR2 = radius * (isSelected ? 1.85 : 1.75)
           ctx.beginPath()
           ctx.moveTo(node.screenX + Math.cos(pAngle) * pinR1, node.screenY + Math.sin(pAngle) * pinR1)
           ctx.lineTo(node.screenX + Math.cos(pAngle) * pinR2, node.screenY + Math.sin(pAngle) * pinR2)
@@ -437,22 +480,37 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         }
         ctx.restore()
 
-        // 核心实心球
+        // D. 核心实心球 (立体球体质感)
+        ctx.save()
+        const sphereGrad = ctx.createRadialGradient(
+          node.screenX - radius * 0.3, node.screenY - radius * 0.3, radius * 0.1,
+          node.screenX, node.screenY, radius
+        )
+        if (isSelected) {
+          sphereGrad.addColorStop(0, '#ffffff')
+          sphereGrad.addColorStop(0.5, '#34d399')
+          sphereGrad.addColorStop(1, '#059669')
+        } else {
+          sphereGrad.addColorStop(0, '#ffffff')
+          sphereGrad.addColorStop(0.4, themeColor)
+          sphereGrad.addColorStop(1, themeColor)
+        }
         ctx.beginPath()
         ctx.arc(node.screenX, node.screenY, radius, 0, Math.PI * 2)
-        ctx.fillStyle = themeColor
+        ctx.fillStyle = sphereGrad
         ctx.globalAlpha = baseAlpha
         ctx.fill()
+        ctx.restore()
 
-        // 选中准星
+        // E. 选中时的高能 HUD 准星
         if (isSelected) {
           ctx.save()
           ctx.strokeStyle = '#ffffff'
-          ctx.lineWidth = 2
+          ctx.lineWidth = 2.4
           ctx.shadowColor = '#10b981'
-          ctx.shadowBlur = 12
-          const reticleSize = radius * 2.3
-          const d = 8
+          ctx.shadowBlur = 14
+          const reticleSize = radius * 2.2
+          const d = 10
           ctx.beginPath()
           ctx.moveTo(node.screenX - reticleSize, node.screenY - reticleSize + d)
           ctx.lineTo(node.screenX - reticleSize, node.screenY - reticleSize)
@@ -470,22 +528,26 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           ctx.restore()
         }
 
-        // 文本标签
-        if (!isFaded && (node.zDepth < 650 || isHovered || isSelected)) {
-          const fontSize = Math.max(10, Math.min(14, 12 * node.scale))
+        // F. 文本标签 (选中的节点文字放大且带有微光)
+        if (!isFaded && (isSelected || !selectedNode || isConnected)) {
+          const fontSize = isSelected ? 15 : Math.max(10, Math.min(13, 11.5 * node.scale))
           ctx.save()
           ctx.font = `${isSelected ? 'bold ' : ''}${fontSize}px Inter, sans-serif`
-          ctx.fillStyle = isSelected ? '#ffffff' : isHovered ? '#34d399' : `rgba(226, 232, 240, ${baseAlpha * 0.9})`
+          ctx.fillStyle = isSelected ? '#ffffff' : isHovered ? '#34d399' : `rgba(226, 232, 240, ${baseAlpha * 0.95})`
 
           const codeText = `[${node.code}] `
           ctx.font = `800 ${Math.max(9, fontSize - 2)}px ui-monospace, monospace`
           ctx.fillStyle = isSelected ? '#34d399' : themeColor
-          ctx.fillText(codeText, node.screenX + radius + 6, node.screenY + 4)
+          ctx.fillText(codeText, node.screenX + radius + 8, node.screenY + 4)
 
           const codeWidth = ctx.measureText(codeText).width
           ctx.font = `${isSelected ? 'bold ' : ''}${fontSize}px Inter, sans-serif`
           ctx.fillStyle = isSelected ? '#ffffff' : `rgba(226, 232, 240, ${baseAlpha * 0.95})`
-          ctx.fillText(node.name, node.screenX + radius + 6 + codeWidth, node.screenY + 4)
+          if (isSelected) {
+            ctx.shadowColor = '#059669'
+            ctx.shadowBlur = 8
+          }
+          ctx.fillText(node.name, node.screenX + radius + 8 + codeWidth, node.screenY + 4)
           ctx.restore()
         }
       })
@@ -499,7 +561,7 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resizeCanvas)
     }
-  }, [autoRotate, filterWeakOnly, hoveredNode, selectedNode, selectedCourse, cyberGridParticles])
+  }, [autoRotate, filterWeakOnly, hoveredNode, selectedNode, selectedCourse, cyberGridParticles, connectedNodeIds])
 
   // 鼠标交互
   const handleMouseDown = (e) => {
@@ -539,16 +601,19 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       const sinY = Math.sin(cam.rotY)
 
       activeNodes.forEach(node => {
+        const isSelected = selectedNode && selectedNode.id === node.id
         const x1 = node.x * cosY - node.z * sinY
         const z1 = node.z * cosY + node.x * sinY
         const y2 = node.y * cosX - z1 * sinX
-        const z2 = z1 * cosX + node.y * sinX + 480
+        let z2 = z1 * cosX + node.y * sinX + 480
+        if (isSelected) z2 = Math.max(40, z2 - 90)
+
         const scale = (460 / Math.max(10, z2)) * cam.zoom
         const screenX = rect.width / 2 + x1 * scale + cam.panX
         const screenY = rect.height / 2 + y2 * scale + cam.panY
         const dist = Math.hypot(mouseX - screenX, mouseY - screenY)
 
-        if (dist < 22) {
+        if (dist < (isSelected ? 32 : 24)) {
           hit = node
         }
       })
@@ -567,7 +632,9 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
     cam.targetZoom = Math.max(0.45, Math.min(2.8, cam.targetZoom * zoomFactor))
   }
 
-  // 点击单节点置顶正前方
+  // ========================================================
+  // 核心：点击节点时不仅正对居中，更要让镜头强力推近、产生震撼的“往前跃升”体感
+  // ========================================================
   const handleClick = () => {
     if (hoveredNode) {
       setSelectedNode(hoveredNode)
@@ -578,6 +645,7 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
       const ny = hoveredNode.y
       const nz = hoveredNode.z
 
+      // 正对居中的理想角度
       const idealRotY = Math.atan2(nx, nz)
       const rxz = Math.hypot(nx, nz)
       const idealRotX = Math.atan2(ny, rxz)
@@ -588,7 +656,8 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
 
       cam.targetRotY = cam.rotY + diffY
       cam.targetRotX = idealRotX
-      cam.targetZoom = 1.45
+      // 关键：将缩放目标大幅拉近（从原本平缓推至 1.85），产生强烈的穿梭飞入特写感！
+      cam.targetZoom = 1.85
       cam.panX = 0
       cam.panY = 0
     }
@@ -601,7 +670,7 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
 
   return (
     <div className="knowledge-galaxy-page">
-      {/* 学科独立星图切换 Tab 栏 (核心升级：每个学科独立星图) */}
+      {/* 学科独立星图切换 Tab 栏 */}
       <div className="galaxy-discipline-bar">
         <div className="discipline-bar-title">
           <span className="dot-live" />
@@ -679,7 +748,7 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           <span className="dot">•</span>
           <span>点击上方学科: 独立切换对应学科星域</span>
           <span className="dot">•</span>
-          <span className="highlight-hint">点击任意考点: 正面置顶聚焦</span>
+          <span className="highlight-hint">点击任意考点: 正面立体推近置顶</span>
         </div>
 
         {/* 右侧微架构学情与当前学科图例面板 */}
