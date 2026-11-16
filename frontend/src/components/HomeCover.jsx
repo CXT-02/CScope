@@ -28,20 +28,21 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile, on
 
         /* 左侧品牌与标语区 */
         .cover-brand-tag {
-          display: inline-flex;
+          display: flex;
           align-items: center;
-          gap: 8px;
-          color: #5548d2;
-          font-size: 13.5px;
-          font-weight: 800;
-          letter-spacing: 0.08em;
-          margin-bottom: 18px;
+          gap: 10px;
+          color: #059669;
+          font-size: clamp(20px, 2.4vw, 28px);
+          font-weight: 900;
+          letter-spacing: -0.01em;
+          margin-bottom: 16px;
         }
         .cover-brand-tag .dash {
-          width: 18px;
-          height: 2px;
-          background: #5548d2;
+          width: 24px;
+          height: 3px;
+          background: #059669;
           border-radius: 2px;
+          flex-shrink: 0;
         }
 
         .cover-heading {
@@ -439,7 +440,7 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile, on
         <div>
           <div className="cover-brand-tag">
             <span className="dash" />
-            <span>CSCOPE · 可视化计算机学习实验室</span>
+            <span>CSCOPE · 计算机微观仿真与 408 测评实验室</span>
           </div>
 
           <h1 className="cover-heading">

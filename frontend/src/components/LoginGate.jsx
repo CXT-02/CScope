@@ -87,15 +87,22 @@ export default function LoginGate({ onLoginSuccess }) {
       <div className="login-gate-shell">
         {/* 左侧：学术质感展示与实验室亮点 */}
         <div className="login-gate-intro">
-          <div className="login-brand-tag">
-            <span className="brand-dot" />
-            <span>CSCOPE · 计算机微观仿真与 408 测评实验室</span>
+          <div className="login-brand-header-block">
+            <div className="login-brand-sub-badge">
+              <span className="brand-dot" />
+              <span>COMPUTATIONAL ARCHITECTURE LAB</span>
+            </div>
+            <h1 className="login-platform-brand-name">
+              <span className="brand-en">CSCOPE</span>
+              <span className="brand-sep">·</span>
+              <span className="brand-cn">计算机微观仿真与 408 测评实验室</span>
+            </h1>
           </div>
 
-          <h1 className="login-hero-title">
+          <h2 className="login-hero-title">
             把看不见的计算过程，<br />
             变成<span className="title-highlight">可以操作的实验</span>。
-          </h1>
+          </h2>
 
           <p className="login-hero-desc">
             从注意力机制、数据结构到操作系统与计算机网络，让抽象概念按步骤运行；
