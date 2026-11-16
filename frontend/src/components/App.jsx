@@ -5,7 +5,6 @@ import DijkstraExperiment from './DijkstraExperiment'
 import DeadlockExperiment from './DeadlockExperiment'
 import ProcessSyncExperiment from './ProcessSyncExperiment'
 import ExperimentHub from './ExperimentHub'
-import HomeCover from './HomeCover'
 import GradientDescentExperiment from './GradientDescentExperiment'
 import IpSubnetExperiment from './IpSubnetExperiment'
 import DnsResolutionExperiment from './DnsResolutionExperiment'
@@ -20,6 +19,9 @@ import NormalizationExperiment from './NormalizationExperiment'
 import AccountDialog from './AccountDialog'
 import LearningDashboard from './LearningDashboard'
 import ExamArena from './ExamArena'
+import ConsoleDashboard from './ConsoleDashboard'
+import SidebarNav from './SidebarNav'
+import LoginGate from './LoginGate'
 import { useLearningProfile } from './LearningProfileContext'
 import MemoryPartitionExperiment from './MemoryPartitionExperiment'
 import NeuralNetworkExperiment from './NeuralNetworkExperiment'
@@ -63,11 +65,11 @@ const experimentComponents = {
 
 export default function App() {
   const [route, setRoute] = useState(readRouteFromHash)
-  const [accountOpen, setAccountOpen] = useState(false)
-  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { user, logout, recordVisit } = useLearningProfile()
   const activeExperiment = route.kind === 'lab' ? route.id : null
   const activeCourseId = route.kind === 'course' ? route.id : null
+  const activeCourse = courses.find((item) => item.id === activeCourseId)
   const experiment = experiments.find((item) => item.id === activeExperiment)
   const Experiment = experimentComponents[activeExperiment]
   const experimentCourse = activeExperiment ? courseForExperiment(activeExperiment) : null
@@ -88,119 +90,141 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const goHome = () => navigate('')
+  const goConsole = () => navigate('#/console')
   const openCourses = () => navigate('#/courses')
   const openExperiment = (experimentId) => navigate(`#/lab/${experimentId}`)
   const openCourse = (courseId) => navigate(`#/course/${courseId}`)
   const openProfile = () => navigate('#/profile')
   const openExam = () => navigate('#/exam')
 
+  // 1. 若用户未登录，展示登录/建档迎宾门户（满足个性化学习服务门槛要求）
+  if (!user) {
+    return <LoginGate onLoginSuccess={() => navigate('#/console')} />
+  }
+
+  // 2. 登录后进入现代化控制台工作台（左侧常驻功能侧边栏 + 右侧主工作区）
   return (
-    <div className="app-shell">
-      <header className="topbar">
-        <button className="brand" type="button" onClick={goHome}>
-          <span className="brand-mark">C</span>
-          <span><strong>CScope</strong><small>计算机原理微观仿真实验室</small></span>
-        </button>
-        <nav className="topbar-nav" aria-label="主导航">
-          <button className={route.kind === 'home' ? 'active' : ''} type="button" onClick={goHome}>
-            首页
-          </button>
-          <button className={route.kind === 'courses' ? 'active' : ''} type="button" onClick={openCourses}>
-            课程知识库
-          </button>
-          <button
-            className={route.kind === 'exam' ? 'active' : ''}
-            type="button"
-            onClick={openExam}
-            style={{ fontWeight: 700 }}
-          >
-            408考研测评
-          </button>
-          {user ? (
-            <div className="account-menu-wrap">
-              <button
-                className={`profile-trigger ${route.kind === 'profile' ? 'active' : ''}`}
-                type="button"
-                onClick={() => setAccountMenuOpen((value) => !value)}
-              >
-                <span>{user.name.slice(0, 1).toUpperCase()}</span>
-                <strong>{user.name}</strong>
-                <i>⌄</i>
-              </button>
-              {accountMenuOpen && (
-                <div className="account-menu">
-                  <button type="button" onClick={() => { setAccountMenuOpen(false); openProfile() }}>
-                    <span>◎</span>
-                    <div><strong>我的学情中心</strong><small>进度、记录与个性推荐</small></div>
-                  </button>
-                  <button type="button" onClick={() => { setAccountMenuOpen(false); logout(); goHome() }}>
-                    <span>↪</span>
-                    <div><strong>退出当前账户</strong><small>记录仍保存在本机</small></div>
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <button className="login-trigger" type="button" onClick={() => setAccountOpen(true)}>
-              登录 / 注册
+    <div className={`cscope-workspace-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      {/* 最左侧展示全部功能入口：切换其他功能无需返回首页 */}
+      <SidebarNav
+        activeKey={route.kind}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
+        onSelectNav={(key) => {
+          if (key === 'console') goConsole()
+          else if (key === 'courses') openCourses()
+          else if (key === 'exam') openExam()
+          else if (key === 'profile') openProfile()
+        }}
+        user={user}
+        onLogout={() => {
+          logout()
+          navigate('')
+        }}
+      />
+
+      {/* 右侧主工作区 */}
+      <div className="cscope-workspace-main">
+        {/* 顶部全局状态栏与面包屑 */}
+        <header className="workspace-header">
+          <div className="breadcrumb-nav">
+            <button type="button" className="crumb-btn home" onClick={goConsole}>
+              控制台
             </button>
-          )}
-        </nav>
-      </header>
-
-      {/* 核心页面路由分派 */}
-      {route.kind === 'home' ? (
-        /* 1. 全新科技感大封面：封面纯粹、三大模块门户入口直达、无多余碎片 */
-        <HomeCover
-          onOpenCourses={openCourses}
-          onOpenExam={openExam}
-          onOpenProfile={openProfile}
-          onOpenExperiment={openExperiment}
-        />
-      ) : route.kind === 'courses' ? (
-        /* 2. 课程知识库完整视图 (包含课程地图、知识点搜索与个人上次学习) */
-        <ExperimentHub
-          courses={courses}
-          activeCourseId={activeCourseId}
-          onOpen={openExperiment}
-          onSelectCourse={openCourse}
-          onBack={openCourses}
-          onShowProfile={openProfile}
-          onLogin={() => setAccountOpen(true)}
-        />
-      ) : route.kind === 'profile' ? (
-        /* 3. 个人学情中心与能力画像 */
-        <LearningDashboard experiments={experiments} courses={courses} onOpen={openExperiment} onBack={goHome} />
-      ) : route.kind === 'exam' ? (
-        /* 4. 408 考研真题与专项测评中心 */
-        <ExamArena onOpenExperiment={openExperiment} onBackHome={goHome} />
-      ) : Experiment && experiment ? (
-        /* 5. 具体某个知识点的微观仿真实验室 */
-        <main className="experiment-page" key={activeExperiment}>
-          <div className="breadcrumb">
-            <button type="button" onClick={openCourses}>全部课程</button>
-            <span>/</span>
-            <button type="button" onClick={() => openCourse(experimentCourse?.id)}>{experimentCourse?.title}</button>
-            <span>/</span>
-            <span>{experiment.title}</span>
+            {route.kind !== 'console' && <span className="crumb-sep">/</span>}
+            {route.kind === 'courses' && <span className="crumb-current">课程知识中心</span>}
+            {route.kind === 'exam' && <span className="crumb-current">408 考研真题测评</span>}
+            {route.kind === 'profile' && <span className="crumb-current">学情画像与学习档案</span>}
+            {route.kind === 'course' && (
+              <>
+                <button type="button" className="crumb-btn" onClick={openCourses}>课程中心</button>
+                <span className="crumb-sep">/</span>
+                <span className="crumb-current">{activeCourse?.title || '专项课程'}</span>
+              </>
+            )}
+            {route.kind === 'lab' && (
+              <>
+                <button type="button" className="crumb-btn" onClick={openCourses}>课程中心</button>
+                <span className="crumb-sep">/</span>
+                <button type="button" className="crumb-btn" onClick={() => openCourse(experimentCourse?.id)}>
+                  {experimentCourse?.title}
+                </button>
+                <span className="crumb-sep">/</span>
+                <span className="crumb-current">{experiment?.title}</span>
+              </>
+            )}
           </div>
-          <Experiment experiment={experiment} />
-        </main>
-      ) : (
-        /* 兜底课程列表 */
-        <ExperimentHub
-          courses={courses}
-          activeCourseId={activeCourseId}
-          onOpen={openExperiment}
-          onSelectCourse={openCourse}
-          onBack={openCourses}
-          onShowProfile={openProfile}
-          onLogin={() => setAccountOpen(true)}
-        />
-      )}
 
-      <AccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
+          <div className="header-right">
+            <div className="header-user-badge">
+              <span className="header-avatar">{user.name.slice(0, 1).toUpperCase()}</span>
+              <span className="header-name">{user.name}</span>
+              <span className="header-status-pill">408在线研习</span>
+            </div>
+            <button
+              type="button"
+              className="header-logout-btn"
+              onClick={() => {
+                logout()
+                navigate('')
+              }}
+              title="退出当前登录"
+            >
+              退出登录
+            </button>
+          </div>
+        </header>
+
+        {/* 核心工作区内容渲染 */}
+        <div className="workspace-body-container">
+          {route.kind === 'console' ? (
+            /* 控制台主页面（参考 JobPilot 控制台风格，问候、AI导学、核心指标、三大入口、最近测评与学科诊断） */
+            <ConsoleDashboard
+              onOpenCourses={openCourses}
+              onOpenExam={openExam}
+              onOpenProfile={openProfile}
+              onOpenExperiment={openExperiment}
+            />
+          ) : route.kind === 'courses' ? (
+            /* 课程知识库视图 */
+            <ExperimentHub
+              courses={courses}
+              activeCourseId={activeCourseId}
+              onOpen={openExperiment}
+              onSelectCourse={openCourse}
+              onBack={goConsole}
+              onShowProfile={openProfile}
+              onLogin={() => {}}
+            />
+          ) : route.kind === 'profile' ? (
+            /* 个人学情中心与能力画像 */
+            <LearningDashboard
+              experiments={experiments}
+              courses={courses}
+              onOpen={openExperiment}
+              onBack={goConsole}
+            />
+          ) : route.kind === 'exam' ? (
+            /* 408 考研真题测评中心（105道真题、自定义题量时长、错题直达实验） */
+            <ExamArena
+              onOpenExperiment={openExperiment}
+              onBackHome={goConsole}
+            />
+          ) : Experiment && experiment ? (
+            /* 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
+            <main className="experiment-page" key={activeExperiment}>
+              <Experiment experiment={experiment} />
+            </main>
+          ) : (
+            <ConsoleDashboard
+              onOpenCourses={openCourses}
+              onOpenExam={openExam}
+              onOpenProfile={openProfile}
+              onOpenExperiment={openExperiment}
+            />
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -209,9 +233,10 @@ function readRouteFromHash() {
   if (window.location.hash === '#/profile') return { kind: 'profile', id: null }
   if (window.location.hash === '#/exam') return { kind: 'exam', id: null }
   if (window.location.hash === '#/courses') return { kind: 'courses', id: null }
+  if (window.location.hash === '#/console') return { kind: 'console', id: null }
   const labMatch = window.location.hash.match(/^#\/lab\/([a-z-]+)$/)
   if (experiments.some((item) => item.id === labMatch?.[1])) return { kind: 'lab', id: labMatch[1] }
   const courseMatch = window.location.hash.match(/^#\/course\/([a-z-]+)$/)
   if (courses.some((item) => item.id === courseMatch?.[1])) return { kind: 'course', id: courseMatch[1] }
-  return { kind: 'home', id: null }
+  return { kind: 'console', id: null }
 }
