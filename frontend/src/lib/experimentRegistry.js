@@ -7,7 +7,7 @@ export const experiments = [
   { id: 'sorting', courseId: 'data-structures', category: '数据结构与算法', title: '排序算法对比', description: '让冒泡、选择、插入和快速排序同步运行，对比过程与操作次数。', accent: '#159a83', icon: '序', concepts: ['比较排序', '复杂度', '分治'] },
   { id: 'tree-traversal', courseId: 'data-structures', category: '数据结构与算法', title: '二叉树遍历', description: '同步观察当前节点、递归栈或队列，以及前中后序和层序访问结果。', accent: '#159a83', icon: '树', concepts: ['二叉树', '递归', '队列'] },
   { id: 'stack-queue', courseId: 'data-structures', category: '数据结构与算法', title: '栈与队列', description: '通过进出动画理解 LIFO、FIFO、栈顶、队首与典型应用。', accent: '#159a83', icon: 'SQ', concepts: ['栈', '队列', '线性结构'] },
-  { id: 'scheduling', courseId: 'operating-systems', category: '操作系统', title: 'CPU 进程调度', description: '对比 FCFS、SJF 与时间片轮转，理解等待时间和响应效率。', accent: '#ee6c4d', icon: 'OS', concepts: ['进程', '调度算法', '甘特图'] },
+  { id: 'scheduling', courseId: 'operating-systems', category: '操作系统', title: '进程生命周期与 CPU 调度', description: '透视进程五状态模型（创建、就绪、运行、阻塞、终止）与 PCB 转换，对比 FCFS、SJF 与时间片轮转。', accent: '#ee6c4d', icon: 'OS', concepts: ['五状态模型', 'PCB', '就绪与阻塞', '调度算法', '甘特图'] },
   { id: 'page-replacement', courseId: 'operating-systems', category: '操作系统', title: '页面置换算法', description: '同步比较 FIFO、LRU 与 OPT 的命中、缺页和页面淘汰过程。', accent: '#ee6c4d', icon: 'VM', concepts: ['虚拟内存', '缺页', '页面置换'] },
   { id: 'sync', courseId: 'operating-systems', category: '操作系统', title: '进程同步与互斥', description: '模拟经典生产者-消费者模型，通过信号量 P/V 操作与互斥锁理解并发同步、临界区与阻塞唤醒。', accent: '#ee6c4d', icon: 'SYNC', concepts: ['信号量', 'P/V操作', '生产者消费者', '临界区'] },
   { id: 'deadlock', courseId: 'operating-systems', category: '操作系统', title: '死锁：预防、避免与解除', description: '透视死锁四个必要条件，实操银行家算法安全性检查，动态化简资源分配图并破除死锁环。', accent: '#ee6c4d', icon: 'DL', concepts: ['死锁四条件', '银行家算法', '死锁预防', '资源分配图'] },
@@ -54,7 +54,7 @@ export const courses = [
     description: '观察进程、内存与资源在系统内部如何被分配、等待和调度。',
     tags: ['进程', '内存', '并发'],
     points: [
-      point('CPU 进程调度', '对比 FCFS、SJF 与时间片轮转的执行结果', 'scheduling', ['进程', '时间片', '甘特图']),
+      point('进程生命周期与 CPU 调度', '透视进程五状态转换与 PCB，对比 FCFS、SJF 与时间片轮转', 'scheduling', ['进程五状态', 'PCB', '就绪队列', '调度算法', '甘特图']),
       point('页面置换算法', '模拟 FIFO、LRU 和 OPT 的缺页过程', 'page-replacement', ['虚拟内存', '缺页']),
       point('进程同步与互斥', '经典生产者-消费者模型与信号量 P/V 操作', 'sync', ['信号量', 'PV操作', '互斥锁']),
       point('死锁：预防与解除', '死锁四条件、银行家算法与资源图破环', 'deadlock', ['死锁四条件', '银行家算法', '死锁解除']),
