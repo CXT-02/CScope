@@ -74,105 +74,155 @@ const STORY_STEPS = [
 // 导学右侧高动态动画组件
 function PipelineStoryVisual({ stageIndex }) {
   const [pulse, setPulse] = useState(0)
+  const [clockTick, setClockTick] = useState(0)
 
   useEffect(() => {
     setPulse(0)
-    const t = setTimeout(() => setPulse(1), 1200)
-    return () => clearTimeout(t)
+    const t = setTimeout(() => setPulse(1), 800)
+    const timer = setInterval(() => {
+      setClockTick(c => (c + 1) % 6)
+    }, 1200)
+    return () => {
+      clearTimeout(t)
+      clearInterval(timer)
+    }
   }, [stageIndex])
 
   return (
     <div className="pipeline-story-visual-canvas" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <style>{`
+        @keyframes pipeFlow {
+          0% { stroke-dashoffset: 30; }
+          100% { stroke-dashoffset: 0; }
+        }
+        @keyframes pipeGlow {
+          0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+          50% { box-shadow: 0 0 22px rgba(16, 185, 129, 0.7); }
+        }
+        @keyframes stallWarning {
+          0%, 100% { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; }
+          50% { background: rgba(239, 68, 68, 0.45); border-color: #f87171; box-shadow: 0 0 18px rgba(239, 68, 68, 0.7); }
+        }
+        @keyframes forwardRay {
+          0% { stroke-dashoffset: 40; opacity: 0.3; }
+          50% { opacity: 1; }
+          100% { stroke-dashoffset: 0; opacity: 0.3; }
+        }
+      `}</style>
+
       {/* 阶段 1: 串行 vs 流水线对比 */}
       {stageIndex === 0 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>串行执行 (Serial) vs 流水线重叠 (Pipelined)</span>
-            <span style={{ background: '#1e293b', color: '#10b981', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>串行执行 vs 流水线吞吐实时动态对比</span>
+            <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', border: '1px solid #10b981', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               加速比 2.5×
             </span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ background: '#1e293b', padding: '10px 14px', borderRadius: '6px', borderLeft: '4px solid #ef4444' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#fca5a5', fontSize: '0.88rem', fontWeight: 'bold' }}>
-                <span>串行执行：4 条指令</span>
-                <span>总耗时 20 个周期</span>
+            {/* 串行进度条 */}
+            <div style={{ background: '#0f172a', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #ef4444' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#fca5a5', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '4px' }}>
+                <span>传统串行执行：4条指令</span>
+                <span>需 20 周期 (各占 5 周期)</span>
               </div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>每条指令独立耗费 5 周期，其他部件全部空等。</div>
+              <div style={{ height: '8px', background: '#1e293b', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: `${((clockTick % 4) + 1) * 25}%`, height: '100%', background: '#ef4444', transition: 'width 0.4s' }}></div>
+              </div>
+              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>每次仅一个工位工作，其他 4 个部件完全空闲等待。</div>
             </div>
 
-            <div style={{ background: '#1e293b', padding: '10px 14px', borderRadius: '6px', borderLeft: '4px solid #10b981' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#86efac', fontSize: '0.88rem', fontWeight: 'bold' }}>
-                <span>流水线执行：4 条指令重叠</span>
-                <span>仅需 8 个周期！</span>
+            {/* 流水线进度条 */}
+            <div style={{ background: '#0f172a', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #10b981', animation: 'pipeGlow 2s infinite' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#86efac', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '4px' }}>
+                <span>重叠流水线：4条指令并发</span>
+                <span style={{ color: '#34d399' }}>仅需 8 周期！</span>
               </div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>5 级独立工位同时作业，吞吐率激增 150%。</div>
+              <div style={{ height: '8px', background: '#1e293b', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(90deg, #10b981, #38bdf8)' }}></div>
+              </div>
+              <div style={{ fontSize: '0.75rem', color: '#a7f3d0', marginTop: '4px' }}>5 级独立工位如同汽车流水装配线，指令源源不断输出！</div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 2: 经典五级划分 */}
+      {/* 阶段 2: 经典五级划分 (传送流动动效) */}
       {stageIndex === 1 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>经典 RISC 五级流水工位</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-              5-Stage Pipeline
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>经典 RISC 五级流水工位传送带</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              当前脉冲激活：{['IF', 'ID', 'EX', 'MEM', 'WB'][clockTick % 5]}
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px' }}>
             {[
-              { code: 'IF', name: '取指', role: '指令 Cache' },
+              { code: 'IF', name: '取指', role: '指令Cache' },
               { code: 'ID', name: '译码', role: '读寄存器' },
-              { code: 'EX', name: '执行', role: 'ALU 运算' },
-              { code: 'MEM', name: '访存', role: '数据 Cache' },
+              { code: 'EX', name: '执行', role: 'ALU运算' },
+              { code: 'MEM', name: '访存', role: '数据Cache' },
               { code: 'WB', name: '写回', role: '写寄存器' }
-            ].map((s, i) => (
-              <div key={s.code} style={{ background: '#1e293b', border: '1.5px solid #475569', borderRadius: '6px', padding: '10px 6px', textAlign: 'center' }}>
-                <span style={{ color: '#38bdf8', fontSize: '1.1rem', fontWeight: 'bold', display: 'block' }}>{s.code}</span>
-                <strong style={{ color: '#f8fafc', fontSize: '0.85rem', display: 'block', margin: '2px 0' }}>{s.name}</strong>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{s.role}</span>
-              </div>
-            ))}
+            ].map((s, i) => {
+              const active = (clockTick % 5) === i
+              return (
+                <div key={s.code} style={{
+                  background: active ? 'rgba(56, 189, 248, 0.25)' : '#0f172a',
+                  border: active ? '2px solid #38bdf8' : '1px solid #334155',
+                  boxShadow: active ? '0 0 16px rgba(56, 189, 248, 0.6)' : 'none',
+                  borderRadius: '6px', padding: '10px 4px', textAlign: 'center', transition: 'all 0.3s'
+                }}>
+                  <span style={{ color: active ? '#38bdf8' : '#94a3b8', fontSize: '1.05rem', fontWeight: 'bold', display: 'block' }}>{s.code}</span>
+                  <strong style={{ color: '#f8fafc', fontSize: '0.82rem', display: 'block', margin: '2px 0' }}>{s.name}</strong>
+                  <span style={{ fontSize: '0.7rem', color: '#64748b' }}>{s.role}</span>
+                </div>
+              )
+            })}
+          </div>
+
+          <div style={{ marginTop: '12px', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', border: '1px solid #334155', textAlign: 'center', fontSize: '0.8rem', color: '#34d399' }}>
+            各个工位之间由<strong>流水线锁存寄存器</strong>（IF/ID, ID/EX, EX/MEM, MEM/WB）隔离时序。
           </div>
         </div>
       )}
 
       {/* 阶段 3: 瀑布流推进 */}
       {stageIndex === 2 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>理想流水线时空瀑布图 (CPI ≈ 1)</span>
-            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-              无气泡连续推进
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#10b981', fontSize: '0.95rem', fontWeight: 'bold' }}>理想流水线时空瀑布图 (CPI ≈ 1 连续推进)</span>
+            <span style={{ background: '#10b981', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              时钟节拍：CC {clockTick + 1}
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: '#1e293b', padding: '12px', borderRadius: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
             {PROGRAM.map((inst, rowIdx) => (
               <div key={inst.id} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ width: '28px', fontSize: '0.8rem', fontWeight: 'bold', color: '#94a3b8' }}>{inst.id}</span>
                 {Array.from({ length: 8 }, (_, cIdx) => {
                   const stagePos = cIdx - rowIdx
                   const stageCode = stagePos >= 0 && stagePos < 5 ? STAGES[stagePos] : ''
+                  const isCurrent = cIdx === clockTick
                   return (
                     <div
                       key={cIdx}
                       style={{
                         width: '36px',
-                        height: '26px',
+                        height: '24px',
                         borderRadius: '4px',
-                        background: stageCode ? '#2563eb' : '#0f172a',
+                        background: stageCode ? (isCurrent ? '#38bdf8' : '#2563eb') : '#1e293b',
+                        boxShadow: isCurrent && stageCode ? '0 0 10px #38bdf8' : 'none',
                         color: '#fff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '0.75rem',
+                        fontSize: '0.72rem',
                         fontWeight: 'bold',
-                        opacity: stageCode ? 1 : 0.3
+                        opacity: stageCode ? (isCurrent ? 1 : 0.8) : 0.2,
+                        transition: 'all 0.3s'
                       }}
                     >
                       {stageCode}
@@ -185,41 +235,43 @@ function PipelineStoryVisual({ stageIndex }) {
         </div>
       )}
 
-      {/* 阶段 4: 数据冒险与气泡 */}
+      {/* 阶段 4: 数据冲突与气泡 */}
       {stageIndex === 3 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>写后读 (RAW) 数据冲突与停顿气泡 (Stall)</span>
-            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#ef4444', fontSize: '0.95rem', fontWeight: 'bold' }}>写后读 (RAW) 冲突与硬件停顿气泡 (Stall)</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               插入 2 周期气泡
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', lineHeight: '1.6' }}>
-            <div style={{ color: '#93c5fd', fontSize: '0.88rem' }}>I1: LOAD <strong style={{ color: '#f59e0b' }}>R1</strong>, [A] ➔ 直到第 5 周期 WB 才能把 R1 写入寄存器堆！</div>
-            <div style={{ color: '#fca5a5', fontSize: '0.88rem' }}>I2: ADD R2, <strong style={{ color: '#f59e0b' }}>R1</strong>, R3 ➔ 第 3 周期在 ID 阶段就急需读 R1！</div>
-            <div style={{ marginTop: '8px', padding: '8px 12px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '6px', color: '#fca5a5', fontSize: '0.82rem' }}>
-              无硬件旁路时：硬件检测到依赖，必须强制让 I2 停顿 2 个时钟周期（Stall 气泡），等待 R1 写回完成。
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <div style={{ color: '#93c5fd', fontSize: '0.85rem' }}>I1: LOAD <strong style={{ color: '#f59e0b' }}>R1</strong>, [A] ➔ 直到第 5 周期 WB 才能写入寄存器堆！</div>
+            <div style={{ color: '#fca5a5', fontSize: '0.85rem', marginTop: '4px' }}>I2: ADD R2, <strong style={{ color: '#f59e0b' }}>R1</strong>, R3 ➔ 第 3 周期 ID 即需读取 R1！</div>
+            <div style={{
+              marginTop: '10px', padding: '8px 12px', borderRadius: '6px',
+              animation: 'stallWarning 1.5s infinite', border: '1px solid #ef4444', color: '#fca5a5', fontSize: '0.8rem'
+            }}>
+              ⚠️ 硬件检测到写后读依赖：强制将后续阶段置为 NOP（空操作气泡），流水线暂停 2 拍！
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 5: 旁路前递技术 */}
+      {/* 阶段 5: 旁路前递 */}
       {stageIndex === 4 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>硬件旁路前递 (Bypass / Forwarding) 挽救停顿</span>
-            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#10b981', fontSize: '0.95rem', fontWeight: 'bold' }}>硬件旁路前递 (Bypass / Forwarding) 挽救停顿</span>
+            <span style={{ background: '#10b981', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               无需等待 WB 阶段
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderLeft: '4px solid #10b981' }}>
-            <div style={{ color: '#86efac', fontWeight: 'bold', fontSize: '0.92rem' }}>短路直通原理：</div>
-            <div style={{ color: '#f8fafc', fontSize: '0.88rem', marginTop: '6px', lineHeight: '1.6' }}>
-              ALU 的计算结果早在 EX/MEM 寄存器中就已经就绪！
-              通过在硬件层铺设一条<strong>前递多路选择器导线</strong>，直接将结果从 MEM 阶段拉回到后续指令的 EX 阶段输入端，消除大部分停顿！
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #10b981', animation: 'pipeGlow 2.5s infinite' }}>
+            <div style={{ color: '#86efac', fontWeight: 'bold', fontSize: '0.9rem' }}>短路直通原理：</div>
+            <div style={{ color: '#f8fafc', fontSize: '0.82rem', marginTop: '6px', lineHeight: '1.6' }}>
+              ALU 运算结果在 EX/MEM 寄存器即已产出！通过专用的<strong>硬件前递导线与多路选择器 MUX</strong>，直接将结果反馈注入后续指令的 ALU 输入端，将停顿从 2 周期缩减至 0~1 周期！
             </div>
           </div>
         </div>
@@ -227,18 +279,18 @@ function PipelineStoryVisual({ stageIndex }) {
 
       {/* 阶段 6: 分支冲刷 */}
       {stageIndex === 5 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>控制冒险与流水线冲刷 (Branch Flush)</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>控制冒险与流水线冲刷 (Branch Flush)</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               预测失败清空
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px' }}>
-            <div style={{ color: '#fde68a', fontSize: '0.88rem', fontWeight: 'bold' }}>遇到条件跳转指令 BEQ：</div>
-            <div style={{ color: '#cbd5e1', fontSize: '0.82rem', marginTop: '4px', lineHeight: '1.5' }}>
-              当分支真正发生跳转时，原本顺延取入的错位指令被直接置为 NOP（空操作），所有阶段同步清空（FLUSH 冲刷），代价是损失 1~3 个周期。
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <div style={{ color: '#fde68a', fontSize: '0.85rem', fontWeight: 'bold' }}>条件跳转 BEQ 指令引发分支预测：</div>
+            <div style={{ color: '#cbd5e1', fontSize: '0.8rem', marginTop: '4px', lineHeight: '1.5' }}>
+              当分支真正跳转时，已顺延取指的错误指令被直接置为 NOP（空操作），所有工位同步触发 FLUSH 冲刷清空，损失 1~3 周期。
             </div>
           </div>
         </div>
@@ -246,22 +298,22 @@ function PipelineStoryVisual({ stageIndex }) {
 
       {/* 阶段 7: 权衡总结 */}
       {stageIndex === 6 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>现代流水线设计的综合工程权衡</span>
-            <span style={{ background: '#2563eb', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>现代流水线设计的综合工程权衡</span>
+            <span style={{ background: '#2563eb', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>
               CPI vs 主频
             </span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div style={{ background: '#1e293b', padding: '10px', borderRadius: '6px' }}>
-              <div style={{ color: '#38bdf8', fontSize: '0.85rem', fontWeight: 'bold' }}>级数越深</div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '4px' }}>每个工位更简单，主频可以做得极高。</div>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #3b82f6' }}>
+              <div style={{ color: '#38bdf8', fontSize: '0.85rem', fontWeight: 'bold' }}>级数加深 (Deep Pipeline)</div>
+              <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px' }}>工位简短，主频拉升；但锁存开销与冒险惩罚剧增。</div>
             </div>
-            <div style={{ background: '#1e293b', padding: '10px', borderRadius: '6px' }}>
-              <div style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 'bold' }}>冒险惩罚暴增</div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '4px' }}>一旦分支失败冲刷几十级工位，CPI 恶化。</div>
+            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', border: '1px solid #10b981' }}>
+              <div style={{ color: '#10b981', fontSize: '0.85rem', fontWeight: 'bold' }}>动态调度 (Out-of-Order)</div>
+              <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '4px' }}>借助保留站与重排序缓存 ROB，乱序执行消除等待。</div>
             </div>
           </div>
         </div>

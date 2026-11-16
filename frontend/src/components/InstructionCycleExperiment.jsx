@@ -54,204 +54,386 @@ const STORY_STEPS = [
 ]
 
 function CpuStoryVisual({ stageIndex }) {
-  const [pulseStep, setPulseStep] = useState(0)
+  const [subTick, setSubTick] = useState(0)
 
   useEffect(() => {
-    setPulseStep(0)
-    const t = setTimeout(() => setPulseStep(1), 1000)
-    return () => clearTimeout(t)
+    setSubTick(0)
+    const timer = setInterval(() => {
+      setSubTick(t => (t + 1) % 4)
+    }, 1100)
+    return () => clearInterval(timer)
   }, [stageIndex])
 
   return (
     <div className="cpu-story-visual-canvas" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      {/* 阶段 1: 冯诺依曼架构 */}
+      <style>{`
+        @keyframes cpuBusFlow {
+          0% { stroke-dashoffset: 40; }
+          100% { stroke-dashoffset: 0; }
+        }
+        @keyframes cpuGlowPulse {
+          0%, 100% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.25); border-color: rgba(56, 189, 248, 0.4); }
+          50% { box-shadow: 0 0 22px rgba(56, 189, 248, 0.7); border-color: #38bdf8; }
+        }
+        @keyframes cuDecodePulse {
+          0%, 100% { filter: drop-shadow(0 0 4px #a855f7); transform: scale(1); }
+          50% { filter: drop-shadow(0 0 14px #c084fc); transform: scale(1.02); }
+        }
+        @keyframes aluComputeGlow {
+          0%, 100% { background: rgba(16, 185, 129, 0.15); border-color: #10b981; }
+          50% { background: rgba(16, 185, 129, 0.35); border-color: #34d399; box-shadow: 0 0 18px rgba(16, 185, 129, 0.5); }
+        }
+        @keyframes cycleOrbit {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes signalRay {
+          0% { opacity: 0.2; transform: translateY(-3px); }
+          50% { opacity: 1; transform: translateY(0); filter: drop-shadow(0 0 6px currentColor); }
+          100% { opacity: 0.2; transform: translateY(3px); }
+        }
+      `}</style>
+
+      {/* 阶段 1: 冯诺依曼架构总线与部件流转 */}
       {stageIndex === 0 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>冯·诺依曼计算机五大部件架构</span>
-            <span style={{ background: '#1e293b', color: '#cbd5e1', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              存储程序 · 顺序执行
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', animation: 'cpuGlowPulse 1.5s infinite' }}></span>
+              <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>冯·诺依曼架构三大总线流转图</span>
+            </div>
+            <span style={{ background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', border: '1px solid rgba(56, 189, 248, 0.3)', fontFamily: 'monospace' }}>
+              CLK: 3.5 GHz 脉冲
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 2fr', gap: '14px', alignItems: 'center' }}>
-            <div style={{ background: '#1e293b', border: '2px solid #3b82f6', borderRadius: '8px', padding: '14px', textAlign: 'center' }}>
-              <div style={{ color: '#93c5fd', fontSize: '0.85rem', fontWeight: 'bold' }}>主存储器 (Memory)</div>
-              <div style={{ color: '#f8fafc', fontSize: '1.1rem', margin: '6px 0', fontFamily: 'monospace' }}>指令 + 数据</div>
-              <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>同一空间混存，按地址访问</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr auto 1fr', gap: '10px', alignItems: 'center' }}>
+            {/* CPU 复合部件 */}
+            <div style={{ background: '#0f172a', border: '1.5px solid #3b82f6', borderRadius: '8px', padding: '12px', textAlign: 'center', animation: 'cpuGlowPulse 3s infinite' }}>
+              <div style={{ color: '#60a5fa', fontSize: '0.88rem', fontWeight: 'bold', marginBottom: '8px' }}>中央处理器 CPU</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                <div style={{ background: '#1e293b', padding: '6px 4px', borderRadius: '4px', border: '1px solid #f59e0b' }}>
+                  <div style={{ color: '#fbbf24', fontSize: '0.75rem', fontWeight: 'bold' }}>控制器 CU</div>
+                  <div style={{ color: '#94a3b8', fontSize: '0.7rem' }}>PC / IR / 时序</div>
+                </div>
+                <div style={{ background: '#1e293b', padding: '6px 4px', borderRadius: '4px', border: '1px solid #10b981' }}>
+                  <div style={{ color: '#34d399', fontSize: '0.75rem', fontWeight: 'bold' }}>运算器 ALU</div>
+                  <div style={{ color: '#94a3b8', fontSize: '0.7rem' }}>ACC / 逻辑算术</div>
+                </div>
+              </div>
+              <div style={{ marginTop: '8px', background: 'rgba(59, 130, 246, 0.15)', padding: '3px', borderRadius: '4px', color: '#93c5fd', fontSize: '0.72rem' }}>
+                内部寄存器: MAR · MDR · PSW
+              </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <div style={{ background: '#1e293b', padding: '10px', borderRadius: '6px', textAlign: 'center', border: '1px solid #c88724' }}>
-                <span style={{ color: '#f59e0b', fontSize: '0.82rem', fontWeight: 'bold' }}>控制器 CU</span>
-                <div style={{ color: '#cbd5e1', fontSize: '0.78rem', marginTop: '2px' }}>PC / IR / 控制逻辑</div>
+            {/* 动态总线通道 (SVG 动态流动粒子线) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#f59e0b', fontWeight: 'bold' }}>地址总线 ABUS ➔</span>
+                <svg width="120" height="12" style={{ display: 'block' }}>
+                  <line x1="0" y1="6" x2="120" y2="6" stroke="#f59e0b" strokeWidth="2.5" strokeDasharray="6 4" style={{ animation: 'cpuBusFlow 1s linear infinite' }} />
+                </svg>
               </div>
-              <div style={{ background: '#1e293b', padding: '10px', borderRadius: '6px', textAlign: 'center', border: '1px solid #10b981' }}>
-                <span style={{ color: '#10b981', fontSize: '0.82rem', fontWeight: 'bold' }}>运算器 ALU</span>
-                <div style={{ color: '#cbd5e1', fontSize: '0.78rem', marginTop: '2px' }}>ACC / 算术逻辑单元</div>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#38bdf8', fontWeight: 'bold' }}>⇄ 数据总线 DBUS ⇄</span>
+                <svg width="120" height="12" style={{ display: 'block' }}>
+                  <line x1="0" y1="6" x2="120" y2="6" stroke="#38bdf8" strokeWidth="3" strokeDasharray="8 4" style={{ animation: 'cpuBusFlow 0.8s linear infinite reverse' }} />
+                </svg>
               </div>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '0.7rem', color: '#c084fc', fontWeight: 'bold' }}>控制总线 CBUS ➔</span>
+                <svg width="120" height="12" style={{ display: 'block' }}>
+                  <line x1="0" y1="6" x2="120" y2="6" stroke="#c084fc" strokeWidth="2.5" strokeDasharray="6 4" style={{ animation: 'cpuBusFlow 1.2s linear infinite' }} />
+                </svg>
+              </div>
+            </div>
+
+            {/* 主存储器 Memory */}
+            <div style={{ background: '#0f172a', border: '1.5px solid #10b981', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+              <div style={{ color: '#34d399', fontSize: '0.88rem', fontWeight: 'bold' }}>主存储器 Memory</div>
+              <div style={{ background: '#1e293b', border: '1px dashed #475569', borderRadius: '4px', padding: '6px', margin: '6px 0', fontSize: '0.76rem', fontFamily: 'monospace' }}>
+                <div style={{ color: '#fbbf24' }}>00H: ADD M[06H]</div>
+                <div style={{ color: '#38bdf8' }}>06H: DATA (13)</div>
+              </div>
+              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>指令与数据同处一存</div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 2: 取指周期动态流动 */}
+      {/* 阶段 2: 取指周期流水微操作 (动态高亮轮转) */}
       {stageIndex === 1 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>取指微操作四步曲 (Fetch Data-flow)</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-              PC ➔ MAR ➔ MDR ➔ IR
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>取指流水微操作：微节拍 T{subTick + 1} 演示</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              步进：{['① 送地址', '② 读存储', '③ 入指令', '④ PC自增'][subTick]}
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px', background: '#1e293b', borderRadius: '8px' }}>
-            <div style={{ padding: '8px 12px', background: '#3b82f6', borderRadius: '6px', color: '#fff', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.75rem' }}>1. 计数器</div>
-              <strong style={{ fontSize: '0.95rem' }}>PC (00H)</strong>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', position: 'relative' }}>
+            {/* 1. PC */}
+            <div style={{
+              background: subTick === 0 ? 'rgba(59, 130, 246, 0.3)' : '#0f172a',
+              border: subTick === 0 ? '2px solid #38bdf8' : '1px solid #334155',
+              boxShadow: subTick === 0 ? '0 0 15px rgba(56, 189, 248, 0.6)' : 'none',
+              borderRadius: '8px', padding: '10px 6px', textAlign: 'center', transition: 'all 0.3s'
+            }}>
+              <div style={{ fontSize: '0.72rem', color: subTick === 0 ? '#38bdf8' : '#94a3b8' }}>1. 计数器</div>
+              <strong style={{ fontSize: '0.95rem', color: '#fff', display: 'block', margin: '2px 0' }}>PC: 00H</strong>
+              <div style={{ fontSize: '0.68rem', color: subTick === 0 ? '#67e8f9' : '#64748b' }}>送地址MAR</div>
             </div>
-            <div style={{ color: '#f59e0b', fontSize: '1.2rem', fontWeight: 'bold' }}>➔</div>
-            <div style={{ padding: '8px 12px', background: '#1e293b', border: '1.5px solid #f59e0b', borderRadius: '6px', color: '#f59e0b', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.75rem' }}>2. 地址寄存器</div>
-              <strong style={{ fontSize: '0.95rem' }}>MAR</strong>
+
+            {/* 2. MAR */}
+            <div style={{
+              background: subTick === 1 ? 'rgba(245, 158, 11, 0.3)' : '#0f172a',
+              border: subTick === 1 ? '2px solid #fbbf24' : '1px solid #334155',
+              boxShadow: subTick === 1 ? '0 0 15px rgba(245, 158, 11, 0.6)' : 'none',
+              borderRadius: '8px', padding: '10px 6px', textAlign: 'center', transition: 'all 0.3s'
+            }}>
+              <div style={{ fontSize: '0.72rem', color: subTick === 1 ? '#fbbf24' : '#94a3b8' }}>2. 地址寄存器</div>
+              <strong style={{ fontSize: '0.95rem', color: '#fff', display: 'block', margin: '2px 0' }}>MAR: 00H</strong>
+              <div style={{ fontSize: '0.68rem', color: subTick === 1 ? '#fde68a' : '#64748b' }}>访存读指令</div>
             </div>
-            <div style={{ color: '#f59e0b', fontSize: '1.2rem', fontWeight: 'bold' }}>➔</div>
-            <div style={{ padding: '8px 12px', background: '#1e293b', border: '1.5px solid #10b981', borderRadius: '6px', color: '#10b981', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.75rem' }}>3. 数据缓冲</div>
-              <strong style={{ fontSize: '0.95rem' }}>MDR</strong>
+
+            {/* 3. MDR */}
+            <div style={{
+              background: subTick === 2 ? 'rgba(16, 185, 129, 0.3)' : '#0f172a',
+              border: subTick === 2 ? '2px solid #34d399' : '1px solid #334155',
+              boxShadow: subTick === 2 ? '0 0 15px rgba(16, 185, 129, 0.6)' : 'none',
+              borderRadius: '8px', padding: '10px 6px', textAlign: 'center', transition: 'all 0.3s'
+            }}>
+              <div style={{ fontSize: '0.72rem', color: subTick === 2 ? '#34d399' : '#94a3b8' }}>3. 数据缓冲</div>
+              <strong style={{ fontSize: '0.95rem', color: '#fff', display: 'block', margin: '2px 0' }}>MDR</strong>
+              <div style={{ fontSize: '0.68rem', color: subTick === 2 ? '#a7f3d0' : '#64748b' }}>暂存机器码</div>
             </div>
-            <div style={{ color: '#f59e0b', fontSize: '1.2rem', fontWeight: 'bold' }}>➔</div>
-            <div style={{ padding: '8px 12px', background: '#ec4899', borderRadius: '6px', color: '#fff', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.75rem' }}>4. 指令寄存器</div>
-              <strong style={{ fontSize: '0.95rem' }}>IR</strong>
+
+            {/* 4. IR */}
+            <div style={{
+              background: subTick === 3 ? 'rgba(236, 72, 153, 0.3)' : '#0f172a',
+              border: subTick === 3 ? '2px solid #f472b6' : '1px solid #334155',
+              boxShadow: subTick === 3 ? '0 0 15px rgba(236, 72, 153, 0.6)' : 'none',
+              borderRadius: '8px', padding: '10px 6px', textAlign: 'center', transition: 'all 0.3s'
+            }}>
+              <div style={{ fontSize: '0.72rem', color: subTick === 3 ? '#f472b6' : '#94a3b8' }}>4. 指令寄存器</div>
+              <strong style={{ fontSize: '0.95rem', color: '#fff', display: 'block', margin: '2px 0' }}>IR</strong>
+              <div style={{ fontSize: '0.68rem', color: subTick === 3 ? '#fbcfe8' : '#64748b' }}>送控制器CU</div>
             </div>
           </div>
 
-          <div style={{ marginTop: '12px', fontSize: '0.85rem', color: '#34d399', textAlign: 'center' }}>
-            取指结束伴随动作：程序计数器自动自增 PC ➔ PC + 1，为下一条指令准备就绪！
+          {/* 动态微操作总线流转提示条 */}
+          <div style={{ marginTop: '12px', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+            <span style={{ color: '#cbd5e1' }}>当前微操作硬件动作：</span>
+            <span style={{ color: '#38bdf8', fontWeight: 'bold', fontFamily: 'monospace' }}>
+              {subTick === 0 && 'PC ➔ MAR (发出物理内存地址 00H)'}
+              {subTick === 1 && 'Memory[00H] ➔ 数据总线 ➔ MDR (读取操作码)'}
+              {subTick === 2 && 'MDR ➔ 内部数据通路 ➔ IR (装载至指令寄存器)'}
+              {subTick === 3 && '取指完成，伴随动作：PC 自动加 1 (PC ➔ 01H) ⚡'}
+            </span>
           </div>
         </div>
       )}
 
-      {/* 阶段 3: 译码周期 */}
+      {/* 阶段 3: 译码周期动态解析 (用户截图指出的重点模块！) */}
       {stageIndex === 2 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#a855f7', fontSize: '1rem', fontWeight: 'bold' }}>指令译码 (Decode)：拆分操作码与地址码</span>
-            <span style={{ background: '#a855f7', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              CU 逻辑解析
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#c084fc', animation: 'cuDecodePulse 1.2s infinite' }}></span>
+              <span style={{ color: '#c084fc', fontSize: '0.95rem', fontWeight: 'bold' }}>指令译码 (Decode)：操作码分解与控制扇出</span>
+            </div>
+            <span style={{ background: 'rgba(192, 132, 252, 0.15)', color: '#c084fc', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', border: '1px solid rgba(192, 132, 252, 0.3)', fontFamily: 'monospace' }}>
+              CU 矩阵动态译码中
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
-            <div style={{ color: '#94a3b8', fontSize: '0.82rem', marginBottom: '6px' }}>当前位于 IR 中的 16 位指令：</div>
-            <div style={{ display: 'flex', height: '46px', borderRadius: '6px', overflow: 'hidden', border: '2px solid #475569' }}>
-              <div style={{ width: '40%', background: '#a855f7', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.95rem' }}>
+          {/* IR 指令分解框 */}
+          <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '10px', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px' }}>
+              <span>指令寄存器 IR [15:0]</span>
+              <span style={{ color: '#cbd5e1', fontFamily: 'monospace' }}>机器码: 0001 0000 0000 0110</span>
+            </div>
+            <div style={{ display: 'flex', height: '38px', borderRadius: '6px', overflow: 'hidden', border: '2px solid #475569' }}>
+              <div style={{ width: '42%', background: 'linear-gradient(135deg, #7e22ce, #9333ea)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.85rem', animation: 'cuDecodePulse 2s infinite' }}>
                 操作码 OPCODE (ADD)
               </div>
-              <div style={{ width: '60%', background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.95rem' }}>
+              <div style={{ width: '58%', background: 'linear-gradient(135deg, #1d4ed8, #2563eb)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.85rem' }}>
                 地址码 ADDRESS (06H)
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#cbd5e1', marginTop: '8px' }}>
-              <span>发送到控制器 CU 译码 ➔ 激活 ALU 加法通路</span>
-              <span>发送到地址寄存器 MAR ➔ 准备读内存 M[6]</span>
+          </div>
+
+          {/* 译码流向扇出与信号激活 */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px', alignItems: 'stretch' }}>
+            {/* 左侧：CU 逻辑解析与控制总线脉冲 */}
+            <div style={{ background: '#0f172a', border: '1px solid #7e22ce', borderRadius: '8px', padding: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <span style={{ color: '#c084fc', fontSize: '0.8rem', fontWeight: 'bold' }}>CU 控制单元矩阵</span>
+                <span style={{ color: '#34d399', fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.15)', padding: '1px 6px', borderRadius: '4px' }}>译码识别: 加法指令</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#1e293b', padding: '4px 8px', borderRadius: '4px', fontSize: '0.72rem' }}>
+                  <span style={{ color: '#94a3b8' }}>① 控制线: ALU_OP</span>
+                  <span style={{ color: '#38bdf8', fontWeight: 'bold', animation: 'signalRay 1s infinite' }}>[ADD] 高电平 ⚡</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#1e293b', padding: '4px 8px', borderRadius: '4px', fontSize: '0.72rem' }}>
+                  <span style={{ color: '#94a3b8' }}>② 控制线: MEM_READ</span>
+                  <span style={{ color: '#34d399', fontWeight: 'bold', animation: 'signalRay 1.2s infinite' }}>[ENABLE] 有效 ⚡</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#1e293b', padding: '4px 8px', borderRadius: '4px', fontSize: '0.72rem' }}>
+                  <span style={{ color: '#94a3b8' }}>③ 时钟节拍: CLK_PULSE</span>
+                  <span style={{ color: '#fbbf24', fontWeight: 'bold' }}>节拍 T2 激活 ⏱</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 右侧：地址码发射至 MAR */}
+            <div style={{ background: '#0f172a', border: '1px solid #1d4ed8', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ color: '#60a5fa', fontSize: '0.8rem', fontWeight: 'bold' }}>操作数寻址通路</span>
+                <div style={{ marginTop: '4px', fontSize: '0.75rem', color: '#94a3b8' }}>
+                  地址码 <span style={{ color: '#93c5fd', fontWeight: 'bold', fontFamily: 'monospace' }}>06H</span> 注入 MAR：
+                </div>
+              </div>
+              <div style={{ background: 'rgba(37, 99, 235, 0.15)', border: '1px dashed #3b82f6', borderRadius: '6px', padding: '6px', textAlign: 'center', margin: '4px 0' }}>
+                <span style={{ color: '#93c5fd', fontSize: '0.82rem', fontWeight: 'bold', fontFamily: 'monospace' }}>MAR ➔ M[06H]</span>
+                <div style={{ color: '#38bdf8', fontSize: '0.68rem', marginTop: '2px' }}>准备在执行期读取操作数 13</div>
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#34d399', textAlign: 'center' }}>
+                微命令准备就绪，进入执行阶段 ➔
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 4: 执行阶段 */}
+      {/* 阶段 4: 执行阶段动态 ALU 加法运算 */}
       {stageIndex === 3 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>执行周期 (Execute)：ALU 算术运算</span>
-            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-              ALU 运算中
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#10b981', fontSize: '0.95rem', fontWeight: 'bold' }}>执行周期 (Execute)：ALU 算术逻辑单元微操作运算</span>
+            <span style={{ background: '#10b981', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              微操作：(ACC) + (MDR) ➔ ALU
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: '8px', alignItems: 'center', padding: '16px', background: '#1e293b', borderRadius: '8px', textAlign: 'center' }}>
-            <div style={{ padding: '10px', background: '#334155', borderRadius: '6px' }}>
-              <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>累加器 ACC</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#38bdf8' }}>8</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1.2fr', gap: '8px', alignItems: 'center', padding: '12px', background: '#0f172a', borderRadius: '8px', border: '1px solid #334155' }}>
+            {/* 输入 A: 累加器 */}
+            <div style={{ background: '#1e293b', border: '1.5px solid #38bdf8', borderRadius: '6px', padding: '10px 6px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>累加器 ACC</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#38bdf8', fontFamily: 'monospace' }}>8</div>
+              <div style={{ fontSize: '0.68rem', color: '#67e8f9' }}>第一操作数</div>
             </div>
 
-            <div style={{ fontSize: '1.4rem', color: '#10b981', fontWeight: 'bold' }}>+</div>
+            <div style={{ fontSize: '1.4rem', color: '#10b981', fontWeight: 'bold', animation: 'signalRay 0.8s infinite' }}>+</div>
 
-            <div style={{ padding: '10px', background: '#334155', borderRadius: '6px' }}>
-              <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>MDR 操作数</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#f59e0b' }}>13</div>
+            {/* 输入 B: 内存取出的操作数 */}
+            <div style={{ background: '#1e293b', border: '1.5px solid #f59e0b', borderRadius: '6px', padding: '10px 6px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>缓冲器 MDR</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#fbbf24', fontFamily: 'monospace' }}>13</div>
+              <div style={{ fontSize: '0.68rem', color: '#fde68a' }}>来自 M[06H]</div>
             </div>
 
-            <div style={{ fontSize: '1.4rem', color: '#10b981', fontWeight: 'bold' }}>=</div>
+            <div style={{ fontSize: '1.4rem', color: '#10b981', fontWeight: 'bold' }}>➔</div>
 
-            <div style={{ padding: '10px', background: 'rgba(16, 185, 129, 0.2)', border: '2px solid #10b981', borderRadius: '6px' }}>
-              <div style={{ fontSize: '0.78rem', color: '#86efac' }}>ALU 输出</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#10b981' }}>21</div>
+            {/* ALU 运算输出 */}
+            <div style={{
+              borderRadius: '6px', padding: '10px 8px', textAlign: 'center',
+              animation: 'aluComputeGlow 1.8s infinite', border: '2px solid #10b981'
+            }}>
+              <div style={{ fontSize: '0.72rem', color: '#86efac' }}>ALU 运算输出</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#10b981', fontFamily: 'monospace' }}>21</div>
+              <div style={{ fontSize: '0.68rem', color: '#34d399' }}>加法运算完成 ⚡</div>
             </div>
+          </div>
+
+          <div style={{ marginTop: '10px', fontSize: '0.78rem', color: '#94a3b8', textAlign: 'center', background: 'rgba(16, 185, 129, 0.08)', padding: '6px', borderRadius: '4px' }}>
+            ALU 运算时间通常仅占半个时钟节拍，计算结果已送上内部总线等待写回。
           </div>
         </div>
       )}
 
-      {/* 阶段 5: 写回周期 */}
+      {/* 阶段 5: 写回周期与标志位更新 */}
       {stageIndex === 4 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>写回周期 (Writeback)：更新寄存器与状态标志</span>
-            <span style={{ background: '#2563eb', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              ACC 赋值
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>写回周期 (Writeback)：更新寄存器与状态标志</span>
+            <span style={{ background: '#2563eb', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              微操作：ALU ➔ ACC
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '14px' }}>
-            <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderLeft: '4px solid #3b82f6' }}>
-              <div style={{ fontSize: '0.9rem', color: '#93c5fd', fontWeight: 'bold' }}>累加器写入：ACC ➔ 21</div>
-              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
-                运算结果正式保存进内部通用寄存器，供下一条 STORE 指令使用。
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px' }}>
+            {/* 写入 ACC */}
+            <div style={{ background: '#0f172a', border: '1.5px solid #3b82f6', borderRadius: '8px', padding: '12px', animation: 'cpuGlowPulse 2.5s infinite' }}>
+              <div style={{ fontSize: '0.88rem', color: '#93c5fd', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
+                <span>累加器写入：ACC ➔ 21</span>
+                <span style={{ color: '#34d399', fontSize: '0.75rem' }}>已锁定</span>
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>
+                运算结果正式保存进内部累加寄存器 ACC，替代原先的 8，供后续指令使用。
               </div>
             </div>
 
-            <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderLeft: '4px solid #10b981' }}>
-              <div style={{ fontSize: '0.9rem', color: '#86efac', fontWeight: 'bold' }}>标志位状态：PSW</div>
-              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '4px' }}>
-                零标志 Z=0 · 负标志 S=0 · 溢出 V=0
+            {/* 标志位 PSW */}
+            <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '12px' }}>
+              <div style={{ fontSize: '0.88rem', color: '#fbbf24', fontWeight: 'bold', marginBottom: '6px' }}>
+                程序状态字 PSW (标志位)
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', textAlign: 'center' }}>
+                <div style={{ background: '#1e293b', padding: '4px', borderRadius: '4px', border: '1px solid #475569' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block' }}>Z (零)</span>
+                  <strong style={{ fontSize: '0.85rem', color: '#38bdf8', fontFamily: 'monospace' }}>0</strong>
+                </div>
+                <div style={{ background: '#1e293b', padding: '4px', borderRadius: '4px', border: '1px solid #475569' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block' }}>S (符号)</span>
+                  <strong style={{ fontSize: '0.85rem', color: '#38bdf8', fontFamily: 'monospace' }}>0</strong>
+                </div>
+                <div style={{ background: '#1e293b', padding: '4px', borderRadius: '4px', border: '1px solid #475569' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block' }}>V (溢出)</span>
+                  <strong style={{ fontSize: '0.85rem', color: '#38bdf8', fontFamily: 'monospace' }}>0</strong>
+                </div>
+                <div style={{ background: '#1e293b', padding: '4px', borderRadius: '4px', border: '1px solid #475569' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block' }}>C (进位)</span>
+                  <strong style={{ fontSize: '0.85rem', color: '#38bdf8', fontFamily: 'monospace' }}>0</strong>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 6: 大循环 */}
+      {/* 阶段 6: 循环往复大循环 (动效跑马灯) */}
       {stageIndex === 5 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>指令周期大循环：取指 ➔ 译码 ➔ 执行 ➔ 写回</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-              循环往复
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px', position: 'relative' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>无限指令大循环：时钟驱动四阶脉动</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              PC ➔ PC + 1 (持续递增)
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '14px', background: '#1e293b', borderRadius: '8px' }}>
-            <div style={{ textAlign: 'center', color: '#60a5fa' }}>
-              <strong style={{ fontSize: '1.1rem' }}>取指 (Fetch)</strong>
-            </div>
-            <div style={{ color: '#f59e0b', fontSize: '1.2rem', fontWeight: 'bold' }}>➔</div>
-            <div style={{ textAlign: 'center', color: '#a855f7' }}>
-              <strong style={{ fontSize: '1.1rem' }}>译码 (Decode)</strong>
-            </div>
-            <div style={{ color: '#f59e0b', fontSize: '1.2rem', fontWeight: 'bold' }}>➔</div>
-            <div style={{ textAlign: 'center', color: '#10b981' }}>
-              <strong style={{ fontSize: '1.1rem' }}>执行 (Execute)</strong>
-            </div>
-            <div style={{ color: '#f59e0b', fontSize: '1.2rem', fontWeight: 'bold' }}>➔</div>
-            <div style={{ textAlign: 'center', color: '#38bdf8' }}>
-              <strong style={{ fontSize: '1.1rem' }}>写回 (WB)</strong>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', textAlign: 'center' }}>
+            {[
+              { name: '1. 取指 Fetch', color: '#38bdf8', code: 'PC➔MAR➔IR' },
+              { name: '2. 译码 Decode', color: '#c084fc', code: 'CU 逻辑解析' },
+              { name: '3. 执行 Execute', color: '#10b981', code: 'ALU 计算/访存' },
+              { name: '4. 写回 WB', color: '#fbbf24', code: '刷新 ACC/PSW' }
+            ].map((st, i) => (
+              <div key={st.name} style={{
+                background: subTick === i ? 'rgba(56, 189, 248, 0.2)' : '#0f172a',
+                border: subTick === i ? `2px solid ${st.color}` : '1px solid #334155',
+                boxShadow: subTick === i ? `0 0 16px ${st.color}` : 'none',
+                borderRadius: '8px', padding: '12px 6px', transition: 'all 0.3s'
+              }}>
+                <strong style={{ color: st.color, fontSize: '0.88rem', display: 'block' }}>{st.name}</strong>
+                <span style={{ fontSize: '0.72rem', color: '#cbd5e1', display: 'block', marginTop: '4px' }}>{st.code}</span>
+              </div>
+            ))}
           </div>
 
-          <div style={{ marginTop: '12px', fontSize: '0.85rem', color: '#94a3b8', textAlign: 'center' }}>
-            PC 递增推进，不断重复此周期，直至遇到 HALT 停机指令或被硬件中断信号暂停。
+          <div style={{ marginTop: '14px', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', border: '1px solid #334155', textAlign: 'center', fontSize: '0.8rem', color: '#94a3b8' }}>
+            时钟脉冲永不停歇，直到遇到 <span style={{ color: '#ef4444', fontWeight: 'bold' }}>HALT 停机</span> 或触发 <span style={{ color: '#fbbf24', fontWeight: 'bold' }}>外部中断信号</span>。
           </div>
         </div>
       )}

@@ -43,80 +43,102 @@ export default function TransactionExperiment({ experiment }) {
 }
 
 function TransactionStoryVisual({ stageIndex }) {
+  const [clockTick, setClockTick] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setClockTick(c => (c + 1) % 4)
+    }, 1100)
+    return () => clearInterval(timer)
+  }, [stageIndex])
+
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <style>{`
+        @keyframes dbGlow {
+          0%, 100% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+          50% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); }
+        }
+        @keyframes deadlockPulse {
+          0%, 100% { border-color: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.3); }
+          50% { border-color: #f87171; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
+        }
+      `}</style>
+
       {/* 阶段 1: ACID 特性 */}
       {stageIndex === 0 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>事务的基石：ACID 四大特性</span>
-            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              原子性保障
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>事务基石：ACID 四大支柱特性</span>
+            <span style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>
+              原子性守护中
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
-            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #38bdf8' }}>
-              <strong style={{ color: '#38bdf8', fontSize: '0.9rem' }}>A - 原子性 (Atomicity)</strong>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '2px' }}>要么全做要么不做；崩溃时利用 Undo Log 自动回滚。</div>
-            </div>
-            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #10b981' }}>
-              <strong style={{ color: '#10b981', fontSize: '0.9rem' }}>C - 一致性 (Consistency)</strong>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '2px' }}>转账前后账户总金额保持守恒，满足完整性约束。</div>
-            </div>
-            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #f59e0b' }}>
-              <strong style={{ color: '#f59e0b', fontSize: '0.9rem' }}>I - 隔离性 (Isolation)</strong>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '2px' }}>多个事务并发执行，其效果如同串行执行一样互不干扰。</div>
-            </div>
-            <div style={{ background: '#0f172a', padding: '10px', borderRadius: '6px', borderLeft: '4px solid #a855f7' }}>
-              <strong style={{ color: '#a855f7', fontSize: '0.9rem' }}>D - 持久性 (Durability)</strong>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '2px' }}>一旦提交，修改永久落盘；借助 Redo Log WAL 恢复。</div>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            {[
+              { code: 'A', name: '原子性 (Atomicity)', desc: '要么全做要么全不做，崩溃由 Undo Log 回滚', color: '#38bdf8' },
+              { code: 'C', name: '一致性 (Consistency)', desc: '转账前后守恒，不破坏数据库完整性约束', color: '#10b981' },
+              { code: 'I', name: '隔离性 (Isolation)', desc: '并发效果如同串行执行，由 MVCC/锁保障', color: '#f59e0b' },
+              { code: 'D', name: '持久性 (Durability)', desc: '一旦提交不可逆，由 Redo Log WAL 刷盘', color: '#c084fc' }
+            ].map((item, idx) => (
+              <div key={item.code} style={{
+                background: '#0f172a', border: `1.5px solid ${clockTick === idx ? item.color : '#334155'}`,
+                boxShadow: clockTick === idx ? `0 0 14px ${item.color}` : 'none',
+                borderRadius: '8px', padding: '10px', transition: 'all 0.3s'
+              }}>
+                <strong style={{ color: item.color, fontSize: '0.85rem' }}>{item.name}</strong>
+                <div style={{ fontSize: '0.74rem', color: '#cbd5e1', marginTop: '4px', lineHeight: '1.4' }}>{item.desc}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
       {/* 阶段 2: 并发读异常 */}
       {stageIndex === 1 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>并发交错引发的三大读异常</span>
-            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#ef4444', fontSize: '0.95rem', fontWeight: 'bold' }}>并发交错引发的三大经典读异常</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               数据风险
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#1e293b', padding: '12px', borderRadius: '8px' }}>
-            <div style={{ background: '#0f172a', padding: '8px 12px', borderRadius: '4px', borderLeft: '4px solid #ef4444' }}>
-              <strong style={{ color: '#f87171', fontSize: '0.85rem' }}>脏读 (Dirty Read)：</strong>
-              <span style={{ fontSize: '0.8rem', color: '#cbd5e1', marginLeft: '6px' }}>读到了其他事务未提交的“临时脏数据”，随后该事务发生了回滚。</span>
-            </div>
-            <div style={{ background: '#0f172a', padding: '8px 12px', borderRadius: '4px', borderLeft: '4px solid #f59e0b' }}>
-              <strong style={{ color: '#f59e0b', fontSize: '0.85rem' }}>不可重复读 (Non-repeatable Read)：</strong>
-              <span style={{ fontSize: '0.8rem', color: '#cbd5e1', marginLeft: '6px' }}>同一事务内两次读取同一行，中途被其他事务 UPDATE 并提交，两次读值不一致。</span>
-            </div>
-            <div style={{ background: '#0f172a', padding: '8px 12px', borderRadius: '4px', borderLeft: '4px solid #a855f7' }}>
-              <strong style={{ color: '#a855f7', fontSize: '0.85rem' }}>幻读 (Phantom Read)：</strong>
-              <span style={{ fontSize: '0.8rem', color: '#cbd5e1', marginLeft: '6px' }}>同一事务范围查询时，其他事务 INSERT 了新记录，二次范围查询莫名多出新行。</span>
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {[
+              { name: '脏读 (Dirty Read)', desc: 'T1 读到了 T2 尚未 Commit 的中间值，随后 T2 发生 Rollback', color: '#f87171' },
+              { name: '不可重复读 (Non-repeatable Read)', desc: 'T1 两次读取同一行记录，中途被 T2 UPDATE 提交，导致读值改变', color: '#fbbf24' },
+              { name: '幻读 (Phantom Read)', desc: 'T1 范围查询同一条件，中途 T2 INSERT 插入新行，二次查多出“幽灵行”', color: '#c084fc' }
+            ].map((ab, i) => (
+              <div key={ab.name} style={{
+                background: '#0f172a', borderLeft: `4px solid ${ab.color}`,
+                border: clockTick === i ? `1px solid ${ab.color}` : '1px solid #334155',
+                boxShadow: clockTick === i ? `0 0 12px ${ab.color}` : 'none',
+                padding: '8px 12px', borderRadius: '6px', transition: 'all 0.3s'
+              }}>
+                <strong style={{ color: ab.color, fontSize: '0.82rem' }}>{ab.name}：</strong>
+                <span style={{ fontSize: '0.78rem', color: '#cbd5e1', marginLeft: '4px' }}>{ab.desc}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
       {/* 阶段 3: 锁机制与相容矩阵 */}
       {stageIndex === 2 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#f59e0b', fontSize: '1rem', fontWeight: 'bold' }}>封锁协议：S 共享锁与 X 排他锁</span>
-            <span style={{ background: '#f59e0b', color: '#1e293b', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-              锁冲突矩阵
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#f59e0b', fontSize: '0.95rem', fontWeight: 'bold' }}>封锁协议：S 共享锁与 X 排他锁</span>
+            <span style={{ background: '#f59e0b', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              冲突相容矩阵
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.85rem', color: '#e2e8f0' }}>
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.82rem', color: '#e2e8f0' }}>
               <thead>
-                <tr style={{ background: '#0f172a' }}>
+                <tr style={{ background: '#1e293b' }}>
                   <th style={{ padding: '8px', border: '1px solid #475569' }}>已持有 \ 请求锁</th>
                   <th style={{ padding: '8px', border: '1px solid #475569', color: '#38bdf8' }}>S 锁 (读锁)</th>
                   <th style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444' }}>X 锁 (写锁)</th>
@@ -125,37 +147,37 @@ function TransactionStoryVisual({ stageIndex }) {
               <tbody>
                 <tr>
                   <td style={{ padding: '8px', border: '1px solid #475569', fontWeight: 'bold', color: '#38bdf8' }}>S 锁 (读锁)</td>
-                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#10b981', fontWeight: 'bold' }}>兼容 (允许并发读)</td>
-                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444', fontWeight: 'bold' }}>冲突 (写操作阻塞等待)</td>
+                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#34d399', fontWeight: 'bold' }}>✔ 兼容 (并发读)</td>
+                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444', fontWeight: 'bold' }}>✖ 冲突 (写阻塞)</td>
                 </tr>
                 <tr>
                   <td style={{ padding: '8px', border: '1px solid #475569', fontWeight: 'bold', color: '#ef4444' }}>X 锁 (写锁)</td>
-                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444', fontWeight: 'bold' }}>冲突 (读操作阻塞等待)</td>
-                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444', fontWeight: 'bold' }}>冲突 (排他独占)</td>
+                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444', fontWeight: 'bold' }}>✖ 冲突 (读阻塞)</td>
+                  <td style={{ padding: '8px', border: '1px solid #475569', color: '#ef4444', fontWeight: 'bold' }}>✖ 冲突 (排他独占)</td>
                 </tr>
               </tbody>
             </table>
-            <div style={{ marginTop: '8px', fontSize: '0.78rem', color: '#94a3b8', textAlign: 'center' }}>
-              两阶段锁协议 (2PL)：加锁阶段只能拿锁不可放锁，解锁阶段只能放锁不可拿锁。
+            <div style={{ marginTop: '8px', fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>
+              遵循两阶段锁协议 (2PL)：加锁阶段不断获取锁，解锁阶段一次性释放。
             </div>
           </div>
         </div>
       )}
 
-      {/* 阶段 4: 隔离级别矩阵 */}
+      {/* 阶段 4: 隔离级别阶梯 */}
       {stageIndex === 3 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#10b981', fontSize: '1rem', fontWeight: 'bold' }}>SQL 标准的 4 级隔离阶梯</span>
-            <span style={{ background: '#10b981', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              权衡性能与一致性
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#10b981', fontSize: '0.95rem', fontWeight: 'bold' }}>SQL 标准的 4 级隔离阶梯</span>
+            <span style={{ background: '#10b981', color: '#0f172a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              性能与一致性权衡
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.8rem', color: '#e2e8f0' }}>
+          <div style={{ background: '#0f172a', padding: '10px', borderRadius: '8px', border: '1px solid #334155' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.78rem', color: '#e2e8f0' }}>
               <thead>
-                <tr style={{ background: '#0f172a' }}>
+                <tr style={{ background: '#1e293b' }}>
                   <th style={{ padding: '6px', border: '1px solid #475569' }}>隔离级别</th>
                   <th style={{ padding: '6px', border: '1px solid #475569' }}>脏读</th>
                   <th style={{ padding: '6px', border: '1px solid #475569' }}>不可重复读</th>
@@ -163,30 +185,19 @@ function TransactionStoryVisual({ stageIndex }) {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#ef4444' }}>读未提交 (RU)</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#ef4444' }}>存在</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#ef4444' }}>存在</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#ef4444' }}>存在</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#f59e0b' }}>读已提交 (RC)</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#10b981' }}>已解决</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#ef4444' }}>存在</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#ef4444' }}>存在</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#38bdf8' }}>可重复读 (RR)</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#10b981' }}>已解决</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#10b981' }}>已解决</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#f59e0b' }}>存在(InnoDB借Next-Key锁解决)</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#a855f7' }}>可串行化 (Serializable)</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#10b981' }}>已解决</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#10b981' }}>已解决</td>
-                  <td style={{ padding: '6px', border: '1px solid #475569', color: '#10b981' }}>已解决</td>
-                </tr>
+                {[
+                  { level: '读未提交 (RU)', d: '存在', nr: '存在', p: '存在', c: '#ef4444' },
+                  { level: '读已提交 (RC)', d: '已解决', nr: '存在', p: '存在', c: '#f59e0b' },
+                  { level: '可重复读 (RR)', d: '已解决', nr: '已解决', p: 'Innodb解决', c: '#38bdf8' },
+                  { level: '可串行化 (Serial)', d: '已解决', nr: '已解决', p: '已解决', c: '#c084fc' }
+                ].map((row, i) => (
+                  <tr key={row.level} style={{ background: clockTick === i ? 'rgba(56, 189, 248, 0.15)' : 'transparent' }}>
+                    <td style={{ padding: '6px', border: '1px solid #475569', color: row.c, fontWeight: 'bold' }}>{row.level}</td>
+                    <td style={{ padding: '6px', border: '1px solid #475569', color: row.d === '已解决' ? '#34d399' : '#ef4444' }}>{row.d}</td>
+                    <td style={{ padding: '6px', border: '1px solid #475569', color: row.nr === '已解决' ? '#34d399' : '#ef4444' }}>{row.nr}</td>
+                    <td style={{ padding: '6px', border: '1px solid #475569', color: row.p.includes('解决') ? '#34d399' : '#ef4444' }}>{row.p}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -195,34 +206,34 @@ function TransactionStoryVisual({ stageIndex }) {
 
       {/* 阶段 5: MVCC 多版本并发控制 */}
       {stageIndex === 4 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 'bold' }}>MVCC：读不加锁，读写不冲突</span>
-            <span style={{ background: '#3b82f6', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              Undo Log 版本链
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#38bdf8', fontSize: '0.95rem', fontWeight: 'bold' }}>MVCC：读不加锁，读写不冲突</span>
+            <span style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+              Undo Log 版本链动态回溯
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+          <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px', border: '1px solid #334155' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px', border: '1px solid #10b981', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.75rem', color: '#10b981' }}>版本 V1 (trx_id=10)</div>
-                <div style={{ fontWeight: 'bold', color: '#fff' }}>余额: 1000</div>
+              <div style={{ background: '#1e293b', padding: '8px', borderRadius: '6px', border: '1px solid #10b981', textAlign: 'center', minWidth: '100px' }}>
+                <div style={{ fontSize: '0.7rem', color: '#34d399' }}>历史版本 V1</div>
+                <div style={{ fontWeight: 'bold', color: '#fff', fontSize: '0.85rem' }}>余额: 1000</div>
               </div>
-              <span style={{ color: '#64748b', fontWeight: 'bold' }}>← roll_ptr ←</span>
-              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px', border: '1px solid #38bdf8', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.75rem', color: '#38bdf8' }}>版本 V2 (trx_id=20)</div>
-                <div style={{ fontWeight: 'bold', color: '#fff' }}>余额: 1200</div>
+              <span style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.8rem' }}>← roll_ptr ←</span>
+              <div style={{ background: '#1e293b', padding: '8px', borderRadius: '6px', border: '1px solid #38bdf8', textAlign: 'center', minWidth: '100px' }}>
+                <div style={{ fontSize: '0.7rem', color: '#38bdf8' }}>历史版本 V2</div>
+                <div style={{ fontWeight: 'bold', color: '#fff', fontSize: '0.85rem' }}>余额: 1200</div>
               </div>
-              <span style={{ color: '#64748b', fontWeight: 'bold' }}>← roll_ptr ←</span>
-              <div style={{ background: '#0f172a', padding: '8px', borderRadius: '6px', border: '1px solid #f59e0b', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.75rem', color: '#f59e0b' }}>当前行 (trx_id=30)</div>
-                <div style={{ fontWeight: 'bold', color: '#f87171' }}>余额: 800 (未提交)</div>
+              <span style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.8rem' }}>← roll_ptr ←</span>
+              <div style={{ background: '#1e293b', padding: '8px', borderRadius: '6px', border: '1.5px solid #f59e0b', textAlign: 'center', minWidth: '100px' }}>
+                <div style={{ fontSize: '0.7rem', color: '#fbbf24' }}>最新行 (trx=30)</div>
+                <div style={{ fontWeight: 'bold', color: '#f87171', fontSize: '0.85rem' }}>800 (未提交)</div>
               </div>
             </div>
 
-            <div style={{ background: '#0f172a', padding: '8px 12px', borderRadius: '4px', fontSize: '0.8rem', color: '#cbd5e1' }}>
-              <strong>ReadView 快照机制：</strong>读操作不加任何锁，直接沿着 Undo Log 链往前回溯，定位到符合自己事务可见性要求的历史快照版本！
+            <div style={{ background: '#1e293b', padding: '6px 10px', borderRadius: '4px', fontSize: '0.75rem', color: '#a7f3d0' }}>
+              <strong>ReadView 快照机制：</strong>读取事务不阻塞写事务，依据创建时的 ReadView 沿着 roll_ptr 动态向前寻觅自身可见的历史版本！
             </div>
           </div>
         </div>
@@ -230,31 +241,31 @@ function TransactionStoryVisual({ stageIndex }) {
 
       {/* 阶段 6: 死锁与等待图破解 */}
       {stageIndex === 5 && (
-        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <span style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 'bold' }}>事务死锁与牺牲者回滚 (Victim Selection)</span>
-            <span style={{ background: '#ef4444', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem' }}>
-              Wait-For Graph 破环
+        <div style={{ background: '#090f1d', border: '1.5px solid #1e293b', borderRadius: '12px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ color: '#ef4444', fontSize: '0.95rem', fontWeight: 'bold' }}>事务死锁与等待图 (Wait-For Graph) 破环</span>
+            <span style={{ background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+              检测到环路死锁
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px' }}>
+          <div style={{ background: '#0f172a', padding: '14px', borderRadius: '8px', border: '1px solid #334155' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', marginBottom: '12px' }}>
-              <div style={{ background: '#3b82f6', color: '#fff', padding: '10px 14px', borderRadius: '8px', textAlign: 'center' }}>
-                <strong>事务 T1</strong><br />
-                <span style={{ fontSize: '0.75rem' }}>持有资源 A，申请资源 B</span>
+              <div style={{ background: '#1e293b', border: '1.5px solid #3b82f6', color: '#fff', padding: '10px 14px', borderRadius: '8px', textAlign: 'center' }}>
+                <strong style={{ color: '#60a5fa' }}>事务 T1</strong><br />
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>持有 A，等待 B</span>
               </div>
-              <div style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '1.3rem' }}>
+              <div style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '1.1rem' }}>
                 ⇄ 环路死锁 ⇄
               </div>
-              <div style={{ background: '#ec4899', color: '#fff', padding: '10px 14px', borderRadius: '8px', textAlign: 'center' }}>
-                <strong>事务 T2</strong><br />
-                <span style={{ fontSize: '0.75rem' }}>持有资源 B，申请资源 A</span>
+              <div style={{ background: '#1e293b', border: '1.5px solid #ec4899', color: '#fff', padding: '10px 14px', borderRadius: '8px', textAlign: 'center' }}>
+                <strong style={{ color: '#f472b6' }}>事务 T2</strong><br />
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>持有 B，等待 A</span>
               </div>
             </div>
 
-            <div style={{ background: '#0f172a', padding: '8px 12px', borderRadius: '6px', fontSize: '0.82rem', color: '#cbd5e1' }}>
-              数据库后台<strong>死锁检测器</strong>检测到等待图中出现闭环；自动选择 Undo 日志量最小（代价最低）的事务作为牺牲者（Victim）回滚，释放锁以拯救整个系统。
+            <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', padding: '8px 12px', borderRadius: '6px', fontSize: '0.78rem', color: '#fca5a5', textAlign: 'center' }}>
+              数据库后台<strong>死锁检测器</strong>（50ms 轮询）探测到环路：主动回滚 undo log 较小的牺牲者（Victim），释放锁资源解开僵局！
             </div>
           </div>
         </div>
