@@ -1298,3 +1298,159 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .derivation-label span{font-size:12px;color:#94a3b8}
 .derivation-calc-box code{font-size:14.5px;color:#34d399;font-weight:900;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);padding:6px 12px;border-radius:8px;font-family:Consolas,monospace}
 .enhanced-note{margin-top:14px}
+
+/* ======================================================== */
+/* 24. 死锁导学 (DeadlockStoryVisual) 7 大沉浸式原理与形成全时序场景 */
+/* ======================================================== */
+.deadlock-story-rich-canvas{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:12px}
+.dl-sc{display:flex;flex-direction:column;gap:14px;width:100%;animation:fadeIn .25s ease}
+.dl-sc-header{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:10px}
+.dl-tag{font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px;background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.3);font-family:monospace}
+.dl-tag.danger{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}
+.dl-tag.warning{background:rgba(245,158,11,.15);color:#fbbf24;border-color:rgba(245,158,11,.3)}
+.dl-tag.cycle-tag{background:rgba(239,68,68,.2);color:#fca5a5;border-color:#ef4444}
+.dl-tag.success{background:rgba(16,185,129,.15);color:#34d399;border-color:rgba(16,185,129,.3)}
+.dl-tag.summary{background:rgba(99,102,241,.15);color:#a5b4fc;border-color:rgba(99,102,241,.3)}
+.dl-sc-header strong{font-size:16px;color:#f8fafc}
+
+.dl-footer-tip{font-size:14px;line-height:1.65;color:#94a3b8;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 14px}
+.dl-footer-tip strong{color:#38bdf8}
+.dl-footer-tip.danger strong{color:#f87171}
+.dl-footer-tip.success strong{color:#34d399}
+
+/* 场景 01: 临界区互斥锁 */
+.mutex-gate-stage{display:flex;flex-direction:column;gap:14px}
+.mutex-process-queue{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:12px;align-items:center;background:#0d1524;border:1.5px solid #202d42;border-radius:14px;padding:16px}
+.p-in-gate{background:#162032;border:1.5px solid #28374d;border-radius:10px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.p-in-gate.running{border-color:#10b981;background:#0d241c}
+.p-in-gate.blocked{border-color:#ef4444;background:#241216}
+.p-role{font-size:11.5px;font-weight:800;color:#34d399}
+.p-role.warn{color:#f87171}
+.p-in-gate strong{font-size:18px;color:#f8fafc;font-weight:900}
+.p-in-gate small{font-size:11px;color:#94a3b8}
+.gate-barrier{background:#141f32;border:2px dashed #f59e0b;border-radius:12px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.gate-barrier.locked{border-color:#ef4444;background:#221319}
+.lock-icon{font-size:26px}
+.lock-info strong{font-size:13.5px;color:#f87171;display:block}
+.lock-info small{font-size:11.5px;color:#cbd5e1}
+.critical-resource-box{background:#111a2b;border:1.5px solid #1e2c45;border-radius:10px;padding:12px 16px}
+.res-tag{font-size:11.5px;font-weight:800;color:#38bdf8;display:block;margin-bottom:2px}
+.critical-resource-box strong{font-size:16px;color:#f8fafc;font-weight:900;display:block;margin-bottom:4px}
+.critical-resource-box p{margin:0;font-size:13px;color:#94a3b8;line-height:1.6}
+
+/* 场景 02: 占有并等待 */
+.hold-wait-diagram{display:flex;flex-direction:column;gap:14px}
+.hold-flow-grid{display:grid;grid-template-columns:1fr 80px 1fr;gap:12px;align-items:center}
+.process-hold-card{background:#0e1626;border:1.5px solid #1e293b;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.p1-side{border-color:#6366f1}
+.p2-side{border-color:#06b6d4}
+.proc-header{display:flex;justify-content:space-between;align-items:center}
+.proc-header strong{font-size:16px;color:#f8fafc;font-weight:900}
+.greedy-tag{font-size:11px;font-weight:800;color:#f59e0b;background:rgba(245,158,11,.15);padding:2px 6px;border-radius:4px}
+.action-arrows{display:flex;flex-direction:column;gap:8px}
+.arrow-box{background:#162032;border:1px solid #28374d;border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center}
+.arrow-box.holding{border-color:#10b981;background:#0e241c}
+.arrow-box.requesting{border-color:#f59e0b;background:#261f14}
+.arrow-label{font-size:11.5px;color:#94a3b8}
+.res-badge{font-size:13px;color:#34d399;font-weight:800}
+.res-badge.want{color:#fbbf24}
+.versus-divider{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.versus-divider span{font-size:11px;color:#64748b}
+.versus-divider i{font-size:20px;font-weight:900;color:#ef4444;font-style:normal}
+.rag-preview-strip{background:#0a1220;border:1px solid #1a2538;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.rag-label{font-size:12px;font-weight:800;color:#cbd5e1}
+.rag-preview-strip code{font-size:13.5px;color:#38bdf8;font-weight:800;font-family:monospace}
+.rag-preview-strip small{font-size:11.5px;color:#64748b}
+
+/* 场景 03: 不可剥夺 */
+.no-preempt-stage{display:flex;flex-direction:column;gap:14px}
+.preempt-visual-row{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:12px;align-items:center}
+.victim-p,.owner-p{background:#162032;border:1px solid #28374d;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;text-align:center}
+.victim-p strong,.owner-p strong{font-size:15px;color:#f8fafc;font-weight:900}
+.victim-p p,.owner-p p{margin:0;font-size:12px;color:#94a3b8;line-height:1.55}
+.os-police-shield{background:#1a1928;border:2px solid #a855f7;border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.shield-icon{font-size:28px}
+.os-police-shield strong{font-size:14px;color:#c084fc;font-weight:900}
+.os-police-shield span{font-size:12px;color:#cbd5e1;line-height:1.5}
+.forbid-chip{font-size:11.5px;font-weight:800;color:#f87171;background:rgba(239,68,68,.15);padding:2px 8px;border-radius:4px;margin-top:4px}
+.deadlock-stalemate-box{background:#181216;border:1.5px solid #ef4444;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:14px}
+.stalemate-icon{font-size:28px}
+.stalemate-text strong{font-size:14.5px;color:#f87171;display:block;margin-bottom:2px}
+.stalemate-text p{margin:0;font-size:13px;color:#fca5a5;line-height:1.6}
+
+/* 场景 04: 四必要条件矩阵 */
+.four-conditions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cond-card{background:#0e1626;border:1.5px solid #1e293b;border-radius:12px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+.cond-card.met{border-color:#3b82f6;background:#101a2f}
+.cond-card.trigger{border-color:#ef4444;background:#261218;box-shadow:0 0 16px rgba(239,68,68,.25)}
+.cond-head{display:flex;align-items:baseline;gap:6px}
+.cond-num{font-size:12px;font-weight:900;color:#60a5fa;font-family:monospace}
+.cond-head strong{font-size:14px;color:#f8fafc;font-weight:900}
+.cond-card p{margin:0;font-size:12px;color:#94a3b8;line-height:1.55}
+.cond-status{font-size:11.5px;font-weight:800;color:#34d399}
+.trigger-alert{color:#f87171 !important;font-size:12px !important}
+.cond-verdict-banner{background:rgba(239,68,68,.1);border:1.5px solid #ef4444;border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.alarm-badge{font-size:11px;font-weight:900;color:#f87171;background:rgba(239,68,68,.2);padding:2px 8px;border-radius:4px;width:max-content}
+.cond-verdict-banner strong{font-size:15px;color:#fee2e2}
+.cond-verdict-banner small{font-size:12.5px;color:#fca5a5}
+
+/* 场景 05: 死锁形成演化四部曲 */
+.evolution-controller-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#0d1522;padding:4px;border-radius:10px;border:1px solid #1e293b}
+.evo-btn{background:transparent;border:none;padding:8px;border-radius:6px;font-size:12.5px;font-weight:800;color:#94a3b8;cursor:pointer;transition:all .18s ease}
+.evo-btn:hover{color:#fff;background:rgba(255,255,255,.05)}
+.evo-btn.active{background:#ef4444;color:#fff;box-shadow:0 2px 10px rgba(239,68,68,.4)}
+.evolution-canvas-wrap{display:flex;flex-direction:column;gap:12px}
+.rag-visual-box{background:#090f1a;border:2px solid #1e293b;border-radius:14px;padding:18px 22px;display:flex;flex-direction:column;gap:16px;position:relative}
+.rag-visual-box.stage-3{border-color:#ef4444;box-shadow:0 0 24px rgba(239,68,68,.25)}
+.rag-row{display:flex;justify-content:space-between;align-items:center}
+.rag-node{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px;padding:12px 18px;min-width:120px;text-align:center;transition:all .2s ease}
+.p-node{background:#1e1b4b;border:2px solid #6366f1;color:#fff}
+.p-node.deadlocked-node{border-color:#ef4444;background:#3b1219;box-shadow:0 0 16px rgba(239,68,68,.6);animation:pulse-red 1.2s infinite alternate}
+@keyframes pulse-red{from{transform:scale(1)}to{transform:scale(1.05)}}
+.r-node{background:#111c2e;border:2px solid #0284c7;color:#fff}
+.r-node.owned{border-color:#10b981;background:#0d241c}
+.node-id{font-size:16px;font-weight:900}
+.node-desc{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.res-icon{font-size:20px;margin-bottom:2px}
+.res-owner-tag{font-size:11px;color:#34d399;font-weight:800}
+.rag-middle-indicator{text-align:center}
+.stage-tip{font-size:12.5px;font-weight:800;color:#94a3b8}
+.stage-tip.safe{color:#34d399}
+.stage-tip.warn{color:#fbbf24}
+.stage-tip.danger-pulse{color:#f87171;font-size:14px;animation:pulse-red 1s infinite alternate}
+.rag-links-container{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#0f1726;padding:10px 14px;border-radius:8px;border:1px solid #1a2538}
+.rag-link{display:flex;align-items:center;font-size:12.5px;font-weight:800;font-family:monospace}
+.link-tag{color:#34d399}
+.req-tag{color:#f59e0b}
+.req-tag.deadly{color:#ef4444;font-size:13px}
+.cycle-loop-warning{background:rgba(239,68,68,.15);border:1px dashed #ef4444;border-radius:8px;padding:6px 12px;text-align:center}
+.cycle-loop-warning strong{color:#f87171;font-size:13px;display:block}
+.cycle-loop-warning code{color:#fca5a5;font-size:12px}
+.open-path-text{font-size:12px;color:#64748b}
+.evolution-explain-box{background:#111928;border:1px solid #1e2c45;border-radius:10px;padding:12px 16px}
+.evolution-explain-box p{margin:0;font-size:14px;line-height:1.65;color:#e2e8f0}
+.danger-text{color:#fca5a5 !important}
+
+/* 场景 06: 破除死锁 */
+.break-solutions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.solution-card{background:#0e1626;border:1.5px solid #1e293b;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.sol-badge{font-size:11px;font-weight:900;color:#38bdf8;background:rgba(56,189,248,.12);padding:2px 6px;border-radius:4px;width:max-content}
+.solution-card h4{margin:0;font-size:15px;color:#f8fafc;font-weight:900}
+.solution-card p{margin:0;font-size:12.5px;color:#94a3b8;line-height:1.6}
+.sol-tag{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:4px;margin-top:auto}
+.sol-tag.good{color:#34d399;background:rgba(16,185,129,.12)}
+.sol-tag.safe{color:#38bdf8;background:rgba(56,189,248,.12)}
+.sol-tag.warn{color:#fbbf24;background:rgba(245,158,11,.12)}
+
+/* 场景 07: 安全状态与安全序列 */
+.safe-sequence-stage{display:flex;flex-direction:column;gap:14px}
+.safe-seq-pipeline{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0d1524;border:1.5px solid #202d42;border-radius:14px;padding:16px}
+.seq-step-card{flex:1;background:#111f30;border:1.5px solid #10b981;border-radius:10px;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.step-num{font-size:11px;font-weight:900;color:#34d399;font-family:monospace}
+.seq-step-card strong{font-size:15px;color:#f8fafc;font-weight:900}
+.seq-step-card p{margin:0;font-size:11.5px;color:#94a3b8;line-height:1.5}
+.seq-arrow{font-size:11.5px;color:#64748b;font-weight:800;text-align:center}
+.safe-verdict-card{background:rgba(16,185,129,.08);border:1.5px solid #10b981;border-radius:12px;padding:14px 18px}
+.verdict-title strong{font-size:15px;color:#34d399;margin-right:8px}
+.verdict-title span{font-size:13px;color:#cbd5e1}
+.safe-verdict-card p{margin:8px 0 0;font-size:13.5px;line-height:1.65;color:#e2e8f0}
