@@ -294,25 +294,190 @@ function SqStoryVisual({ step }) {
     )
   }
 
-  // 步骤 6：对比
-  const removedCount = Math.max(0, frame - 3)
+  // 步骤 6：输入完全相同，输出顺序相反的深度大画幅对比
+  const COMPARE_STEPS = [
+    {
+      title: '初始准备',
+      desc: '准备将完全相同的一组数据 [A, B, C] 依次送入栈和队列。',
+      input: [],
+      stack: [],
+      queue: [],
+      stackOut: [],
+      queueOut: [],
+      highlight: '等待开始',
+    },
+    {
+      title: '1. 元素 A 依次进入',
+      desc: 'A 进入栈底；A 同时进入队首。',
+      input: ['A'],
+      stack: ['A'],
+      queue: ['A'],
+      stackOut: [],
+      queueOut: [],
+      highlight: 'A 写入',
+    },
+    {
+      title: '2. 元素 B 依次进入',
+      desc: 'B 压在 A 之上（栈）；B 排在 A 之后（队列）。',
+      input: ['A', 'B'],
+      stack: ['A', 'B'],
+      queue: ['A', 'B'],
+      stackOut: [],
+      queueOut: [],
+      highlight: 'B 写入',
+    },
+    {
+      title: '3. 元素 C 依次进入（写入全部完成）',
+      desc: 'C 到达栈顶；C 排在队尾。此时两种结构内部存储完全就绪！',
+      input: ['A', 'B', 'C'],
+      stack: ['A', 'B', 'C'],
+      queue: ['A', 'B', 'C'],
+      stackOut: [],
+      queueOut: [],
+      highlight: '写入完成',
+    },
+    {
+      title: '4. 第一次出栈 / 出队',
+      desc: '栈只能取栈顶的 C（后进先出）；队列只能取队首的 A（先进先出）！',
+      input: ['A', 'B', 'C'],
+      stack: ['A', 'B'],
+      queue: ['B', 'C'],
+      stackOut: ['C'],
+      queueOut: ['A'],
+      highlight: '栈移出 C · 队列移出 A',
+    },
+    {
+      title: '5. 第二次出栈 / 出队',
+      desc: '栈继续弹出新的栈顶 B；队列继续移出新的队首 B。',
+      input: ['A', 'B', 'C'],
+      stack: ['A'],
+      queue: ['C'],
+      stackOut: ['C', 'B'],
+      queueOut: ['A', 'B'],
+      highlight: '栈移出 B · 队列移出 B',
+    },
+    {
+      title: '6. 第三次出栈 / 出队（全部完成）',
+      desc: '栈最后取出最初进入的 A；队列最后取出最后排队的 C！结果完全相反！',
+      input: ['A', 'B', 'C'],
+      stack: [],
+      queue: [],
+      stackOut: ['C', 'B', 'A'],
+      queueOut: ['A', 'B', 'C'],
+      highlight: '逆序 C-B-A vs 原序 A-B-C',
+    },
+  ]
+
+  const curCmp = COMPARE_STEPS[Math.min(frame, COMPARE_STEPS.length - 1)]
+
   return (
-    <div className="sq-step-stage">
-      <div className="sq-compare animated">
-        <div>
-          <span>依次加入</span>
-          <strong>{['A', 'B', 'C'].slice(0, Math.min(3, frame)).join(' → ') || '准备加入'}</strong>
+    <div className="sq-compare-hero-stage">
+      {/* 顶部相同输入展示 */}
+      <div className="sq-cmp-input-bar">
+        <span className="cmp-label">相同数据源依次进入：</span>
+        <div className="cmp-input-tokens">
+          {['A', 'B', 'C'].map((tok, i) => (
+            <span key={tok} className={`token-badge ${curCmp.input.includes(tok) ? 'entered' : ''}`}>
+              {tok}
+            </span>
+          ))}
         </div>
-        <div className={frame >= 3 ? 'active' : ''}>
-          <span>栈移除 (后进先出)</span>
-          <strong>{['C', 'B', 'A'].slice(0, removedCount).join(' → ') || '等待移除'}</strong>
+        <span className="cmp-status-tag">{curCmp.highlight}</span>
+      </div>
+
+      {/* 中部双结构真实容器动态对比 */}
+      <div className="sq-cmp-split-view">
+        {/* 栈对比卡片 */}
+        <div className="cmp-side-card stack-side">
+          <header className="side-header">
+            <strong>🥞 栈 Stack (后进先出 LIFO)</strong>
+            <small>入口 = 出口 = 栈顶</small>
+          </header>
+          <div className="side-visual-box">
+            <div className="mini-stack-vessel">
+              <span className="vessel-arrow">↓ 栈顶 ↑</span>
+              <div className="vessel-body">
+                {curCmp.stack.length === 0 ? (
+                  <small className="vessel-empty">已全部出栈</small>
+                ) : (
+                  [...curCmp.stack].reverse().map((it, idx) => (
+                    <i key={`${it}-${idx}`} className={idx === 0 ? 'top-item' : ''}>
+                      {it}
+                    </i>
+                  ))
+                )}
+              </div>
+              <span className="vessel-bottom">栈底 (封闭)</span>
+            </div>
+            <div className="side-output-list">
+              <span className="out-label">栈输出序列 (逆序):</span>
+              <div className="out-chips">
+                {curCmp.stackOut.length === 0 ? (
+                  <small>等待弹出...</small>
+                ) : (
+                  curCmp.stackOut.map((x, i) => (
+                    <b key={`${x}-${i}`} className="out-badge stack-badge">
+                      {x}
+                    </b>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className={frame >= 3 ? 'active' : ''}>
-          <span>队列移除 (先进先出)</span>
-          <strong>{['A', 'B', 'C'].slice(0, removedCount).join(' → ') || '等待移除'}</strong>
+
+        {/* 队列对比卡片 */}
+        <div className="cmp-side-card queue-side">
+          <header className="side-header">
+            <strong>🚶 队列 Queue (先进先出 FIFO)</strong>
+            <small>队尾进 ➔ 队首出</small>
+          </header>
+          <div className="side-visual-box">
+            <div className="mini-queue-tunnel">
+              <span className="tunnel-label left">出队 ←</span>
+              <div className="tunnel-track">
+                {curCmp.queue.length === 0 ? (
+                  <small className="vessel-empty">已全部出队</small>
+                ) : (
+                  curCmp.queue.map((it, idx) => (
+                    <i key={`${it}-${idx}`} className={idx === 0 ? 'head-item' : ''}>
+                      {it}
+                    </i>
+                  ))
+                )}
+              </div>
+              <span className="tunnel-label right">← 入队</span>
+            </div>
+            <div className="side-output-list">
+              <span className="out-label">队列输出序列 (原序):</span>
+              <div className="out-chips">
+                {curCmp.queueOut.length === 0 ? (
+                  <small>等待出队...</small>
+                ) : (
+                  curCmp.queueOut.map((x, i) => (
+                    <b key={`${x}-${i}`} className="out-badge queue-badge">
+                      {x}
+                    </b>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      {renderMicroControls('比较相同输入下的相反输出顺序')}
+
+      {/* 底部深刻规律解析卡片 */}
+      <div className="sq-cmp-summary-banner">
+        <div className="summary-title-line">
+          <strong>{curCmp.title}：</strong>
+          <span>{curCmp.desc}</span>
+        </div>
+        <div className="summary-rule-box">
+          💡 <strong>核心直觉：</strong>输入顺序完全一样（A ➔ B ➔ C），受限端点规则不同，导致栈逆转为 <strong>C ➔ B ➔ A</strong>，而队列保持为 <strong>A ➔ B ➔ C</strong>！
+        </div>
+      </div>
+
+      {renderMicroControls('手动点击“下一步”，一步步看清入栈/出栈与入队/出队的鲜明时序差异')}
     </div>
   )
 }
