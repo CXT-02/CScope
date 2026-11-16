@@ -1,38 +1,81 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
+import { useLearningProfile } from './LearningProfileContext'
+import { getPersonalRecommendations } from './LearningDashboard'
+import { experiments } from '../lib/experimentRegistry'
 
-export default function ExperimentHub({ experiments, onOpen }) {
+export default function ExperimentHub({ courses, activeCourseId, onOpen, onSelectCourse, onBack, onShowProfile, onLogin }) {
+  const { user, records } = useLearningProfile()
+  const activeCourse = courses.find((course) => course.id === activeCourseId)
+  if (activeCourse) return <CourseDetail course={activeCourse} onOpen={onOpen} onBack={onBack} records={records} />
+  return <CourseCatalog courses={courses} onOpen={onOpen} onSelectCourse={onSelectCourse} user={user} records={records} onShowProfile={onShowProfile} onLogin={onLogin} />
+}
+
+function CourseCatalog({ courses, onOpen, onSelectCourse, user, records, onShowProfile, onLogin }) {
+  const [query, setQuery] = useState('')
+  const normalizedQuery = query.trim().toLocaleLowerCase()
+  const matches = useMemo(() => {
+    if (!normalizedQuery) return []
+    return courses.flatMap((course) => course.points.map((point) => ({ course, point }))).filter(({ course, point }) => (
+      [course.title, course.english, ...course.tags, point.title, point.description, ...point.keywords]
+        .join(' ').toLocaleLowerCase().includes(normalizedQuery)
+    ))
+  }, [courses, normalizedQuery])
+
+  function chooseResult(course, point) {
+    if (point.available) onOpen(point.experimentId)
+    else onSelectCourse(course.id)
+  }
+
   return (
-    <main>
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">不只告诉你答案，让知识在眼前运行</span>
-          <h1>把抽象的计算机原理，<br /><em>变成可以动手的实验。</em></h1>
-          <p>从人工智能、算法到操作系统，通过逐步动画、参数调节和结果对比，真正看懂每一个过程为什么发生。</p>
-          <button className="primary-button" type="button" onClick={() => onOpen('attention')}>开始第一个实验 <span>→</span></button>
+    <main className="course-home">
+      <section className="course-hero">
+        <div className="course-hero-copy">
+          <span className="eyebrow">CSCOPE · 可视化计算机学习实验室</span>
+          <h1>今天想看懂<br /><em>哪门计算机课程？</em></h1>
+          <p>从课程进入知识地图，选择一个知识点，让抽象原理在眼前一步步运行。</p>
+          <div className={`course-search ${query ? 'has-query' : ''}`}>
+            <span aria-hidden="true">⌕</span>
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索知识点，例如：注意力、最短路径、进程调度…" aria-label="搜索课程和知识点" />
+            {query && <button type="button" onClick={() => setQuery('')} aria-label="清除搜索">×</button>}
+          </div>
+          {normalizedQuery && (
+            <div className="search-results" role="listbox" aria-label="搜索结果">
+              <div className="search-summary">找到 {matches.length} 个相关知识点</div>
+              {matches.length ? matches.slice(0, 8).map(({ course, point }) => (
+                <button type="button" key={`${course.id}-${point.title}`} onClick={() => chooseResult(course, point)}>
+                  <span className="search-course-dot" style={{ background: course.accent }}>{course.icon}</span>
+                  <span><strong>{point.title}</strong><small>{course.title} · {point.description}</small></span>
+                  <i className={point.available ? 'ready' : ''}>{point.available ? '进入可视化 →' : '查看课程 →'}</i>
+                </button>
+              )) : <div className="search-empty"><strong>暂时没有找到</strong><span>试试“TCP”“算法”或“内存”等关键词</span></div>}
+            </div>
+          )}
         </div>
-        <div className="hero-visual" aria-label="知识可视化示意">
-          <div className="orbit orbit-one"><span>输入</span><i /></div>
-          <div className="orbit orbit-two"><span>过程</span><i /></div>
-          <div className="orbit orbit-three"><span>理解</span><i /></div>
-          <div className="core-orb">可视化<br />实验</div>
+        <div className="curriculum-map" aria-label="课程知识地图装饰">
+          <div className="map-core"><strong>CS</strong><span>Computer Science</span></div>
+          {courses.slice(0, 5).map((course, index) => <div className={`map-course map-course-${index + 1}`} key={course.id} style={{ '--course-accent': course.accent }}><i>{course.icon}</i><span>{course.title}</span></div>)}
         </div>
       </section>
 
-      <section className="hub-section">
-        <div className="section-heading">
-          <div><span className="eyebrow">EXPLORE LABS</span><h2>选择一个实验开始探索</h2></div>
-          <p>三个模块覆盖人工智能、算法与操作系统，所有实验均可直接操作。</p>
+      <PersonalLearning user={user} records={records} courses={courses} onOpen={onOpen} onShowProfile={onShowProfile} onLogin={onLogin} />
+
+      <section className="course-library">
+        <div className="course-section-heading">
+          <div><span className="eyebrow">COURSE LIBRARY</span><h2>课程知识地图</h2></div>
+          <p><strong>{courses.length}</strong> 门核心课程 · <strong>{courses.reduce((sum, course) => sum + course.points.length, 0)}</strong> 个规划知识点 · 持续扩充</p>
         </div>
-        <div className="experiment-grid">
-          {experiments.map((experiment, index) => (
-            <button className="experiment-card" type="button" key={experiment.id} onClick={() => onOpen(experiment.id)} style={{ '--accent': experiment.accent }}>
-              <span className="card-index">0{index + 1}</span><span className="card-icon">{experiment.icon}</span>
-              <span className="card-category">{experiment.category}</span><strong>{experiment.title}</strong>
-              <span className="card-description">{experiment.description}</span>
-              <span className="concept-list">{experiment.concepts.map((concept) => <i key={concept}>{concept}</i>)}</span>
-              <span className="card-action">进入实验 <b>↗</b></span>
-            </button>
-          ))}
+        <div className="course-grid">
+          {courses.map((course) => {
+            const readyCount = course.points.filter((point) => point.available).length
+            return (
+              <button className="course-card" type="button" key={course.id} onClick={() => onSelectCourse(course.id)} style={{ '--course-accent': course.accent }}>
+                <div className="course-card-top"><span className="course-number">COURSE {course.number}</span><span className="course-icon">{course.icon}</span></div>
+                <span className="course-english">{course.english}</span><h3>{course.title}</h3><p>{course.description}</p>
+                <div className="course-point-preview">{course.points.slice(0, 3).map((point) => <span key={point.title}><i className={point.available ? 'ready' : ''} />{point.title}</span>)}</div>
+                <div className="course-card-footer"><span>{readyCount ? `${readyCount} 个可视化已上线` : '课程内容规划中'}</span><b>查看知识点 →</b></div>
+              </button>
+            )
+          })}
         </div>
       </section>
 
@@ -40,11 +83,45 @@ export default function ExperimentHub({ experiments, onOpen }) {
         <span className="eyebrow">HOW IT WORKS</span><h2>从“听懂了”到“真的会了”</h2>
         <div className="flow-steps">
           {[
-            ['01', '提出问题', '带着一个真实困惑进入实验'], ['02', '动手验证', '调节参数并预测结果'],
-            ['03', '观察过程', '逐帧看到原理如何运行'], ['04', '形成理解', '比较结果并总结规律'],
+            ['01', '选择课程', '先建立这门课的知识地图'], ['02', '进入知识点', '带着一个具体问题开始学习'],
+            ['03', '操作可视化', '改变参数并观察完整过程'], ['04', '完成验证', '用预测和总结形成自己的理解'],
           ].map(([number, title, text]) => <div className="flow-step" key={number}><span>{number}</span><strong>{title}</strong><p>{text}</p></div>)}
         </div>
       </section>
     </main>
   )
+}
+
+function CourseDetail({ course, onOpen, onBack, records }) {
+  const readyCount = course.points.filter((point) => point.available).length
+  return (
+    <main className="course-detail" style={{ '--course-accent': course.accent }}>
+      <section className="course-detail-hero">
+        <button className="course-back" type="button" onClick={onBack}>← 返回全部课程</button>
+        <div className="course-detail-title"><span className="course-detail-icon">{course.icon}</span><div><span>{course.english}</span><h1>{course.title}</h1><p>{course.description}</p></div></div>
+        <div className="course-detail-stats"><span><strong>{course.points.length}</strong>知识点</span><span><strong>{readyCount}</strong>可立即学习</span><span><strong>{course.tags.length}</strong>核心方向</span></div>
+      </section>
+      <section className="knowledge-section">
+        <div className="knowledge-heading"><div><span className="eyebrow">KNOWLEDGE POINTS</span><h2>选择一个知识点开始</h2></div><p>建议按顺序学习，也可以直接进入你正在复习的内容。</p></div>
+        <div className="knowledge-list">
+          {course.points.map((point, index) => (
+            <article className={`knowledge-card ${point.available ? 'available' : 'planned'} ${records.experiments?.[point.experimentId]?.completed ? 'learned' : ''}`} key={point.title}>
+              <div className="knowledge-index">{String(index + 1).padStart(2, '0')}</div>
+              <div className="knowledge-content"><div><span>{point.available ? '交互式可视化' : '规划中'}</span><h3>{point.title}</h3></div><p>{point.description}</p><div>{point.keywords.map((keyword) => <i key={keyword}>{keyword}</i>)}</div></div>
+              {point.available ? <button type="button" onClick={() => onOpen(point.experimentId)}>{records.experiments?.[point.experimentId]?.completed ? '再次复习' : records.experiments?.[point.experimentId]?.visits ? '继续学习' : '进入实验'} <span>→</span></button> : <button type="button" disabled>即将上线</button>}
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function PersonalLearning({ user, records, courses, onOpen, onShowProfile, onLogin }) {
+  if (!user) return <section className="personal-entry guest"><div><span className="eyebrow">PERSONALIZED LEARNING</span><h2>登录后，让学习路径逐渐适合你</h2><p>系统会根据实验访问次数、理解自测和学习总结，优先推荐需要继续完成或适合复习的知识点。</p></div><div className="personal-entry-steps"><span><b>01</b>记录学习次数</span><span><b>02</b>识别未完成内容</span><span><b>03</b>生成下一步推荐</span></div><button type="button" onClick={onLogin}>创建本地学习账户 →</button></section>
+  const recommendations = getPersonalRecommendations(records, experiments, courses)
+  const entries = Object.values(records.experiments || {})
+  const visits = entries.reduce((sum, item) => sum + (item.visits || 0), 0)
+  const completed = entries.filter((item) => item.completed).length
+  return <section className="personal-entry signed"><div className="personal-entry-heading"><div><span className="eyebrow">WELCOME BACK</span><h2>{user.name}，继续上次的学习</h2><p>已学习 <strong>{visits}</strong> 次，完成 <strong>{completed}</strong> 个实验学习循环。</p></div><button type="button" onClick={onShowProfile}>查看完整学习中心 →</button></div><div className="home-recommendations">{recommendations.map((item, index) => <button type="button" key={item.id} onClick={() => onOpen(item.id)} style={{ '--recommend-accent': item.accent }}><span>0{index + 1}</span><i>{item.icon}</i><div><strong>{item.title}</strong><small>{item.reason}</small></div><b>开始 →</b></button>)}</div></section>
 }

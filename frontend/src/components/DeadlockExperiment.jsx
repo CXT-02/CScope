@@ -2,21 +2,726 @@ import React,{useEffect,useMemo,useState}from'react'
 import{ExperimentHeader}from'./AttentionExperiment'
 import LearningCycle from'./LearningCycle'
 
-const PROCESSES=['P1','P2','P3'],RESOURCES=['R1','R2','R3']
-const PRESETS={safe:{name:'安全状态',owners:{R1:'P1',R2:'P2',R3:null},waiting:[{process:'P2',resource:'R1'}]},competition:{name:'资源竞争',owners:{R1:'P1',R2:null,R3:null},waiting:[{process:'P2',resource:'R1'},{process:'P3',resource:'R1'}]},deadlock:{name:'死锁环',owners:{R1:'P1',R2:'P2',R3:'P3'},waiting:[{process:'P1',resource:'R2'},{process:'P2',resource:'R3'},{process:'P3',resource:'R1'}]}}
-const STORY=[['临界区','多个进程访问共享资源时，需要同步规则','同步保证关键操作互斥，避免数据竞争和不一致。'],['申请','进程必须先申请资源，成功后才能使用','资源只有一个实例时，同一时刻只能由一个进程持有。'],['阻塞','资源已被占用，申请者进入等待状态','阻塞避免忙等，但等待关系可能逐渐形成依赖链。'],['条件','死锁需要四个条件同时成立','互斥、占有并等待、不可剥夺、循环等待缺一不可。'],['等待环','等待图出现环时，进程彼此等待','每个进程都等环中下一个进程释放资源，因而无人能继续。'],['解除','释放、剥夺或破坏环可解除死锁','预防策略的本质是主动破坏四个必要条件之一。'],['安全性','安全状态允许找到一个完成顺序','即使当前有人等待，只要存在依次完成的路径，就不等于死锁。']]
+const PROCESSES = ['P1', 'P2', 'P3']
+const RESOURCES = ['R1', 'R2', 'R3']
 
-export default function DeadlockExperiment({experiment}){
- const[owners,setOwners]=useState({...PRESETS.safe.owners}),[waiting,setWaiting]=useState(PRESETS.safe.waiting),[process,setProcess]=useState('P1'),[resource,setResource]=useState('R1'),[message,setMessage]=useState('P2 正在等待 P1 释放 R1；P1 可以继续执行。')
- const cycle=useMemo(()=>findCycle(owners,waiting),[owners,waiting]);const blocked=new Set(waiting.map((x)=>x.process))
- function load(key){const p=PRESETS[key];setOwners({...p.owners});setWaiting(p.waiting.map((x)=>({...x})));setMessage(`已加载“${p.name}”示例。`)}
- function request(){const owner=owners[resource];if(owner===process){setMessage(`${process} 已经持有 ${resource}，无需重复申请。`);return}if(!owner){setOwners((current)=>({...current,[resource]:process}));setWaiting((current)=>current.filter((x)=>!(x.process===process&&x.resource===resource)));setMessage(`${process} 成功获得空闲资源 ${resource}。`)}else{setWaiting((current)=>current.some((x)=>x.process===process&&x.resource===resource)?current:[...current,{process,resource}]);setMessage(`${resource} 被 ${owner} 持有，${process} 进入阻塞等待。`)}}
- function release(){if(owners[resource]!==process){setMessage(`${process} 没有持有 ${resource}，不能释放。`);return}const waiter=waiting.find((x)=>x.resource===resource);setOwners((current)=>({...current,[resource]:waiter?.process??null}));setWaiting((current)=>current.filter((x)=>x!==waiter));setMessage(waiter?`${process} 释放 ${resource}，等待最久的 ${waiter.process} 获得资源并被唤醒。`:`${process} 释放 ${resource}，它现在为空闲状态。`)}
- function releaseAll(){const held=RESOURCES.filter((r)=>owners[r]===process);if(!held.length){setMessage(`${process} 当前没有持有资源。`);return}let nextOwners={...owners},nextWaiting=[...waiting];held.forEach((r)=>{const waiter=nextWaiting.find((x)=>x.resource===r);nextOwners[r]=waiter?.process??null;if(waiter)nextWaiting=nextWaiting.filter((x)=>x!==waiter)});setOwners(nextOwners);setWaiting(nextWaiting);setMessage(`${process} 已释放全部资源，等待进程按顺序获得可用资源。`)}
- return <><ExperimentHeader experiment={experiment} eyebrow="操作系统实验 03"/><DeadlockStory/><div className="explore-heading"><span>自由探索 · 亲手构造或解除等待环</span><h2>控制资源申请与释放，观察死锁何时形成</h2><p>实线表示资源已分配，虚线表示进程正在等待；系统会实时检测进程等待图中的环。</p></div><div className="lab-layout deadlock-layout"><aside className="control-panel"><div className="panel-title"><span>资源操作</span><i className={cycle.length?'':'online'}>{cycle.length?'检测到死锁':'无死锁'}</i></div><label className="field-block"><span>选择进程</span><select value={process} onChange={(e)=>setProcess(e.target.value)}>{PROCESSES.map((x)=><option key={x}>{x}</option>)}</select></label><label className="field-block"><span>选择资源</span><select value={resource} onChange={(e)=>setResource(e.target.value)}>{RESOURCES.map((x)=><option key={x}>{x} · {owners[x]?`${owners[x]} 持有`:'空闲'}</option>)}</select></label><div className="deadlock-actions"><button onClick={request}>申请资源</button><button onClick={release}>释放资源</button></div><button className="gd-reset" onClick={releaseAll}>释放 {process} 的全部资源</button><div className="deadlock-presets"><span>状态预设</span><div><button onClick={()=>load('safe')}>安全状态</button><button onClick={()=>load('competition')}>资源竞争</button><button onClick={()=>load('deadlock')}>死锁环</button></div></div><div className={`live-explanation ${cycle.length?'danger':''}`}><span>{cycle.length?'系统警报':'操作解释'}</span><strong>{cycle.length?`等待环：${cycle.join(' → ')} → ${cycle[0]}`:message}</strong><p>{cycle.length?'环中每个进程都在等待下一个进程持有的资源，因此没有进程能够继续。':`${blocked.size} 个进程阻塞；等待并不一定等于死锁。`}</p></div></aside><section className="visual-panel deadlock-visual"><div className="visual-toolbar"><div><strong>资源分配图</strong><span>绿色实线：资源 → 持有者 · 橙色虚线：等待者 → 资源</span></div><span className={`source-chip ${cycle.length?'deadlock-chip':''}`}>{cycle.length?'Deadlock':'Safe / Waiting'}</span></div><ResourceGraph owners={owners} waiting={waiting} cycle={cycle}/><div className="deadlock-state-grid"><div><span>资源持有情况</span>{RESOURCES.map((r)=><p key={r}><b>{r}</b><strong>{owners[r]??'空闲'}</strong></p>)}</div><div><span>进程状态</span>{PROCESSES.map((p)=><p key={p}><b>{p}</b><strong className={cycle.includes(p)?'danger':blocked.has(p)?'waiting':'running'}>{cycle.includes(p)?'死锁':blocked.has(p)?'阻塞':'可运行'}</strong></p>)}</div></div><div className="deadlock-conditions">{['互斥','占有并等待','不可剥夺','循环等待'].map((x,i)=><span className={i<3||cycle.length?'met':''} key={x}><i>{i<3||cycle.length?'✓':'○'}</i>{x}</span>)}</div></section></div><LearningCycle experimentId="deadlock" prediction={{question:'系统中有进程等待资源，就一定发生死锁了吗？',options:['一定是','不一定','只要有两个进程就是'],answer:'不一定',explanation:' 若持有资源的进程仍能继续并最终释放资源，等待者就能被唤醒，不构成死锁。'}} operation={{title:'构造并解除一个等待环',instruction:'加载“死锁环”预设，观察 P1→P2→P3 的依赖；然后选择一个进程并释放它持有的全部资源。'}} observation={cycle.length?`当前检测到死锁环：${cycle.join(' → ')} → ${cycle[0]}。`:`当前没有等待环，${blocked.size} 个进程处于阻塞等待。`} summaryPrompt="死锁的四个必要条件是什么？破坏其中哪个条件可以解除当前示例？"/></>
+const PRESETS = {
+  safe: {
+    name: '安全状态 (无环)',
+    owners: { R1: 'P1', R2: 'P2', R3: null },
+    waiting: [{ process: 'P2', resource: 'R1' }]
+  },
+  competition: {
+    name: '并发资源竞争',
+    owners: { R1: 'P1', R2: null, R3: null },
+    waiting: [{ process: 'P2', resource: 'R1' }, { process: 'P3', resource: 'R1' }]
+  },
+  deadlock: {
+    name: '经典死锁环 (P1⇄P2)',
+    owners: { R1: 'P1', R2: 'P2', R3: 'P3' },
+    waiting: [
+      { process: 'P1', resource: 'R2' },
+      { process: 'P2', resource: 'R3' },
+      { process: 'P3', resource: 'R1' }
+    ]
+  }
 }
-function ResourceGraph({owners,waiting,cycle}){const pp={P1:[130,105],P2:[360,105],P3:[590,105]},rp={R1:[130,310],R2:[360,310],R3:[590,310]};return <svg className="resource-graph" viewBox="0 0 720 410"><defs><marker id="greenArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#159a83"/></marker><marker id="orangeArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ee6c4d"/></marker></defs>{RESOURCES.map((r)=>owners[r]&&<line className="allocation" key={`a-${r}`} x1={rp[r][0]} y1={rp[r][1]-34} x2={pp[owners[r]][0]} y2={pp[owners[r]][1]+37} markerEnd="url(#greenArrow)"/>)}{waiting.map((w,i)=><line className={cycle.includes(w.process)?'request cycle':'request'} key={`w-${w.process}-${w.resource}-${i}`} x1={pp[w.process][0]} y1={pp[w.process][1]+37} x2={rp[w.resource][0]} y2={rp[w.resource][1]-37} markerEnd="url(#orangeArrow)"/>)}{PROCESSES.map((p)=><g className={`process-node ${cycle.includes(p)?'cycle':''}`} key={p} transform={`translate(${pp[p][0]},${pp[p][1]})`}><circle r="37"/><text y="5">{p}</text></g>)}{RESOURCES.map((r)=><g className={`resource-node ${owners[r]?'owned':''}`} key={r} transform={`translate(${rp[r][0]},${rp[r][1]})`}><rect x="-34" y="-34" width="68" height="68" rx="14"/><text y="5">{r}</text><text className="owner" y="53">{owners[r]?`${owners[r]} 持有`:'空闲'}</text></g>)}</svg>}
-function findCycle(owners,waiting){const edges={};waiting.forEach(({process,resource})=>{const owner=owners[resource];if(owner)(edges[process]??=[]).push(owner)});const visiting=new Set(),visited=new Set(),path=[];function dfs(p){if(visiting.has(p)){const i=path.indexOf(p);return path.slice(i)}if(visited.has(p))return null;visiting.add(p);path.push(p);for(const next of edges[p]??[]){const found=dfs(next);if(found)return found}path.pop();visiting.delete(p);visited.add(p);return null}for(const p of PROCESSES){const found=dfs(p);if(found)return found}return[]}
+
+// 严谨、健壮、零死循环的等待环 DFS 检测算法
+function findDeadlockCycle(owners, waiting) {
+  const edges = {}
+  PROCESSES.forEach((p) => { edges[p] = [] })
+
+  waiting.forEach(({ process, resource }) => {
+    const owner = owners[resource]
+    if (owner && owner !== process) {
+      if (!edges[process].includes(owner)) {
+        edges[process].push(owner)
+      }
+    }
+  })
+
+  const visited = new Set()
+  const inStack = new Set()
+  const path = []
+
+  function dfs(u) {
+    visited.add(u)
+    inStack.add(u)
+    path.push(u)
+
+    for (const v of edges[u]) {
+      if (!visited.has(v)) {
+        const found = dfs(v)
+        if (found) return found
+      } else if (inStack.has(v)) {
+        const cycleStartIndex = path.indexOf(v)
+        return path.slice(cycleStartIndex)
+      }
+    }
+
+    path.pop()
+    inStack.delete(u)
+    return null
+  }
+
+  for (const p of PROCESSES) {
+    if (!visited.has(p)) {
+      const cycle = dfs(p)
+      if (cycle && cycle.length > 0) return cycle
+    }
+  }
+
+  return []
+}
+
+// 银行家算法初始状态 (经典 4 进程 3 资源模型)
+const INITIAL_BANKER = {
+  available: [3, 3, 2],
+  processes: [
+    { id: 'P0', max: [7, 5, 3], allocation: [0, 1, 0] },
+    { id: 'P1', max: [3, 2, 2], allocation: [2, 0, 0] },
+    { id: 'P2', max: [9, 0, 2], allocation: [3, 0, 2] },
+    { id: 'P3', max: [2, 2, 2], allocation: [2, 1, 1] },
+  ]
+}
+
+function runSafetyCheck(available, processes) {
+  const work = [...available]
+  const finish = processes.map(() => false)
+  const safeSeq = []
+  const steps = []
+
+  let found = true
+  while (found) {
+    found = false
+    for (let i = 0; i < processes.length; i++) {
+      if (!finish[i]) {
+        const need = processes[i].max.map((m, idx) => m - processes[i].allocation[idx])
+        const canSatisfy = need.every((val, idx) => val <= work[idx])
+        if (canSatisfy) {
+          const beforeWork = [...work]
+          for (let idx = 0; idx < work.length; idx++) {
+            work[idx] += processes[i].allocation[idx]
+          }
+          finish[i] = true
+          safeSeq.push(processes[i].id)
+          steps.push({
+            process: processes[i].id,
+            need,
+            allocation: processes[i].allocation,
+            beforeWork,
+            afterWork: [...work]
+          })
+          found = true
+          break
+        }
+      }
+    }
+  }
+
+  const isSafe = finish.every(Boolean)
+  return { isSafe, safeSeq, steps }
+}
+
+export default function DeadlockExperiment({ experiment }) {
+  const [activeTab, setActiveTab] = useState('detection') // 'detection' | 'prevention' | 'banker'
+
+  // --- 模块 1 & 3: 资源分配图与死锁检测 & 恢复 ---
+  const [owners, setOwners] = useState({ ...PRESETS.safe.owners })
+  const [waiting, setWaiting] = useState(PRESETS.safe.waiting.map(x => ({ ...x })))
+  const [process, setProcess] = useState('P1')
+  const [resource, setResource] = useState('R1')
+  const [message, setMessage] = useState('P2 正在等待 P1 释放 R1；P1 可以继续执行。')
+
+  // --- 模块 2: 死锁预防规则开关 ---
+  const [orderedRule, setOrderedRule] = useState(false) // 资源有序分配法 (R1 < R2 < R3)
+  const [holdOnceRule, setHoldOnceRule] = useState(false) // 一次性申请全部资源
+
+  // --- 模块 4: 银行家算法状态 ---
+  const [bankerAvail, setBankerAvail] = useState(INITIAL_BANKER.available)
+  const [bankerProcs, setBankerProcs] = useState(INITIAL_BANKER.processes)
+  const [reqProc, setReqProc] = useState('P1')
+  const [reqVector, setReqVector] = useState([1, 0, 2])
+  const [bankerFeedback, setBankerFeedback] = useState('就绪状态，点击下方“运行安全性检查”或“模拟进程申请”')
+
+  // 严谨计算死锁环
+  const cycle = useMemo(() => findDeadlockCycle(owners, waiting), [owners, waiting])
+  const blocked = useMemo(() => new Set(waiting.map((x) => x.process)), [waiting])
+  const safetyResult = useMemo(() => runSafetyCheck(bankerAvail, bankerProcs), [bankerAvail, bankerProcs])
+
+  function loadPreset(key) {
+    const p = PRESETS[key]
+    setOwners({ ...p.owners })
+    setWaiting(p.waiting.map((x) => ({ ...x })))
+    setMessage(`已加载“${p.name}”示例。`)
+  }
+
+  // 申请资源（带预防规则检查与实时响应）
+  function handleRequest() {
+    const owner = owners[resource]
+
+    // 预防规则 1: 资源有序分配法检查
+    if (orderedRule) {
+      const heldResources = RESOURCES.filter((r) => owners[r] === process)
+      const currentResIdx = RESOURCES.indexOf(resource)
+      const maxHeldIdx = heldResources.length > 0 ? Math.max(...heldResources.map(r => RESOURCES.indexOf(r))) : -1
+      if (heldResources.length > 0 && currentResIdx <= maxHeldIdx) {
+        setMessage(`⚠️【预防规则拦截】有序分配法规定必须递增申请！${process} 已持有较高编号资源，禁止逆向申请 ${resource}！`)
+        return
+      }
+    }
+
+    if (owner === process) {
+      setMessage(`${process} 已经持有 ${resource}，无需重复申请。`)
+      return
+    }
+
+    if (!owner) {
+      // 成功获得空闲资源
+      setOwners((prev) => ({ ...prev, [resource]: process }))
+      setWaiting((prev) => prev.filter((x) => !(x.process === process && x.resource === resource)))
+      setMessage(`✅ ${process} 成功获得空闲资源 ${resource}。`)
+    } else {
+      // 被占用，进入阻塞等待
+      const alreadyWaiting = waiting.some((x) => x.process === process && x.resource === resource)
+      if (alreadyWaiting) {
+        setMessage(`⏳ ${process} 已在等待队列中排队等待 ${resource}。`)
+      } else {
+        setWaiting((prev) => [...prev, { process, resource }])
+        setMessage(`⚠️ ${resource} 正被 ${owner} 持有，${process} 进入阻塞等待队列。`)
+      }
+    }
+  }
+
+  // 释放资源并唤醒等待者
+  function handleRelease() {
+    if (owners[resource] !== process) {
+      setMessage(`❌ ${process} 当前并未持有 ${resource}，无法释放。`)
+      return
+    }
+
+    const waiter = waiting.find((x) => x.resource === resource)
+    if (waiter) {
+      // 唤醒最先等待该资源的进程
+      setOwners((prev) => ({ ...prev, [resource]: waiter.process }))
+      setWaiting((prev) => prev.filter((x) => x !== waiter))
+      setMessage(`🔓 ${process} 释放了 ${resource}，等待中的 ${waiter.process} 获得资源并成功被唤醒！`)
+    } else {
+      setOwners((prev) => ({ ...prev, [resource]: null }))
+      setMessage(`🔓 ${process} 释放了 ${resource}，该资源现已完全空闲。`)
+    }
+  }
+
+  // 释放指定进程所有资源
+  function handleReleaseProcess(targetP) {
+    const held = RESOURCES.filter((r) => owners[r] === targetP)
+    if (!held.length) {
+      setMessage(`${targetP} 当前没有持有任何资源。`)
+      return
+    }
+    const nextOwners = { ...owners }
+    let nextWaiting = [...waiting]
+
+    held.forEach((r) => {
+      const waiter = nextWaiting.find((x) => x.resource === r)
+      nextOwners[r] = waiter ? waiter.process : null
+      if (waiter) {
+        nextWaiting = nextWaiting.filter((x) => x !== waiter)
+      }
+    })
+
+    setOwners(nextOwners)
+    setWaiting(nextWaiting)
+    setMessage(`🧹 已释放 ${targetP} 的全部持有资源，等待它的进程已被唤醒！`)
+  }
+
+  // 解除死锁：一键强行剥夺资源打破环
+  function handleBreakDeadlock() {
+    if (!cycle.length) {
+      setMessage('当前未检测到死锁环，无需解除。')
+      return
+    }
+    const victim = cycle[0] // 选环中第一个进程作为牺牲者
+    handleReleaseProcess(victim)
+    setMessage(`🔪【死锁解除成功】已强制终止/剥夺牺牲进程 ${victim}，等待闭环已被切断，系统死锁解除！`)
+  }
+
+  // 银行家算法模拟请求
+  function handleBankerRequest() {
+    const pIdx = bankerProcs.findIndex(p => p.id === reqProc)
+    const proc = bankerProcs[pIdx]
+    const need = proc.max.map((m, i) => m - proc.allocation[i])
+
+    // 检查 1: Request <= Need
+    if (reqVector.some((r, i) => r > need[i])) {
+      setBankerFeedback(`❌ 申请错误：${reqProc} 申请的资源量超过了其声明的最大需求 Need！`)
+      return
+    }
+    // 检查 2: Request <= Available
+    if (reqVector.some((r, i) => r > bankerAvail[i])) {
+      setBankerFeedback(`⏳ 资源不足：当前系统可用资源 Available 不足，${reqProc} 必须等待！`)
+      return
+    }
+
+    // 试探性分配
+    const tempAvail = bankerAvail.map((a, i) => a - reqVector[i])
+    const tempProcs = bankerProcs.map((p, i) => i === pIdx ? {
+      ...p,
+      allocation: p.allocation.map((val, idx) => val + reqVector[idx])
+    } : p)
+
+    const check = runSafetyCheck(tempAvail, tempProcs)
+    if (check.isSafe) {
+      setBankerAvail(tempAvail)
+      setBankerProcs(tempProcs)
+      setBankerFeedback(`✅【安全分配通过】系统预演发现安全序列 < ${check.safeSeq.join(', ')} >，资源已安全下发给 ${reqProc}！`)
+    } else {
+      setBankerFeedback(`⚠️【银行家算法拦截】若分配将导致系统进入“不安全状态”（找不到安全序列），系统拒绝分配，避免死锁！`)
+    }
+  }
+
+  return (
+    <>
+      <ExperimentHeader experiment={experiment} eyebrow="操作系统实验 04" />
+      <DeadlockStory />
+
+      <div className="explore-heading">
+        <span>自由探索 · 死锁成因、预防、避免与解除</span>
+        <h2>多维度交互实验：资源分配图、有序分配与银行家算法</h2>
+        <p>支持亲手构造/解除等待环、开启死锁预防规则拦截，并动态演练考研核心银行家算法安全性检查。</p>
+      </div>
+
+      {/* 模块顶部导航 Tab */}
+      <div className="deadlock-module-tabs">
+        <button
+          type="button"
+          className={`tab-btn ${activeTab === 'detection' ? 'active' : ''}`}
+          onClick={() => setActiveTab('detection')}
+        >
+          🔍 资源分配图与死锁检测 (RAG)
+        </button>
+        <button
+          type="button"
+          className={`tab-btn ${activeTab === 'prevention' ? 'active' : ''}`}
+          onClick={() => setActiveTab('prevention')}
+        >
+          🛡️ 死锁预防机制 (Prevention)
+        </button>
+        <button
+          type="button"
+          className={`tab-btn ${activeTab === 'banker' ? 'active' : ''}`}
+          onClick={() => setActiveTab('banker')}
+        >
+          🏦 银行家算法安全性检查 (Banker's Algorithm)
+        </button>
+      </div>
+
+      {activeTab === 'detection' && (
+        <div className="lab-layout deadlock-layout">
+          <aside className="control-panel">
+            <div className="panel-title">
+              <span>资源分配操作</span>
+              <i className={cycle.length ? 'danger' : 'online'}>
+                {cycle.length ? '🚨 检测到死锁环' : '✅ 状态安全'}
+              </i>
+            </div>
+
+            <label className="field-block">
+              <span>选择进程</span>
+              <select value={process} onChange={(e) => setProcess(e.target.value)}>
+                {PROCESSES.map((x) => (
+                  <option key={x} value={x}>{x} {blocked.has(x) ? '(阻塞中)' : '(可运行)'}</option>
+                ))}
+              </select>
+            </label>
+
+            <label className="field-block">
+              <span>选择资源</span>
+              <select value={resource} onChange={(e) => setResource(e.target.value)}>
+                {RESOURCES.map((x) => (
+                  <option key={x} value={x}>
+                    {x} · {owners[x] ? `${owners[x]} 持有` : '当前空闲'}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="deadlock-actions">
+              <button type="button" className="btn-req" onClick={handleRequest}>
+                申请资源
+              </button>
+              <button type="button" className="btn-rel" onClick={handleRelease}>
+                释放资源
+              </button>
+            </div>
+
+            <button type="button" className="gd-reset" onClick={() => handleReleaseProcess(process)}>
+              释放 {process} 的全部持有资源
+            </button>
+
+            {cycle.length > 0 && (
+              <button type="button" className="btn-break-cycle-pulse" onClick={handleBreakDeadlock}>
+                🔪 强行解除死锁 (斩断环路)
+              </button>
+            )}
+
+            <div className="deadlock-presets">
+              <span>状态预设快速加载</span>
+              <div>
+                <button type="button" onClick={() => loadPreset('safe')}>安全状态</button>
+                <button type="button" onClick={() => loadPreset('competition')}>资源竞争</button>
+                <button type="button" onClick={() => loadPreset('deadlock')}>死锁环</button>
+              </div>
+            </div>
+
+            <div className={`live-explanation ${cycle.length ? 'danger' : ''}`}>
+              <span>{cycle.length ? '系统警报' : '操作实时反馈'}</span>
+              <strong>{cycle.length ? `死锁闭环：${cycle.join(' ➔ ')} ➔ ${cycle[0]}` : message}</strong>
+              <p>
+                {cycle.length
+                  ? '环中每个进程都在苦等下一个进程释放资源，全员被死死锁住！请点击“强行解除死锁”或释放资源打破闭环。'
+                  : `${blocked.size} 个进程处于阻塞中；只要没有闭合回路，系统依然是安全的。`}
+              </p>
+            </div>
+          </aside>
+
+          <section className="visual-panel deadlock-visual">
+            <div className="visual-toolbar">
+              <div>
+                <strong>资源分配图 (Resource Allocation Graph)</strong>
+                <span>绿色实线：资源 ➔ 持有者 · 橙色虚线：申请者 ➔ 资源</span>
+              </div>
+              <span className={`source-chip ${cycle.length ? 'deadlock-chip' : ''}`}>
+                {cycle.length ? 'Deadlock Alert' : 'Safe / Waiting'}
+              </span>
+            </div>
+
+            {/* 防报错健壮 SVG 拓扑图 */}
+            <ResourceGraph owners={owners} waiting={waiting} cycle={cycle} />
+
+            <div className="deadlock-state-grid">
+              <div>
+                <span>资源持有现状 (Owners)</span>
+                {RESOURCES.map((r) => (
+                  <p key={r}>
+                    <b>{r}</b>
+                    <strong className={owners[r] ? 'owned' : 'free'}>{owners[r] ?? '空闲'}</strong>
+                  </p>
+                ))}
+              </div>
+              <div>
+                <span>进程运行状态 (Processes)</span>
+                {PROCESSES.map((p) => (
+                  <p key={p}>
+                    <b>{p}</b>
+                    <strong className={cycle.includes(p) ? 'danger' : blocked.has(p) ? 'waiting' : 'running'}>
+                      {cycle.includes(p) ? '死锁中 💥' : blocked.has(p) ? '阻塞等待 ⏳' : '可运行 ✓'}
+                    </strong>
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="deadlock-conditions">
+              {[
+                { name: '互斥', desc: '资源独占' },
+                { name: '占有并等待', desc: '手持资源索要新资源' },
+                { name: '不可剥夺', desc: '系统禁止强抢' },
+                { name: '循环等待', desc: '依赖链闭合成环' },
+              ].map((item, i) => {
+                const isMet = i < 3 || cycle.length > 0
+                return (
+                  <span className={isMet ? 'met' : ''} key={item.name}>
+                    <i>{isMet ? '✓' : '○'}</i>
+                    <b>{item.name}</b>
+                    <small>{item.desc}</small>
+                  </span>
+                )
+              })}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {activeTab === 'prevention' && (
+        <section className="prevention-panel-container">
+          <div className="prevention-header">
+            <div>
+              <h3>死锁预防策略模拟 (Deadlock Prevention)</h3>
+              <p>预防死锁的核心在于<strong>通过施加严格的静态分配规则，彻底破坏四大必要条件之一</strong>。</p>
+            </div>
+          </div>
+
+          <div className="prevention-cards-grid">
+            {/* 规则 1: 资源有序分配法 */}
+            <div className={`rule-card ${orderedRule ? 'active-rule' : ''}`}>
+              <div className="rule-card-header">
+                <span className="rule-tag">破坏循环等待</span>
+                <h4>方案 1 · 资源有序分配法 (Resource Ordering)</h4>
+              </div>
+              <p>
+                规定所有资源具有全局递增编号：<code>R1 (1) &lt; R2 (2) &lt; R3 (3)</code>。
+                进程只能按照<strong>编号严格单调递增</strong>的顺序提出申请。若已持有 R2，则绝不允许回头申请 R1！
+              </p>
+              <div className="rule-toggle-row">
+                <span>开启有序分配拦截规则：</span>
+                <button
+                  type="button"
+                  className={`toggle-btn ${orderedRule ? 'on' : 'off'}`}
+                  onClick={() => setOrderedRule(!orderedRule)}
+                >
+                  {orderedRule ? '已开启 · 100% 免疫环路' : '已关闭 (允许任意乱序申请)'}
+                </button>
+              </div>
+              <small className="rule-math-tip">
+                数学证明：所有等待边方向始终指向更高编号节点，图中不可能存在反向有向边，<strong>数学上拓扑成环概率为 0</strong>！
+              </small>
+            </div>
+
+            {/* 规则 2: 一次性申请 */}
+            <div className="rule-card">
+              <div className="rule-card-header">
+                <span className="rule-tag">破坏占有并等待</span>
+                <h4>方案 2 · 一次性分配法 (Hold-All-At-Once)</h4>
+              </div>
+              <p>
+                进程在开始执行前，必须一次性申请运行所需的<strong>全部资源</strong>。只要有一种资源无法满足，就一个都不分配，进程绝不进入持有状态。
+              </p>
+              <div className="rule-tradeoff-box">
+                <strong>优缺点权衡：</strong>
+                <span>优点：杜绝了手持资源等新资源的贪心行为；缺点：资源利用率极低，严重浪费资源。</span>
+              </div>
+            </div>
+
+            {/* 规则 3: 允许强行剥夺 */}
+            <div className="rule-card">
+              <div className="rule-card-header">
+                <span className="rule-tag">破坏不可剥夺</span>
+                <h4>方案 3 · 协议式主动释放 (Preemption Protocol)</h4>
+              </div>
+              <p>
+                当一个已经持有某些资源的进程申请新资源被阻塞时，必须<strong>主动释放它当前持有的全部资源</strong>。
+                待以后能够同时满足时再重新申请，从而消除死等待。
+              </p>
+              <div className="rule-tradeoff-box">
+                <strong>适用限制：</strong>
+                <span>只适用于 CPU 寄存器和主存等状态易于保存和恢复的硬件，不能用于打印机或磁带机。</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {activeTab === 'banker' && (
+        <section className="banker-panel-container">
+          <div className="banker-header-bar">
+            <div>
+              <h3>银行家算法动态安全性检查 (Banker's Algorithm)</h3>
+              <p>著名的<strong>死锁避免 (Avoidance)</strong> 算法：在每次资源分配前进行动态推演，只有系统保持在安全状态才真正分配。</p>
+            </div>
+            <button
+              type="button"
+              className="btn-banker-reset"
+              onClick={() => {
+                setBankerAvail(INITIAL_BANKER.available)
+                setBankerProcs(INITIAL_BANKER.processes)
+                setBankerFeedback('已重置银行家算法数据至初始基准状态。')
+              }}
+            >
+              重置矩阵基准
+            </button>
+          </div>
+
+          <div className="banker-content-grid">
+            <div className="banker-tables-zone">
+              <div className="banker-avail-strip">
+                <strong>系统当前可用资源向量 Available:</strong>
+                <div className="avail-badges">
+                  <span>A: <b>{bankerAvail[0]}</b></span>
+                  <span>B: <b>{bankerAvail[1]}</b></span>
+                  <span>C: <b>{bankerAvail[2]}</b></span>
+                </div>
+              </div>
+
+              <table className="banker-matrix-table">
+                <thead>
+                  <tr>
+                    <th>进程</th>
+                    <th>Max (最大需求)</th>
+                    <th>Allocation (已分配)</th>
+                    <th>Need (尚需 = Max - Alloc)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bankerProcs.map((p) => {
+                    const need = p.max.map((m, i) => m - p.allocation[i])
+                    return (
+                      <tr key={p.id}>
+                        <td><strong>{p.id}</strong></td>
+                        <td><code>[{p.max.join(', ')}]</code></td>
+                        <td><code className="hl-alloc">[{p.allocation.join(', ')}]</code></td>
+                        <td><code className="hl-need">[{need.join(', ')}]</code></td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+
+              {/* 申请模拟控制 */}
+              <div className="banker-req-form">
+                <div className="form-head">
+                  <strong>模拟进程发起资源申请 Request:</strong>
+                </div>
+                <div className="form-controls">
+                  <select value={reqProc} onChange={(e) => setReqProc(e.target.value)}>
+                    {bankerProcs.map(p => <option key={p.id} value={p.id}>{p.id}</option>)}
+                  </select>
+                  <label>A: <input type="number" min="0" max="5" value={reqVector[0]} onChange={(e) => setReqVector([Number(e.target.value), reqVector[1], reqVector[2]])} /></label>
+                  <label>B: <input type="number" min="0" max="5" value={reqVector[1]} onChange={(e) => setReqVector([reqVector[0], Number(e.target.value), reqVector[2]])} /></label>
+                  <label>C: <input type="number" min="0" max="5" value={reqVector[2]} onChange={(e) => setReqVector([reqVector[0], reqVector[1], Number(e.target.value)])} /></label>
+                  <button type="button" className="btn-exec-req" onClick={handleBankerRequest}>
+                    银行家安全性预演分配
+                  </button>
+                </div>
+                <div className="banker-msg-box">{bankerFeedback}</div>
+              </div>
+            </div>
+
+            {/* 安全性检查结果与推导链 */}
+            <div className="banker-safety-zone">
+              <div className={`safety-status-card ${safetyResult.isSafe ? 'safe' : 'unsafe'}`}>
+                <div className="status-title">
+                  <span>安全性算法检查结论</span>
+                  <strong>{safetyResult.isSafe ? '系统处于安全状态 (Safe)' : '系统处于不安全状态 (Unsafe) ⚠️'}</strong>
+                </div>
+                {safetyResult.isSafe ? (
+                  <div className="safe-seq-result">
+                    <span>找到安全序列：</span>
+                    <code>&lt; {safetyResult.safeSeq.join(', ')} &gt;</code>
+                  </div>
+                ) : (
+                  <div className="safe-seq-result unsafe">
+                    <span>无法找到让所有进程安全完成的序列！</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="safety-steps-list">
+                <span className="steps-title">安全性检查动态推导过程 (Work + Allocation):</span>
+                {safetyResult.steps.map((st, i) => (
+                  <div className="step-item-card" key={st.process}>
+                    <div className="step-badge">第 {i + 1} 步: 满足 {st.process}</div>
+                    <p>
+                      Need [{st.need.join(',')}] ≤ Work [{st.beforeWork.join(',')}],
+                      执行后释放资源 ➔ 新 Work [{st.afterWork.join(',')}]
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <LearningCycle
+        experimentId="deadlock"
+        prediction={{
+          question: '系统中有进程等待资源，就一定发生死锁了吗？',
+          options: ['一定是', '不一定', '只要有两个进程就是'],
+          answer: '不一定',
+          explanation: ' 若持有资源的进程仍能继续并最终释放资源，等待者就能被唤醒，不构成死锁。',
+        }}
+        operation={{
+          title: '构造并破除死锁环',
+          instruction: '在死锁检测面板加载“死锁环”预设，观察闭环；然后点击“强行解除死锁”或开启“资源有序分配规则”观察拦截。'
+        }}
+        observation={cycle.length ? `当前检测到死锁环：${cycle.join(' → ')} → ${cycle[0]}。` : `当前无等待环，${blocked.size} 个进程处于阻塞等待。`}
+        summaryPrompt="死锁的四个必要条件是什么？破坏其中哪个条件可以彻底消除环路？"
+      />
+    </>
+  )
+}
+
+function ResourceGraph({ owners, waiting, cycle }) {
+  const pp = { P1: [130, 95], P2: [360, 95], P3: [590, 95] }
+  const rp = { R1: [130, 310], R2: [360, 310], R3: [590, 310] }
+
+  return (
+    <svg className="resource-graph" viewBox="0 0 720 410">
+      <defs>
+        <marker id="greenArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L7,3 z" fill="#10b981" />
+        </marker>
+        <marker id="orangeArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L7,3 z" fill="#f59e0b" />
+        </marker>
+        <marker id="redArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L7,3 z" fill="#ef4444" />
+        </marker>
+      </defs>
+
+      {/* 分配边 (资源 ➔ 进程) */}
+      {RESOURCES.map((r) => {
+        const owner = owners[r]
+        if (!owner || !pp[owner] || !rp[r]) return null
+        return (
+          <line
+            className="allocation"
+            key={`a-${r}-${owner}`}
+            x1={rp[r][0]}
+            y1={rp[r][1] - 34}
+            x2={pp[owner][0]}
+            y2={pp[owner][1] + 37}
+            markerEnd="url(#greenArrow)"
+          />
+        )
+      })}
+
+      {/* 申请边 (进程 ➔ 资源) */}
+      {waiting.map((w, i) => {
+        if (!pp[w.process] || !rp[w.resource]) return null
+        const inCycle = cycle.includes(w.process)
+        return (
+          <line
+            className={inCycle ? 'request cycle' : 'request'}
+            key={`w-${w.process}-${w.resource}-${i}`}
+            x1={pp[w.process][0]}
+            y1={pp[w.process][1] + 37}
+            x2={rp[w.resource][0]}
+            y2={rp[w.resource][1] - 37}
+            markerEnd={inCycle ? 'url(#redArrow)' : 'url(#orangeArrow)'}
+          />
+        )
+      })}
+
+      {/* 进程节点 */}
+      {PROCESSES.map((p) => {
+        const coord = pp[p] ?? [0, 0]
+        const inCycle = cycle.includes(p)
+        return (
+          <g className={`process-node ${inCycle ? 'cycle' : ''}`} key={p} transform={`translate(${coord[0]},${coord[1]})`}>
+            <circle r="36" />
+            <text y="5">{p}</text>
+          </g>
+        )
+      })}
+
+      {/* 资源节点 */}
+      {RESOURCES.map((r) => {
+        const coord = rp[r] ?? [0, 0]
+        const owner = owners[r]
+        return (
+          <g className={`resource-node ${owner ? 'owned' : ''}`} key={r} transform={`translate(${coord[0]},${coord[1]})`}>
+            <rect x="-34" y="-34" width="68" height="68" rx="14" />
+            <text y="5">{r}</text>
+            <text className="owner" y="53">{owner ? `${owner} 持有` : '空闲'}</text>
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
 
 function DeadlockStory(){
   const [step, setStep] = useState(0);
