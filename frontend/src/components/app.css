@@ -598,3 +598,40 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 
 /* 遍历与对比控制容器 */
 .tree-traversal-stage,.tree-compare-stage{display:flex;flex-direction:column;align-items:center;width:100%}
+
+/* 17. 二叉树自由探索自定义形状抽屉与节点拖拽系统 */
+.tree-custom-card{background:linear-gradient(180deg,#151f2e,#111824);border:1px solid #2e3e55;border-radius:14px;padding:12px;margin:6px 0 14px 0;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.tree-custom-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;background:#1e2a3c;border:1px solid #3d4f6a;border-radius:10px;padding:9px 12px;color:#e2e8f0;font-size:14px;font-weight:700;cursor:pointer;transition:.2s}
+.tree-custom-toggle:hover{background:#26354b;border-color:#5c7398;color:#fff}
+.tree-custom-toggle.active{background:#223249;border-color:#6558e8;color:#a5b4fc}
+.tree-custom-tip{font-size:12.5px;color:#94a3b8;line-height:1.55;margin:8px 2px 2px 2px}
+.tree-custom-tip strong{color:#ff9073}
+
+.tree-config-drawer{margin-top:12px;display:flex;flex-direction:column;gap:12px;border-top:1px dashed #2b394f;padding-top:12px}
+.tree-preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tree-preset-btn{background:#16202e;border:1px solid #2d3b50;border-radius:8px;padding:7px 8px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:.2s}
+.tree-preset-btn strong{font-size:12.5px;color:#cbd5e1}
+.tree-preset-btn small{font-size:11px;color:#64748b}
+.tree-preset-btn:hover{background:#1e2d42;border-color:#4b607d}
+.tree-preset-btn.active{background:#1d2942;border-color:#6558e8;box-shadow:inset 0 0 0 1px #6558e8}
+.tree-preset-btn.active strong{color:#a5b4fc}
+
+.level-order-box{display:flex;gap:6px}
+.level-order-box input{flex:1;background:#0d141e;border:1px solid #354760;border-radius:6px;color:#f1f5f9;padding:6px 8px;font-size:13px;font-weight:700;font-family:monospace}
+.level-build-btn{background:#312e81;border:1px solid #4f46e5;color:#e0e7ff;border-radius:6px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s}
+.level-build-btn:hover{background:#4338ca;color:#fff}
+.custom-err-hint{font-size:12px;color:#f87171;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);padding:4px 8px;border-radius:6px;margin-top:2px}
+
+.node-op-box{display:flex;flex-direction:column;gap:6px;background:#151e2b;border:1px solid #28374a;border-radius:8px;padding:8px}
+.op-row{display:flex;align-items:center;gap:6px}
+.op-row label{font-size:12.5px;color:#94a3b8;white-space:nowrap}
+.op-row select{flex:1;background:#0d141e;border:1px solid #354760;border-radius:6px;color:#f1f5f9;padding:5px 6px;font-size:12.5px;font-weight:700}
+.child-name-input{width:70px;background:#0d141e;border:1px solid #354760;border-radius:6px;color:#f1f5f9;padding:5px 6px;font-size:13px;font-weight:800;text-align:center;text-transform:uppercase}
+.add-child-btn{background:#159a83;border:1px solid #107c69;color:#e6fffa;border-radius:6px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.2s}
+.add-child-btn:hover{background:#128773;color:#fff}
+.del-node-btn{background:rgba(239,68,68,.14);border:1px solid #ef4444;color:#fca5a5;border-radius:6px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.2s}
+.del-node-btn:hover{background:rgba(239,68,68,.3);color:#fff}
+
+.tree-canvas.is-dragging{cursor:grabbing !important}
+.tree-node{cursor:grab;transition:transform .1s ease}
+.tree-node.dragging{cursor:grabbing !important;filter:drop-shadow(0 0 16px rgba(99,102,241,.85))}

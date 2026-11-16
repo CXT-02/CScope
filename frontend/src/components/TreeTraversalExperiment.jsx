@@ -2,44 +2,673 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ExperimentHeader } from './AttentionExperiment'
 import LearningCycle from './LearningCycle'
 
-const TREES = {
-  balanced: { name: '完全二叉树', root: 'A', nodes: [node('A',360,55,'B','C'),node('B',190,155,'D','E'),node('C',530,155,'F','G'),node('D',105,270),node('E',275,270),node('F',445,270),node('G',615,270)] },
-  incomplete: { name: '非完全二叉树', root: 'A', nodes: [node('A',360,55,'B','C'),node('B',190,155,null,'D'),node('C',530,155,'E','F'),node('D',275,270),node('E',445,270,null,'G'),node('F',615,270),node('G',500,365)] },
-  skewed: { name: '左斜树', root: 'A', nodes: [node('A',500,45,'B'),node('B',400,125,'C'),node('C',300,205,'D'),node('D',200,285,'E'),node('E',100,365)] },
+const PRESET_TREES = {
+  balanced: {
+    name: '完全二叉树 (7 点)',
+    desc: '满对称平衡二叉树',
+    root: 'A',
+    nodes: [
+      node('A', 360, 55, 'B', 'C'),
+      node('B', 190, 155, 'D', 'E'),
+      node('C', 530, 155, 'F', 'G'),
+      node('D', 105, 270),
+      node('E', 275, 270),
+      node('F', 445, 270),
+      node('G', 615, 270),
+    ],
+  },
+  incomplete: {
+    name: '非完全二叉树 (6 点)',
+    desc: '含缺失子树与非对称分支',
+    root: 'A',
+    nodes: [
+      node('A', 360, 55, 'B', 'C'),
+      node('B', 190, 155, null, 'D'),
+      node('C', 530, 155, 'E', 'F'),
+      node('D', 275, 270),
+      node('E', 445, 270, null, 'G'),
+      node('F', 615, 270),
+      node('G', 500, 365),
+    ],
+  },
+  skewed: {
+    name: '左单斜树 (5 点)',
+    desc: '单侧递归，退化为链表结构',
+    root: 'A',
+    nodes: [
+      node('A', 480, 50, 'B'),
+      node('B', 390, 130, 'C'),
+      node('C', 300, 210, 'D'),
+      node('D', 210, 290, 'E'),
+      node('E', 120, 370),
+    ],
+  },
+  rightSkewed: {
+    name: '右单斜树 (5 点)',
+    desc: '单侧全右孩子向下延伸',
+    root: 'A',
+    nodes: [
+      node('A', 200, 50, null, 'B'),
+      node('B', 290, 130, null, 'C'),
+      node('C', 380, 210, null, 'D'),
+      node('D', 470, 290, null, 'E'),
+      node('E', 560, 370),
+    ],
+  },
+  zigzag: {
+    name: '之字折叠树 (5 点)',
+    desc: '左右交替折叠形态',
+    root: 'A',
+    nodes: [
+      node('A', 360, 55, null, 'B'),
+      node('B', 480, 135, 'C', null),
+      node('C', 360, 215, null, 'D'),
+      node('D', 480, 295, 'E', null),
+      node('E', 360, 375),
+    ],
+  },
+  deepBranch: {
+    name: '深层分支树 (7 点)',
+    desc: '左右不对称深层拓扑',
+    root: 'A',
+    nodes: [
+      node('A', 360, 55, 'B', 'C'),
+      node('B', 200, 155, 'D', null),
+      node('C', 520, 155, null, 'E'),
+      node('D', 110, 260, 'F', null),
+      node('E', 610, 260, null, 'G'),
+      node('F', 60, 360),
+      node('G', 660, 360),
+    ],
+  },
 }
-const MODES = {
-  preorder: { name: '前序遍历', rule: '根 → 左 → 右', color: '#6558e8' },
-  inorder: { name: '中序遍历', rule: '左 → 根 → 右', color: '#159a83' },
-  postorder: { name: '后序遍历', rule: '左 → 右 → 根', color: '#ee6c4d' },
-  levelorder: { name: '层序遍历', rule: '从上到下、从左到右', color: '#c88724' },
+
+// 层序序列解析与二叉树自动排版布局
+function parseLevelOrderToTree(inputStr) {
+  if (!inputStr || !inputStr.trim()) return null
+  const tokens = inputStr
+    .split(/[,，\s]+/)
+    .map((t) => t.trim())
+    .filter(Boolean)
+  if (tokens.length === 0) return null
+
+  const isNull = (s) => ['null', 'none', '#', '-', '空'].includes(s.toLowerCase())
+  if (isNull(tokens[0])) return null
+
+  const rootId = tokens[0]
+  const nodeMap = { [rootId]: { id: rootId, left: null, right: null } }
+  const queue = [rootId]
+  let idx = 1
+
+  while (queue.length > 0 && idx < tokens.length) {
+    const parentId = queue.shift()
+    const parent = nodeMap[parentId]
+
+    // 处理左孩子
+    if (idx < tokens.length) {
+      const leftVal = tokens[idx++]
+      if (!isNull(leftVal)) {
+        nodeMap[leftVal] = { id: leftVal, left: null, right: null }
+        parent.left = leftVal
+        queue.push(leftVal)
+      }
+    }
+    // 处理右孩子
+    if (idx < tokens.length) {
+      const rightVal = tokens[idx++]
+      if (!isNull(rightVal)) {
+        nodeMap[rightVal] = { id: rightVal, left: null, right: null }
+        parent.right = rightVal
+        queue.push(rightVal)
+      }
+    }
+  }
+
+  // 计算树深度并自动计算 (x, y) 坐标
+  const levels = []
+  const bfsQ = [{ id: rootId, depth: 0 }]
+  const visited = new Set()
+  while (bfsQ.length > 0) {
+    const { id, depth } = bfsQ.shift()
+    if (visited.has(id)) continue
+    visited.add(id)
+    if (!levels[depth]) levels[depth] = []
+    levels[depth].push(id)
+    const n = nodeMap[id]
+    if (n.left && nodeMap[n.left]) bfsQ.push({ id: n.left, depth: depth + 1 })
+    if (n.right && nodeMap[n.right]) bfsQ.push({ id: n.right, depth: depth + 1 })
+  }
+
+  const depthCount = levels.length
+  const ySpacing = depthCount <= 3 ? 100 : Math.min(85, Math.floor(310 / Math.max(1, depthCount - 1)))
+
+  const nodes = []
+  levels.forEach((row, d) => {
+    const y = Math.min(375, 55 + d * ySpacing)
+    const count = row.length
+    row.forEach((nid, i) => {
+      const x = Math.round(((i + 1) / (count + 1)) * 620 + 50)
+      const item = nodeMap[nid]
+      nodes.push({
+        id: nid,
+        x,
+        y,
+        left: item.left,
+        right: item.right,
+      })
+    })
+  })
+
+  return {
+    name: '自定义二叉树',
+    root: rootId,
+    nodes,
+  }
 }
-const STORY = [
-  { short:'结构',title:'先看结构：树不是一条线，而是递归分支',eyebrow:'01 · 建立地图',why:'每个节点都可能连接左右子树，因此遍历必须明确“何时访问根节点”。' },
-  { short:'递归',title:'从 A 走到 B、再走到 D 时，A 和 B 的任务都还没有完成',eyebrow:'02 · 理解返回',why:'调用栈保存“返回哪个父节点、接下来还要处理哪棵子树”，所以 D 完成后先回到 B，再由 B 回到 A。' },
-  { short:'前序',title:'前序：一到节点就先访问，再探索子树',eyebrow:'03 · 根左右',why:'先记录根节点，适合复制树结构、生成目录层级等场景。' },
-  { short:'中序',title:'中序：先走左侧，回到根，再走右侧',eyebrow:'04 · 左根右',why:'对二叉搜索树使用中序遍历，可以得到从小到大的有序序列。' },
-  { short:'后序',title:'后序：两个子树都处理完，最后访问根',eyebrow:'05 · 左右根',why:'先处理子节点再处理父节点，适合删除树、计算目录大小。' },
-  { short:'层序',title:'层序：用队列按距离根节点的层级推进',eyebrow:'06 · 广度优先',why:'队列保持先进先出，使同一层节点在更深层节点之前被访问。' },
-  { short:'对比',title:'同一棵树，访问顺序取决于“根在何时被记录”',eyebrow:'07 · 形成规律',why:'理解根节点的访问时机，比孤立背诵四条结果更容易迁移到新树。' },
-]
 
 export default function TreeTraversalExperiment({ experiment }) {
-  const [treeKey,setTreeKey]=useState('balanced'); const [mode,setMode]=useState('preorder'); const [stepIndex,setStepIndex]=useState(0); const [playing,setPlaying]=useState(false); const [speed,setSpeed]=useState(1)
-  const tree=TREES[treeKey]; const steps=useMemo(()=>buildTraversal(tree,mode),[tree,mode]); const step=steps[Math.min(stepIndex,steps.length-1)]
-  useEffect(()=>{setStepIndex(0);setPlaying(false)},[treeKey,mode])
-  useEffect(()=>{if(!playing)return undefined;const timer=window.setInterval(()=>setStepIndex((current)=>{if(current>=steps.length-1){setPlaying(false);return current}return current+1}),800/speed);return()=>window.clearInterval(timer)},[playing,speed,steps.length])
-  return <>
-    <ExperimentHeader experiment={experiment} eyebrow="算法实验 04" />
-    <TreeStory tree={TREES.balanced} />
-    <div className="explore-heading"><span>自由探索 · 同一棵树，四种访问顺序</span><h2>跟随当前节点，看懂递归栈与队列</h2><p>切换树形和遍历方式，逐步观察“进入节点、访问节点、返回父节点”的完整过程。</p></div>
-    <div className="lab-layout tree-lab-layout"><aside className="control-panel"><div className="panel-title"><span>遍历控制</span><i>{step.done?'已完成':'逐步运行'}</i></div><label className="field-block"><span>树的形状</span><small>树形改变后，四种遍历的结果都会重新计算。</small><select value={treeKey} onChange={(event)=>setTreeKey(event.target.value)}>{Object.entries(TREES).map(([key,item])=><option value={key} key={key}>{item.name}</option>)}</select></label><label className="field-block"><span>遍历方式</span><small>{MODES[mode].rule}；切换后注意根节点访问时机。</small><select value={mode} onChange={(event)=>setMode(event.target.value)}>{Object.entries(MODES).map(([key,item])=><option value={key} key={key}>{item.name}</option>)}</select></label><div className="tree-rule" style={{'--tree-accent':MODES[mode].color}}><span>核心顺序</span><strong>{MODES[mode].rule}</strong></div><div className="step-counter"><span>当前步骤</span><strong>{stepIndex} / {steps.length-1}</strong></div><input className="step-slider" type="range" min="0" max={steps.length-1} value={stepIndex} onChange={(event)=>{setStepIndex(Number(event.target.value));setPlaying(false)}}/><div className="step-buttons"><button type="button" disabled={stepIndex===0} onClick={()=>setStepIndex((v)=>v-1)}>← 上一步</button><button type="button" disabled={stepIndex===steps.length-1} onClick={()=>setStepIndex((v)=>v+1)}>下一步 →</button></div><button className={`tree-play ${playing?'stop':''}`} type="button" onClick={()=>{if(step.done)setStepIndex(0);setPlaying((v)=>!v)}}>{playing?'暂停遍历':step.done?'重新播放':'▶ 自动遍历'}</button><div className="live-explanation" key={`${mode}-${stepIndex}`}><span>这一步发生了什么</span><strong>{step.action}</strong><p>{step.message}</p></div></aside>
-      <section className="visual-panel tree-visual-panel"><div className="visual-toolbar"><div><strong>{tree.name} · {MODES[mode].name}</strong><span>橙色：当前节点 · 绿色：已经访问 · 虚线：当前递归路径</span></div><span className="source-chip">根节点 {tree.root}</span></div><TreeCanvas tree={tree} step={step}/><div className="tree-state-row"><div className="visit-sequence"><span>访问结果</span><div>{step.visited.length?step.visited.map((id,index)=><i key={`${id}-${index}`}>{id}<b>{index+1}</b></i>):<small>尚未访问任何节点</small>}</div></div><div className="tree-memory"><span>{mode==='levelorder'?'队列 Queue':'递归栈 Stack'}</span><div>{step.memory.length?step.memory.map((id,index)=><i key={`${id}-${index}`}>{id}</i>):<small>空</small>}</div><p>{mode==='levelorder'?'队首在左侧，先进入的节点先处理。':'栈顶在右侧，当前递归调用最后进入、最先返回。'}</p></div></div></section></div>
-    <TreeCodeDemo mode={mode} action={step.action} />
-    <LearningCycle experimentId="tree-traversal" prediction={{question:'前序遍历与中序遍历的关键区别是什么？',options:['根节点被访问的时机不同','是否访问叶子节点','树中节点数量不同'],answer:'根节点被访问的时机不同',explanation:' 前序在进入节点时访问根，中序在完成左子树后访问根。'}} operation={{title:'比较同一棵树的四种结果',instruction:'保持完全二叉树不变，依次运行前序、中序、后序和层序，观察根节点 A 分别第几个被访问。'}} observation={`${MODES[mode].name}当前已访问 ${step.visited.length}/${tree.nodes.length} 个节点，序列为 ${step.visited.join(' → ')||'空'}。`} summaryPrompt="递归栈和层序队列分别如何决定下一个被处理的节点？" />
-  </>
+  const [treeKey, setTreeKey] = useState('balanced')
+  const [tree, setTree] = useState(PRESET_TREES.balanced)
+  const [mode, setMode] = useState('preorder')
+  const [stepIndex, setStepIndex] = useState(0)
+  const [playing, setPlaying] = useState(false)
+  const [speed, setSpeed] = useState(1)
+
+  // 自定义树状态与抽屉
+  const [showConfig, setShowConfig] = useState(false)
+  const [draggingNode, setDraggingNode] = useState(null)
+  const [levelInput, setLevelInput] = useState('A, B, C, D, E, F, G')
+  const [inputErr, setInputErr] = useState('')
+
+  // 节点子树增删快速操作
+  const [selectedParent, setSelectedParent] = useState('A')
+  const [newChildName, setNewChildName] = useState('')
+  const [newChildSide, setNewChildSide] = useState('left')
+
+  const steps = useMemo(() => buildTraversal(tree, mode), [tree, mode])
+  const step = steps[Math.min(stepIndex, steps.length - 1)]
+
+  // 保证选中的父节点始终合法
+  useEffect(() => {
+    if (tree.nodes.length > 0 && !tree.nodes.some((n) => n.id === selectedParent)) {
+      setSelectedParent(tree.nodes[0].id)
+    }
+  }, [tree.nodes, selectedParent])
+
+  useEffect(() => {
+    setStepIndex(0)
+    setPlaying(false)
+  }, [tree, mode])
+
+  useEffect(() => {
+    if (!playing) return undefined
+    const timer = window.setInterval(() => {
+      setStepIndex((current) => {
+        if (current >= steps.length - 1) {
+          setPlaying(false)
+          return current
+        }
+        return current + 1
+      })
+    }, 800 / speed)
+    return () => window.clearInterval(timer)
+  }, [playing, speed, steps.length])
+
+  // 切换预设
+  function applyPreset(key) {
+    setTreeKey(key)
+    const target = PRESET_TREES[key]
+    if (!target) return
+    setTree(JSON.parse(JSON.stringify(target)))
+    setStepIndex(0)
+    setPlaying(false)
+    setInputErr('')
+  }
+
+  // 通过层序序列构建树
+  function handleGenerateFromLevelOrder() {
+    setInputErr('')
+    const newTree = parseLevelOrderToTree(levelInput)
+    if (!newTree || newTree.nodes.length === 0) {
+      setInputErr('输入格式有误，请输入用逗号分隔的节点（如 A, B, C, D, null, F）')
+      return
+    }
+    setTreeKey('custom')
+    setTree(newTree)
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  // 为选中父节点快速添加孩子节点
+  function handleAddChildNode() {
+    if (!newChildName.trim()) return
+    const childId = newChildName.trim().toUpperCase()
+    if (tree.nodes.some((n) => n.id === childId)) {
+      setInputErr(`节点 ${childId} 已存在，请换一个名称`)
+      return
+    }
+    const parent = tree.nodes.find((n) => n.id === selectedParent)
+    if (!parent) return
+
+    // 检查侧边是否已有孩子
+    if (newChildSide === 'left' && parent.left) {
+      setInputErr(`父节点 ${selectedParent} 已经有左孩子 ${parent.left}，请先移除或换边`)
+      return
+    }
+    if (newChildSide === 'right' && parent.right) {
+      setInputErr(`父节点 ${selectedParent} 已经有右孩子 ${parent.right}，请先移除或换边`)
+      return
+    }
+
+    // 估算新节点坐标
+    const offsetX = newChildSide === 'left' ? -70 : 70
+    const newX = Math.max(50, Math.min(670, parent.x + offsetX))
+    const newY = Math.min(380, parent.y + 85)
+
+    const updatedNodes = tree.nodes.map((n) => {
+      if (n.id === selectedParent) {
+        return {
+          ...n,
+          [newChildSide]: childId,
+        }
+      }
+      return n
+    })
+    updatedNodes.push({
+      id: childId,
+      x: newX,
+      y: newY,
+      left: null,
+      right: null,
+    })
+
+    setTreeKey('custom')
+    setTree({
+      ...tree,
+      name: '自定义二叉树',
+      nodes: updatedNodes,
+    })
+    setNewChildName('')
+    setInputErr('')
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  // 删除某个非根节点
+  function handleRemoveNode(nodeId) {
+    if (nodeId === tree.root) {
+      setInputErr('无法删除根节点！如需更改根节点，请直接使用层序序列建树')
+      return
+    }
+    // 递归查找以 nodeId 为根的所有子孙节点
+    const toRemove = new Set()
+    function markSubtree(id) {
+      if (!id || toRemove.has(id)) return
+      toRemove.add(id)
+      const n = tree.nodes.find((item) => item.id === id)
+      if (n) {
+        if (n.left) markSubtree(n.left)
+        if (n.right) markSubtree(n.right)
+      }
+    }
+    markSubtree(nodeId)
+
+    // 清理父节点的指向并过滤节点
+    const updatedNodes = tree.nodes
+      .filter((n) => !toRemove.has(n.id))
+      .map((n) => ({
+        ...n,
+        left: toRemove.has(n.left) ? null : n.left,
+        right: toRemove.has(n.right) ? null : n.right,
+      }))
+
+    setTreeKey('custom')
+    setTree({
+      ...tree,
+      name: '自定义二叉树',
+      nodes: updatedNodes,
+    })
+    setInputErr('')
+    setStepIndex(0)
+    setPlaying(false)
+  }
+
+  // 鼠标拖拽节点改变树的样子
+  function handleNodeMouseDown(nodeId, e) {
+    e.stopPropagation()
+    setDraggingNode(nodeId)
+  }
+
+  function handleMouseMove(e) {
+    if (!draggingNode) return
+    const svg = e.currentTarget
+    const rect = svg.getBoundingClientRect()
+    const x = Math.round(((e.clientX - rect.left) / rect.width) * 720)
+    const y = Math.round(((e.clientY - rect.top) / rect.height) * 420)
+    const clampedX = Math.max(45, Math.min(675, x))
+    const clampedY = Math.max(40, Math.min(380, y))
+    setTree((prev) => ({
+      ...prev,
+      name: '自定义二叉树',
+      nodes: prev.nodes.map((n) => (n.id === draggingNode ? { ...n, x: clampedX, y: clampedY } : n)),
+    }))
+  }
+
+  function handleMouseUp() {
+    setDraggingNode(null)
+  }
+
+  return (
+    <>
+      <ExperimentHeader experiment={experiment} eyebrow="算法实验 04" />
+      <TreeStory tree={PRESET_TREES.balanced} />
+      <div className="explore-heading">
+        <span>自由探索 · 同一棵树，四种访问顺序</span>
+        <h2>跟随当前节点，看懂递归栈与队列</h2>
+        <p>切换树形和遍历方式，逐步观察“进入节点、访问节点、返回父节点”的完整过程。</p>
+      </div>
+      <div className="lab-layout tree-lab-layout">
+        <aside className="control-panel">
+          <div className="panel-title">
+            <span>遍历控制</span>
+            <i>{step.done ? '已完成' : '逐步运行'}</i>
+          </div>
+
+          {/* 自定义二叉树形态入口抽屉 */}
+          <div className="tree-custom-card">
+            <button
+              type="button"
+              className={`tree-custom-toggle ${showConfig ? 'active' : ''}`}
+              onClick={() => setShowConfig((v) => !v)}
+            >
+              <span>⚙ 自定义二叉树形状与分支</span>
+              <span className="badge-pill">{showConfig ? '收起配置 ▲' : '展开自定义 ▼'}</span>
+            </button>
+            <p className="tree-custom-tip">
+              💡 支持预设 6 种树形，也可<strong>在右侧画布直接拖拽圆点</strong>任意排布树状形态！
+            </p>
+
+            {showConfig && (
+              <div className="tree-config-drawer">
+                <div className="config-sub-block">
+                  <div className="config-sub-header">
+                    <span className="config-sub-label">1. 快速切换经典树形</span>
+                    <button
+                      type="button"
+                      className="mini-reset-btn"
+                      onClick={() => applyPreset(treeKey === 'custom' ? 'balanced' : treeKey)}
+                      title="重置为当前预设"
+                    >
+                      ↺ 恢复预设
+                    </button>
+                  </div>
+                  <div className="tree-preset-grid">
+                    {Object.entries(PRESET_TREES).map(([k, p]) => (
+                      <button
+                        key={k}
+                        type="button"
+                        className={`tree-preset-btn ${treeKey === k ? 'active' : ''}`}
+                        onClick={() => applyPreset(k)}
+                      >
+                        <strong>{p.name}</strong>
+                        <small>{p.desc}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="config-sub-block">
+                  <span className="config-sub-label">2. 层序输入一键建树 (支持 null 空树)</span>
+                  <div className="level-order-box">
+                    <input
+                      type="text"
+                      value={levelInput}
+                      onChange={(e) => setLevelInput(e.target.value)}
+                      placeholder="例如: A, B, C, D, null, F, G"
+                    />
+                    <button type="button" onClick={handleGenerateFromLevelOrder} className="level-build-btn">
+                      一键建树
+                    </button>
+                  </div>
+                  {inputErr && <span className="custom-err-hint">{inputErr}</span>}
+                </div>
+
+                <div className="config-sub-block">
+                  <span className="config-sub-label">3. 节点子树增删微调</span>
+                  <div className="node-op-box">
+                    <div className="op-row">
+                      <label>父节点:</label>
+                      <select value={selectedParent} onChange={(e) => setSelectedParent(e.target.value)}>
+                        {tree.nodes.map((n) => (
+                          <option key={n.id} value={n.id}>
+                            {n.id} (左: {n.left || '无'}, 右: {n.right || '无'})
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        className="del-node-btn"
+                        onClick={() => handleRemoveNode(selectedParent)}
+                        title="删除该节点及其子树"
+                      >
+                        删除
+                      </button>
+                    </div>
+                    <div className="op-row">
+                      <select value={newChildSide} onChange={(e) => setNewChildSide(e.target.value)}>
+                        <option value="left">左孩子</option>
+                        <option value="right">右孩子</option>
+                      </select>
+                      <input
+                        type="text"
+                        maxLength="3"
+                        placeholder="新节点名"
+                        value={newChildName}
+                        onChange={(e) => setNewChildName(e.target.value)}
+                        className="child-name-input"
+                      />
+                      <button type="button" onClick={handleAddChildNode} className="add-child-btn">
+                        + 挂载
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <label className="field-block">
+            <span>遍历方式</span>
+            <small>{MODES[mode].rule}；切换后注意根节点访问时机。</small>
+            <select value={mode} onChange={(event) => setMode(event.target.value)}>
+              {Object.entries(MODES).map(([key, item]) => (
+                <option value={key} key={key}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="tree-rule" style={{ '--tree-accent': MODES[mode].color }}>
+            <span>核心顺序</span>
+            <strong>{MODES[mode].rule}</strong>
+          </div>
+          <div className="step-counter">
+            <span>当前步骤</span>
+            <strong>
+              {stepIndex} / {steps.length - 1}
+            </strong>
+          </div>
+          <input
+            className="step-slider"
+            type="range"
+            min="0"
+            max={steps.length - 1}
+            value={stepIndex}
+            onChange={(event) => {
+              setStepIndex(Number(event.target.value))
+              setPlaying(false)
+            }}
+          />
+          <div className="step-buttons">
+            <button type="button" disabled={stepIndex === 0} onClick={() => setStepIndex((v) => v - 1)}>
+              ← 上一步
+            </button>
+            <button type="button" disabled={stepIndex === steps.length - 1} onClick={() => setStepIndex((v) => v + 1)}>
+              下一步 →
+            </button>
+          </div>
+          <button
+            className={`tree-play ${playing ? 'stop' : ''}`}
+            type="button"
+            onClick={() => {
+              if (step.done) setStepIndex(0)
+              setPlaying((v) => !v)
+            }}
+          >
+            {playing ? '暂停遍历' : step.done ? '重新播放' : '▶ 自动遍历'}
+          </button>
+          <div className="live-explanation" key={`${mode}-${stepIndex}`}>
+            <span>这一步发生了什么</span>
+            <strong>{step.action}</strong>
+            <p>{step.message}</p>
+          </div>
+        </aside>
+        <section className="visual-panel tree-visual-panel">
+          <div className="visual-toolbar">
+            <div>
+              <strong>
+                {tree.name} · {MODES[mode].name}
+              </strong>
+              <span>
+                {draggingNode
+                  ? `正在拖拽节点 ${draggingNode} 调整树形...`
+                  : '橙色：当前节点 · 绿色：已访问 · 虚线：当前递归路径 · 支持直接拖拽节点调整布局'}
+              </span>
+            </div>
+            <div className="toolbar-actions">
+              <span className="source-chip">根节点 {tree.root} · 总节点: {tree.nodes.length}</span>
+              <button className="text-button" type="button" onClick={() => setStepIndex(0)}>
+                重新开始
+              </button>
+            </div>
+          </div>
+          <TreeCanvas
+            tree={tree}
+            step={step}
+            draggingNode={draggingNode}
+            onNodeMouseDown={handleNodeMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+          />
+          <div className="tree-state-row">
+            <div className="visit-sequence">
+              <span>访问结果</span>
+              <div>
+                {step.visited.length ? (
+                  step.visited.map((id, index) => (
+                    <i key={`${id}-${index}`}>
+                      {id}
+                      <b>{index + 1}</b>
+                    </i>
+                  ))
+                ) : (
+                  <small>尚未访问任何节点</small>
+                )}
+              </div>
+            </div>
+            <div className="tree-memory">
+              <span>{mode === 'levelorder' ? '队列 Queue' : '递归栈 Stack'}</span>
+              <div>
+                {step.memory.length ? (
+                  step.memory.map((id, index) => <i key={`${id}-${index}`}>{id}</i>)
+                ) : (
+                  <small>空</small>
+                )}
+              </div>
+              <p>
+                {mode === 'levelorder'
+                  ? '队首在左侧，先进入的节点先处理。'
+                  : '栈顶在右侧，当前递归调用最后进入、最先返回。'}
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <TreeCodeDemo mode={mode} action={step.action} />
+      <LearningCycle
+        experimentId="tree-traversal"
+        prediction={{
+          question: '前序遍历与中序遍历的关键区别是什么？',
+          options: ['根节点被访问的时机不同', '是否访问叶子节点', '树中节点数量不同'],
+          answer: '根节点被访问的时机不同',
+          explanation: ' 前序在进入节点时访问根，中序在完成左子树后访问根。',
+        }}
+        operation={{
+          title: '比较同一棵树的四种结果',
+          instruction: '保持完全二叉树不变，依次运行前序、中序、后序和层序，观察根节点 A 分别第几个被访问。',
+        }}
+        observation={`${MODES[mode].name}当前已访问 ${step.visited.length}/${tree.nodes.length} 个节点，序列为 ${
+          step.visited.join(' → ') || '空'
+        }。`}
+        summaryPrompt="递归栈和层序队列分别如何决定下一个被处理的节点？"
+      />
+    </>
+  )
 }
 
-function TreeCanvas({tree,step}){const path=new Set(step.memory);return <svg className="tree-canvas" viewBox="0 0 720 420" role="img" aria-label="二叉树遍历动画">{tree.nodes.flatMap((parent)=>['left','right'].map((side)=>{const child=tree.nodes.find((n)=>n.id===parent[side]);if(!child)return null;const active=path.has(parent.id)&&path.has(child.id);return <line key={`${parent.id}-${child.id}`} className={active?'active-path':''} x1={parent.x} y1={parent.y} x2={child.x} y2={child.y}/> }))}{tree.nodes.map((n)=>{const state=step.current===n.id?'current':step.visited.includes(n.id)?'visited':path.has(n.id)?'pending':'';return <g className={`tree-node ${state}`} key={n.id} transform={`translate(${n.x},${n.y})`}><circle r="29"/><text y="5">{n.id}</text>{step.visited.includes(n.id)&&<text className="visit-order" y="-38">#{step.visited.indexOf(n.id)+1}</text>}</g>})}</svg>}
+function TreeCanvas({ tree, step, draggingNode, onNodeMouseDown, onMouseMove, onMouseUp }) {
+  const path = new Set(step.memory)
+  return (
+    <svg
+      className={`tree-canvas ${draggingNode ? 'is-dragging' : ''}`}
+      viewBox="0 0 720 420"
+      role="img"
+      aria-label="二叉树遍历动画"
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseUp}
+    >
+      {tree.nodes.flatMap((parent) =>
+        ['left', 'right'].map((side) => {
+          const child = tree.nodes.find((n) => n.id === parent[side])
+          if (!child) return null
+          const active = path.has(parent.id) && path.has(child.id)
+          return (
+            <line
+              key={`${parent.id}-${child.id}`}
+              className={active ? 'active-path' : ''}
+              x1={parent.x}
+              y1={parent.y}
+              x2={child.x}
+              y2={child.y}
+            />
+          )
+        })
+      )}
+      {tree.nodes.map((n) => {
+        const state = step.current === n.id ? 'current' : step.visited.includes(n.id) ? 'visited' : path.has(n.id) ? 'pending' : ''
+        const isDraggingThis = draggingNode === n.id
+        return (
+          <g
+            className={`tree-node ${state} ${isDraggingThis ? 'dragging' : ''}`}
+            key={n.id}
+            transform={`translate(${n.x},${n.y})`}
+            onMouseDown={(e) => onNodeMouseDown?.(n.id, e)}
+            style={{ cursor: isDraggingThis ? 'grabbing' : 'grab' }}
+          >
+            <circle r="29" />
+            <text y="5">{n.id}</text>
+            {step.visited.includes(n.id) && (
+              <text className="visit-order" y="-38">
+                #{step.visited.indexOf(n.id) + 1}
+              </text>
+            )}
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
 
 function TreeStory({tree}){const [step,setStep]=useState(0);const [playing,setPlaying]=useState(false);const [speed,setSpeed]=useState(1);useEffect(()=>{if(!playing)return undefined;const timer=window.setTimeout(()=>setStep((v)=>{if(v===STORY.length-1){setPlaying(false);return v}return v+1}),2700/speed);return()=>window.clearTimeout(timer)},[playing,speed,step]);function choose(v){setStep(v);setPlaying(false)}return <section className="transformer-story tree-story"><header className="story-intro"><div><span className="story-kicker">动画导学 · 约 3 分钟</span><h2>根节点什么时候被访问，决定遍历的名字</h2><p>用同一棵树贯穿四种算法，重点观察根、左子树和右子树的先后关系。</p></div><div className="tree-story-rules">{Object.values(MODES).map((item)=><span key={item.name}><i style={{background:item.color}}/>{item.name}<b>{item.rule}</b></span>)}</div></header><nav className="story-timeline" style={{'--story-steps':STORY.length}}>{STORY.map((item,index)=><button type="button" key={item.short} className={`${index===step?'active':''} ${index<step?'passed':''}`} onClick={()=>choose(index)}><i>{index<step?'✓':index+1}</i><span>{item.short}</span></button>)}</nav><div className="story-stage" key={step}><div className="story-copy"><span>{STORY[step].eyebrow}</span><h3>{STORY[step].title}</h3><p>{storyText(step)}</p><aside><strong>为什么需要它？</strong><p>{STORY[step].why}</p></aside></div><div className="story-visual"><TreeStoryVisual step={step} tree={tree}/></div></div><footer className="story-controls"><button type="button" disabled={step===0} onClick={()=>choose(step-1)}>← 上一步</button><button className="story-play" type="button" onClick={()=>{if(step===STORY.length-1)setStep(0);setPlaying((v)=>!v)}}>{playing?'暂停讲解':step===STORY.length-1?'重新播放':'▶ 自动播放'}</button><button type="button" disabled={step===STORY.length-1} onClick={()=>choose(step+1)}>下一步 →</button><label>速度<select value={speed} onChange={(e)=>setSpeed(Number(e.target.value))}><option value={.75}>0.75×</option><option value={1}>1×</option><option value={1.5}>1.5×</option></select></label></footer></section>}
 const RECURSION_STEPS = [
