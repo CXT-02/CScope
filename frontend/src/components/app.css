@@ -782,3 +782,57 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .structure-detail-panel{margin-top:16px;padding:12px 14px;background:#fff;border:1px solid #d5e9e3;border-radius:10px}
 .structure-detail-panel h4{margin:0 0 6px;font-size:13.5px;font-weight:900;color:#0f766e}
 .structure-detail-panel p{margin:0;font-size:13px;line-height:1.65;color:#475569}
+
+/* ======================================================== */
+/* 19. 页面置换算法实验 (Page Replacement) 全画幅字号、对比度与排版超清升级 */
+/* ======================================================== */
+.pager-controls{padding:20px 24px;border-radius:18px;margin-bottom:22px}
+.pager-controls label>span{font-size:15px;font-weight:800;color:#334155;margin-bottom:8px}
+.pager-controls input[type=text],.pager-controls input:not([type]){font-size:15.5px;font-weight:600;padding:11px 14px;border-radius:10px 0 0 10px}
+.pager-controls button{font-size:15px;font-weight:800;padding:0 22px;border-radius:0 10px 10px 0;cursor:pointer}
+.pager-controls label b{font-size:16.5px;color:#ee6c4d;font-weight:900}
+
+.pager-lab{padding:28px 32px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.04)}
+.pager-reference>span{color:#1e293b;font-size:16px;font-weight:800;display:inline-block;margin-bottom:8px}
+.pager-reference>div{display:flex;gap:8px;margin-top:10px;padding-bottom:6px;overflow-x:auto}
+.pager-reference button{position:relative;min-width:52px;height:58px;border:1.5px solid #cbd5e1;border-radius:12px;background:#f8fafc;color:#0f172a;cursor:pointer;font-size:24px;font-weight:900;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.04);transition:all .15s ease}
+.pager-reference button:hover{border-color:#ee6c4d;background:#fff}
+.pager-reference button.active{border-color:#e05330;color:#fff;background:#e05330;transform:translateY(-4px);box-shadow:0 6px 16px rgba(224,83,48,.35)}
+.pager-reference button.passed{border-color:#10b981;background:#f0fdf4;color:#065f46}
+.pager-reference button i{position:absolute;right:5px;bottom:3px;color:#64748b;font-size:12.5px;font-weight:700;font-style:normal;font-family:Consolas,monospace}
+.pager-reference button.active i{color:rgba(255,255,255,.9);font-weight:800}
+
+.pager-toolbar{display:flex;justify-content:center;align-items:center;gap:10px;margin:24px 0 22px}
+.pager-toolbar button,.pager-toolbar select{border:1.5px solid #cbd5e1;border-radius:10px;padding:10px 18px;background:#fff;color:#1e293b;font-size:15px;font-weight:700;transition:all .15s ease}
+.pager-toolbar button:hover:not(:disabled){border-color:#94a3b8;background:#f8fafc}
+.pager-toolbar .pager-play{color:#fff;background:#e05330;border-color:#e05330;box-shadow:0 4px 12px rgba(224,83,48,.25)}
+.pager-toolbar .pager-play:hover:not(:disabled){background:#c8401f;border-color:#c8401f}
+
+.pager-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.pager-panel{padding:22px 24px;border:1.5px solid #e2e8f0;border-radius:18px;background:#ffffff;box-shadow:0 4px 20px rgba(0,0,0,.03);display:flex;flex-direction:column;gap:14px}
+.pager-panel.fault{border-color:rgba(238,108,77,.4)}
+.pager-panel.hit{border-color:rgba(16,185,129,.45)}
+.pager-panel header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pager-panel header span{color:#475569;font-size:14.5px;font-weight:600;line-height:1.45;display:block}
+.pager-panel h3{margin:4px 0 0;font-size:26px;font-weight:900;color:#0f172a;letter-spacing:-.02em}
+.pager-panel header i{height:max-content;padding:6px 14px;border-radius:8px;font-size:13.5px;font-weight:800;font-style:normal;letter-spacing:.02em}
+.pager-panel.fault header i{color:#b91c1c;background:#fee2e2;border:1px solid #fca5a5}
+.pager-panel.hit header i{color:#047857;background:#d1fae5;border:1px solid #6ee7b7}
+
+.memory-frames{display:flex;flex-direction:column;gap:8px;margin:4px 0}
+.memory-frames>div{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-radius:10px;background:#f1f5f9;border:1.5px solid #e2e8f0;transition:all .2s ease}
+.memory-frames span{color:#475569;font-size:15px;font-weight:700}
+.memory-frames strong{font-size:22px;font-weight:900;color:#0f172a}
+.memory-frames>div.loaded{color:#047857;background:#ecfdf5;border-color:#34d399;box-shadow:0 0 12px rgba(16,185,129,.2)}
+.memory-frames>div.loaded strong{color:#065f46}
+.memory-frames>div.replaced{color:#b91c1c;background:#fef2f2;border-color:#f87171;box-shadow:0 0 12px rgba(239,68,68,.2)}
+.memory-frames>div.replaced strong{color:#991b1b}
+
+.pager-panel>p{min-height:54px;color:#1e293b;font-size:15px;line-height:1.65;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin:0;display:flex;align-items:center}
+.pager-panel footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1.5px solid #e2e8f0;color:#475569;font-size:14.5px;font-weight:600}
+.pager-panel footer span{display:flex;align-items:baseline;gap:5px}
+.pager-panel footer b{color:#0f172a;font-size:18px;font-weight:900}
+
+.pager-comparison{margin-top:20px;padding:18px 24px;border-left:5px solid #ee6c4d;border-radius:14px;background:#fff7f4;border-top:1px solid #ffedd5;border-right:1px solid #ffedd5;border-bottom:1px solid #ffedd5}
+.pager-comparison strong{color:#c2410c;font-size:16.5px;font-weight:900;display:block;margin-bottom:6px;letter-spacing:.02em}
+.pager-comparison p{margin:0;color:#431407;font-size:15.5px;line-height:1.75;font-weight:500}
