@@ -168,13 +168,13 @@ export default function App() {
             )}
             {route.kind === 'lab' && (
               <>
-                <button type="button" className="crumb-btn" onClick={openCourses}>课程中心</button>
+                <button type="button" className="crumb-btn" onClick={() => navigate('#/workshop')}>仿真工坊</button>
                 <span className="crumb-sep">/</span>
                 <button type="button" className="crumb-btn" onClick={() => openCourse(experimentCourse?.id)}>
-                  {experimentCourse?.title}
+                  {experimentCourse?.title || '计算机专业课'}
                 </button>
                 <span className="crumb-sep">/</span>
-                <span className="crumb-current">{experiment?.title}</span>
+                <span className="crumb-current">{experiment?.title || '仿真实验'}</span>
               </>
             )}
           </div>
@@ -301,6 +301,14 @@ export default function App() {
             <main className="experiment-page" key={activeExperiment}>
               <Experiment experiment={experiment} />
             </main>
+          ) : route.kind === 'lab' ? (
+            <div style={{ padding: '60px 20px', textAlign: 'center', background: 'white', borderRadius: '16px', margin: '24px' }}>
+              <h2>未找到该仿真实验</h2>
+              <p style={{ color: '#64748b', margin: '12px 0 20px' }}>请求的实验模块不存在或配置正在更新中。</p>
+              <button type="button" className="start-lab-btn" style={{ padding: '8px 20px', cursor: 'pointer' }} onClick={() => navigate('#/workshop')}>
+                返回微观仿真工坊
+              </button>
+            </div>
           ) : (
             <ConsoleDashboard
               onOpenCourses={openCourses}

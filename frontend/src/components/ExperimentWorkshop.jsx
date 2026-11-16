@@ -6,6 +6,22 @@ export default function ExperimentWorkshop({ onOpenExperiment }) {
   const [difficultyFilter, setDifficultyFilter] = useState('all')
   const [search, setSearch] = useState('')
 
+  const subjectTabs = useMemo(() => {
+    const counts = { all: experiments.length }
+    experiments.forEach((e) => {
+      counts[e.courseId] = (counts[e.courseId] || 0) + 1
+    })
+    return [
+      { key: 'all', label: `全部学科 (${counts.all || 25})` },
+      { key: 'computer-organization', label: `计算机组成原理 (${counts['computer-organization'] || 0})` },
+      { key: 'operating-systems', label: `操作系统 (${counts['operating-systems'] || 0})` },
+      { key: 'networks', label: `计算机网络 (${counts['networks'] || 0})` },
+      { key: 'data-structures', label: `数据结构与算法 (${counts['data-structures'] || 0})` },
+      { key: 'databases', label: `数据库系统 (${counts['databases'] || 0})` },
+      { key: 'ai', label: `人工智能与前沿 (${counts['ai'] || 0})` },
+    ]
+  }, [])
+
   const enrichedExperiments = useMemo(() => {
     return experiments.map((exp) => {
       const course = courses.find(c => c.id === exp.courseId)
@@ -83,15 +99,7 @@ export default function ExperimentWorkshop({ onOpenExperiment }) {
       <div className="workshop-filter-bar">
         {/* 学科分类 */}
         <div className="filter-subject-tabs">
-          {[
-            { key: 'all', label: '全部学科 (25)' },
-            { key: 'arch', label: '计算机组成原理' },
-            { key: 'os', label: '操作系统' },
-            { key: 'net', label: '计算机网络' },
-            { key: 'ds', label: '数据结构与算法' },
-            { key: 'db', label: '数据库系统' },
-            { key: 'ai', label: '人工智能与前沿' }
-          ].map(sub => (
+          {subjectTabs.map((sub) => (
             <button
               key={sub.key}
               type="button"
@@ -129,47 +137,69 @@ export default function ExperimentWorkshop({ onOpenExperiment }) {
       </div>
 
       {/* 实验卡片大网格 */}
-      <div className="workshop-grid">
-        {filteredList.map((exp) => (
-          <div
-            key={exp.id}
-            className="workshop-card"
-            style={{ '--card-accent': exp.accent || '#4f46e5' }}
-            onClick={() => onOpenExperiment(exp.id)}
+      {filteredList.length === 0 ? (
+        <div className="workshop-empty-state" style={{ textAlign: 'center', padding: '60px 20px', background: 'white', borderRadius: '16px', margin: '20px 0', border: '1px dashed #cbd5e1' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🔍</div>
+          <h3 style={{ fontSize: '1.2rem', color: '#1e293b', marginBottom: '8px' }}>未找到匹配的底层仿真实验</h3>
+          <p style={{ color: '#64748b', fontSize: '0.92rem', marginBottom: '18px' }}>
+            没有找到符合当前学科或关键词的实验，建议调整学科分类或清空搜索条件。
+          </p>
+          <button
+            type="button"
+            className="filter-btn active"
+            style={{ padding: '8px 18px', borderRadius: '8px', cursor: 'pointer' }}
+            onClick={() => {
+              setSubjectFilter('all')
+              setDifficultyFilter('all')
+              setSearch('')
+            }}
           >
-            <div className="workshop-card-top">
-              <span className="course-tag">{exp.courseTitle}</span>
-              <span className="diff-tag">{exp.difficulty}</span>
-            </div>
-
-            <div className="card-center-icon" style={{ background: exp.accent || '#4f46e5' }}>
-              <span>{exp.icon || '🔬'}</span>
-            </div>
-
-            <h3 className="workshop-card-title">{exp.title}</h3>
-            <p className="workshop-card-desc">{exp.description}</p>
-
-            {/* 核心概念标签 */}
-            {exp.concepts && (
-              <div className="card-concept-pills">
-                {exp.concepts.slice(0, 3).map((c, cIdx) => (
-                  <span key={cIdx} className="concept-pill">{c}</span>
-                ))}
+            重置所有筛选条件
+          </button>
+        </div>
+      ) : (
+        <div className="workshop-grid">
+          {filteredList.map((exp) => (
+            <div
+              key={exp.id}
+              className="workshop-card"
+              style={{ '--card-accent': exp.accent || '#4f46e5' }}
+              onClick={() => onOpenExperiment(exp.id)}
+            >
+              <div className="workshop-card-top">
+                <span className="course-tag">{exp.courseTitle}</span>
+                <span className="diff-tag">{exp.difficulty}</span>
               </div>
-            )}
 
-            <div className="workshop-card-footer">
-              <div className="stars-rate">
-                <span>考频：</span>
-                <strong>{exp.stars}</strong>
+              <div className="card-center-icon" style={{ background: exp.accent || '#4f46e5' }}>
+                <span>{exp.icon || '🔬'}</span>
               </div>
-              <button type="button" className="start-lab-btn">
-                启动推演 →
-              </button>
+
+              <h3 className="workshop-card-title">{exp.title}</h3>
+              <p className="workshop-card-desc">{exp.description}</p>
+
+              {/* 核心概念标签 */}
+              {exp.concepts && (
+                <div className="card-concept-pills">
+                  {exp.concepts.slice(0, 3).map((c, cIdx) => (
+                    <span key={cIdx} className="concept-pill">{c}</span>
+                  ))}
+                </div>
+              )}
+
+              <div className="workshop-card-footer">
+                <div className="stars-rate">
+                  <span>考频：</span>
+                  <strong>{exp.stars}</strong>
+                </div>
+                <button type="button" className="start-lab-btn">
+                  启动推演 →
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
