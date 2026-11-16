@@ -245,6 +245,12 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .story-controls select{font-size:14.5px;padding:7px 10px;border-radius:9px}
 
 /* 4. 控制面板侧边栏与调节控件（图4、图12） */
+.visual-panel{display:flex;flex-direction:column;min-width:0;min-height:560px}
+.visual-toolbar{flex:0 0 auto;margin-bottom:22px}
+.visual-content-stage{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;min-height:0}
+.attention-heatmap-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:auto 0;width:100%;overflow-x:auto}
+.attention-heatmap-wrap>div{display:flex;flex-direction:column;align-items:center}
+.visual-panel>svg,.visual-panel>canvas,.visual-panel>.graph-canvas,.visual-panel>.tree-canvas,.visual-panel>.nn-canvas,.visual-panel>.gd-chart{margin-top:auto;margin-bottom:auto}
 .control-panel{padding:26px}
 .panel-title span,.visual-toolbar strong{font-size:18px;font-weight:800;color:#182238}
 .panel-title i,.source-chip{font-size:13.5px;font-weight:700}

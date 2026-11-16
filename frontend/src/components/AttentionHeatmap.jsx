@@ -27,7 +27,7 @@ export default function AttentionHeatmap({ tokens = [], weights = [], cellSize =
   }
 
   return (
-    <div style={styles.wrap}>
+    <div style={styles.wrap} className="attention-heatmap-wrap">
       <div style={styles.grid}>
         {/* 顶部 token 标签行 */}
         <div style={{ width: cellSize * 1.5, height: cellSize, display: 'inline-flex', alignItems: 'flex-end', justifyContent: 'flex-end', paddingRight: 6, fontSize: 14, fontWeight: 700, color: '#4d5b74', whiteSpace: 'nowrap' }}>

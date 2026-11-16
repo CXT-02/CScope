@@ -3,7 +3,7 @@ import { getAttention, getBackendStatus } from '../lib/attentionService'
 import AttentionCanvas from './AttentionCanvas'
 import AttentionHeatmap from './AttentionHeatmap'
 import LearningCycle from './LearningCycle'
-import TheoryPrimer from './TheoryPrimer'
+import TransformerStory from './TransformerStory'
 
 export default function AttentionExperiment({ experiment }) {
   const [text, setText] = useState('我喜欢学习深度学习')
@@ -41,17 +41,8 @@ export default function AttentionExperiment({ experiment }) {
   return (
     <>
       <ExperimentHeader experiment={experiment} eyebrow="人工智能实验 01" />
-      <TheoryPrimer
-        title="Attention 到底在做什么？"
-        intro="Transformer 会把一句话拆成多个 token。对每个 token，它都会计算“我现在应该关注句子里的谁”，并把关注程度表示为 0 到 1 的权重。权重越大，连线越粗、热力格颜色越深。"
-        formula="Attention(Q, K, V) = Softmax(QKᵀ / √dₖ) · V"
-        concepts={[
-          { term: 'Token', description: '模型处理文本的基本单位。中文通常接近单字或词片，英文通常是单词或子词。' },
-          { term: 'Layer 与 Head', description: 'Layer 是逐层加工的深度；同一层中的多个 Head 是并行观察句子的不同视角。' },
-          { term: '权重矩阵', description: '每一行表示一个 token 如何分配注意力；同一行所有权重之和为 1。' },
-        ]}
-        goal="保持文本不变，切换 Layer 和 Head，观察主要连线是否改变；再调节温度，验证注意力会变得更集中还是更均匀。"
-      />
+      <TransformerStory tokens={result?.data?.tokens} weights={result?.data?.weights} text={text} onTextChange={setText} />
+      <div className="explore-heading"><span>自由探索 · 把刚才的理解变成证据</span><h2>现在由你控制注意力</h2><p>修改同一句话、切换层与注意力头，右侧图形会立即重新计算。先做预测，再观察变化。</p></div>
       <div className="lab-layout">
         <aside className="control-panel">
           <div className="panel-title"><span>实验参数</span><i className={backendOnline ? 'online' : ''}>{backendOnline ? '真实模型' : '演示模式'}</i></div>
@@ -65,10 +56,12 @@ export default function AttentionExperiment({ experiment }) {
         </aside>
         <section className={`visual-panel ${loading && result ? 'is-updating' : ''}`}>
           <div className="visual-toolbar"><div><strong>{view === 'graph' ? 'Token 注意力连线' : '注意力权重矩阵'}</strong><span>{result ? `${result.data.tokens?.length || 0} tokens · Layer ${layer + 1} · Head ${head + 1}` : '等待数据'}</span></div><span className={`source-chip ${loading ? 'updating' : ''}`}>{loading ? '正在更新' : sourceLabel(result?.source)}</span></div>
-          {loading && !result && <div className="empty-state">正在生成注意力图…</div>}
-          {error && <div className="error-state">计算失败：{error}</div>}
-          {result && view === 'graph' && <AttentionCanvas tokens={result.data.tokens} weights={result.data.weights} topK={edgeLimit} />}
-          {result && view === 'heatmap' && <AttentionHeatmap tokens={result.data.tokens} weights={result.data.weights} />}
+          <div className="visual-content-stage">
+            {loading && !result && <div className="empty-state">正在生成注意力图…</div>}
+            {error && <div className="error-state">计算失败：{error}</div>}
+            {result && view === 'graph' && <AttentionCanvas tokens={result.data.tokens} weights={result.data.weights} topK={edgeLimit} />}
+            {result && view === 'heatmap' && <AttentionHeatmap tokens={result.data.tokens} weights={result.data.weights} />}
+          </div>
         </section>
       </div>
       <LearningCycle
@@ -88,7 +81,18 @@ export default function AttentionExperiment({ experiment }) {
 }
 
 export function ExperimentHeader({ experiment, eyebrow }) {
-  return <header className="experiment-header" style={{ '--accent': experiment.accent }}><div><span className="eyebrow">{eyebrow}</span><h1>{experiment.title}</h1><p>{experiment.description}</p></div><span className="experiment-icon">{experiment.icon}</span></header>
+  const context = COURSE_CONTEXT[experiment.category] || COURSE_CONTEXT.default
+  return <><header className="experiment-header" style={{ '--accent': experiment.accent }}><div><span className="eyebrow">{eyebrow}</span><h1>{experiment.title}</h1><p>{experiment.description}</p></div><span className="experiment-icon">{experiment.icon}</span></header><section className="knowledge-brief" style={{ '--brief-accent': experiment.accent }}><div className="knowledge-brief-intro"><span>KNOWLEDGE GUIDE · 知识点说明</span><h2>先明确“学什么”，再开始操作</h2><p>{experiment.description} 本实验不只展示结果，还会把关键状态、变化原因和最终规律对应起来。</p></div><div className="knowledge-brief-grid"><article><i>01</i><div><strong>核心概念</strong><p>{experiment.concepts.join('、')}。操作时要注意这些概念分别对应图中的哪些元素。</p></div></article><article><i>02</i><div><strong>学习目标</strong><p>能够用自己的话解释过程，并能预测改变输入或参数后会发生什么。</p></div></article><article><i>03</i><div><strong>实际应用</strong><p>{context.application}</p></div></article><article><i>04</i><div><strong>容易混淆</strong><p>{context.misconception}</p></div></article></div></section></>
+}
+
+const COURSE_CONTEXT = {
+  人工智能: { application: '帮助理解模型训练、图像识别和大语言模型内部的数据计算过程。', misconception: '可视化展示的是一次具体运行，规律来自多次改变输入后的共同现象。' },
+  数据结构与算法: { application: '用于程序设计、路径规划、检索、调度和各类性能优化问题。', misconception: '不要只背最终复杂度，还要区分比较、移动、访问和额外空间分别从哪里产生。' },
+  操作系统: { application: '对应真实系统中的进程调度、内存管理、资源竞争与并发执行。', misconception: '系统策略通常是在公平性、吞吐量、响应速度和资源利用率之间权衡。' },
+  计算机网络: { application: '用于理解浏览器访问、可靠传输、地址规划和互联网基础设施。', misconception: '协议步骤不是孤立规则，每个字段或状态都在解决一种具体的不确定性。' },
+  计算机组成原理: { application: '对应处理器、存储层次和数值表示，是分析程序性能与硬件行为的基础。', misconception: '逻辑步骤与真实时钟周期不总是一一对应，要区分功能阶段和硬件并行过程。' },
+  数据库系统: { application: '用于索引设计、查询优化、事务一致性和关系模式设计。', misconception: '正确结果只是第一步，还要考虑磁盘访问、并发冲突、冗余和维护成本。' },
+  default: { application: '把抽象理论连接到真实计算机系统中的问题。', misconception: '不要只观察动画结果，要同时说明变化的原因。' },
 }
 
 function RangeField({ label, description, value, display, onChange, ...rangeProps }) {
