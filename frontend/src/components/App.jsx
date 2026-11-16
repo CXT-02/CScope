@@ -149,8 +149,8 @@ export default function App() {
             </button>
             {route.kind !== 'console' && <span className="crumb-sep">/</span>}
             {route.kind === 'galaxy' && <span className="crumb-current">3D 思维知识星图 · 三维神经网络</span>}
-            {route.kind === 'checkin' && <span className="crumb-current">每日研习打卡 · 脑力负荷</span>}
-            {route.kind === 'courses' && <span className="crumb-current">课程知识中心</span>}
+            {route.kind === 'checkin' && <span className="crumb-current">实机学时度量 · 仿真与模考档案</span>}
+            {route.kind === 'courses' && <span className="crumb-current">课程知识中心 · 专业课大纲</span>}
             {route.kind === 'workshop' && <span className="crumb-current">微观交互仿真工坊</span>}
             {route.kind === 'exam' && <span className="crumb-current">408 考研真题测评</span>}
             {route.kind === 'mistakes' && <span className="crumb-current">靶向错题本与消错实验</span>}
@@ -223,6 +223,7 @@ export default function App() {
               onOpenExam={openExam}
               onOpenProfile={openProfile}
               onOpenExperiment={openExperiment}
+              onOpenGalaxy={() => navigate('#/galaxy')}
             />
           ) : route.kind === 'galaxy' ? (
             /* 2. 3D 思维知识星图 (空间三维神经网络与交互) */
@@ -230,7 +231,7 @@ export default function App() {
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'checkin' ? (
-            /* 3. 每日研习打卡（复刻 SmartFit 运动打卡体验） */
+            /* 3. 实机学时度量档案 */
             <DailyCheckin
               onOpenExperiment={openExperiment}
               onOpenCourses={openCourses}

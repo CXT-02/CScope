@@ -6,7 +6,8 @@ export default function ConsoleDashboard({
   onOpenCourses,
   onOpenExam,
   onOpenProfile,
-  onOpenExperiment
+  onOpenExperiment,
+  onOpenGalaxy
 }) {
   const { user, records } = useLearningProfile()
   const [refreshSeed, setRefreshSeed] = useState(0)
@@ -149,6 +150,18 @@ export default function ConsoleDashboard({
             <button
               type="button"
               className="cscope-btn cscope-btn-outline"
+              onClick={onOpenCourses}
+              title="浏览 8 门专业课教学大纲与知识点"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <span>课程知识中心</span>
+            </button>
+            <button
+              type="button"
+              className="cscope-btn cscope-btn-outline"
               onClick={() => setRefreshSeed(s => s + 1)}
               title="刷新内核时钟与数据"
             >
@@ -168,7 +181,7 @@ export default function ConsoleDashboard({
                 <circle cx="12" cy="12" r="6" />
                 <circle cx="12" cy="12" r="2" />
               </svg>
-              <span>进入 408 智能模考</span>
+              <span>408 智能模考</span>
             </button>
           </div>
         </div>
@@ -437,7 +450,7 @@ export default function ConsoleDashboard({
             <button
               type="button"
               className="galaxy-enter-btn"
-              onClick={onOpenCourses}
+              onClick={onOpenGalaxy || onOpenCourses}
             >
               进入 3D 知识星图漫游 →
             </button>
