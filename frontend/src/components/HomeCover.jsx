@@ -1,269 +1,356 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) {
+export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile, onOpenExperiment }) {
+  const [activeTab, setActiveTab] = useState('attention')
+
   return (
     <div className="home-cover-page">
       <style>{`
         .home-cover-page {
           min-height: calc(100vh - 86px);
-          background: 
-            radial-gradient(circle at 10% 8%, rgba(101, 88, 232, 0.05), transparent 32rem),
-            radial-gradient(circle at 90% 25%, rgba(21, 154, 131, 0.04), transparent 28rem),
-            #f7f8f4;
+          background: #f7f8f4;
           color: #14213d;
-          padding: 48px clamp(24px, 5vw, 72px) 72px;
+          padding: 44px clamp(20px, 4vw, 64px) 72px;
           display: flex;
           flex-direction: column;
           align-items: center;
         }
 
         .cover-hero {
-          max-width: 1240px;
+          max-width: 1260px;
           width: 100%;
           display: grid;
-          grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+          grid-template-columns: minmax(0, 1fr) minmax(460px, 1.05fr);
           align-items: center;
-          gap: 56px;
-          margin-bottom: 60px;
+          gap: 48px;
+          margin-bottom: 64px;
         }
 
-        .cover-eyebrow {
-          display: inline-block;
-          font-size: 13px;
+        /* 左侧品牌与标语区 */
+        .cover-brand-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #5548d2;
+          font-size: 13.5px;
           font-weight: 800;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: #6554c0;
-          margin-bottom: 16px;
+          letter-spacing: 0.08em;
+          margin-bottom: 18px;
+        }
+        .cover-brand-tag .dash {
+          width: 18px;
+          height: 2px;
+          background: #5548d2;
+          border-radius: 2px;
         }
 
         .cover-heading {
-          font: 700 clamp(38px, 4.5vw, 58px)/1.14 Georgia, "Songti SC", "SimSun", serif;
-          letter-spacing: -0.03em;
+          font: 700 clamp(34px, 4vw, 48px)/1.18 Georgia, "Songti SC", "SimSun", serif;
+          letter-spacing: -0.025em;
           color: #14213d;
           margin: 0 0 20px;
         }
-        .cover-heading em {
-          font-style: normal;
-          color: #6558e8;
+        .cover-heading .highlight-phrase {
+          position: relative;
+          color: #4338ca;
+          display: inline-block;
+        }
+        .cover-heading .highlight-phrase::after {
+          content: '';
+          position: absolute;
+          bottom: 4px;
+          left: 0;
+          right: 0;
+          height: 10px;
+          background: rgba(99, 102, 241, 0.14);
+          z-index: -1;
+          border-radius: 4px;
         }
 
         .cover-desc {
-          font-size: 16.5px;
+          font-size: 15.5px;
           line-height: 1.8;
           color: #65708a;
           margin: 0 0 32px;
-          max-width: 620px;
+          max-width: 530px;
         }
 
-        /* 优雅主按钮系统 */
-        .cover-cta-group {
+        /* 按钮与指标排版 */
+        .cover-actions {
           display: flex;
-          gap: 16px;
+          gap: 14px;
+          margin-bottom: 44px;
           flex-wrap: wrap;
         }
-        .cover-btn-primary {
+        .btn-dark {
           border: 0;
           border-radius: 12px;
-          padding: 14px 26px;
-          background: linear-gradient(135deg, #182440, #2c3e66);
+          padding: 13px 24px;
+          background: #18233c;
           color: #ffffff;
           font-weight: 700;
-          font-size: 15px;
+          font-size: 14.5px;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          box-shadow: 0 8px 24px rgba(24, 36, 64, 0.18);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 6px 20px rgba(24, 35, 60, 0.16);
+          transition: transform 0.2s ease, background 0.2s ease;
         }
-        .cover-btn-primary:hover {
+        .btn-dark:hover {
           transform: translateY(-2px);
-          box-shadow: 0 12px 28px rgba(24, 36, 64, 0.25);
+          background: #253352;
         }
-        .cover-btn-secondary {
+        .btn-light {
           border: 1px solid #d9dce3;
           border-radius: 12px;
-          padding: 13px 24px;
+          padding: 12px 22px;
           background: #ffffff;
-          color: #202a44;
+          color: #1e293b;
           font-weight: 700;
-          font-size: 15px;
+          font-size: 14.5px;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
           transition: transform 0.2s ease, border-color 0.2s ease;
         }
-        .cover-btn-secondary:hover {
+        .btn-light:hover {
           transform: translateY(-2px);
           border-color: #6558e8;
         }
 
-        /* 右侧：计算机微架构时钟与动态时序沙盘（无旋转倒立文字） */
-        .simulator-sandbox {
-          position: relative;
-          background: #ffffff;
-          border: 1px solid #dfe3ea;
-          border-radius: 20px;
-          padding: 24px 26px;
-          box-shadow: 0 16px 42px rgba(20, 33, 61, 0.07);
+        .cover-stats-row {
+          display: flex;
+          align-items: center;
+          gap: 40px;
+          padding-top: 10px;
+        }
+        .stat-item {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+        }
+        .stat-num {
+          font: 700 32px/1 Georgia, serif;
+          color: #14213d;
+        }
+        .stat-lbl {
+          font-size: 12.5px;
+          color: #7b8499;
+          margin-top: 6px;
+        }
+
+        /* 右侧深色模拟器展示窗口 (参考图神还原) */
+        .live-lab-window {
+          background: #0f172a;
+          border-radius: 20px;
+          border: 1px solid #1e293b;
+          padding: 20px 24px 22px;
+          color: #f8fafc;
+          box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.35);
+          position: relative;
           overflow: hidden;
         }
 
-        /* 顶部仿真控制栏 */
-        .sim-header {
+        .window-topbar {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding-bottom: 14px;
-          border-bottom: 1px solid #edf0f5;
+          padding-bottom: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          margin-bottom: 16px;
         }
-        .sim-dots {
+        .window-dots {
           display: flex;
-          gap: 6px;
+          gap: 7px;
         }
-        .sim-dot {
-          width: 9px;
-          height: 9px;
+        .window-dot {
+          width: 10px;
+          height: 10px;
           border-radius: 50%;
         }
-
-        /* 动态流水线时钟通道 */
-        .pipeline-track {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 8px;
-          position: relative;
-        }
-        .pipeline-stage-box {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 10px;
-          padding: 10px 6px;
-          text-align: center;
-          position: relative;
-          transition: all 0.3s ease;
-        }
-        .pipeline-stage-box strong {
-          display: block;
-          font-size: 13px;
-          color: #1e293b;
-        }
-        .pipeline-stage-box small {
-          display: block;
-          font-size: 10px;
+        .window-title {
+          font-family: monospace;
+          font-size: 11.5px;
+          letter-spacing: 0.12em;
           color: #64748b;
-          margin-top: 2px;
+        }
+        .window-status {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 11.5px;
+          color: #34d399;
+          font-weight: 700;
+        }
+        .status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #34d399;
+          box-shadow: 0 0 8px #34d399;
         }
 
-        /* 指令在流水线中流动的光斑 */
-        @keyframes instStream {
-          0% { transform: translateX(0); opacity: 0; }
-          15% { opacity: 1; }
-          85% { opacity: 1; }
-          100% { transform: translateX(290px); opacity: 0; }
+        /* 模拟器上方小 Tabs */
+        .window-tabs {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 18px;
         }
-        .inst-runner {
-          position: absolute;
-          top: -4px;
-          left: 10px;
-          height: 3px;
-          width: 60px;
-          background: linear-gradient(90deg, transparent, #6558e8, #38bdf8);
-          border-radius: 99px;
-          animation: instStream 3.8s ease-in-out infinite;
-          box-shadow: 0 0 10px #6558e8;
+        .win-tab {
+          border: 0;
+          border-radius: 8px;
+          padding: 6px 14px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          background: transparent;
+          color: #94a3b8;
+          transition: all 0.2s;
+        }
+        .win-tab.active {
+          background: rgba(99, 102, 241, 0.18);
+          color: #c7d2fe;
+          border: 1px solid rgba(129, 140, 248, 0.35);
         }
 
-        /* 协议信道双向飞行数据包 */
-        .channel-lane {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 12px 16px;
+        /* 模拟器画布网格与注意力弧线交互区 */
+        .canvas-area {
+          height: 200px;
+          background: rgba(15, 23, 42, 0.65);
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 24px 24px;
+          border-radius: 14px;
+          border: 1px solid rgba(255, 255, 255, 0.06);
           position: relative;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          justifyContent: space-between;
         }
-        .lane-header {
+
+        /* 词元节点水平排列 */
+        .tokens-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 10px;
+          z-index: 2;
+        }
+        .token-chip {
+          background: rgba(30, 41, 59, 0.85);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          padding: 7px 0;
+          text-align: center;
+          font-size: 12.5px;
+          color: #cbd5e1;
+        }
+        .token-chip.target {
+          background: #312e81;
+          border-color: #6366f1;
+          color: #ffffff;
+          box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+        }
+
+        /* 注意力发光连线弧线 SVG */
+        .arc-svg-container {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        }
+        @keyframes dashMove {
+          to { stroke-dashoffset: -40; }
+        }
+        .animated-arc {
+          stroke: #818cf8;
+          stroke-dasharray: 6 4;
+          animation: dashMove 3s linear infinite;
+        }
+        .target-glow-ball {
+          animation: pulseBall 2s ease-in-out infinite alternate;
+        }
+        @keyframes pulseBall {
+          0% { r: 6; fill: #818cf8; filter: drop-shadow(0 0 4px #818cf8); }
+          100% { r: 8; fill: #c084fc; filter: drop-shadow(0 0 10px #c084fc); }
+        }
+
+        /* 底部注意力权重指示滑条 */
+        .canvas-footer {
           display: flex;
           justify-content: space-between;
-          font-size: 12px;
-          font-weight: 700;
-          color: #475569;
-          margin-bottom: 8px;
+          align-items: center;
+          font-size: 11px;
+          color: #64748b;
+          z-index: 2;
         }
-        .lane-rail {
+        .weight-track {
+          flex: 1;
+          margin-left: 12px;
           height: 4px;
-          background: #e2e8f0;
+          background: rgba(255, 255, 255, 0.1);
           border-radius: 99px;
           position: relative;
           overflow: hidden;
         }
-        @keyframes packetFlyLeftRight {
-          0% { left: 0%; opacity: 0; }
-          20% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { left: 90%; opacity: 0; }
-        }
-        @keyframes packetFlyRightLeft {
-          0% { right: 0%; opacity: 0; }
-          20% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { right: 90%; opacity: 0; }
-        }
-        .packet-pulse-forward {
-          position: absolute;
-          top: 0;
+        .weight-fill {
+          width: 72%;
           height: 100%;
-          width: 36px;
+          background: linear-gradient(90deg, #6366f1, #a855f7);
           border-radius: 99px;
-          background: linear-gradient(90deg, transparent, #2563eb);
-          animation: packetFlyLeftRight 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        .packet-pulse-backward {
-          position: absolute;
-          top: 0;
-          height: 100%;
-          width: 36px;
-          border-radius: 99px;
-          background: linear-gradient(-90deg, transparent, #10b981);
-          animation: packetFlyRightLeft 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-          animation-delay: 1.4s;
         }
 
-        /* 实时微状态指示器 */
-        .metrics-row {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
+        /* 模拟器下方说明文字与进入实验按钮 */
+        .window-details {
+          margin-top: 18px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 16px;
         }
-        .metric-cell {
-          background: #f8fafc;
-          border: 1px solid #edf0f5;
-          border-radius: 8px;
-          padding: 8px 10px;
-          text-align: center;
-        }
-        .metric-cell span {
-          display: block;
+        .kicker-tag {
           font-size: 11px;
-          color: #64748b;
+          font-weight: 800;
+          color: #818cf8;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
         }
-        .metric-cell strong {
-          display: block;
-          font-size: 14px;
-          font-family: monospace;
-          color: #1e293b;
-          margin-top: 2px;
+        .details-title {
+          font-size: 15px;
+          font-weight: 700;
+          color: #f8fafc;
+          margin: 6px 0 4px;
+        }
+        .details-desc {
+          font-size: 12px;
+          color: #94a3b8;
+          line-height: 1.5;
+          margin: 0;
+          max-width: 320px;
+        }
+        .btn-enter-lab {
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          padding: 8px 16px;
+          border-radius: 8px;
+          font-size: 12.5px;
+          font-weight: 700;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: background 0.2s;
+        }
+        .btn-enter-lab:hover {
+          background: rgba(255, 255, 255, 0.16);
         }
 
-        /* 三大模块入口大卡片 */
+        /* 下方三大模块大卡片入口 (保持不变的清晰层级) */
         .portal-deck {
-          max-width: 1240px;
+          max-width: 1260px;
           width: 100%;
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -275,7 +362,7 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
           background: #ffffff;
           border: 1px solid #dfe3ea;
           border-radius: 20px;
-          padding: 32px 28px;
+          padding: 30px 26px;
           display: flex;
           flex-direction: column;
           justifyContent: space-between;
@@ -283,8 +370,6 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
           cursor: pointer;
           box-shadow: 0 8px 24px rgba(20, 33, 61, 0.04);
           transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
-          position: relative;
-          overflow: hidden;
         }
         .portal-entry-card:hover {
           transform: translateY(-6px);
@@ -293,14 +378,13 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
         }
 
         .portal-icon-box {
-          width: 50px;
-          height: 50px;
-          border-radius: 14px;
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 22px;
-          border: 1px solid rgba(0, 0, 0, 0.05);
+          margin-bottom: 20px;
         }
 
         .portal-tag {
@@ -313,16 +397,16 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
         }
 
         .portal-title {
-          font: 700 22px/1.3 Georgia, "Songti SC", serif;
+          font: 700 21px/1.3 Georgia, "Songti SC", serif;
           color: #14213d;
-          margin: 0 0 12px;
+          margin: 0 0 10px;
         }
 
         .portal-text {
-          font-size: 14px;
+          font-size: 13.5px;
           line-height: 1.7;
           color: #65708a;
-          margin: 0 0 24px;
+          margin: 0 0 20px;
           flex-grow: 1;
         }
 
@@ -330,42 +414,18 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: 14px;
+          font-size: 13.5px;
           font-weight: 800;
-          padding-top: 18px;
+          padding-top: 16px;
           border-top: 1px solid #f0f2ea;
-          transition: color 0.2s ease;
         }
         .portal-entry-card:hover .portal-action-link span:last-child {
           transform: translateX(4px);
         }
 
-        /* 底部底标栏 */
-        .cover-footer-bar {
-          max-width: 1240px;
-          width: 100%;
-          border-top: 1px solid #e2e5df;
-          padding-top: 24px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 16px;
-          font-size: 13px;
-          color: #7b8396;
-        }
-
-        @media (max-width: 960px) {
+        @media (max-width: 980px) {
           .cover-hero {
             grid-template-columns: 1fr;
-            text-align: center;
-            gap: 40px;
-          }
-          .cover-desc {
-            margin-inline: auto;
-          }
-          .cover-cta-group {
-            justify-content: center;
           }
           .portal-deck {
             grid-template-columns: 1fr;
@@ -373,115 +433,175 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
         }
       `}</style>
 
-      {/* 顶部 Hero 区域 */}
+      {/* 顶部 Hero 主区域 */}
       <section className="cover-hero">
-        <div className="cover-hero-copy">
-          <span className="cover-eyebrow">CSCOPE · 计算机软硬件全栈可视化仿真实验室</span>
+        {/* 左侧文案与数据 */}
+        <div>
+          <div className="cover-brand-tag">
+            <span className="dash" />
+            <span>CSCOPE · 可视化计算机学习实验室</span>
+          </div>
+
           <h1 className="cover-heading">
-            透视计算机底层机理<br />
-            <em>让抽象代码在眼前具象运行</em>
+            把看不见的<br />
+            <span className="highlight-phrase">计算过程</span>，变成<br />
+            可以操作的实验。
           </h1>
+
           <p className="cover-desc">
-            融汇 8 门计算机类核心学科知识图谱与 30+ 交互式微观仿真实验。
-            首创历年 408 考研统考真题自适应测评与错题靶向推演，打造“学·练·测·诊”全闭环教研平台。
+            从注意力机制、数据结构到操作系统与计算机网络，让抽象概念按步骤运行；
+            你可以暂停、修改参数，并用代码对应每一次变化。
           </p>
 
-          <div className="cover-cta-group">
-            <button className="cover-btn-primary" onClick={onOpenCourses}>
-              <span>进入课程知识库</span>
+          <div className="cover-actions">
+            <button className="btn-dark" onClick={onOpenCourses}>
+              <span>浏览课程知识地图</span>
               <span>→</span>
             </button>
-            <button className="cover-btn-secondary" onClick={onOpenExam}>
-              <span>408 统考真题测评</span>
-              <span style={{ color: '#6558e8' }}>●</span>
+            <button className="btn-light" onClick={onOpenExam}>
+              <span>进入 408 测评</span>
             </button>
+          </div>
+
+          <div className="cover-stats-row">
+            <div className="stat-item">
+              <span className="stat-num">08</span>
+              <span className="stat-lbl">门核心课程</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-num">30+</span>
+              <span className="stat-lbl">个交互实验</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-num">04</span>
+              <span className="stat-lbl">步主动学习循环</span>
+            </div>
           </div>
         </div>
 
-        {/* 右侧：计算机微架构时钟与动态流水线沙盘（文字水平绝对不倒立，动效高级平稳） */}
-        <div className="simulator-sandbox" aria-label="微架构与协议时序仿真动效展示">
-          {/* 沙盘顶部控制状态栏 */}
-          <div className="sim-header">
-            <div className="sim-dots">
-              <span className="sim-dot" style={{ background: '#f87171' }} />
-              <span className="sim-dot" style={{ background: '#fbbf24' }} />
-              <span className="sim-dot" style={{ background: '#34d399' }} />
+        {/* 右侧微型计算机仿真实验室窗口 (参考图精准神还原) */}
+        <div className="live-lab-window">
+          {/* 窗口顶栏 */}
+          <div className="window-topbar">
+            <div className="window-dots">
+              <span className="window-dot" style={{ background: '#ef4444' }} />
+              <span className="window-dot" style={{ background: '#f59e0b' }} />
+              <span className="window-dot" style={{ background: '#10b981' }} />
             </div>
-            <span style={{ fontSize: '11px', fontFamily: 'monospace', color: '#64748b', fontWeight: 700 }}>
-              CLK 0.5ns · CPU & PROTOCOL SIMULATOR
-            </span>
+            <span className="window-title">CSCOPE / LIVE LAB</span>
+            <div className="window-status">
+              <span className="status-dot" />
+              <span>正在运行</span>
+            </div>
           </div>
 
-          {/* 1. 五级指令流水线动态数据通路展示 */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: '#1e293b' }}>
-                CPU 五级时空流水线 (Pipelined Dataflow)
+          {/* 实验切换 Tabs */}
+          <div className="window-tabs">
+            <button
+              className={`win-tab ${activeTab === 'attention' ? 'active' : ''}`}
+              onClick={() => setActiveTab('attention')}
+            >
+              AI 注意力机制
+            </button>
+            <button
+              className={`win-tab ${activeTab === 'tree' ? 'active' : ''}`}
+              onClick={() => setActiveTab('tree')}
+            >
+              DS 二叉树遍历
+            </button>
+            <button
+              className={`win-tab ${activeTab === 'tcp' ? 'active' : ''}`}
+              onClick={() => setActiveTab('tcp')}
+            >
+              NET TCP 连接
+            </button>
+          </div>
+
+          {/* 核心画布区 (注意力机制动态弧线) */}
+          <div className="canvas-area">
+            {/* 词元节点 */}
+            <div className="tokens-row">
+              <div className="token-chip">模型</div>
+              <div className="token-chip">理解</div>
+              <div className="token-chip target">上下文</div>
+              <div className="token-chip">关系</div>
+            </div>
+
+            {/* 动态贝塞尔发光弧线 */}
+            <svg className="arc-svg-container" viewBox="0 0 460 200">
+              <defs>
+                <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#818cf8" stopOpacity="0.4" />
+                  <stop offset="50%" stopColor="#a855f7" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#6366f1" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+
+              {/* 弧线 1: 从节点1到节点3 */}
+              <path
+                d="M 60 70 Q 180 10 290 70"
+                fill="none"
+                stroke="url(#arcGrad)"
+                strokeWidth="2.5"
+                className="animated-arc"
+              />
+
+              {/* 弧线 2: 从节点2到节点3 */}
+              <path
+                d="M 175 70 Q 230 35 290 70"
+                fill="none"
+                stroke="#6366f1"
+                strokeWidth="2"
+                opacity="0.6"
+              />
+
+              {/* 弧线 3: 从节点3到节点4 */}
+              <path
+                d="M 290 70 Q 350 35 400 70"
+                fill="none"
+                stroke="#475569"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+              />
+
+              {/* 发光注意力聚焦球 */}
+              <circle cx="290" cy="70" r="7" className="target-glow-ball" />
+            </svg>
+
+            {/* 底部权重条 */}
+            <div className="canvas-footer">
+              <span>注意力权重</span>
+              <div className="weight-track">
+                <div className="weight-fill" />
+              </div>
+              <span style={{ marginLeft: '12px', fontFamily: 'monospace', color: '#c7d2fe', fontWeight: 700 }}>
+                0.72
               </span>
-              <span style={{ fontSize: '11px', color: '#6558e8', fontWeight: 700, fontFamily: 'monospace' }}>
-                Cycle #4 · RAW 无气泡
-              </span>
-            </div>
-
-            <div className="pipeline-track">
-              <div className="inst-runner" />
-              <div className="pipeline-stage-box" style={{ borderTop: '2px solid #38bdf8' }}>
-                <strong>IF</strong>
-                <small>取指令</small>
-              </div>
-              <div className="pipeline-stage-box" style={{ borderTop: '2px solid #818cf8' }}>
-                <strong>ID</strong>
-                <small>译码/读</small>
-              </div>
-              <div className="pipeline-stage-box" style={{ borderTop: '2px solid #c084fc', background: '#f5f3ff' }}>
-                <strong style={{ color: '#7c3aed' }}>EX</strong>
-                <small>ALU执行</small>
-              </div>
-              <div className="pipeline-stage-box" style={{ borderTop: '2px solid #f59e0b' }}>
-                <strong>MEM</strong>
-                <small>访存读写</small>
-              </div>
-              <div className="pipeline-stage-box" style={{ borderTop: '2px solid #10b981' }}>
-                <strong>WB</strong>
-                <small>结果写回</small>
-              </div>
             </div>
           </div>
 
-          {/* 2. TCP 双向信道可靠报文滑动交互 */}
-          <div className="channel-lane">
-            <div className="lane-header">
-              <span>Client 主机 [seq=1001]</span>
-              <span style={{ color: '#6558e8' }}>⇄ 全双工信道 RTT ~15ms</span>
-              <span>Server 服务端 [ack=1002]</span>
+          {/* 窗口下方详情与按钮 */}
+          <div className="window-details">
+            <div>
+              <span className="kicker-tag">ARTIFICIAL INTELLIGENCE</span>
+              <h3 className="details-title">一句话里的词，正在彼此寻找上下文</h3>
+              <p className="details-desc">
+                观察当前词如何把注意力分配给其他词，理解 Transformer 为什么能联系上下文。
+              </p>
             </div>
-            <div className="lane-rail">
-              <div className="packet-pulse-forward" />
-              <div className="packet-pulse-backward" />
-            </div>
-          </div>
-
-          {/* 3. 动态指标标签 */}
-          <div className="metrics-row">
-            <div className="metric-cell">
-              <span>Cache 命中率</span>
-              <strong style={{ color: '#059669' }}>96.4% ⚡</strong>
-            </div>
-            <div className="metric-cell">
-              <span>流水线吞吐</span>
-              <strong style={{ color: '#2563eb' }}>1.0 IPC</strong>
-            </div>
-            <div className="metric-cell">
-              <span>TCP 拥塞窗口</span>
-              <strong style={{ color: '#7c3aed' }}>16 MSS</strong>
-            </div>
+            <button
+              className="btn-enter-lab"
+              onClick={() => onOpenExperiment('attention')}
+            >
+              进入实验 ↗
+            </button>
           </div>
         </div>
       </section>
 
-      {/* 三大核心门户入口大卡片 (点进去直达各模块) */}
+      {/* 下方三大核心门户入口大卡片 (点卡片直达各子模块) */}
       <section className="portal-deck">
-        {/* 模块 1: 课程知识与交互实验 */}
+        {/* 模块 1 */}
         <div className="portal-entry-card" onClick={onOpenCourses}>
           <div>
             <div className="portal-icon-box" style={{ background: '#eef2ff', color: '#4f46e5' }}>
@@ -494,7 +614,7 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
             <span className="portal-tag" style={{ color: '#4f46e5' }}>MODULE 01 · 核心实验</span>
             <h3 className="portal-title">课程知识地图与仿真实验</h3>
             <p className="portal-text">
-              涵盖计算机组成原理、操作系统、计网、数据结构、数据库等 8 门核心课。30+ 交互仿真让抽象的硬件微操作与时序直观可视。
+              涵盖计算机组成原理、操作系统、计网、数据结构等 8 门核心课程。30+ 交互仿真让抽象的硬件微操作与时序直观可视。
             </p>
           </div>
           <div className="portal-action-link" style={{ color: '#4f46e5' }}>
@@ -503,7 +623,7 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
           </div>
         </div>
 
-        {/* 模块 2: 408 考研真题与智能测评中心 */}
+        {/* 模块 2 */}
         <div className="portal-entry-card" onClick={onOpenExam}>
           <div>
             <div className="portal-icon-box" style={{ background: '#f5f3ff', color: '#7c3aed' }}>
@@ -528,7 +648,7 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
           </div>
         </div>
 
-        {/* 模块 3: 学情画像与成长档案 */}
+        {/* 模块 3 */}
         <div className="portal-entry-card" onClick={onOpenProfile}>
           <div>
             <div className="portal-icon-box" style={{ background: '#ecfdf5', color: '#059669' }}>
@@ -550,20 +670,6 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile }) 
           </div>
         </div>
       </section>
-
-      {/* 底部沉稳的学术规格标牌 */}
-      <footer className="cover-footer-bar">
-        <div>
-          <strong>CSCOPE Lab</strong> · 全国计算机类高水平课程与考研统考仿真平台
-        </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <span>8 门核心课程规划</span>
-          <span>·</span>
-          <span>30+ 交互式仿真</span>
-          <span>·</span>
-          <span>408 真题靶向实验联动</span>
-        </div>
-      </footer>
     </div>
   )
 }
