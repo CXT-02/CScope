@@ -133,22 +133,22 @@ function CacheStoryVisual({ stageIndex }) {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', borderLeft: '4px solid #38bdf8', animation: 'cachePulse 2s infinite' }}>
-              <div style={{ width: '85px', fontWeight: 'bold', color: '#38bdf8', fontSize: '0.9rem' }}>CPU 核心</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#0f172a', padding: '9px 12px', borderRadius: '6px', borderLeft: '4px solid #38bdf8', animation: 'cachePulse 2s infinite' }}>
+              <div style={{ width: '110px', flexShrink: 0, fontWeight: 'bold', color: '#38bdf8', fontSize: '0.88rem', whiteSpace: 'nowrap' }}>CPU 核心</div>
               <div style={{ flex: 1, color: '#cbd5e1', fontSize: '0.8rem' }}>单时钟周期 ~0.5 ns，超高速吞吐指令与数据</div>
-              <span style={{ background: '#0284c7', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace' }}>0.5 ns ⚡</span>
+              <span style={{ background: '#0284c7', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace', flexShrink: 0, whiteSpace: 'nowrap' }}>0.5 ns ⚡</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', borderLeft: '4px solid #10b981', animation: 'hitGlow 2.5s infinite' }}>
-              <div style={{ width: '85px', fontWeight: 'bold', color: '#10b981', fontSize: '0.9rem' }}>Cache(SRAM)</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#0f172a', padding: '9px 12px', borderRadius: '6px', borderLeft: '4px solid #10b981', animation: 'hitGlow 2.5s infinite' }}>
+              <div style={{ width: '110px', flexShrink: 0, fontWeight: 'bold', color: '#10b981', fontSize: '0.88rem', whiteSpace: 'nowrap' }}>Cache (SRAM)</div>
               <div style={{ flex: 1, color: '#cbd5e1', fontSize: '0.8rem' }}>延迟极低，抵挡 90%+ 访存请求</div>
-              <span style={{ background: '#059669', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace' }}>1 ~ 5 ns</span>
+              <span style={{ background: '#059669', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace', flexShrink: 0, whiteSpace: 'nowrap' }}>1 ~ 5 ns</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', background: '#0f172a', padding: '8px 12px', borderRadius: '6px', borderLeft: '4px solid #f59e0b' }}>
-              <div style={{ width: '85px', fontWeight: 'bold', color: '#fbbf24', fontSize: '0.9rem' }}>主存 (DRAM)</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#0f172a', padding: '9px 12px', borderRadius: '6px', borderLeft: '4px solid #f59e0b' }}>
+              <div style={{ width: '110px', flexShrink: 0, fontWeight: 'bold', color: '#fbbf24', fontSize: '0.88rem', whiteSpace: 'nowrap' }}>主存 (DRAM)</div>
               <div style={{ flex: 1, color: '#cbd5e1', fontSize: '0.8rem' }}>容量大，但访问延迟高达数十至上百周期</div>
-              <span style={{ background: '#d97706', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace' }}>50 ~ 100 ns 🐢</span>
+              <span style={{ background: '#d97706', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'monospace', flexShrink: 0, whiteSpace: 'nowrap' }}>50 ~ 100 ns 🐢</span>
             </div>
           </div>
           <div style={{ marginTop: '10px', fontSize: '0.78rem', color: '#38bdf8', textAlign: 'center', background: 'rgba(56, 189, 248, 0.08)', padding: '6px', borderRadius: '4px' }}>
