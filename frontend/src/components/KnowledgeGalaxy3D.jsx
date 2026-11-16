@@ -10,42 +10,52 @@ const COURSE_DOMAINS = [
   { id: 'ai', name: '数据库与前沿AI星图', tag: '05 智能计算', count: 4, color: '#f43f5e' }
 ]
 
-// 25 个底层计算机核心知识节点在 3D 芯片拓扑空间中的坐标（分学科星团聚类）
+// 学科颜色与色板映射工具函数
+export function getNodeTheme(node) {
+  if (!node) return { themeColor: '#10b981', rgb: '16, 185, 129' }
+  if (node.courseId === 'os') return { themeColor: '#06b6d4', rgb: '6, 182, 212' }
+  if (node.courseId === 'net') return { themeColor: '#8b5cf6', rgb: '139, 92, 246' }
+  if (node.courseId === 'ds') return { themeColor: '#f59e0b', rgb: '245, 158, 11' }
+  if (node.courseId === 'ai') return { themeColor: '#f43f5e', rgb: '244, 63, 94' }
+  return { themeColor: '#10b981', rgb: '16, 185, 129' }
+}
+
+// 25 个底层计算机核心知识节点在 3D 芯片拓扑空间中的坐标（学科星团充分分离，互不遮叠）
 const GALAXY_NODES = [
-  // 计算机组成原理星团 (Cluster 1: 左侧硬件星域, 坐标紧凑内聚)
-  { id: 'n_cpu_pipe', code: 'CPU-01', name: 'CPU 五级流水线', course: '计算机组成原理', courseId: 'arch', status: 'weak', x: -130, y: 30, z: 20, size: 14, labId: 'cpu-pipeline', desc: '涵盖 IF/ID/EX/MEM/WB 五大时钟节拍，408 重点突破 RAW 数据冒险与分支预测。' },
-  { id: 'n_hazard', code: 'CPU-02', name: 'Load-Use 数据冒险', course: '计算机组成原理', courseId: 'arch', status: 'weak', x: -170, y: 70, z: 40, size: 11, labId: 'cpu-pipeline', desc: '数据在 MEM 阶段末尾产出，后继指令 EX 阶段强行等待，必须硬件阻塞插入 Bubble。' },
-  { id: 'n_cache', code: 'MEM-01', name: 'Cache 组相联映射', course: '计算机组成原理', courseId: 'arch', status: 'core', x: -100, y: -40, z: 80, size: 14, labId: 'cache-mapping', desc: '主存物理地址解构为 Tag + Set Index + Offset，408 必考 Cache 容量与组相联缺失判定。' },
-  { id: 'n_thrash', code: 'MEM-02', name: 'Cache 冲突颠簸', course: '计算机组成原理', courseId: 'arch', status: 'weak', x: -140, y: -80, z: 110, size: 10, labId: 'cache-mapping', desc: '循环访问映射到同一 Cache 行的变量导致命中率跌至 0%，需提高相联度或填充数组解除。' },
-  { id: 'n_inst_cycle', code: 'CTL-01', name: '指令周期时序打拍', course: '计算机组成原理', courseId: 'arch', status: 'mastered', x: -70, y: 70, z: -30, size: 11, labId: 'instruction-cycle', desc: '取指、间址、执行、中断四阶段总线控制逻辑与微操作控制信号时钟节拍。' },
-  { id: 'n_ieee754', code: 'ALU-01', name: 'IEEE 754 浮点表示', course: '计算机组成原理', courseId: 'arch', status: 'unvisited', x: -80, y: -90, z: -20, size: 10, labId: 'number-representation', desc: '1 位符号 + 8 位阶码(移码) + 23 位尾数(隐藏位 1.M)，以及正负零与非规格化数计算。' },
+  // 计算机组成原理星团 (Cluster 1: 左侧硬件星域，中心约 x:-220, y:20, z:20)
+  { id: 'n_cpu_pipe', code: 'CPU-01', name: 'CPU 五级流水线', course: '计算机组成原理', courseId: 'arch', status: 'weak', x: -220, y: 20, z: 20, size: 14, labId: 'cpu-pipeline', desc: '涵盖 IF/ID/EX/MEM/WB 五大时钟节拍，408 重点突破 RAW 数据冒险与分支预测。' },
+  { id: 'n_hazard', code: 'CPU-02', name: 'Load-Use 数据冒险', course: '计算机组成原理', courseId: 'arch', status: 'weak', x: -260, y: 60, z: 40, size: 11, labId: 'cpu-pipeline', desc: '数据在 MEM 阶段末尾产出，后继指令 EX 阶段强行等待，必须硬件阻塞插入 Bubble。' },
+  { id: 'n_cache', code: 'MEM-01', name: 'Cache 组相联映射', course: '计算机组成原理', courseId: 'arch', status: 'core', x: -190, y: -40, z: 60, size: 14, labId: 'cache-mapping', desc: '主存物理地址解构为 Tag + Set Index + Offset，408 必考 Cache 容量与组相联缺失判定。' },
+  { id: 'n_thrash', code: 'MEM-02', name: 'Cache 冲突颠簸', course: '计算机组成原理', courseId: 'arch', status: 'weak', x: -230, y: -80, z: 90, size: 10, labId: 'cache-mapping', desc: '循环访问映射到同一 Cache 行的变量导致命中率跌至 0%，需提高相联度或填充数组解除。' },
+  { id: 'n_inst_cycle', code: 'CTL-01', name: '指令周期时序打拍', course: '计算机组成原理', courseId: 'arch', status: 'mastered', x: -160, y: 60, z: -30, size: 11, labId: 'instruction-cycle', desc: '取指、间址、执行、中断四阶段总线控制逻辑与微操作控制信号时钟节拍。' },
+  { id: 'n_ieee754', code: 'ALU-01', name: 'IEEE 754 浮点表示', course: '计算机组成原理', courseId: 'arch', status: 'unvisited', x: -170, y: -90, z: -20, size: 10, labId: 'number-representation', desc: '1 位符号 + 8 位阶码(移码) + 23 位尾数(隐藏位 1.M)，以及正负零与非规格化数计算。' },
 
-  // 操作系统星团 (Cluster 2: 右上方内核星域, 空间独立聚类)
-  { id: 'n_deadlock', code: 'OS-01', name: '死锁银行家算法', course: '操作系统', courseId: 'os', status: 'weak', x: 70, y: 110, z: 50, size: 14, labId: 'deadlock', desc: '利用安全性序列检查矩阵（Available, Max, Allocation, Need），判定系统是否处于安全状态。' },
-  { id: 'n_deadlock_cond', code: 'OS-02', name: '死锁四必要条件', course: '操作系统', courseId: 'os', status: 'mastered', x: 110, y: 150, z: 30, size: 9, labId: 'deadlock', desc: '互斥条件、占有且等待、不可剥夺、循环等待链。' },
-  { id: 'n_sync', code: 'OS-03', name: '进程同步与 Peterson', course: '操作系统', courseId: 'os', status: 'core', x: 50, y: 50, z: -50, size: 12, labId: 'process-sync', desc: '通过 flag 意愿标志与 turn 谦让变量严格解决双进程临界区访问互斥。' },
-  { id: 'n_sched', code: 'OS-04', name: 'CPU 调度算法', course: '操作系统', courseId: 'os', status: 'mastered', x: 10, y: 80, z: -90, size: 10, labId: 'scheduling', desc: 'FCFS、SJF、高响应比优先 HRRN 与时间片轮转 RR 周转时间推导。' },
-  { id: 'n_page_rep', code: 'VM-01', name: '虚拟页式存储与置换', course: '操作系统', courseId: 'os', status: 'core', x: 110, y: -20, z: 60, size: 13, labId: 'page-replacement', desc: 'TLB 快表命中、多级页表、OPT/FIFO/LRU 缺页中断时序与物理帧置换。' },
-  { id: 'n_mem_part', code: 'VM-02', name: '内存动态分区分配', course: '操作系统', courseId: 'os', status: 'mastered', x: 80, y: -70, z: 20, size: 9, labId: 'memory-partition', desc: '首次适应、最佳适应与最坏适应算法地址空闲链分配与外部碎片。' },
+  // 操作系统星团 (Cluster 2: 右上方内核星域，中心约 x:160, y:150, z:-40)
+  { id: 'n_deadlock', code: 'OS-01', name: '死锁银行家算法', course: '操作系统', courseId: 'os', status: 'weak', x: 150, y: 160, z: -30, size: 14, labId: 'deadlock', desc: '利用安全性序列检查矩阵（Available, Max, Allocation, Need），判定系统是否处于安全状态。' },
+  { id: 'n_deadlock_cond', code: 'OS-02', name: '死锁四必要条件', course: '操作系统', courseId: 'os', status: 'mastered', x: 190, y: 200, z: -10, size: 9, labId: 'deadlock', desc: '互斥条件、占有且等待、不可剥夺、循环等待链。' },
+  { id: 'n_sync', code: 'OS-03', name: '进程同步与 Peterson', course: '操作系统', courseId: 'os', status: 'core', x: 130, y: 110, z: -80, size: 12, labId: 'process-sync', desc: '通过 flag 意愿标志与 turn 谦让变量严格解决双进程临界区访问互斥。' },
+  { id: 'n_sched', code: 'OS-04', name: 'CPU 调度算法', course: '操作系统', courseId: 'os', status: 'mastered', x: 90, y: 140, z: -110, size: 10, labId: 'scheduling', desc: 'FCFS、SJF、高响应比优先 HRRN 与时间片轮转 RR 周转时间推导。' },
+  { id: 'n_page_rep', code: 'VM-01', name: '虚拟页式存储与置换', course: '操作系统', courseId: 'os', status: 'core', x: 190, y: 90, z: 20, size: 13, labId: 'page-replacement', desc: 'TLB 快表命中、多级页表、OPT/FIFO/LRU 缺页中断时序与物理帧置换。' },
+  { id: 'n_mem_part', code: 'VM-02', name: '内存动态分区分配', course: '操作系统', courseId: 'os', status: 'mastered', x: 160, y: 50, z: -10, size: 9, labId: 'memory-partition', desc: '首次适应、最佳适应与最坏适应算法地址空闲链分配与外部碎片。' },
 
-  // 计算机网络星团 (Cluster 3: 右下方协议栈星域, 垂直分层紧密)
-  { id: 'n_tcp_conn', code: 'NET-01', name: 'TCP 三次握手', course: '计算机网络', courseId: 'net', status: 'core', x: 120, y: -40, z: -80, size: 14, labId: 'tcp-connection', desc: '全双工初始序列号 ISN 同步，防止网络中已失效的历史 SYN 报文段产生错误连接。' },
-  { id: 'n_tcp_close', code: 'NET-02', name: 'TCP 四次挥手 2MSL', course: '计算机网络', courseId: 'net', status: 'mastered', x: 160, y: 10, z: -70, size: 10, labId: 'tcp-connection', desc: 'TIME_WAIT 状态等待 2MSL 确保最终 ACK 可达，并使本连接产生的所有报文段均在网络中消失。' },
-  { id: 'n_sliding_win', code: 'NET-03', name: '滑动窗口与拥塞控制', course: '计算机网络', courseId: 'net', status: 'weak', x: 140, y: -100, z: -30, size: 13, labId: 'sliding-window', desc: '慢开始、拥塞避免、快重传与快恢复拥塞窗口 cwnd 动态曲线与发送/接收滑动窗口演进。' },
-  { id: 'n_ip_subnet', code: 'NET-04', name: 'IP 子网掩码与 CIDR', course: '计算机网络', courseId: 'net', status: 'mastered', x: 90, y: -140, z: -70, size: 10, labId: 'ip-subnet', desc: '网络前缀、斜线记法、路由聚合（超网形成）与路由表最长前缀匹配原则。' },
-  { id: 'n_dns', code: 'NET-05', name: 'DNS 递归与迭代解析', course: '计算机网络', courseId: 'net', status: 'unvisited', x: 80, y: 10, z: -140, size: 9, labId: 'dns-resolution', desc: '主机向本地域名服务器递归，本地域名服务器向根、顶级与权限服务器迭代查询。' },
+  // 计算机网络星团 (Cluster 3: 右下方协议栈星域，中心约 x:180, y:-140, z:50)
+  { id: 'n_tcp_conn', code: 'NET-01', name: 'TCP 三次握手', course: '计算机网络', courseId: 'net', status: 'core', x: 180, y: -130, z: 40, size: 14, labId: 'tcp-connection', desc: '全双工初始序列号 ISN 同步，防止网络中已失效的历史 SYN 报文段产生错误连接。' },
+  { id: 'n_tcp_close', code: 'NET-02', name: 'TCP 四次挥手 2MSL', course: '计算机网络', courseId: 'net', status: 'mastered', x: 220, y: -90, z: 60, size: 10, labId: 'tcp-connection', desc: 'TIME_WAIT 状态等待 2MSL 确保最终 ACK 可达，并使本连接产生的所有报文段均在网络中消失。' },
+  { id: 'n_sliding_win', code: 'NET-03', name: '滑动窗口与拥塞控制', course: '计算机网络', courseId: 'net', status: 'weak', x: 200, y: -180, z: 80, size: 13, labId: 'sliding-window', desc: '慢开始、拥塞避免、快重传与快恢复拥塞窗口 cwnd 动态曲线与发送/接收滑动窗口演进。' },
+  { id: 'n_ip_subnet', code: 'NET-04', name: 'IP 子网掩码与 CIDR', course: '计算机网络', courseId: 'net', status: 'mastered', x: 150, y: -210, z: 30, size: 10, labId: 'ip-subnet', desc: '网络前缀、斜线记法、路由聚合（超网形成）与路由表最长前缀匹配原则。' },
+  { id: 'n_dns', code: 'NET-05', name: 'DNS 递归与迭代解析', course: '计算机网络', courseId: 'net', status: 'unvisited', x: 140, y: -90, z: -20, size: 9, labId: 'dns-resolution', desc: '主机向本地域名服务器递归，本地域名服务器向根、顶级与权限服务器迭代查询。' },
 
-  // 数据结构与算法星团 (Cluster 4: 左下方算法星域, 树图拓扑高内聚)
-  { id: 'n_dijkstra', code: 'DS-01', name: 'Dijkstra 最短路径', course: '数据结构与算法', courseId: 'ds', status: 'core', x: -40, y: -60, z: -110, size: 13, labId: 'dijkstra', desc: '贪心策略按路径递增顺序松弛非负权值边，时间复杂度 O(V^2) 或小顶堆优化 O(E log V)。' },
-  { id: 'n_tree_rot', code: 'DS-02', name: 'AVL 平衡二叉树旋转', course: '数据结构与算法', courseId: 'ds', status: 'weak', x: 20, y: -40, z: -40, size: 12, labId: 'tree-traversal', desc: 'LL、RR、LR、RL 四种平衡旋转调整，维持二叉搜索树的 O(log N) 查找性能。' },
-  { id: 'n_sorting', code: 'DS-03', name: '经典内部排序算法', course: '数据结构与算法', courseId: 'ds', status: 'mastered', x: -90, y: -10, z: -40, size: 11, labId: 'sorting', desc: '快速排序三数取中划分、堆排序大顶堆调整与归并排序稳定性时空对比。' },
-  { id: 'n_stack_queue', code: 'DS-04', name: '栈与队列时序模拟', course: '数据结构与算法', courseId: 'ds', status: 'mastered', x: -10, y: -90, z: -70, size: 9, labId: 'stack-queue', desc: '卡特兰数 Catalan(n) 出栈排列计数与循环队列 (rear + 1) % MaxSize 判满判空。' },
+  // 数据结构与算法星团 (Cluster 4: 左下方算法星域，中心约 x:-170, y:-160, z:-80)
+  { id: 'n_dijkstra', code: 'DS-01', name: 'Dijkstra 最短路径', course: '数据结构与算法', courseId: 'ds', status: 'core', x: -170, y: -170, z: -90, size: 13, labId: 'dijkstra', desc: '贪心策略按路径递增顺序松弛非负权值边，时间复杂度 O(V^2) 或小顶堆优化 O(E log V)。' },
+  { id: 'n_tree_rot', code: 'DS-02', name: 'AVL 平衡二叉树旋转', course: '数据结构与算法', courseId: 'ds', status: 'weak', x: -120, y: -140, z: -60, size: 12, labId: 'tree-traversal', desc: 'LL、RR、LR、RL 四种平衡旋转调整，维持二叉搜索树的 O(log N) 查找性能。' },
+  { id: 'n_sorting', code: 'DS-03', name: '经典内部排序算法', course: '数据结构与算法', courseId: 'ds', status: 'mastered', x: -210, y: -130, z: -60, size: 11, labId: 'sorting', desc: '快速排序三数取中划分、堆排序大顶堆调整与归并排序稳定性时空对比。' },
+  { id: 'n_stack_queue', code: 'DS-04', name: '栈与队列时序模拟', course: '数据结构与算法', courseId: 'ds', status: 'mastered', x: -140, y: -210, z: -110, size: 9, labId: 'stack-queue', desc: '卡特兰数 Catalan(n) 出栈排列计数与循环队列 (rear + 1) % MaxSize 判满判空。' },
 
-  // 数据库与前沿计算 (Cluster 5: 远端拓展星域)
-  { id: 'n_bplus_tree', code: 'DB-01', name: 'B+ 树外存索引', course: '数据库系统', courseId: 'ai', status: 'core', x: -20, y: 90, z: 120, size: 12, labId: 'bplus-tree', desc: '多路平衡查找树，非叶节点只存索引，叶子节点构成双向有序链表，极致优化磁盘 I/O。' },
-  { id: 'n_transactions', code: 'DB-02', name: 'ACID 事务与并发', course: '数据库系统', courseId: 'ai', status: 'unvisited', x: -60, y: 130, z: 100, size: 10, labId: 'transaction', desc: '两段锁协议 2PL 保证冲突可串行化，WAL 预写日志与 Redo/Undo 恢复机制。' },
-  { id: 'n_attention', code: 'AI-01', name: 'Transformer 注意力', course: '人工智能与前沿', courseId: 'ai', status: 'core', x: 60, y: -80, z: 120, size: 14, labId: 'attention', desc: 'Q·K^T / sqrt(d_k) 缩放点积自注意力，软寻址权重矩阵关联上下文语义拓扑。' },
-  { id: 'n_neural_net', code: 'AI-02', name: '感知机与反向传播', course: '人工智能与前沿', courseId: 'ai', status: 'unvisited', x: 100, y: -40, z: 140, size: 10, labId: 'neural-network', desc: '多层前馈神经网络与损失函数梯度下降链式求导更新权重。' }
+  // 数据库与前沿计算 (Cluster 5: 远端拓展高维星域，中心约 x:0, y:40, z:220)
+  { id: 'n_bplus_tree', code: 'DB-01', name: 'B+ 树外存索引', course: '数据库系统', courseId: 'ai', status: 'core', x: -30, y: 70, z: 220, size: 12, labId: 'bplus-tree', desc: '多路平衡查找树，非叶节点只存索引，叶子节点构成双向有序链表，极致优化磁盘 I/O。' },
+  { id: 'n_transactions', code: 'DB-02', name: 'ACID 事务与并发', course: '数据库系统', courseId: 'ai', status: 'unvisited', x: -70, y: 100, z: 200, size: 10, labId: 'transaction', desc: '两段锁协议 2PL 保证冲突可串行化，WAL 预写日志与 Redo/Undo 恢复机制。' },
+  { id: 'n_attention', code: 'AI-01', name: 'Transformer 注意力', course: '人工智能与前沿', courseId: 'ai', status: 'core', x: 50, y: 10, z: 230, size: 14, labId: 'attention', desc: 'Q·K^T / sqrt(d_k) 缩放点积自注意力，软寻址权重矩阵关联上下文语义拓扑。' },
+  { id: 'n_neural_net', code: 'AI-02', name: '感知机与反向传播', course: '人工智能与前沿', courseId: 'ai', status: 'unvisited', x: 80, y: 50, z: 250, size: 10, labId: 'neural-network', desc: '多层前馈神经网络与损失函数梯度下降链式求导更新权重。' }
 ]
 
 // 紧密因果关联总线连线
@@ -350,9 +360,10 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         }
 
         if (isHighlight) {
-          ctx.strokeStyle = '#059669'
+          const highlightTheme = getNodeTheme(selectedNode || hoveredNode || src)
+          ctx.strokeStyle = highlightTheme.themeColor
           ctx.lineWidth = 2.8
-          ctx.shadowColor = '#10b981'
+          ctx.shadowColor = highlightTheme.themeColor
           ctx.shadowBlur = 12
         } else {
           ctx.strokeStyle = edge.isCross
@@ -369,9 +380,10 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           sig.progress = (sig.progress + sig.speed) % 1.0
           const packetX = src.screenX + (tgt.screenX - src.screenX) * sig.progress
           const packetY = src.screenY + (tgt.screenY - src.screenY) * sig.progress
+          const activeTheme = getNodeTheme(selectedNode || hoveredNode || src)
           ctx.beginPath()
           ctx.arc(packetX, packetY, isHighlight ? 2.8 : 1.5, 0, Math.PI * 2)
-          ctx.fillStyle = isHighlight ? '#34d399' : 'rgba(16, 185, 129, 0.65)'
+          ctx.fillStyle = isHighlight ? activeTheme.themeColor : 'rgba(148, 163, 184, 0.65)'
           ctx.fill()
         }
       })
@@ -407,22 +419,8 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           baseAlpha = isFaded ? 0.2 : Math.max(0.35, Math.min(1.0, 1.35 - node.zDepth / 750))
         }
 
-        let themeColor = '#10b981'
-        let glowColor = 'rgba(16, 185, 129, 0.45)'
-        if (node.courseId === 'os') {
-          themeColor = '#06b6d4'
-          glowColor = 'rgba(6, 182, 212, 0.45)'
-        } else if (node.courseId === 'net') {
-          themeColor = '#8b5cf6'
-          glowColor = 'rgba(139, 92, 246, 0.45)'
-        } else if (node.courseId === 'ds') {
-          themeColor = '#f59e0b'
-          glowColor = 'rgba(245, 158, 11, 0.45)'
-        } else if (node.courseId === 'ai') {
-          themeColor = '#f43f5e'
-          glowColor = 'rgba(244, 63, 94, 0.45)'
-        }
-
+        const { themeColor, rgb } = getNodeTheme(node)
+        let glowColor = `rgba(${rgb}, 0.45)`
         if (node.status === 'weak') {
           glowColor = 'rgba(239, 68, 68, 0.55)'
         }
@@ -430,28 +428,28 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         // 视觉效果上有强烈的往前面感觉：选中的节点半径明显放大 (2.1 倍)
         const radius = Math.max(4.5, node.size * node.scale * (isSelected ? 2.1 : isHovered ? 1.3 : 1.0))
 
-        // A. 选中的节点专属：前置立体向外脉冲扩散光波 (Pulse Ripple Waves)
+        // A. 选中的节点专属：前置立体向外脉冲扩散光波 (采用该节点固有色彩)
         if (isSelected) {
           const wavePhase = (now % 1600) / 1600 // 0 -> 1
-          const waveRadius = radius * 1.4 + wavePhase * (radius * 1.8)
+          const waveRadius = radius * 1.35 + wavePhase * (radius * 1.6)
           const waveAlpha = (1 - wavePhase) * 0.75
           ctx.save()
           ctx.beginPath()
           ctx.arc(node.screenX, node.screenY, waveRadius, 0, Math.PI * 2)
-          ctx.strokeStyle = `rgba(52, 211, 153, ${waveAlpha})`
+          ctx.strokeStyle = `rgba(${rgb}, ${waveAlpha})`
           ctx.lineWidth = 2
           ctx.stroke()
           ctx.restore()
         }
 
-        // B. 外层高能发光光晕
+        // B. 外层高能发光光晕 (保持固有学科色)
         if (!isFaded && (!selectedNode || isSelected || isConnected)) {
-          const glowMultiplier = isSelected ? 4.5 : 3.4
+          const glowMultiplier = isSelected ? 4.2 : 3.2
           const glowGrad = ctx.createRadialGradient(
-            node.screenX, node.screenY, radius * 0.15,
+            node.screenX, node.screenY, radius * 0.2,
             node.screenX, node.screenY, radius * glowMultiplier
           )
-          glowGrad.addColorStop(0, isSelected ? 'rgba(52, 211, 153, 0.85)' : glowColor)
+          glowGrad.addColorStop(0, `rgba(${rgb}, ${isSelected ? 0.75 : 0.45})`)
           glowGrad.addColorStop(1, 'rgba(0,0,0,0)')
           ctx.fillStyle = glowGrad
           ctx.beginPath()
@@ -461,9 +459,9 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
 
         // C. 芯片外层引脚刻度圈 (Hardware Pins & Radar Ring)
         ctx.save()
-        ctx.strokeStyle = isSelected ? '#ffffff' : themeColor
+        ctx.strokeStyle = themeColor
         ctx.globalAlpha = baseAlpha * (isSelected ? 0.95 : 0.7)
-        ctx.lineWidth = isSelected ? 2.2 : 1.0
+        ctx.lineWidth = isSelected ? 2.0 : 1.0
         ctx.beginPath()
         ctx.arc(node.screenX, node.screenY, radius * 1.45, 0, Math.PI * 2)
         ctx.stroke()
@@ -480,37 +478,31 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
         }
         ctx.restore()
 
-        // D. 核心实心球 (立体球体质感)
+        // D. 核心实心球：纯粹的平实色块风格，去除刺眼的白斑高光；选中后始终保持原有学科颜色！
         ctx.save()
-        const sphereGrad = ctx.createRadialGradient(
-          node.screenX - radius * 0.3, node.screenY - radius * 0.3, radius * 0.1,
-          node.screenX, node.screenY, radius
-        )
-        if (isSelected) {
-          sphereGrad.addColorStop(0, '#ffffff')
-          sphereGrad.addColorStop(0.5, '#34d399')
-          sphereGrad.addColorStop(1, '#059669')
-        } else {
-          sphereGrad.addColorStop(0, '#ffffff')
-          sphereGrad.addColorStop(0.4, themeColor)
-          sphereGrad.addColorStop(1, themeColor)
-        }
         ctx.beginPath()
         ctx.arc(node.screenX, node.screenY, radius, 0, Math.PI * 2)
-        ctx.fillStyle = sphereGrad
+        ctx.fillStyle = themeColor // 纯色普通色块，原来什么颜色选中之后还是什么颜色
         ctx.globalAlpha = baseAlpha
         ctx.fill()
+
+        // 选中时给普通色块添加一道干净的白色外轮廓，突出立体感，绝不高光漂白
+        if (isSelected) {
+          ctx.strokeStyle = '#ffffff'
+          ctx.lineWidth = 1.8
+          ctx.stroke()
+        }
         ctx.restore()
 
-        // E. 选中时的高能 HUD 准星
+        // E. 选中时的高能 HUD 准星 (自适应学科专属主题色)
         if (isSelected) {
           ctx.save()
-          ctx.strokeStyle = '#ffffff'
-          ctx.lineWidth = 2.4
-          ctx.shadowColor = '#10b981'
-          ctx.shadowBlur = 14
-          const reticleSize = radius * 2.2
-          const d = 10
+          ctx.strokeStyle = themeColor
+          ctx.lineWidth = 2.2
+          ctx.shadowColor = themeColor
+          ctx.shadowBlur = 12
+          const reticleSize = radius * 2.1
+          const d = 9
           ctx.beginPath()
           ctx.moveTo(node.screenX - reticleSize, node.screenY - reticleSize + d)
           ctx.lineTo(node.screenX - reticleSize, node.screenY - reticleSize)
@@ -533,18 +525,18 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           const fontSize = isSelected ? 15 : Math.max(10, Math.min(13, 11.5 * node.scale))
           ctx.save()
           ctx.font = `${isSelected ? 'bold ' : ''}${fontSize}px Inter, sans-serif`
-          ctx.fillStyle = isSelected ? '#ffffff' : isHovered ? '#34d399' : `rgba(226, 232, 240, ${baseAlpha * 0.95})`
+          ctx.fillStyle = isSelected ? '#ffffff' : isHovered ? themeColor : `rgba(226, 232, 240, ${baseAlpha * 0.95})`
 
           const codeText = `[${node.code}] `
           ctx.font = `800 ${Math.max(9, fontSize - 2)}px ui-monospace, monospace`
-          ctx.fillStyle = isSelected ? '#34d399' : themeColor
+          ctx.fillStyle = themeColor
           ctx.fillText(codeText, node.screenX + radius + 8, node.screenY + 4)
 
           const codeWidth = ctx.measureText(codeText).width
           ctx.font = `${isSelected ? 'bold ' : ''}${fontSize}px Inter, sans-serif`
           ctx.fillStyle = isSelected ? '#ffffff' : `rgba(226, 232, 240, ${baseAlpha * 0.95})`
           if (isSelected) {
-            ctx.shadowColor = '#059669'
+            ctx.shadowColor = themeColor
             ctx.shadowBlur = 8
           }
           ctx.fillText(node.name, node.screenX + radius + 8 + codeWidth, node.screenY + 4)
@@ -796,37 +788,52 @@ export default function KnowledgeGalaxy3D({ onOpenExperiment }) {
           </div>
         </div>
 
-        {/* 选中节点的高能 HUD 详情卡片 */}
-        {selectedNode && (
-          <div className="node-inspector-floating-card">
-            <button
-              type="button"
-              className="close-inspector-btn"
-              onClick={() => setSelectedNode(null)}
+        {/* 选中节点的高能 HUD 详情卡片 (色彩与被选中的学科考点严格一致) */}
+        {selectedNode && (() => {
+          const sTheme = getNodeTheme(selectedNode)
+          return (
+            <div
+              className="node-inspector-floating-card"
+              style={{
+                borderColor: sTheme.themeColor,
+                boxShadow: `0 16px 48px rgba(${sTheme.rgb}, 0.28)`
+              }}
             >
-              ×
-            </button>
-            <div className="inspector-badge-row">
-              <span className="course-tag">{selectedNode.course}</span>
-              <span className="node-code-tag">[{selectedNode.code}]</span>
-              <span className={`status-tag ${selectedNode.status}`}>
-                {selectedNode.status === 'weak' ? '薄弱攻坚点' : selectedNode.status === 'mastered' ? '已掌握' : '408 核心必考'}
-              </span>
-            </div>
-            <h3 className="inspector-title">{selectedNode.name}</h3>
-            <p className="inspector-desc">{selectedNode.desc}</p>
-
-            <div className="inspector-action-row">
               <button
                 type="button"
-                className="launch-lab-btn"
-                onClick={() => onOpenExperiment(selectedNode.labId)}
+                className="close-inspector-btn"
+                onClick={() => setSelectedNode(null)}
               >
-                🔬 启动该考点微观仿真时序推演 →
+                ×
               </button>
+              <div className="inspector-badge-row">
+                <span
+                  className="course-tag"
+                  style={{ background: `rgba(${sTheme.rgb}, 0.15)`, color: sTheme.themeColor }}
+                >
+                  {selectedNode.course}
+                </span>
+                <span className="node-code-tag">[{selectedNode.code}]</span>
+                <span className={`status-tag ${selectedNode.status}`}>
+                  {selectedNode.status === 'weak' ? '薄弱攻坚点' : selectedNode.status === 'mastered' ? '已掌握' : '408 核心必考'}
+                </span>
+              </div>
+              <h3 className="inspector-title">{selectedNode.name}</h3>
+              <p className="inspector-desc">{selectedNode.desc}</p>
+
+              <div className="inspector-action-row">
+                <button
+                  type="button"
+                  className="launch-lab-btn"
+                  style={{ background: sTheme.themeColor }}
+                  onClick={() => onOpenExperiment(selectedNode.labId)}
+                >
+                  🔬 启动该考点微观仿真时序推演 →
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
       </div>
     </div>
   )
