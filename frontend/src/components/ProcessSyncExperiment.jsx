@@ -49,7 +49,7 @@ const STORY_STEPS = [
   }
 ]
 
-function SyncStory() {
+function SyncStory({ onSelectModel }) {
   const [step, setStep] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const timerRef = useRef(null)
@@ -228,17 +228,43 @@ function SyncStory() {
 
           {cur.visual === 'summary' && (
             <div style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-              <div style={{ background: '#1e293b', padding: '12px', borderRadius: '6px' }}>
-                <div style={{ color: '#60a5fa', fontWeight: 'bold', fontSize: '0.9rem' }}>生产者-消费者</div>
-                <div style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>同步信号量控制空/满依赖，互斥信号量保障临界区独占。</div>
+              <div
+                onClick={() => onSelectModel && onSelectModel('producer-consumer')}
+                style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderTop: '3px solid #60a5fa', cursor: 'pointer', transition: 'all 0.2s' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ color: '#60a5fa', fontWeight: 'bold', fontSize: '0.95rem' }}>生产者-消费者</div>
+                  <span style={{ fontSize: '0.72rem', color: '#93c5fd', background: 'rgba(96, 165, 250, 0.15)', padding: '2px 6px', borderRadius: '4px' }}>进入模型 ➔</span>
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>
+                  同步信号量控制空/满依赖，互斥信号量保障临界区独占。
+                </div>
               </div>
-              <div style={{ background: '#1e293b', padding: '12px', borderRadius: '6px' }}>
-                <div style={{ color: '#34d399', fontWeight: 'bold', fontSize: '0.9rem' }}>读者-写者问题</div>
-                <div style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>第一个读者加互斥锁，最后一个读者解互斥锁（计数器法）。</div>
+
+              <div
+                onClick={() => onSelectModel && onSelectModel('readers-writers')}
+                style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderTop: '3px solid #34d399', cursor: 'pointer', transition: 'all 0.2s' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ color: '#34d399', fontWeight: 'bold', fontSize: '0.95rem' }}>读者-写者问题</div>
+                  <span style={{ fontSize: '0.72rem', color: '#6ee7b7', background: 'rgba(52, 211, 153, 0.15)', padding: '2px 6px', borderRadius: '4px' }}>进入模型 ➔</span>
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>
+                  第一个读者加互斥锁，最后一个读者解互斥锁（计数器法）。
+                </div>
               </div>
-              <div style={{ background: '#1e293b', padding: '12px', borderRadius: '6px' }}>
-                <div style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '0.9rem' }}>哲学家进餐</div>
-                <div style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>死锁易发模型。通过资源有序分配或限制并发人数防死锁。</div>
+
+              <div
+                onClick={() => onSelectModel && onSelectModel('dining-philosophers')}
+                style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderTop: '3px solid #f59e0b', cursor: 'pointer', transition: 'all 0.2s' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '0.95rem' }}>哲学家进餐</div>
+                  <span style={{ fontSize: '0.72rem', color: '#fde047', background: 'rgba(245, 158, 11, 0.15)', padding: '2px 6px', borderRadius: '4px' }}>进入模型 ➔</span>
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#cbd5e1', marginTop: '6px', lineHeight: '1.5' }}>
+                  死锁易发模型。通过资源有序分配或限制并发人数防死锁。
+                </div>
               </div>
             </div>
           )}
@@ -270,6 +296,106 @@ function SyncStory() {
 }
 
 export default function ProcessSyncExperiment({ experiment }) {
+  const [activeModel, setActiveModel] = useState('producer-consumer')
+
+  return (
+    <>
+      <ExperimentHeader experiment={experiment} eyebrow="操作系统实验 03 · 进程同步" />
+
+      {/* 动画导学区 */}
+      <SyncStory onSelectModel={setActiveModel} />
+
+      {/* 自由探索区 */}
+      <div className="explore-heading">
+        <span>自由探索 · 并发经典三大同步互斥模型</span>
+        <h2>进程同步与互斥实验室</h2>
+        <p>支持自由切换三大经典模型：生产者-消费者、读者-写者问题与哲学家进餐，亲手调度原语并探究死锁形成与防范。</p>
+      </div>
+
+      {/* 三大经典模型切换 Tab */}
+      <div className="number-tabs" style={{ maxWidth: '560px', margin: '0 0 20px' }}>
+        <button
+          className={activeModel === 'producer-consumer' ? 'active' : ''}
+          onClick={() => setActiveModel('producer-consumer')}
+        >
+          1. 生产者-消费者
+        </button>
+        <button
+          className={activeModel === 'readers-writers' ? 'active' : ''}
+          onClick={() => setActiveModel('readers-writers')}
+        >
+          2. 读者-写者问题
+        </button>
+        <button
+          className={activeModel === 'dining-philosophers' ? 'active' : ''}
+          onClick={() => setActiveModel('dining-philosophers')}
+        >
+          3. 哲学家进餐
+        </button>
+      </div>
+
+      {activeModel === 'producer-consumer' && <ProducerConsumerLab />}
+      {activeModel === 'readers-writers' && <ReadersWritersLab />}
+      {activeModel === 'dining-philosophers' && <DiningPhilosophersLab />}
+
+      {activeModel === 'producer-consumer' && (
+        <LearningCycle
+          experimentId="sync-pc"
+          prediction={{
+            question: '在生产者-消费者问题中，如果颠倒生产者的 P(empty) 与 P(mutex) 顺序，当缓冲区已满时会发生什么？',
+            options: ['正常生产不会受影响', '生产者在持有互斥锁的情况下阻塞，导致消费者也无法进入，形成死锁', '消费者直接消费失败并退出'],
+            answer: '生产者在持有互斥锁的情况下阻塞，导致消费者也无法进入，形成死锁',
+            explanation: '互斥锁必须紧贴临界区，若先获取互斥锁再申请资源，当资源不足阻塞时互斥锁无法释放，导致死锁。'
+          }}
+          operation={{
+            title: '演练生产者与消费者协同',
+            instruction: '连续点击“生产单个项目”直到缓冲区占满（5/5），观察第 6 次生产如何被挂起入队；再点击“消费单个项目”，观察消费者如何释放空位并唤醒等待的生产者。'
+          }}
+          observation="当前模型为生产者-消费者：由 empty 与 full 信号量控制同步，由 mutex 信号量保障对共享环形缓冲区的独占原子访问。"
+          summaryPrompt="为什么 P 操作的互斥与同步顺序不能颠倒，而 V 操作的顺序可以颠倒？"
+        />
+      )}
+
+      {activeModel === 'readers-writers' && (
+        <LearningCycle
+          experimentId="sync-rw"
+          prediction={{
+            question: '在经典读者优先的读者-写者问题中，当已有读者在读时，新到来的读者需要等待吗？',
+            options: ['不需要，可以直接加入并发读取', '需要等待当前读者全部读完', '由操作系统随机决定'],
+            answer: '不需要，可以直接加入并发读取',
+            explanation: '读者优先策略下，只要 readcount > 0，后续读者只需增加计数器即可共享临界区，这可能导致写者长时间饿死。'
+          }}
+          operation={{
+            title: '验证共享读与排他写',
+            instruction: '连续添加 3 位读者，观察文件状态如何变为“多读者共享”，且 wmutex 被锁住；此时尝试添加写者，观察写者如何被阻塞在等待队列中。'
+          }}
+          observation="当前模型为读者-写者：通过计数器 readcount 实现多读者共享读，通过 wmutex 实现写者排他写；写者进入时所有读者与其他写者均被阻塞。"
+          summaryPrompt="读者优先会导致写者饥饿，怎样设计信号量才能实现写者优先或公平无饥饿排队？"
+        />
+      )}
+
+      {activeModel === 'dining-philosophers' && (
+        <LearningCycle
+          experimentId="sync-dp"
+          prediction={{
+            question: '哲学家进餐问题中，若 5 位哲学家同时感到饥饿并同时拿起左边的筷子，会导致什么后果？',
+            options: ['顺利吃完面条', '形成环路等待，全员阻塞发生死锁', '随机一人放弃筷子'],
+            answer: '形成环路等待，全员阻塞发生死锁',
+            explanation: '每位哲学家都持有一根筷子并等待右侧筷子，5 条请求边形成闭合环路，满足死锁的 4 个必要条件。'
+          }}
+          operation={{
+            title: '一键复现死锁与破除死锁',
+            instruction: '选择“朴素无保护”策略，点击“⚠️ 一键触发死锁”，观察 5 位哲学家如何同时陷入死锁环；然后切换为“奇偶规则”或“限制4人并发”，观察死锁如何被彻底消除。'
+          }}
+          observation="当前模型为哲学家进餐：圆桌上 5 位哲学家交替思考与就餐；死锁源于循环等待筷子，可通过打破循环等待（奇偶拿法或原子双拿）彻底免疫死锁。"
+          summaryPrompt="在现实数据库死锁或多线程编程中，哲学家进餐的哪些策略对应了资源分级分配（Resource Hierarchy）？"
+        />
+      )}
+    </>
+  )
+}
+
+function ProducerConsumerLab() {
   // 环形缓冲区状态
   const [buffer, setBuffer] = useState([
     { id: 1, name: '数据块#1' },
@@ -465,20 +591,7 @@ export default function ProcessSyncExperiment({ experiment }) {
   }
 
   return (
-    <>
-      <ExperimentHeader experiment={experiment} eyebrow="操作系统实验 03 · 进程同步" />
-
-      {/* 动画导学区 */}
-      <SyncStory />
-
-      {/* 自由探索区 */}
-      <div className="explore-heading">
-        <span>自由探索 · 经典生产者-消费者协同模型</span>
-        <h2>生产者-消费者 (Producer-Consumer) 协同实验室</h2>
-        <p>控制生产者与消费者进程，实时观测信号量计数（mutex、empty、full）、阻塞队列与共享环形缓冲区的动态流转。</p>
-      </div>
-
-      <div className="lab-layout sync-layout" style={{ gridTemplateColumns: '320px 1fr' }}>
+    <div className="lab-layout sync-layout" style={{ gridTemplateColumns: '320px 1fr' }}>
         {/* 左侧控制台 */}
         <aside className="control-panel">
           <div className="panel-title">
@@ -688,22 +801,875 @@ export default function ProcessSyncExperiment({ experiment }) {
           </div>
         </section>
       </div>
+  )
+}
 
-      <LearningCycle
-        experimentId="sync"
-        prediction={{
-          question: '在生产者-消费者问题中，如果颠倒生产者的 P(empty) 与 P(mutex) 顺序，当缓冲区已满时会发生什么？',
-          options: ['正常生产不会受影响', '生产者在持有互斥锁的情况下阻塞，导致消费者也无法进入，形成死锁', '消费者直接消费失败并退出'],
-          answer: '生产者在持有互斥锁的情况下阻塞，导致消费者也无法进入，形成死锁',
-          explanation: '互斥锁必须紧贴临界区，若先获取互斥锁再申请资源，当资源不足阻塞时互斥锁无法释放，导致死锁。'
-        }}
-        operation={{
-          title: '演练生产者与消费者协同',
-          instruction: '连续点击“生产单个项目”直到缓冲区占满（5/5），观察第 6 次生产如何被挂起入队；再点击“消费单个项目”，观察消费者如何释放空位并唤醒等待的生产者。'
-        }}
-        observation={`当前缓冲区状态：mutex=${mutex}，empty=${empty}，full=${full}。生产者队列等待数：${producerQueue.length}，消费者队列等待数：${consumerQueue.length}。`}
-        summaryPrompt="为什么 P 操作的互斥与同步顺序不能颠倒，而 V 操作的顺序可以颠倒？"
-      />
-    </>
+function ReadersWritersLab() {
+  const [strategy, setStrategy] = useState('reader-priority') // 'reader-priority' | 'fair'
+  const [readCount, setReadCount] = useState(0)
+  const [rmutex, setRmutex] = useState(1) // 保护 readCount
+  const [wmutex, setWmutex] = useState(1) // 保护共享文件的写锁
+  const [activeReaders, setActiveReaders] = useState([])
+  const [activeWriter, setActiveWriter] = useState(null)
+  const [waitingReaders, setWaitingReaders] = useState([])
+  const [waitingWriters, setWaitingWriters] = useState([])
+  const [fileVersion, setFileVersion] = useState(1)
+  const [logs, setLogs] = useState([
+    { time: '00:00', text: '读者-写者模型就绪：支持多读者并发读取、写者独占访问。', type: 'info' }
+  ])
+
+  const addLog = (text, type = 'info') => {
+    const time = new Date().toTimeString().split(' ')[0]
+    setLogs(prev => [{ time, text, type }, ...prev.slice(0, 18)])
+  }
+
+  // 添加读者
+  const handleAddReader = () => {
+    const rId = Math.floor(Math.random() * 900 + 100)
+    const reader = { id: rId, name: `读者R${rId}` }
+
+    // 若当前有写者正在写，或者在公平模式下已有写者排队等待
+    if (activeWriter !== null || (strategy === 'fair' && waitingWriters.length > 0)) {
+      addLog(`[${reader.name}] 申请读取，但文件被写者占用或排队，进入读者阻塞队列`, 'warning')
+      setWaitingReaders(prev => [...prev, reader])
+      return
+    }
+
+    // 读者进入流程
+    addLog(`[${reader.name}] 执行 P(rmutex)，进入读者计数临界区`, 'info')
+    setRmutex(0)
+
+    setTimeout(() => {
+      setReadCount(rc => {
+        const nextRc = rc + 1
+        if (rc === 0) {
+          addLog(`[${reader.name}] 是首位读者，执行 P(wmutex) 锁住写锁，禁止所有写者进入！`, 'success')
+          setWmutex(0)
+        }
+        return nextRc
+      })
+      setActiveReaders(prev => [...prev, reader])
+      setRmutex(1)
+      addLog(`[${reader.name}] 退出 rmutex，开始并发读取文件 (当前共 ${readCount + 1} 位读者)`, 'success')
+    }, 200)
+  }
+
+  // 读者读毕离开
+  const handleFinishReader = (rId) => {
+    const reader = activeReaders.find(r => r.id === rId) || { name: `读者R${rId}` }
+    addLog(`[${reader.name}] 读取完毕，申请执行 P(rmutex) 修改计数`, 'info')
+    setRmutex(0)
+
+    setTimeout(() => {
+      setActiveReaders(prev => prev.filter(r => r.id !== rId))
+      setReadCount(rc => {
+        const nextRc = Math.max(0, rc - 1)
+        if (nextRc === 0) {
+          addLog(`[${reader.name}] 是最后离开的读者，执行 V(wmutex) 释放写锁！`, 'success')
+          setWmutex(1)
+
+          // 唤醒等待的写者
+          setWaitingWriters(ww => {
+            if (ww.length > 0) {
+              const nextWriter = ww[0]
+              addLog(`[系统唤醒] 读者全部离开，唤醒等待队列中的 ${nextWriter.name} 开始写入`, 'success')
+              setWmutex(0)
+              setActiveWriter(nextWriter)
+              return ww.slice(1)
+            }
+            return ww
+          })
+        }
+        return nextRc
+      })
+      setRmutex(1)
+      addLog(`[${reader.name}] 退出系统，执行 V(rmutex)`, 'info')
+    }, 200)
+  }
+
+  // 添加写者
+  const handleAddWriter = () => {
+    const wId = Math.floor(Math.random() * 900 + 100)
+    const writer = { id: wId, name: `写者W${wId}` }
+
+    if (activeWriter !== null || activeReaders.length > 0) {
+      addLog(`[${writer.name}] 申请写入，但临界区有人正在访问（读者或写者），加入写者阻塞队列`, 'warning')
+      setWaitingWriters(prev => [...prev, writer])
+      return
+    }
+
+    // 获得独占权
+    addLog(`[${writer.name}] 执行 P(wmutex)，获取文件排他写入锁！`, 'success')
+    setWmutex(0)
+    setActiveWriter(writer)
+  }
+
+  // 写者写毕离开
+  const handleFinishWriter = () => {
+    if (!activeWriter) return
+    const writer = activeWriter
+    addLog(`[${writer.name}] 写入操作完成，更新文件版本为 V${fileVersion + 1}`, 'success')
+    setFileVersion(v => v + 1)
+    setActiveWriter(null)
+    setWmutex(1)
+    addLog(`[${writer.name}] 执行 V(wmutex)，释放排他锁`, 'info')
+
+    // 唤醒策略
+    if (strategy === 'fair' && waitingReaders.length > 0) {
+      addLog(`[公平调度] 优先唤醒阻塞中的 ${waitingReaders.length} 位等待读者`, 'success')
+      const waking = [...waitingReaders]
+      setWaitingReaders([])
+      setWmutex(0)
+      setActiveReaders(waking)
+      setReadCount(waking.length)
+    } else if (waitingWriters.length > 0) {
+      const nextWriter = waitingWriters[0]
+      setWaitingWriters(ww => ww.slice(1))
+      addLog(`[系统唤醒] 唤醒下一位等待的写者 ${nextWriter.name}`, 'success')
+      setWmutex(0)
+      setActiveWriter(nextWriter)
+    } else if (waitingReaders.length > 0) {
+      const waking = [...waitingReaders]
+      setWaitingReaders([])
+      setWmutex(0)
+      setActiveReaders(waking)
+      setReadCount(waking.length)
+    }
+  }
+
+  const handleReset = () => {
+    setReadCount(0)
+    setRmutex(1)
+    setWmutex(1)
+    setActiveReaders([])
+    setActiveWriter(null)
+    setWaitingReaders([])
+    setWaitingWriters([])
+    setFileVersion(1)
+    addLog('已重置读者-写者模型到初始空闲状态。', 'info')
+  }
+
+  return (
+    <div className="lab-layout sync-layout" style={{ gridTemplateColumns: '320px 1fr' }}>
+      <aside className="control-panel">
+        <div className="panel-title">
+          <span>读者-写者调度</span>
+          <i>共享读 · 排他写</i>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button
+            className="btn btn-primary"
+            style={{ padding: '10px', fontSize: '0.9rem', fontWeight: 'bold' }}
+            onClick={handleAddReader}
+          >
+            ＋ 添加并发读者 (Reader)
+          </button>
+
+          <button
+            className="btn btn-warning"
+            style={{ padding: '10px', fontSize: '0.9rem', fontWeight: 'bold', background: '#f59e0b', color: '#1e293b', border: 'none' }}
+            onClick={handleAddWriter}
+          >
+            ＋ 添加排他写者 (Writer)
+          </button>
+        </div>
+
+        {activeWriter && (
+          <div style={{ marginTop: '12px' }}>
+            <button
+              className="btn btn-success"
+              style={{ width: '100%', padding: '10px', background: '#10b981', color: '#fff', border: 'none', fontWeight: 'bold' }}
+              onClick={handleFinishWriter}
+            >
+              ✓ 当前写者写毕离开 (V操作)
+            </button>
+          </div>
+        )}
+
+        <div style={{ marginTop: '16px', padding: '12px', background: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontWeight: 'bold', fontSize: '0.85rem', color: '#334155', marginBottom: '6px' }}>
+            调度策略模式
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              className={`btn btn-sm ${strategy === 'reader-priority' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ flex: 1, padding: '6px' }}
+              onClick={() => { setStrategy('reader-priority'); addLog('已切换为经典“读者优先”策略', 'info') }}
+            >
+              读者优先 (易饥饿)
+            </button>
+            <button
+              className={`btn btn-sm ${strategy === 'fair' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ flex: 1, padding: '6px' }}
+              onClick={() => { setStrategy('fair'); addLog('已切换为“公平无饥饿”排队策略', 'info') }}
+            >
+              公平排队
+            </button>
+          </div>
+          <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '6px', lineHeight: '1.4' }}>
+            {strategy === 'reader-priority'
+              ? '只要有读者在读，后续来的读者无需等待写者即可进入，极端时导致写者饿死。'
+              : '写者排队时，阻止后续读者插队，保障写者在当前读者读完后能优先执行。'}
+          </div>
+        </div>
+
+        <div style={{ marginTop: '14px' }}>
+          <button className="btn btn-secondary" style={{ width: '100%', padding: '8px' }} onClick={handleReset}>
+            重置实验室状态
+          </button>
+        </div>
+
+        <div style={{ marginTop: '16px', padding: '12px', borderRadius: '6px', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.82rem', color: '#64748b' }}>文件独占锁状态 (wmutex)</div>
+          <div style={{ fontWeight: 'bold', marginTop: '4px', fontSize: '0.92rem', color: wmutex === 0 ? '#dc2626' : '#059669' }}>
+            {wmutex === 0 ? 'LOCKED (被读者组或写者独占)' : 'UNLOCKED (空闲)'}
+          </div>
+        </div>
+      </aside>
+
+      <section className="visual-panel sync-visual" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="visual-toolbar">
+          <div>
+            <strong>读者-写者共享文件状态看板</strong>
+            <span>允许多个读者共享读取，但任一时刻最多允许一个写者独占操作。</span>
+          </div>
+          <span className="source-chip">策略: {strategy === 'reader-priority' ? '读者优先' : '公平排队'}</span>
+        </div>
+
+        {/* 信号量与计数器 */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.82rem', color: '#64748b' }}>读者计数器 (readcount)</div>
+            <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#3b82f6', margin: '3px 0' }}>{readCount}</div>
+            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>当前在读读者总数</div>
+          </div>
+
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.82rem', color: '#64748b' }}>互斥信号量 (rmutex)</div>
+            <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#10b981', margin: '3px 0' }}>{rmutex}</div>
+            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>保护 readCount 原语修改</div>
+          </div>
+
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.82rem', color: '#64748b' }}>写锁信号量 (wmutex)</div>
+            <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#f59e0b', margin: '3px 0' }}>{wmutex}</div>
+            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>保护文件的排他互斥访问</div>
+          </div>
+        </div>
+
+        {/* 共享文件与临界区沙盘 */}
+        <div style={{ background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <div>
+              <strong style={{ fontSize: '1rem', color: '#1e293b' }}>共享资源：database_file.bin</strong>
+              <span style={{ marginLeft: '10px', fontSize: '0.8rem', color: '#64748b' }}>版本: V{fileVersion}</span>
+            </div>
+            <span style={{
+              padding: '3px 10px',
+              borderRadius: '12px',
+              fontSize: '0.82rem',
+              fontWeight: 'bold',
+              background: activeWriter ? '#fee2e2' : activeReaders.length > 0 ? '#eff6ff' : '#f0fdf4',
+              color: activeWriter ? '#b91c1c' : activeReaders.length > 0 ? '#1d4ed8' : '#15803d'
+            }}>
+              {activeWriter ? '【写者排他写入中】' : activeReaders.length > 0 ? `【${activeReaders.length} 位读者并发读取中】` : '【空闲 IDLE】'}
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', margin: '10px 0' }}>
+            {/* 活跃读者区 */}
+            <div style={{ background: '#f0f9ff', border: '1.5px solid #bae6fd', borderRadius: '8px', padding: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <strong style={{ color: '#0369a1', fontSize: '0.88rem' }}>正在读取的读者 (并发共享)</strong>
+                <span style={{ fontSize: '0.78rem', color: '#0284c7' }}>{activeReaders.length} 位</span>
+              </div>
+              <div style={{ minHeight: '60px', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center' }}>
+                {activeReaders.length === 0 ? (
+                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>暂无读者正在读取</span>
+                ) : (
+                  activeReaders.map(r => (
+                    <div key={r.id} style={{ background: '#0284c7', color: '#fff', padding: '4px 10px', borderRadius: '4px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>{r.name}</span>
+                      <button
+                        onClick={() => handleFinishReader(r.id)}
+                        style={{ background: 'rgba(255,255,255,0.25)', border: 'none', color: '#fff', borderRadius: '3px', padding: '0 4px', cursor: 'pointer', fontSize: '0.75rem' }}
+                        title="读完离开"
+                      >
+                        ✓
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* 活跃写者区 */}
+            <div style={{ background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: '8px', padding: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <strong style={{ color: '#b45309', fontSize: '0.88rem' }}>正在写入的写者 (独占排他)</strong>
+                <span style={{ fontSize: '0.78rem', color: '#d97706' }}>{activeWriter ? '1 位 (独占)' : '0 位'}</span>
+              </div>
+              <div style={{ minHeight: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {activeWriter ? (
+                  <div style={{ background: '#d97706', color: '#fff', padding: '8px 18px', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.95rem' }}>
+                    {activeWriter.name} [独占写入中...]
+                  </div>
+                ) : (
+                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>暂无写者操作</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* 阻塞等待队列 */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '16px', paddingTop: '12px', borderTop: '1px dashed #e2e8f0' }}>
+            <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 'bold' }}>
+                等待读取的读者队列: {waitingReaders.length}
+              </div>
+              <div style={{ minHeight: '26px', marginTop: '4px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                {waitingReaders.length === 0 ? (
+                  <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>无阻塞读者</span>
+                ) : (
+                  waitingReaders.map(r => (
+                    <span key={r.id} style={{ background: '#e0f2fe', color: '#0369a1', padding: '1px 6px', borderRadius: '3px', fontSize: '0.75rem' }}>
+                      {r.name}
+                    </span>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 'bold' }}>
+                等待写入的写者队列: {waitingWriters.length}
+              </div>
+              <div style={{ minHeight: '26px', marginTop: '4px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                {waitingWriters.length === 0 ? (
+                  <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>无阻塞写者</span>
+                ) : (
+                  waitingWriters.map(w => (
+                    <span key={w.id} style={{ background: '#fef3c7', color: '#b45309', padding: '1px 6px', borderRadius: '3px', fontSize: '0.75rem' }}>
+                      {w.name}
+                    </span>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 实时调度流水账 */}
+        <div style={{ background: '#0f172a', borderRadius: '6px', padding: '12px 16px', color: '#f8fafc', fontFamily: 'monospace' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', borderBottom: '1px solid #334155', paddingBottom: '4px' }}>
+            <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>读者-写者 P/V 原语执行流水</span>
+            <span style={{ color: '#64748b', fontSize: '0.75rem' }}>原子原语日志</span>
+          </div>
+          <div style={{ maxHeight: '130px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+            {logs.map((l, i) => (
+              <div key={i} style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
+                <span style={{ color: '#64748b', marginRight: '6px' }}>[{l.time}]</span>
+                <span style={{
+                  color: l.type === 'error' ? '#f87171' :
+                         l.type === 'warning' ? '#fbbf24' :
+                         l.type === 'success' ? '#34d399' : '#93c5fd'
+                }}>
+                  {l.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function DiningPhilosophersLab() {
+  const [strategy, setStrategy] = useState('naive') // 'naive' | 'limit4' | 'odd-even' | 'both-and'
+  const [philosophers, setPhilosophers] = useState([
+    { id: 0, state: 'thinking', hasLeft: false, hasRight: false },
+    { id: 1, state: 'thinking', hasLeft: false, hasRight: false },
+    { id: 2, state: 'thinking', hasLeft: false, hasRight: false },
+    { id: 3, state: 'thinking', hasLeft: false, hasRight: false },
+    { id: 4, state: 'thinking', hasLeft: false, hasRight: false }
+  ])
+  // 每根筷子持有人 id，null 表示在桌面上空闲
+  const [chopsticks, setChopsticks] = useState([null, null, null, null, null])
+  const [isDeadlocked, setIsDeadlocked] = useState(false)
+  const [logs, setLogs] = useState([
+    { time: '00:00', text: '哲学家进餐模型已就绪：5 位哲学家围绕圆桌，共享 5 根筷子。', type: 'info' }
+  ])
+
+  const addLog = (text, type = 'info') => {
+    const time = new Date().toTimeString().split(' ')[0]
+    setLogs(prev => [{ time, text, type }, ...prev.slice(0, 18)])
+  }
+
+  // 哲学家左筷子号为 id，右筷子号为 (id + 1) % 5
+  const leftChopstick = (id) => id
+  const rightChopstick = (id) => (id + 1) % 5
+
+  // 单个哲学家的状态流转
+  const handleTogglePhilosopher = (id) => {
+    const p = philosophers[id]
+    const left = leftChopstick(id)
+    const right = rightChopstick(id)
+
+    // 状态 1: 正在思考 ➔ 感到饥饿并尝试拿筷子
+    if (p.state === 'thinking') {
+      addLog(`[哲学家 P${id}] 思考完毕，感到饥饿，准备申请筷子 [C${left}, C${right}]`, 'info')
+
+      // 方案 A: 限制最多 4 人同时拿筷子
+      if (strategy === 'limit4') {
+        const hungryOrEatingCount = philosophers.filter(item => item.state !== 'thinking').length
+        if (hungryOrEatingCount >= 4) {
+          addLog(`[限制并发规则] 当前已有 4 人在尝试就餐，P${id} 被限制信号量 count 阻塞等待！`, 'warning')
+          return
+        }
+      }
+
+      // 方案 B: 奇偶规则 (偶数先左后右，奇数先右后左)
+      let first = left, second = right
+      if (strategy === 'odd-even' && id % 2 === 1) {
+        first = right
+        second = left
+      }
+
+      // 方案 C: 同时拿两根 (AND 原语)
+      if (strategy === 'both-and') {
+        if (chopsticks[left] === null && chopsticks[right] === null) {
+          setChopsticks(prev => {
+            const next = [...prev]
+            next[left] = id
+            next[right] = id
+            return next
+          })
+          setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'eating', hasLeft: true, hasRight: true } : item))
+          addLog(`[AND 原语成功] P${id} 检测到左右筷子均空闲，一次性全部拿起，开始就餐！`, 'success')
+        } else {
+          setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'hungry' } : item))
+          addLog(`[AND 原语等待] P${id} 左右筷子未同时空闲，一根不拿，保持等待`, 'warning')
+        }
+        return
+      }
+
+      // 普通顺序流程
+      if (chopsticks[first] === null) {
+        // 先拿第一根
+        setChopsticks(prev => {
+          const next = [...prev]
+          next[first] = id
+          return next
+        })
+        const hasLeftNow = first === left
+        const hasRightNow = first === right
+
+        if (chopsticks[second] === null) {
+          // 第二根也拿到了，直接就餐
+          setChopsticks(prev => {
+            const next = [...prev]
+            next[second] = id
+            return next
+          })
+          setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'eating', hasLeft: true, hasRight: true } : item))
+          addLog(`[哲学家 P${id}] 顺利拿齐双筷 [C${left}, C${right}]，开始就餐！`, 'success')
+        } else {
+          // 拿了第一根，第二根被邻座占用
+          setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'hungry', hasLeft: hasLeftNow, hasRight: hasRightNow } : item))
+          addLog(`[哲学家 P${id}] 拿到筷子 C${first}，但 C${second} 被邻座占用，陷入等待`, 'warning')
+        }
+      } else {
+        setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'hungry' } : item))
+        addLog(`[哲学家 P${id}] 第一根筷子 C${first} 已被邻座持有，无法拿起，陷入饥饿等待`, 'warning')
+      }
+    } else if (p.state === 'eating') {
+      // 就餐完毕 ➔ 放下两根筷子，回归思考
+      setChopsticks(prev => {
+        const next = [...prev]
+        if (next[left] === id) next[left] = null
+        if (next[right] === id) next[right] = null
+        return next
+      })
+      setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'thinking', hasLeft: false, hasRight: false } : item))
+      addLog(`[哲学家 P${id}] 就餐完毕，放下左右两根筷子 [C${left}, C${right}]，回到思考状态`, 'info')
+    } else if (p.state === 'hungry' && !isDeadlocked) {
+      // 饥饿中，尝试继续补拿第二根筷子
+      if (p.hasLeft && !p.hasRight && chopsticks[right] === null) {
+        setChopsticks(prev => {
+          const next = [...prev]
+          next[right] = id
+          return next
+        })
+        setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'eating', hasRight: true } : item))
+        addLog(`[哲学家 P${id}] 等到了右筷 C${right}，凑齐两根，开始就餐！`, 'success')
+      } else if (!p.hasLeft && p.hasRight && chopsticks[left] === null) {
+        setChopsticks(prev => {
+          const next = [...prev]
+          next[left] = id
+          return next
+        })
+        setPhilosophers(prev => prev.map(item => item.id === id ? { ...item, state: 'eating', hasLeft: true } : item))
+        addLog(`[哲学家 P${id}] 等到了左筷 C${left}，凑齐两根，开始就餐！`, 'success')
+      } else {
+        addLog(`[哲学家 P${id}] 所需筷子仍未释放，继续等待`, 'warning')
+      }
+    }
+  }
+
+  // ⚠️ 一键触发死锁
+  const handleTriggerDeadlock = () => {
+    // 5位哲学家同时拿起左筷子！
+    setChopsticks([0, 1, 2, 3, 4])
+    setPhilosophers([
+      { id: 0, state: 'deadlocked', hasLeft: true, hasRight: false },
+      { id: 1, state: 'deadlocked', hasLeft: true, hasRight: false },
+      { id: 2, state: 'deadlocked', hasLeft: true, hasRight: false },
+      { id: 3, state: 'deadlocked', hasLeft: true, hasRight: false },
+      { id: 4, state: 'deadlocked', hasLeft: true, hasRight: false }
+    ])
+    setIsDeadlocked(true)
+    addLog('【死锁警报】5位哲学家同时持有了各自左侧的筷子，又同时申请右侧筷子！', 'error')
+    addLog('循环等待环路形成：P0➔P1➔P2➔P3➔P4➔P0，全员永久阻塞！', 'error')
+  }
+
+  // 解除死锁
+  const handleResolveDeadlock = () => {
+    // 让哲学家 P0 主动放下左手筷子
+    setChopsticks(prev => {
+      const next = [...prev]
+      next[0] = null // 释放筷子 0
+      return next
+    })
+    setPhilosophers(prev => prev.map(p => {
+      if (p.id === 0) return { ...p, state: 'thinking', hasLeft: false, hasRight: false }
+      if (p.id === 4) return { ...p, state: 'eating', hasRight: true } // P4 拿到右筷(0)
+      return { ...p, state: 'hungry' }
+    }))
+    setIsDeadlocked(false)
+    addLog('【打破死锁】破坏请求与保持条件：P0 放弃左筷 C0，使得邻座 P4 成功拿齐双筷就餐！', 'success')
+  }
+
+  const handleReset = () => {
+    setChopsticks([null, null, null, null, null])
+    setPhilosophers([
+      { id: 0, state: 'thinking', hasLeft: false, hasRight: false },
+      { id: 1, state: 'thinking', hasLeft: false, hasRight: false },
+      { id: 2, state: 'thinking', hasLeft: false, hasRight: false },
+      { id: 3, state: 'thinking', hasLeft: false, hasRight: false },
+      { id: 4, state: 'thinking', hasLeft: false, hasRight: false }
+    ])
+    setIsDeadlocked(false)
+    addLog('已重置圆桌状态：所有哲学家回到思考中，筷子全部归位。', 'info')
+  }
+
+  // 计算圆桌 5 个哲学家和 5 根筷子的坐标 (中心 170, 170)
+  const CX = 170
+  const CY = 170
+  const R_PHILO = 110
+  const R_CHOP = 65
+
+  const philoCoords = [0, 1, 2, 3, 4].map(i => {
+    const angle = ((-90 + i * 72) * Math.PI) / 180
+    return {
+      x: CX + R_PHILO * Math.cos(angle),
+      y: CY + R_PHILO * Math.sin(angle)
+    }
+  })
+
+  const chopCoords = [0, 1, 2, 3, 4].map(i => {
+    const angle = ((-90 + 36 + i * 72) * Math.PI) / 180
+    return {
+      x: CX + R_CHOP * Math.cos(angle),
+      y: CY + R_CHOP * Math.sin(angle)
+    }
+  })
+
+  return (
+    <div className="lab-layout sync-layout" style={{ gridTemplateColumns: '340px 1fr' }}>
+      <aside className="control-panel">
+        <div className="panel-title">
+          <span>哲学家调度控制</span>
+          <i>资源竞争与死锁防范</i>
+        </div>
+
+        {/* 策略选择 */}
+        <label className="field-block">
+          <span>防死锁策略选择</span>
+          <select value={strategy} onChange={e => { setStrategy(e.target.value); handleReset() }}>
+            <option value="naive">朴素无保护 (允许死锁发生)</option>
+            <option value="limit4">策略 1: 限制最多 4 人并发尝试</option>
+            <option value="odd-even">策略 2: 奇偶号非对称拿取规则</option>
+            <option value="both-and">策略 3: AND 信号量 (仅双筷可用时拿)</option>
+          </select>
+        </label>
+
+        <div style={{ marginTop: '10px', padding: '10px', background: '#f8fafc', borderRadius: '6px', fontSize: '0.8rem', color: '#64748b', lineHeight: '1.4' }}>
+          {strategy === 'naive' && '哲学家先拿左筷再拿右筷。若 5 人同时饥饿，将陷入经典死锁。'}
+          {strategy === 'limit4' && '利用计数信号量 count=4 限制人数，必定至少有 1 位哲学家能同时拿到两根筷子。'}
+          {strategy === 'odd-even' && '偶数哲学家先左后右，奇数先右后左。相邻两人竞争同一根，打破环路。'}
+          {strategy === 'both-and' && '原子化检测，只有当左右两根筷子都空闲时才同时拿起，杜绝部分持有等待。'}
+        </div>
+
+        {/* 死锁触发与解除按钮 */}
+        <div style={{ marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <button
+            className="btn btn-danger"
+            style={{ padding: '10px', background: '#ef4444', color: '#fff', border: 'none', fontWeight: 'bold' }}
+            onClick={handleTriggerDeadlock}
+          >
+            ⚠️ 一键复现死锁 (5人同时拿左筷)
+          </button>
+
+          {isDeadlocked && (
+            <button
+              className="btn btn-success"
+              style={{ padding: '10px', background: '#10b981', color: '#fff', border: 'none', fontWeight: 'bold' }}
+              onClick={handleResolveDeadlock}
+            >
+              ✓ 破坏死锁 (强制 P0 释放筷子)
+            </button>
+          )}
+        </div>
+
+        {/* 5位哲学家单步控制 */}
+        <div style={{ marginTop: '16px' }}>
+          <div style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#334155', marginBottom: '8px' }}>
+            点击哲学家切换状态 (思考 ➔ 拿筷 ➔ 就餐 ➔ 放下):
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px' }}>
+            {philosophers.map(p => (
+              <button
+                key={p.id}
+                onClick={() => handleTogglePhilosopher(p.id)}
+                style={{
+                  padding: '8px 2px',
+                  borderRadius: '6px',
+                  border: `1.5px solid ${
+                    p.state === 'eating' ? '#10b981' :
+                    p.state === 'deadlocked' ? '#ef4444' :
+                    p.state === 'hungry' ? '#f59e0b' : '#94a3b8'
+                  }`,
+                  background:
+                    p.state === 'eating' ? '#ecfdf5' :
+                    p.state === 'deadlocked' ? '#fef2f2' :
+                    p.state === 'hungry' ? '#fffbeb' : '#f8fafc',
+                  color:
+                    p.state === 'eating' ? '#047857' :
+                    p.state === 'deadlocked' ? '#b91c1c' :
+                    p.state === 'hungry' ? '#b45309' : '#334155',
+                  fontWeight: 'bold',
+                  fontSize: '0.82rem',
+                  cursor: 'pointer'
+                }}
+              >
+                P{p.id}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginTop: '16px' }}>
+          <button className="btn btn-secondary" style={{ width: '100%', padding: '8px' }} onClick={handleReset}>
+            重置圆桌状态
+          </button>
+        </div>
+      </aside>
+
+      <section className="visual-panel sync-visual" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="visual-toolbar">
+          <div>
+            <strong>哲学家进餐圆桌沙盘</strong>
+            <span>圆桌中央 5 根筷子，5 位哲学家必须同时持有左右两根筷子才能进餐。</span>
+          </div>
+          <span className={`source-chip ${isDeadlocked ? 'danger' : ''}`}>
+            {isDeadlocked ? '⚠️ 系统已陷入死锁' : '正常运行'}
+          </span>
+        </div>
+
+        {/* 圆桌沙盘 SVG */}
+        <div style={{ background: '#0a101d', border: '1.5px solid #1e293b', borderRadius: '10px', padding: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <svg width="340" height="340" viewBox="0 0 340 340" style={{ overflow: 'visible' }}>
+            {/* 圆桌底盘 */}
+            <circle cx={CX} cy={CY} r="105" fill="#1e293b" stroke="#334155" strokeWidth="3" />
+            <circle cx={CX} cy={CY} r="45" fill="#0f172a" stroke="#c88724" strokeWidth="2" strokeDasharray="4 4" />
+            <text x={CX} y={CY + 5} textAnchor="middle" fill="#f59e0b" fontSize="13" fontWeight="bold">
+              餐盘
+            </text>
+
+            {/* 死锁环路警示连线 */}
+            {isDeadlocked && (
+              <circle
+                cx={CX}
+                cy={CY}
+                r="110"
+                fill="none"
+                stroke="#ef4444"
+                strokeWidth="3"
+                strokeDasharray="6 6"
+              />
+            )}
+
+            {/* 5 根筷子 (Chopsticks) */}
+            {chopCoords.map((coord, idx) => {
+              const holder = chopsticks[idx]
+              const isHeld = holder !== null
+              return (
+                <g key={`chop-${idx}`}>
+                  <circle
+                    cx={coord.x}
+                    cy={coord.y}
+                    r="14"
+                    fill={isHeld ? (isDeadlocked ? '#dc2626' : '#2563eb') : '#334155'}
+                    stroke={isHeld ? '#fff' : '#64748b'}
+                    strokeWidth="1.5"
+                  />
+                  <text
+                    x={coord.x}
+                    y={coord.y + 4}
+                    textAnchor="middle"
+                    fill="#fff"
+                    fontSize="10"
+                    fontWeight="bold"
+                  >
+                    C{idx}
+                  </text>
+                  {isHeld && (
+                    <text
+                      x={coord.x}
+                      y={coord.y + 24}
+                      textAnchor="middle"
+                      fill="#93c5fd"
+                      fontSize="9"
+                    >
+                      P{holder}持
+                    </text>
+                  )}
+                </g>
+              )
+            })}
+
+            {/* 5 位哲学家 (Philosophers) */}
+            {philoCoords.map((coord, idx) => {
+              const p = philosophers[idx]
+              let strokeColor = '#64748b'
+              let fillColor = '#1e293b'
+              let textColor = '#cbd5e1'
+              let label = '思考'
+
+              if (p.state === 'eating') {
+                strokeColor = '#10b981'
+                fillColor = '#064e3b'
+                textColor = '#34d399'
+                label = '进餐'
+              } else if (p.state === 'deadlocked') {
+                strokeColor = '#ef4444'
+                fillColor = '#7f1d1d'
+                textColor = '#fca5a5'
+                label = '死锁'
+              } else if (p.state === 'hungry') {
+                strokeColor = '#f59e0b'
+                fillColor = '#78350f'
+                textColor = '#fbbf24'
+                label = p.hasLeft ? '等右筷' : p.hasRight ? '等左筷' : '饥饿'
+              }
+
+              return (
+                <g
+                  key={`philo-${idx}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleTogglePhilosopher(idx)}
+                >
+                  <circle
+                    cx={coord.x}
+                    cy={coord.y}
+                    r="24"
+                    fill={fillColor}
+                    stroke={strokeColor}
+                    strokeWidth="2.5"
+                  />
+                  <text
+                    x={coord.x}
+                    y={coord.y - 3}
+                    textAnchor="middle"
+                    fill="#fff"
+                    fontSize="12"
+                    fontWeight="bold"
+                  >
+                    P{idx}
+                  </text>
+                  <text
+                    x={coord.x}
+                    y={coord.y + 11}
+                    textAnchor="middle"
+                    fill={textColor}
+                    fontSize="9"
+                  >
+                    {label}
+                  </text>
+                </g>
+              )
+            })}
+          </svg>
+        </div>
+
+        {/* 状态看板 */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+          {philosophers.map(p => (
+            <div
+              key={p.id}
+              style={{
+                background: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '6px',
+                padding: '8px',
+                textAlign: 'center'
+              }}
+            >
+              <div style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#1e293b' }}>哲学家 P{p.id}</div>
+              <div style={{
+                fontSize: '0.78rem',
+                fontWeight: 'bold',
+                marginTop: '4px',
+                color:
+                  p.state === 'eating' ? '#059669' :
+                  p.state === 'deadlocked' ? '#dc2626' :
+                  p.state === 'hungry' ? '#d97706' : '#64748b'
+              }}>
+                {p.state === 'eating' ? '正在进餐' :
+                 p.state === 'deadlocked' ? '环路死锁' :
+                 p.state === 'hungry' ? '饥饿等待' : '思考中'}
+              </div>
+              <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px' }}>
+                左筷[C{leftChopstick(p.id)}]: {p.hasLeft ? '已持' : '无'} · 右筷[C{rightChopstick(p.id)}]: {p.hasRight ? '已持' : '无'}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 实时调度流水账 */}
+        <div style={{ background: '#0f172a', borderRadius: '6px', padding: '12px 16px', color: '#f8fafc', fontFamily: 'monospace' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', borderBottom: '1px solid #334155', paddingBottom: '4px' }}>
+            <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>哲学家竞争与筷子信号量流水</span>
+            <span style={{ color: '#64748b', fontSize: '0.75rem' }}>原子指令日志</span>
+          </div>
+          <div style={{ maxHeight: '130px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+            {logs.map((l, i) => (
+              <div key={i} style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
+                <span style={{ color: '#64748b', marginRight: '6px' }}>[{l.time}]</span>
+                <span style={{
+                  color: l.type === 'error' ? '#f87171' :
+                         l.type === 'warning' ? '#fbbf24' :
+                         l.type === 'success' ? '#34d399' : '#93c5fd'
+                }}>
+                  {l.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
