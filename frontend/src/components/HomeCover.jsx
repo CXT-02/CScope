@@ -473,8 +473,12 @@ export default function HomeCover({ onOpenCourses, onOpenExam, onOpenProfile, on
               <span className="stat-lbl">个交互实验</span>
             </div>
             <div className="stat-item">
+              <span className="stat-num">100+</span>
+              <span className="stat-lbl">道 408 真题</span>
+            </div>
+            <div className="stat-item">
               <span className="stat-num">04</span>
-              <span className="stat-lbl">步主动学习循环</span>
+              <span className="stat-lbl">步学习闭环</span>
             </div>
           </div>
         </div>
