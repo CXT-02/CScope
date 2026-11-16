@@ -20,6 +20,12 @@ import AccountDialog from './AccountDialog'
 import LearningDashboard from './LearningDashboard'
 import ExamArena from './ExamArena'
 import ConsoleDashboard from './ConsoleDashboard'
+import DailyCheckin from './DailyCheckin'
+import MistakeNotebook from './MistakeNotebook'
+import AiTutorAgent from './AiTutorAgent'
+import CheatSheetHub from './CheatSheetHub'
+import ExperimentWorkshop from './ExperimentWorkshop'
+import CommunityHub from './CommunityHub'
 import SidebarNav from './SidebarNav'
 import LoginGate from './LoginGate'
 import { useLearningProfile } from './LearningProfileContext'
@@ -112,9 +118,15 @@ export default function App() {
         onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
         onSelectNav={(key) => {
           if (key === 'console') goConsole()
+          else if (key === 'checkin') navigate('#/checkin')
           else if (key === 'courses') openCourses()
+          else if (key === 'workshop') navigate('#/workshop')
           else if (key === 'exam') openExam()
+          else if (key === 'mistakes') navigate('#/mistakes')
+          else if (key === 'cheatsheet') navigate('#/cheatsheet')
+          else if (key === 'aitutor') navigate('#/aitutor')
           else if (key === 'profile') openProfile()
+          else if (key === 'community') navigate('#/community')
         }}
         user={user}
         onLogout={() => {
@@ -132,9 +144,15 @@ export default function App() {
               控制台
             </button>
             {route.kind !== 'console' && <span className="crumb-sep">/</span>}
+            {route.kind === 'checkin' && <span className="crumb-current">每日研习打卡 · 脑力负荷</span>}
             {route.kind === 'courses' && <span className="crumb-current">课程知识中心</span>}
+            {route.kind === 'workshop' && <span className="crumb-current">微观交互仿真工坊</span>}
             {route.kind === 'exam' && <span className="crumb-current">408 考研真题测评</span>}
+            {route.kind === 'mistakes' && <span className="crumb-current">靶向错题本与消错实验</span>}
+            {route.kind === 'cheatsheet' && <span className="crumb-current">408 必考速查宝典与公式库</span>}
+            {route.kind === 'aitutor' && <span className="crumb-current">AI 计算机私教 (DeepSeek-R1)</span>}
             {route.kind === 'profile' && <span className="crumb-current">学情画像与学习档案</span>}
+            {route.kind === 'community' && <span className="crumb-current">极客学术社区广场</span>}
             {route.kind === 'course' && (
               <>
                 <button type="button" className="crumb-btn" onClick={openCourses}>课程中心</button>
@@ -178,15 +196,21 @@ export default function App() {
         {/* 核心工作区内容渲染 */}
         <div className="workspace-body-container">
           {route.kind === 'console' ? (
-            /* 控制台主页面（参考 JobPilot 控制台风格，问候、AI导学、核心指标、三大入口、最近测评与学科诊断） */
+            /* 1. 控制台主页面 */
             <ConsoleDashboard
               onOpenCourses={openCourses}
               onOpenExam={openExam}
               onOpenProfile={openProfile}
               onOpenExperiment={openExperiment}
             />
+          ) : route.kind === 'checkin' ? (
+            /* 2. 每日研习打卡（复刻 SmartFit 运动打卡体验） */
+            <DailyCheckin
+              onOpenExperiment={openExperiment}
+              onOpenCourses={openCourses}
+            />
           ) : route.kind === 'courses' ? (
-            /* 课程知识库视图 */
+            /* 3. 课程知识库视图 */
             <ExperimentHub
               courses={courses}
               activeCourseId={activeCourseId}
@@ -196,22 +220,47 @@ export default function App() {
               onShowProfile={openProfile}
               onLogin={() => {}}
             />
+          ) : route.kind === 'workshop' ? (
+            /* 4. 微观仿真工坊分类检索 */
+            <ExperimentWorkshop
+              onOpenExperiment={openExperiment}
+            />
+          ) : route.kind === 'exam' ? (
+            /* 5. 408 考研真题测评中心 */
+            <ExamArena
+              onOpenExperiment={openExperiment}
+              onBackHome={goConsole}
+            />
+          ) : route.kind === 'mistakes' ? (
+            /* 6. 靶向错题本与消错实验 */
+            <MistakeNotebook
+              onOpenExperiment={openExperiment}
+            />
+          ) : route.kind === 'cheatsheet' ? (
+            /* 7. 408 速查宝典与计算器 */
+            <CheatSheetHub
+              onOpenExperiment={openExperiment}
+            />
+          ) : route.kind === 'aitutor' ? (
+            /* 8. AI 计算机伴学私教 */
+            <AiTutorAgent
+              onOpenExperiment={openExperiment}
+            />
           ) : route.kind === 'profile' ? (
-            /* 个人学情中心与能力画像 */
+            /* 9. 个人学情中心与能力画像 */
             <LearningDashboard
               experiments={experiments}
               courses={courses}
               onOpen={openExperiment}
               onBack={goConsole}
             />
-          ) : route.kind === 'exam' ? (
-            /* 408 考研真题测评中心（105道真题、自定义题量时长、错题直达实验） */
-            <ExamArena
+          ) : route.kind === 'community' ? (
+            /* 10. 极客学术社区广场 */
+            <CommunityHub
               onOpenExperiment={openExperiment}
-              onBackHome={goConsole}
             />
           ) : Experiment && experiment ? (
-            /* 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
+            /* 11. 具体的微观仿真实验页面：左侧侧边栏依然固定存在，随时一键跳转其他模块 */
             <main className="experiment-page" key={activeExperiment}>
               <Experiment experiment={experiment} />
             </main>
@@ -230,6 +279,12 @@ export default function App() {
 }
 
 function readRouteFromHash() {
+  if (window.location.hash === '#/checkin') return { kind: 'checkin', id: null }
+  if (window.location.hash === '#/workshop') return { kind: 'workshop', id: null }
+  if (window.location.hash === '#/mistakes') return { kind: 'mistakes', id: null }
+  if (window.location.hash === '#/cheatsheet') return { kind: 'cheatsheet', id: null }
+  if (window.location.hash === '#/aitutor') return { kind: 'aitutor', id: null }
+  if (window.location.hash === '#/community') return { kind: 'community', id: null }
   if (window.location.hash === '#/profile') return { kind: 'profile', id: null }
   if (window.location.hash === '#/exam') return { kind: 'exam', id: null }
   if (window.location.hash === '#/courses') return { kind: 'courses', id: null }

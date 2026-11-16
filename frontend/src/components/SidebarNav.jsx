@@ -1,62 +1,150 @@
 import React from 'react'
 
 export default function SidebarNav({
-  activeKey, // 'console' | 'courses' | 'exam' | 'profile' | 'lab'
+  activeKey, // 'console' | 'checkin' | 'courses' | 'workshop' | 'exam' | 'mistakes' | 'cheatsheet' | 'aitutor' | 'profile' | 'community'
   collapsed,
   onToggleCollapse,
   onSelectNav,
   user,
   onLogout
 }) {
-  const navItems = [
+  const navSections = [
     {
-      key: 'console',
-      label: '控制台',
-      sub: '综合概览与导学',
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-        </svg>
-      )
+      sectionTitle: '核心研习',
+      items: [
+        {
+          key: 'console',
+          label: '控制台总览',
+          sub: '学情看板与推荐',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+            </svg>
+          )
+        },
+        {
+          key: 'checkin',
+          label: '研习打卡',
+          sub: '脑力能耗管理',
+          badge: '今日',
+          badgeClass: 'green-badge',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          )
+        },
+        {
+          key: 'courses',
+          label: '课程知识中心',
+          sub: '8门专业课大纲',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+          )
+        },
+        {
+          key: 'workshop',
+          label: '微观仿真工坊',
+          sub: '25门底层时钟实验',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0" />
+              <path d="M5.52 16h12.96" />
+            </svg>
+          )
+        }
+      ]
     },
     {
-      key: 'courses',
-      label: '课程知识中心',
-      sub: '8门核心课知识地图',
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-        </svg>
-      )
+      sectionTitle: '408 考研测评与消错',
+      items: [
+        {
+          key: 'exam',
+          label: '408 智能测评',
+          sub: '105题历年真题抽测',
+          badge: 'HOT',
+          badgeClass: 'red-badge',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+          )
+        },
+        {
+          key: 'mistakes',
+          label: '靶向错题本',
+          sub: '实验联动消错',
+          badge: '提分',
+          badgeClass: 'purple-badge',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="9" y1="15" x2="15" y2="15" />
+            </svg>
+          )
+        },
+        {
+          key: 'cheatsheet',
+          label: '408 速查宝典',
+          sub: '必考公式与测算',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          )
+        }
+      ]
     },
     {
-      key: 'exam',
-      label: '408 考研智能测评',
-      sub: '105题历年真题抽取',
-      badge: 'HOT',
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10" />
-          <circle cx="12" cy="12" r="6" />
-          <circle cx="12" cy="12" r="2" />
-        </svg>
-      )
-    },
-    {
-      key: 'profile',
-      label: '学情画像与档案',
-      sub: '成长轨迹与诊断',
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="18" y1="20" x2="18" y2="10" />
-          <line x1="12" y1="20" x2="12" y2="4" />
-          <line x1="6" y1="20" x2="6" y2="14" />
-        </svg>
-      )
+      sectionTitle: 'AI 伴学与成长',
+      items: [
+        {
+          key: 'aitutor',
+          label: 'AI 计算机私教',
+          sub: 'DeepSeek-R1 推理',
+          badge: 'AI',
+          badgeClass: 'ai-gold-badge',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9 10h.01M15 10h.01" />
+              <path d="M9.5 15a3.5 3.5 0 0 0 5 0" />
+            </svg>
+          )
+        },
+        {
+          key: 'profile',
+          label: '学情数据画像',
+          sub: '掌握度雷达分析',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+          )
+        },
+        {
+          key: 'community',
+          label: '极客研学社区',
+          sub: '408考友研讨广场',
+          icon: (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            </svg>
+          )
+        }
+      ]
     }
   ]
 
@@ -69,42 +157,67 @@ export default function SidebarNav({
           {!collapsed && (
             <div className="brand-text-block">
               <span className="brand-title">CScope 领航者</span>
-              <span className="brand-sub">计算机仿真控制台</span>
+              <span className="brand-sub">计算机微观仿真实验室</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* 中部导航菜单 */}
+      {/* 中部导航菜单（多分组展开） */}
       <nav className="sidebar-menu-list">
-        {navItems.map((item) => {
-          const isActive = activeKey === item.key || (item.key === 'courses' && activeKey === 'lab')
-          return (
-            <button
-              key={item.key}
-              type="button"
-              className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
-              onClick={() => onSelectNav(item.key)}
-              title={collapsed ? `${item.label} (${item.sub})` : undefined}
-            >
-              <div className="nav-item-icon">{item.icon}</div>
-              {!collapsed && (
-                <div className="nav-item-label-group">
-                  <div className="nav-item-main-row">
-                    <span className="nav-item-name">{item.label}</span>
-                    {item.badge && <span className="nav-item-badge">{item.badge}</span>}
-                  </div>
-                  <span className="nav-item-sub">{item.sub}</span>
-                </div>
-              )}
-            </button>
-          )
-        })}
+        {navSections.map((sec, sIdx) => (
+          <div key={sIdx} className="sidebar-section-group">
+            {!collapsed && <div className="sidebar-section-title">{sec.sectionTitle}</div>}
+            {sec.items.map((item) => {
+              const isActive =
+                activeKey === item.key ||
+                (item.key === 'courses' && activeKey === 'course') ||
+                (item.key === 'workshop' && activeKey === 'lab')
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => onSelectNav(item.key)}
+                  title={collapsed ? `${item.label} (${item.sub})` : undefined}
+                >
+                  <div className="nav-item-icon">{item.icon}</div>
+                  {!collapsed && (
+                    <div className="nav-item-label-group">
+                      <div className="nav-item-main-row">
+                        <span className="nav-item-name">{item.label}</span>
+                        {item.badge && (
+                          <span className={`nav-item-badge ${item.badgeClass || ''}`}>
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                      <span className="nav-item-sub">{item.sub}</span>
+                    </div>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        ))}
       </nav>
 
-      {/* 底部折叠与用户状态 */}
+      {/* 底部：大模型接入状态徽章 (参考 SmartFit 左下角黄黑科技卡片) */}
+      {!collapsed && (
+        <div className="sidebar-ai-engine-card">
+          <div className="ai-chip-header">
+            <span className="ai-tag-gold">大模型已接入</span>
+            <span className="ai-pulse-dot" />
+          </div>
+          <div className="ai-model-info">
+            <strong>模型：DeepSeek-R1</strong>
+            <p>408 认知推演与微观实验 Agent 已就绪</p>
+          </div>
+        </div>
+      )}
+
+      {/* 侧栏底部用户与收起控制 */}
       <div className="sidebar-footer">
-        {/* 折叠收起按钮 */}
         <button
           type="button"
           className="sidebar-collapse-toggle"
@@ -125,7 +238,6 @@ export default function SidebarNav({
           {!collapsed && <span>收起侧栏</span>}
         </button>
 
-        {/* 当前登录用户信息卡 */}
         {user && (
           <div className="sidebar-user-card">
             <div className="sidebar-user-avatar">
@@ -134,7 +246,7 @@ export default function SidebarNav({
             {!collapsed && (
               <div className="sidebar-user-info">
                 <span className="sidebar-user-name" title={user.name}>{user.name}</span>
-                <span className="sidebar-user-tag">在线学习中</span>
+                <span className="sidebar-user-tag">408 研习进行中</span>
               </div>
             )}
             {!collapsed && (
