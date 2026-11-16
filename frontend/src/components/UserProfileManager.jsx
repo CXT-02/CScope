@@ -14,7 +14,7 @@ export default function UserProfileManager() {
   const { user, updateUserProfile, updatePassword, setSecurityQuestion } = useLearningProfile()
 
   // 账户主信息
-  const [name, setName] = useState(user?.name || '林知远')
+  const [name, setName] = useState(user?.name || '小明同学')
   const [email, setEmail] = useState(user?.email || 'learner@cscope.edu.cn')
   const [major, setMajor] = useState(user?.major || '网络工程')
   const [grade, setGrade] = useState(user?.grade || '本科三年级')

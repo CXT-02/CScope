@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 const INITIAL_POSTS = [
   {
     id: 'p_1',
-    author: '林知远 (408上岸学长)',
-    avatar: '林',
+    author: '陈学长 (408考研高分)',
+    avatar: '陈',
     time: '2 小时前',
     tag: '计组压轴',
     title: '【真题避坑】Cache 直接映射在什么情况下会发生 100% 全颠簸？',

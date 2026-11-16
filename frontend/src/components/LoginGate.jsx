@@ -171,19 +171,9 @@ export default function LoginGate({ onLoginSuccess }) {
                   type="button"
                   className="quick-demo-btn primary"
                   disabled={busy}
-                  onClick={() => handleQuickLogin('林知远', '123456')}
-                >
-                  <span className="btn-role">考研模考生</span>
-                  <strong>林知远</strong>
-                  <span className="btn-action">一键登入 →</span>
-                </button>
-                <button
-                  type="button"
-                  className="quick-demo-btn secondary"
-                  disabled={busy}
                   onClick={() => handleQuickLogin('小明同学', '123456')}
                 >
-                  <span className="btn-role">基础学习者</span>
+                  <span className="btn-role">408 研习学者</span>
                   <strong>小明同学</strong>
                   <span className="btn-action">一键登入 →</span>
                 </button>
@@ -229,7 +219,7 @@ export default function LoginGate({ onLoginSuccess }) {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="例如：林知远 或 20260408"
+                    placeholder="例如：小明同学 或 20260408"
                     maxLength={20}
                     autoComplete="username"
                   />
