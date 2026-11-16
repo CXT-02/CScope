@@ -5545,7 +5545,7 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 
 /* ======================================================== */
-/* 28. 3D 思维知识星图 (KnowledgeGalaxy3D · 空间神经网络可视化) */
+/* 28. 3D 思维知识星图 (KnowledgeGalaxy3D · 分学科独立星图与因果总线) */
 /* ======================================================== */
 
 .knowledge-galaxy-page {
@@ -5553,6 +5553,83 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+}
+
+/* 学科独立星图切换 Tab 栏 */
+.galaxy-discipline-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid #eef2f6;
+  border-radius: 14px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  flex-wrap: wrap;
+}
+.discipline-bar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.discipline-bar-title .dot-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #059669;
+  box-shadow: 0 0 6px #10b981;
+}
+.discipline-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.discipline-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.discipline-pill:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+.discipline-pill.active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+.discipline-pill .pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.discipline-pill .pill-count {
+  font-size: 10.5px;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 1px 6px;
+  border-radius: 99px;
+  color: inherit;
+}
+.discipline-pill.active .pill-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .galaxy-viewport-wrapper {
