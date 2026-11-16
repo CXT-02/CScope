@@ -400,3 +400,15 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .distance-table strong{font-size:16px}
 .step-counter{font-size:15px}
 .step-buttons button,.text-button{font-size:14.5px;padding:11px}
+
+/* 12. 卷积感受野动态滑动动画专项增强 */
+.cnn-story-slide{text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.cnn-story-slide .pixel-grid{width:310px}
+.cnn-slide-indicator{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:99px;background:rgba(255,90,50,.14);border:1px solid rgba(255,90,50,.35);color:#ff9073;font-size:15px;font-weight:700}
+.cnn-slide-indicator .pulse-dot{color:#ff6745;font-style:normal;font-size:13px;display:inline-block;animation:pulse 1.1s ease-in-out infinite}
+.cnn-slide-stepper{display:flex;align-items:center;gap:8px;margin-top:2px}
+.cnn-slide-stepper button{border:1px solid #3d4a60;border-radius:8px;padding:7px 13px;color:#cbd5e3;background:#172130;cursor:pointer;font-size:13.5px;font-weight:700;transition:.2s}
+.cnn-slide-stepper button:hover{border-color:#ff6745;color:white;background:#202c40}
+.cnn-slide-stepper .cnn-slide-pause-btn.is-auto{border-color:rgba(255,90,50,.4);color:#ff967c;background:rgba(255,90,50,.1)}
+.pixel-grid button{transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease,background .25s ease}
+.pixel-grid button.active{border-color:#ff6745;box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),0 0 16px rgba(255,90,50,.35);transform:scale(1.04);z-index:2}
