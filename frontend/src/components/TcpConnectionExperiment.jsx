@@ -461,27 +461,174 @@ function st(title, message, client, server, packet = null, seq = null, lost = fa
 }
 
 function TcpDiagram({ steps, index }) {
+  const visibleSteps = steps.slice(1, index + 1)
+  const svgHeight = Math.max(460, visibleSteps.length * 75 + 90)
+
   return (
-    <div className="tcp-diagram">
-      <div className="tcp-endpoints">
-        <strong>客户端 Client</strong>
-        <strong>服务器 Server</strong>
+    <div className="tcp-diagram-container" style={{ width: '100%', background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px 20px', boxShadow: '0 2px 10px rgba(0,0,0,0.03)' }}>
+      {/* 顶部两端标题 */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', padding: '0 50px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6' }} />
+          <strong style={{ fontSize: '1.1rem', color: '#1e293b' }}>客户端 Client</strong>
+        </div>
+        <div style={{ fontSize: '0.88rem', color: '#64748b', fontStyle: 'italic' }}>
+          时间流逝方向 ↓ (向下斜线体现传输时长)
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <strong style={{ fontSize: '1.1rem', color: '#1e293b' }}>服务器 Server</strong>
+          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981' }} />
+        </div>
       </div>
-      <div className="tcp-lifelines">
-        <i />
-        <i />
-      </div>
-      <div className="tcp-events">
-        {steps.slice(1, index + 1).map((s, i) => {
-          const fromServer = s.packet?.startsWith('SYN + ACK') || (s.packet?.startsWith('FIN') && s.server === 'LAST-ACK') || (s.packet === 'ACK' && s.server === 'CLOSE-WAIT')
-          return (
-            <div className={`${s.lost ? 'lost' : ''} ${i === index - 1 ? 'current' : ''}`} key={i}>
-              <span>{s.packet}</span>
-              <b>{fromServer ? '←' : '→'}</b>
-              <small>{s.seq}</small>
-            </div>
-          )
-        })}
+
+      {/* SVG 斜向下时空时序图 */}
+      <div style={{ width: '100%', overflowX: 'auto' }}>
+        <svg
+          viewBox={`0 0 760 ${svgHeight}`}
+          style={{ width: '100%', minWidth: '600px', height: `${svgHeight}px`, overflow: 'visible' }}
+        >
+          <defs>
+            {/* 普通蓝色箭头 */}
+            <marker id="tcp-arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+            </marker>
+            {/* 绿色返回箭头 */}
+            <marker id="tcp-arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+            </marker>
+            {/* 红色重传/丢失箭头 */}
+            <marker id="tcp-arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+            </marker>
+          </defs>
+
+          {/* 两条垂直时间轴 (生命线) */}
+          <line x1="110" y1="20" x2="110" y2={svgHeight - 20} stroke="#94a3b8" strokeWidth="2.5" strokeDasharray="5 5" />
+          <line x1="650" y1="20" x2="650" y2={svgHeight - 20} stroke="#94a3b8" strokeWidth="2.5" strokeDasharray="5 5" />
+
+          {/* 时间轴末端向下指示箭头 */}
+          <polygon points="106,440 114,440 110,452" fill="#94a3b8" />
+          <polygon points="646,440 654,440 650,452" fill="#94a3b8" />
+          <text x="110" y={svgHeight - 6} fill="#64748b" fontSize="12" fontWeight="bold" textAnchor="middle">时间 t ↓</text>
+          <text x="650" y={svgHeight - 6} fill="#64748b" fontSize="12" fontWeight="bold" textAnchor="middle">时间 t ↓</text>
+
+          {/* 渲染所有已发生报文的斜向下长箭头 */}
+          {visibleSteps.map((s, i) => {
+            const isCurrent = i === visibleSteps.length - 1
+            const y1 = 45 + i * 72
+            const y2 = y1 + 46 // 长长的斜向下跨越 46 像素时延！
+
+            const fromServer = s.packet?.startsWith('SYN + ACK') || (s.packet?.startsWith('FIN') && s.server === 'LAST-ACK') || (s.packet === 'ACK' && s.server === 'CLOSE-WAIT')
+
+            const xStart = fromServer ? 650 : 110
+            const xEnd = fromServer ? 110 : 650
+            const arrowMarker = s.lost ? 'tcp-arrow-red' : fromServer ? 'tcp-arrow-green' : 'tcp-arrow-blue'
+            const strokeColor = s.lost ? '#dc2626' : fromServer ? '#059669' : '#2563eb'
+
+            // 中点坐标 (放置大号清晰文字)
+            const midX = (xStart + xEnd) / 2
+            const midY = (y1 + y2) / 2
+
+            // 丢包场景下只画前半截
+            const dropX = fromServer ? 650 - (650 - 110) * 0.55 : 110 + (650 - 110) * 0.55
+            const dropY = y1 + 46 * 0.55
+
+            return (
+              <g key={i} className={`tcp-seq-row ${isCurrent ? 'is-active' : ''}`}>
+                {/* 发送端时间锚点 */}
+                <circle cx={xStart} cy={y1} r={isCurrent ? '6' : '4.5'} fill={strokeColor} stroke="#fff" strokeWidth="2" />
+
+                {!s.lost ? (
+                  <>
+                    {/* 长长的斜向下传播箭头线 */}
+                    <line
+                      x1={xStart}
+                      y1={y1}
+                      x2={xEnd}
+                      y2={y2}
+                      stroke={strokeColor}
+                      strokeWidth={isCurrent ? '3.5' : '2.5'}
+                      markerEnd={`url(#${arrowMarker})`}
+                      style={{
+                        filter: isCurrent ? 'drop-shadow(0 0 6px rgba(37,99,235,0.4))' : 'none',
+                        transition: 'all 0.3s ease'
+                      }}
+                    />
+                    {/* 接收端时间锚点 (晚于发送时刻到达) */}
+                    <circle cx={xEnd} cy={y2} r={isCurrent ? '6' : '4.5'} fill={strokeColor} stroke="#fff" strokeWidth="2" />
+                  </>
+                ) : (
+                  <>
+                    {/* 丢包场景：斜线中途夭折并带有红色阻断 X */}
+                    <line
+                      x1={xStart}
+                      y1={y1}
+                      x2={dropX}
+                      y2={dropY}
+                      stroke="#dc2626"
+                      strokeWidth="3"
+                      strokeDasharray="6 4"
+                    />
+                    <circle cx={dropX} cy={dropY} r="10" fill="#fee2e2" stroke="#dc2626" strokeWidth="2" />
+                    <text x={dropX} y={dropY + 4} fill="#dc2626" fontSize="12" fontWeight="bold" textAnchor="middle">×</text>
+                    <rect x={dropX - 45} y={dropY + 12} width="90" height="20" rx="4" fill="#fef2f2" stroke="#dc2626" strokeWidth="1" />
+                    <text x={dropX} y={dropY + 26} fill="#dc2626" fontSize="11" fontWeight="bold" textAnchor="middle">报文丢弃 (LOST)</text>
+                  </>
+                )}
+
+                {/* 报文标签卡片 (大字号、清晰醒目、带背景衬底) */}
+                <g transform={`translate(${midX}, ${midY - 14})`}>
+                  <rect
+                    x="-125"
+                    y="-16"
+                    width="250"
+                    height="32"
+                    rx="6"
+                    fill={isCurrent ? (s.lost ? '#fef2f2' : '#eff6ff') : '#ffffff'}
+                    stroke={isCurrent ? strokeColor : '#cbd5e1'}
+                    strokeWidth={isCurrent ? '1.8' : '1'}
+                    filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))"
+                  />
+                  {/* 大字号报文名称 */}
+                  <text
+                    x="-115"
+                    y="5"
+                    fill={s.lost ? '#b91c1c' : strokeColor}
+                    fontSize="15"
+                    fontWeight="800"
+                    fontFamily="sans-serif"
+                  >
+                    {s.packet}
+                  </text>
+                  {/* 大字号参数序列号 */}
+                  <text
+                    x="115"
+                    y="5"
+                    fill="#334155"
+                    fontSize="13.5"
+                    fontWeight="600"
+                    fontFamily="monospace"
+                    textAnchor="end"
+                  >
+                    {s.seq}
+                  </text>
+                </g>
+
+                {/* 两侧对应时刻的状态标注 */}
+                <text
+                  x={xStart > 200 ? 665 : 95}
+                  y={y1 + 4}
+                  fill="#475569"
+                  fontSize="12.5"
+                  fontWeight="bold"
+                  textAnchor={xStart > 200 ? 'start' : 'end'}
+                >
+                  {xStart > 200 ? s.server : s.client}
+                </text>
+              </g>
+            )
+          })}
+        </svg>
       </div>
     </div>
   )
@@ -607,25 +754,27 @@ export default function TcpConnectionExperiment({ experiment }) {
 
           <TcpDiagram steps={steps} index={index} />
 
-          <div className="tcp-state-cards">
-            <div>
-              <span>客户端当前状态</span>
-              <strong style={{ color: step.client === 'ESTABLISHED' ? '#10b981' : step.client.includes('WAIT') ? '#f59e0b' : '#3b82f6' }}>
+          <div className="tcp-state-cards" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ padding: '16px 20px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+              <span style={{ fontSize: '0.88rem', color: '#64748b' }}>客户端当前状态 (Client State)</span>
+              <strong style={{ display: 'block', fontSize: '1.3rem', marginTop: '6px', color: step.client === 'ESTABLISHED' ? '#10b981' : step.client.includes('WAIT') ? '#f59e0b' : '#2563eb' }}>
                 {step.client}
               </strong>
             </div>
-            <div>
-              <span>服务端当前状态</span>
-              <strong style={{ color: step.server === 'ESTABLISHED' ? '#10b981' : step.server.includes('WAIT') ? '#f59e0b' : '#3b82f6' }}>
+            <div style={{ padding: '16px 20px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+              <span style={{ fontSize: '0.88rem', color: '#64748b' }}>服务端当前状态 (Server State)</span>
+              <strong style={{ display: 'block', fontSize: '1.3rem', marginTop: '6px', color: step.server === 'ESTABLISHED' ? '#10b981' : step.server.includes('WAIT') ? '#f59e0b' : '#059669' }}>
                 {step.server}
               </strong>
             </div>
           </div>
 
-          <div className="tcp-packet-detail">
-            <span>当前报文详情</span>
-            <strong>{step.packet ?? '当前无传输中的报文'}</strong>
-            <p>{step.seq ?? '两端状态保持稳定。'}</p>
+          <div className="tcp-packet-detail" style={{ marginTop: '14px', padding: '16px 20px', borderRadius: '8px', background: '#f8fafc', borderLeft: '4px solid #2563eb', border: '1px solid #e2e8f0' }}>
+            <span style={{ fontSize: '0.88rem', color: '#64748b' }}>当前处理报文与状态机说明</span>
+            <strong style={{ display: 'block', fontSize: '1.2rem', marginTop: '6px', color: '#1e293b' }}>{step.packet ?? '当前无传输中的控制报文'}</strong>
+            <p style={{ fontSize: '0.95rem', marginTop: '6px', color: '#334155', lineHeight: '1.6', margin: '6px 0 0' }}>
+              {step.seq ? `${step.seq} · ${step.message}` : step.message}
+            </p>
           </div>
         </section>
       </div>
