@@ -233,16 +233,22 @@ export default function SidebarNav({
         ))}
       </nav>
 
-      {/* 底部：大模型接入状态徽章 */}
+      {/* 底部：虚拟硬件时钟与沙盒内核监视器 (CScope 原创微架构引擎状态) */}
       {!collapsed && (
-        <div className="sidebar-ai-engine-card">
-          <div className="ai-chip-header">
-            <span className="ai-tag-gold">大模型已接入</span>
-            <span className="ai-pulse-dot" />
+        <div className="sidebar-kernel-monitor-card" title="CScope 硬件时序与微观仿真内核">
+          <div className="kernel-chip-header">
+            <span className="kernel-badge">VIRTUAL KERNEL</span>
+            <span className="kernel-pulse-dot" />
           </div>
-          <div className="ai-model-info">
-            <strong>模型：DeepSeek-R1</strong>
-            <p>408 认知推演与微观实验 Agent 已就绪</p>
+          <div className="kernel-clock-row">
+            <svg className="clock-wave-svg" viewBox="0 0 100 18" width="88" height="18">
+              <path d="M0 9 L15 9 L15 2 L30 2 L30 16 L45 16 L45 2 L60 2 L60 16 L75 16 L75 2 L90 2 L90 9 L100 9" fill="none" stroke="#059669" strokeWidth="1.8" />
+            </svg>
+            <span className="clock-freq">100MHz CLK</span>
+          </div>
+          <div className="kernel-meta-info">
+            <strong>微观时序仿真引擎就绪</strong>
+            <p>25 门硬件时钟沙盘 · 105 题 408 真题拓扑</p>
           </div>
         </div>
       )}
