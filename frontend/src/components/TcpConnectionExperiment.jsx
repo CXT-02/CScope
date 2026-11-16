@@ -61,7 +61,7 @@ const STORY_STEPS = [
   }
 ]
 
-// 动画导学右侧高动态可视化组件 (纯正工程风，无多余 emoji)
+// 动画导学右侧高动态可视化组件 (纯正工程风，高对比大字号清晰视效)
 function TcpStoryVisual({ stageIndex }) {
   const [animProgress, setAnimProgress] = useState(0) // 0: 发送端发出, 1: 信道飞行, 2: 对端接收处理
 
@@ -78,69 +78,71 @@ function TcpStoryVisual({ stageIndex }) {
   return (
     <div className="tcp-story-visual-canvas" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       {/* 顶部节点指示标尺 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', padding: '0 30px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', padding: '0 20px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#1e293b', border: '2.5px solid #3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: '0.95rem' }}>
+          <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: '#0f172a', border: '3px solid #38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 0 12px rgba(56, 189, 248, 0.35)' }}>
             Client
           </div>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '6px' }}>客户端主机</span>
+          <span style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 'bold', marginTop: '8px' }}>客户端主机</span>
         </div>
 
-        <div style={{ flex: 1, margin: '0 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '4px' }}>双向全双工传输介质</span>
-          <div style={{ width: '100%', height: '2px', background: '#334155', position: 'relative' }} />
+        <div style={{ flex: 1, margin: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.9rem', color: '#38bdf8', fontWeight: 'bold', background: '#1e293b', border: '1px solid #334155', padding: '3px 12px', borderRadius: '12px', marginBottom: '8px' }}>
+            双向全双工传输信道
+          </span>
+          <div style={{ width: '100%', height: '4px', background: 'linear-gradient(90deg, #38bdf8, #34d399)', borderRadius: '2px', position: 'relative' }} />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#1e293b', border: '2.5px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: '0.95rem' }}>
+          <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: '#0f172a', border: '3px solid #34d399', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 0 12px rgba(52, 211, 153, 0.35)' }}>
             Server
           </div>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '6px' }}>服务端主机</span>
+          <span style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 'bold', marginTop: '8px' }}>服务端主机</span>
         </div>
       </div>
 
       {/* 阶段 1: 全双工双通道说明 */}
       {stageIndex === 0 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#1e293b', borderRadius: '6px', borderLeft: '4px solid #3b82f6' }}>
-              <span style={{ color: '#93c5fd', fontSize: '0.88rem', fontWeight: 'bold' }}>发送方向 A ➔ B (Client 发送通道)</span>
-              <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>初始状态：未同步</span>
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#1e293b', borderRadius: '8px', borderLeft: '5px solid #38bdf8' }}>
+              <span style={{ color: '#60a5fa', fontSize: '1.05rem', fontWeight: 'bold' }}>发送方向 A ➔ B (Client 发送通道)</span>
+              <span style={{ background: '#1d4ed8', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.88rem', fontWeight: 'bold' }}>初始状态：未同步 (CLOSED)</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#1e293b', borderRadius: '6px', borderLeft: '4px solid #10b981' }}>
-              <span style={{ color: '#86efac', fontSize: '0.88rem', fontWeight: 'bold' }}>发送方向 B ➔ A (Server 发送通道)</span>
-              <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>初始状态：LISTEN 监听中</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#1e293b', borderRadius: '8px', borderLeft: '5px solid #34d399' }}>
+              <span style={{ color: '#34d399', fontSize: '1.05rem', fontWeight: 'bold' }}>发送方向 B ➔ A (Server 发送通道)</span>
+              <span style={{ background: '#047857', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.88rem', fontWeight: 'bold' }}>初始状态：LISTEN 监听中</span>
             </div>
           </div>
-          <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '12px', textAlign: 'center' }}>
-            TCP 连接必须双向分别确认收发能力，才能保证全双工通信的无损可靠。
+          <div style={{ fontSize: '0.92rem', color: '#f8fafc', background: '#1e293b', border: '1px solid #475569', borderRadius: '6px', padding: '10px 14px', marginTop: '14px', textAlign: 'center', lineHeight: '1.6' }}>
+            💡 <strong>TCP 核心设计</strong>：连接必须双向分别确认收发能力，才能保证全双工通信的无损可靠！
           </div>
         </div>
       )}
 
       {/* 阶段 2: 第一次握手 SYN 报文飞行 */}
       {stageIndex === 1 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '14px' }}>
-            <span>Client: <strong style={{ color: '#f59e0b' }}>SYN-SENT</strong></span>
-            <span>报文：[SYN=1, seq=100]</span>
-            <span>Server: <strong style={{ color: animProgress >= 2 ? '#3b82f6' : '#94a3b8' }}>{animProgress >= 2 ? 'SYN-RCVD' : 'LISTEN'}</strong></span>
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem', color: '#f8fafc', marginBottom: '14px' }}>
+            <span>Client: <strong style={{ color: '#fbbf24', fontSize: '1.05rem' }}>SYN-SENT</strong></span>
+            <span style={{ background: '#1e293b', padding: '3px 10px', borderRadius: '4px', color: '#38bdf8', fontWeight: 'bold' }}>报文：[SYN=1, seq=100]</span>
+            <span>Server: <strong style={{ color: animProgress >= 2 ? '#38bdf8' : '#e2e8f0', fontSize: '1.05rem' }}>{animProgress >= 2 ? 'SYN-RCVD' : 'LISTEN'}</strong></span>
           </div>
 
-          <div style={{ position: 'relative', height: '42px', background: '#1e293b', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <div style={{ position: 'relative', height: '52px', background: '#1e293b', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
             <div
               style={{
                 position: 'absolute',
-                left: animProgress === 0 ? '10%' : animProgress === 1 ? '50%' : '85%',
+                left: animProgress === 0 ? '12%' : animProgress === 1 ? '50%' : '85%',
                 transform: 'translateX(-50%)',
                 transition: 'all 0.9s cubic-bezier(0.4, 0, 0.2, 1)',
-                background: '#3b82f6',
+                background: '#2563eb',
                 color: '#fff',
-                padding: '4px 14px',
-                borderRadius: '4px',
-                fontSize: '0.82rem',
+                padding: '7px 20px',
+                borderRadius: '6px',
+                fontSize: '1rem',
                 fontWeight: 'bold',
-                boxShadow: '0 2px 8px rgba(59, 130, 246, 0.4)',
+                boxShadow: '0 2px 12px rgba(37, 99, 235, 0.5)',
                 whiteSpace: 'nowrap'
               }}
             >
@@ -148,37 +150,37 @@ function TcpStoryVisual({ stageIndex }) {
             </div>
           </div>
 
-          <div style={{ marginTop: '14px', fontSize: '0.82rem', color: animProgress >= 2 ? '#34d399' : '#94a3b8' }}>
+          <div style={{ marginTop: '14px', fontSize: '0.92rem', color: animProgress >= 2 ? '#34d399' : '#e2e8f0', background: '#1e293b', padding: '10px 14px', borderRadius: '6px' }}>
             {animProgress >= 2
-              ? '[处理完毕] Server 成功接收 SYN 报文，记录 Client 初始序号 100，状态转入 SYN-RCVD。'
-              : '[传输中] Client 生成 seq=100 发送 SYN，请求同步序号...'}
+              ? '✓ [处理完毕] Server 成功接收 SYN 报文，记录 Client 初始序号 100，状态转入 SYN-RCVD。'
+              : '⏳ [传输中] Client 生成 seq=100 发送 SYN，请求同步序列号与连接建立...'}
           </div>
         </div>
       )}
 
       {/* 阶段 3: 第二次握手 SYN + ACK 报文返回 */}
       {stageIndex === 2 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '14px' }}>
-            <span>Client: <strong style={{ color: animProgress >= 2 ? '#10b981' : '#f59e0b' }}>{animProgress >= 2 ? 'ESTABLISHED' : 'SYN-SENT'}</strong></span>
-            <span>报文：[SYN=1, ACK=1, seq=300, ack=101]</span>
-            <span>Server: <strong style={{ color: '#3b82f6' }}>SYN-RCVD</strong></span>
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem', color: '#f8fafc', marginBottom: '14px' }}>
+            <span>Client: <strong style={{ color: animProgress >= 2 ? '#34d399' : '#fbbf24', fontSize: '1.05rem' }}>{animProgress >= 2 ? 'ESTABLISHED' : 'SYN-SENT'}</strong></span>
+            <span style={{ background: '#1e293b', padding: '3px 10px', borderRadius: '4px', color: '#34d399', fontWeight: 'bold' }}>[SYN=1, ACK=1, seq=300, ack=101]</span>
+            <span>Server: <strong style={{ color: '#38bdf8', fontSize: '1.05rem' }}>SYN-RCVD</strong></span>
           </div>
 
-          <div style={{ position: 'relative', height: '42px', background: '#1e293b', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <div style={{ position: 'relative', height: '52px', background: '#1e293b', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
             <div
               style={{
                 position: 'absolute',
-                left: animProgress === 0 ? '85%' : animProgress === 1 ? '50%' : '12%',
+                left: animProgress === 0 ? '85%' : animProgress === 1 ? '50%' : '14%',
                 transform: 'translateX(-50%)',
                 transition: 'all 0.9s cubic-bezier(0.4, 0, 0.2, 1)',
-                background: '#10b981',
+                background: '#059669',
                 color: '#fff',
-                padding: '4px 14px',
-                borderRadius: '4px',
-                fontSize: '0.82rem',
+                padding: '7px 20px',
+                borderRadius: '6px',
+                fontSize: '1rem',
                 fontWeight: 'bold',
-                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.4)',
+                boxShadow: '0 2px 12px rgba(5, 150, 105, 0.5)',
                 whiteSpace: 'nowrap'
               }}
             >
@@ -186,36 +188,37 @@ function TcpStoryVisual({ stageIndex }) {
             </div>
           </div>
 
-          <div style={{ marginTop: '14px', fontSize: '0.82rem', color: animProgress >= 2 ? '#34d399' : '#94a3b8' }}>
+          <div style={{ marginTop: '14px', fontSize: '0.92rem', color: animProgress >= 2 ? '#34d399' : '#e2e8f0', background: '#1e293b', padding: '10px 14px', borderRadius: '6px' }}>
             {animProgress >= 2
-              ? '[处理完毕] Client 收到 SYN+ACK，确认 Server 收发正常，Client 率先进入 ESTABLISHED！'
-              : '[反向传输] Server 同步自身序号 300，并确认 Client 序号 (ack=101)...'}
+              ? '✓ [处理完毕] Client 收到 SYN+ACK，确认 Server 收发正常，Client 率先进入 ESTABLISHED！'
+              : '⏳ [反向传输] Server 同步自身序号 300，并确认 Client 序号 (ack=101)...'}
           </div>
         </div>
       )}
 
       {/* 阶段 4: 第三次握手 ACK 完成双向导通 */}
       {stageIndex === 3 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '14px' }}>
-            <span>Client: <strong style={{ color: '#10b981' }}>ESTABLISHED</strong></span>
-            <span>报文：[ACK=1, seq=101, ack=301]</span>
-            <span>Server: <strong style={{ color: animProgress >= 2 ? '#10b981' : '#3b82f6' }}>{animProgress >= 2 ? 'ESTABLISHED' : 'SYN-RCVD'}</strong></span>
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem', color: '#f8fafc', marginBottom: '14px' }}>
+            <span>Client: <strong style={{ color: '#34d399', fontSize: '1.05rem' }}>ESTABLISHED</strong></span>
+            <span style={{ background: '#1e293b', padding: '3px 10px', borderRadius: '4px', color: '#38bdf8', fontWeight: 'bold' }}>[ACK=1, seq=101, ack=301]</span>
+            <span>Server: <strong style={{ color: animProgress >= 2 ? '#34d399' : '#38bdf8', fontSize: '1.05rem' }}>{animProgress >= 2 ? 'ESTABLISHED' : 'SYN-RCVD'}</strong></span>
           </div>
 
-          <div style={{ position: 'relative', height: '42px', background: '#1e293b', borderRadius: '6px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <div style={{ position: 'relative', height: '52px', background: '#1e293b', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
             <div
               style={{
                 position: 'absolute',
-                left: animProgress === 0 ? '12%' : animProgress === 1 ? '50%' : '88%',
+                left: animProgress === 0 ? '14%' : animProgress === 1 ? '50%' : '86%',
                 transform: 'translateX(-50%)',
                 transition: 'all 0.9s cubic-bezier(0.4, 0, 0.2, 1)',
-                background: '#3b82f6',
+                background: '#2563eb',
                 color: '#fff',
-                padding: '4px 14px',
-                borderRadius: '4px',
-                fontSize: '0.82rem',
+                padding: '7px 20px',
+                borderRadius: '6px',
+                fontSize: '1rem',
                 fontWeight: 'bold',
+                boxShadow: '0 2px 12px rgba(37, 99, 235, 0.5)',
                 whiteSpace: 'nowrap'
               }}
             >
@@ -223,91 +226,91 @@ function TcpStoryVisual({ stageIndex }) {
             </div>
           </div>
 
-          <div style={{ marginTop: '14px', fontSize: '0.82rem', color: animProgress >= 2 ? '#34d399' : '#94a3b8' }}>
+          <div style={{ marginTop: '14px', fontSize: '0.92rem', color: animProgress >= 2 ? '#34d399' : '#e2e8f0', background: '#1e293b', padding: '10px 14px', borderRadius: '6px' }}>
             {animProgress >= 2
-              ? '[连接完全建立] Server 收到最终确认，双方均处于 ESTABLISHED 状态，数据通道正式开通！'
-              : '[最终确认中] Client 发送最后一次 ACK，通知 Server 双向已就绪...'}
+              ? '✓ [连接完全建立] Server 收到最终确认，双方均处于 ESTABLISHED 状态，全双工可靠通道正式开通！'
+              : '⏳ [最终确认中] Client 发送最后一次 ACK，通知 Server 双向收发均已就绪...'}
           </div>
         </div>
       )}
 
       {/* 阶段 5: 四次挥手时序 */}
       {stageIndex === 4 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '14px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div style={{ background: '#1e293b', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #f59e0b' }}>
-              <div style={{ fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>方向 1: 客户端关闭发送</div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '4px' }}>1. Client ➔ FIN (seq=200)</div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>2. Server ➔ ACK (ack=201)</div>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px' }}>Server 进入 CLOSE-WAIT (半关闭)</div>
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderLeft: '5px solid #fbbf24' }}>
+              <div style={{ fontSize: '0.95rem', color: '#fbbf24', fontWeight: 'bold' }}>方向 1: 客户端关闭发送</div>
+              <div style={{ fontSize: '0.92rem', color: '#f8fafc', marginTop: '8px' }}>1. Client ➔ FIN (seq=200)</div>
+              <div style={{ fontSize: '0.92rem', color: '#f8fafc', marginTop: '4px' }}>2. Server ➔ ACK (ack=201)</div>
+              <div style={{ fontSize: '0.85rem', color: '#93c5fd', marginTop: '6px', fontWeight: 'bold' }}>Server 进入 CLOSE-WAIT (半关闭)</div>
             </div>
 
-            <div style={{ background: '#1e293b', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #ef4444' }}>
-              <div style={{ fontSize: '0.8rem', color: '#f87171', fontWeight: 'bold' }}>方向 2: 服务端关闭发送</div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '4px' }}>3. Server ➔ FIN (seq=700)</div>
-              <div style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>4. Client ➔ ACK (ack=701)</div>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px' }}>Client 进入 TIME-WAIT (等 2MSL)</div>
+            <div style={{ background: '#1e293b', padding: '14px', borderRadius: '8px', borderLeft: '5px solid #f87171' }}>
+              <div style={{ fontSize: '0.95rem', color: '#f87171', fontWeight: 'bold' }}>方向 2: 服务端关闭发送</div>
+              <div style={{ fontSize: '0.92rem', color: '#f8fafc', marginTop: '8px' }}>3. Server ➔ FIN (seq=700)</div>
+              <div style={{ fontSize: '0.92rem', color: '#f8fafc', marginTop: '4px' }}>4. Client ➔ ACK (ack=701)</div>
+              <div style={{ fontSize: '0.85rem', color: '#fde047', marginTop: '6px', fontWeight: 'bold' }}>Client 进入 TIME-WAIT (等 2MSL)</div>
             </div>
           </div>
-          <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '10px', textAlign: 'center' }}>
-            四次挥手核心：半关闭状态下，Server 仍可将剩余数据全部推给 Client，直至 Server 发出自己的 FIN。
+          <div style={{ fontSize: '0.92rem', color: '#f8fafc', background: '#1e293b', border: '1px solid #475569', borderRadius: '6px', padding: '10px 14px', marginTop: '14px', textAlign: 'center', lineHeight: '1.6' }}>
+            💡 <strong>四次挥手核心</strong>：在半关闭状态下，Server 仍可将剩余数据全部推给 Client，直至 Server 发出自己的 FIN。
           </div>
         </div>
       )}
 
       {/* 阶段 6: TIME-WAIT 2MSL 倒计时机制 */}
       {stageIndex === 5 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '0.9rem' }}>TIME-WAIT 状态保活倒计时</span>
-            <span style={{ background: '#1e293b', color: '#cbd5e1', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>
-              标准等待：2MSL (约 60~120 秒)
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <span style={{ color: '#fbbf24', fontWeight: 'bold', fontSize: '1.05rem' }}>TIME-WAIT 状态保活倒计时</span>
+            <span style={{ background: '#1e293b', border: '1px solid #f59e0b', color: '#fbbf24', padding: '4px 12px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 'bold' }}>
+              标准等待：2MSL (约 60 ~ 120 秒)
             </span>
           </div>
 
-          <div style={{ background: '#1e293b', borderRadius: '6px', padding: '12px', border: '1px solid #475569' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                T
+          <div style={{ background: '#1e293b', borderRadius: '8px', padding: '14px', border: '1px solid #475569' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#2563eb', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', fontWeight: 'bold', flexShrink: 0 }}>
+                2M
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '0.85rem', color: '#f8fafc', fontWeight: 'bold' }}>防止最后的 ACK 丢失产生死锁</div>
-                <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
-                  若第 4 次 ACK 丢失，Server 超时重传 FIN，处于 TIME-WAIT 的客户端可再次响应 ACK，使 Server 正常 CLOSED。
+                <div style={{ fontSize: '0.98rem', color: '#f8fafc', fontWeight: 'bold' }}>防止最后的 ACK 丢失产生死锁</div>
+                <div style={{ fontSize: '0.9rem', color: '#e2e8f0', marginTop: '4px', lineHeight: '1.6' }}>
+                  若第 4 次 ACK 丢失，Server 会超时重传 FIN；处于 TIME-WAIT 的客户端仍可再次响应 ACK，使 Server 正常进入 CLOSED 状态。
                 </div>
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: '12px', fontSize: '0.82rem', color: '#34d399' }}>
-            [旧报文消亡] 经过 2MSL 时间后，本次连接在网络中产生的所有历史迷路报文全部寿命自然耗尽，避免混淆后续新连接。
+          <div style={{ marginTop: '14px', fontSize: '0.92rem', color: '#34d399', background: '#1e293b', padding: '10px 14px', borderRadius: '6px', border: '1px solid #059669' }}>
+            ✓ [旧报文消亡] 经过 2MSL 时间后，本次连接在网络中产生的所有历史迷路报文全部寿命自然耗尽，避免混淆后续新连接。
           </div>
         </div>
       )}
 
       {/* 阶段 7: 超时重传机制 */}
       {stageIndex === 6 && (
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ color: '#f87171', fontWeight: 'bold', fontSize: '0.9rem' }}>丢包场景：RTO 定时器超时自动重传</span>
-            <span style={{ background: '#334155', color: '#f87171', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>
+        <div style={{ background: '#0f172a', border: '1.5px solid #334155', borderRadius: '10px', padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <span style={{ color: '#f87171', fontWeight: 'bold', fontSize: '1.05rem' }}>丢包场景：RTO 定时器超时自动重传</span>
+            <span style={{ background: '#7f1d1d', color: '#fecaca', padding: '3px 10px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
               Packet Loss 模拟
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '6px' }}>
-              <span style={{ fontSize: '0.82rem', color: '#fca5a5' }}>第 1 次发送：SYN 报文在网络路由器丢弃 (LOST)</span>
-              <span style={{ fontSize: '0.75rem', color: '#ef4444' }}>未收到确认</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(239, 68, 68, 0.15)', border: '1.5px solid #ef4444', borderRadius: '8px' }}>
+              <span style={{ fontSize: '0.92rem', color: '#fecaca', fontWeight: 'bold' }}>第 1 次发送：SYN 报文在网络路由器丢弃 (LOST)</span>
+              <span style={{ background: '#dc2626', color: '#fff', fontSize: '0.8rem', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>未收到确认</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981', borderRadius: '6px' }}>
-              <span style={{ fontSize: '0.82rem', color: '#86efac' }}>超时重传：RTO 定时器触发，重新发送 SYN 报文</span>
-              <span style={{ fontSize: '0.75rem', color: '#10b981' }}>Server 成功接收</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(16, 185, 129, 0.15)', border: '1.5px solid #10b981', borderRadius: '8px' }}>
+              <span style={{ fontSize: '0.92rem', color: '#a7f3d0', fontWeight: 'bold' }}>超时重传：RTO 定时器触发，重新发送 SYN 报文</span>
+              <span style={{ background: '#059669', color: '#fff', fontSize: '0.8rem', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>Server 成功接收</span>
             </div>
           </div>
 
-          <div style={{ marginTop: '12px', fontSize: '0.82rem', color: '#cbd5e1' }}>
-            总结：TCP 将不可靠的网络层转变为可靠数据流的核心，就是<strong>超时计时器 + 确认应答 + 自动重传</strong>。
+          <div style={{ marginTop: '14px', fontSize: '0.92rem', color: '#f8fafc', background: '#1e293b', border: '1px solid #475569', borderRadius: '6px', padding: '10px 14px', lineHeight: '1.6' }}>
+            💡 <strong>总结</strong>：TCP 将不可靠的网络层转变为可靠数据流的核心，就是<strong>超时计时器 (RTO) + 确认应答 (ACK) + 自动重传 (ARQ)</strong>。
           </div>
         </div>
       )}
