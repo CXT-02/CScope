@@ -1078,6 +1078,79 @@
   color: #34d399 !important;
 }
 
+/* --- 深空暗夜: 实机操作流水账单 (Audit Trail) 彻底消灭大白块 --- */
+[data-theme="dark"] .audit-item {
+  background: #131f38 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .audit-time-text {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .audit-cat-pill {
+  background: #1a2a4c !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .audit-cat-pill.exam {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="dark"] .audit-cat-pill.lab {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+
+[data-theme="dark"] .audit-entry-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .audit-entry-detail {
+  color: #cbd5e1 !important;
+}
+
+/* --- 深空暗夜: 靶向错题本统计栏、个人档案中心、登录卡片与弹窗彻底消灭大白块 --- */
+[data-theme="dark"] .mistake-stats-bar,
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .account-dialog,
+[data-theme="dark"] .account-menu,
+[data-theme="dark"] .structure-detail-panel,
+[data-theme="dark"] .tutor-bottom-input-dock,
+[data-theme="dark"] .cache-formula,
+[data-theme="dark"] .sort-control-bar,
+[data-theme="dark"] .sort-practice {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .account-menu > button {
+  background: #0f182c !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .account-menu > button:hover {
+  background: #192644 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .login-card-title,
+[data-theme="dark"] .account-dialog h2 {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .login-card-subtitle,
+[data-theme="dark"] .account-dialog > p {
+  color: #94a3b8 !important;
+}
+
 /* 消除实机度量监视器中的刺眼白色操作按钮 */
 [data-theme="dark"] .tracker-launch-btn.primary {
   background: #059669 !important;
@@ -1893,6 +1966,82 @@
   border-color: #00f5d4 !important;
   color: #00f5d4 !important;
   box-shadow: 0 0 8px rgba(0, 245, 212, 0.4) !important;
+}
+
+/* --- 极客赛博: 实机操作流水账单 (Audit Trail) 彻底消灭大白块，统一赛博深紫夜晶霓虹 --- */
+[data-theme="cyber"] .audit-item {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), inset 0 0 12px rgba(0, 245, 212, 0.05) !important;
+}
+
+[data-theme="cyber"] .audit-time-text {
+  color: #00f5d4 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .audit-cat-pill {
+  background: #25155c !important;
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .audit-cat-pill.exam {
+  background: rgba(255, 0, 127, 0.2) !important;
+  color: #ff007f !important;
+  border: 1px solid rgba(255, 0, 127, 0.4) !important;
+}
+
+[data-theme="cyber"] .audit-cat-pill.lab {
+  background: rgba(0, 245, 212, 0.18) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .audit-entry-title {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.3) !important;
+}
+
+[data-theme="cyber"] .audit-entry-detail {
+  color: #c7d2fe !important;
+}
+
+/* --- 极客赛博: 靶向错题本统计栏、个人档案中心、登录卡片与弹窗彻底消灭大白块 --- */
+[data-theme="cyber"] .mistake-stats-bar,
+[data-theme="cyber"] .profile-card,
+[data-theme="cyber"] .login-card,
+[data-theme="cyber"] .account-dialog,
+[data-theme="cyber"] .account-menu,
+[data-theme="cyber"] .structure-detail-panel,
+[data-theme="cyber"] .tutor-bottom-input-dock,
+[data-theme="cyber"] .cache-formula,
+[data-theme="cyber"] .sort-control-bar,
+[data-theme="cyber"] .sort-practice {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(0, 245, 212, 0.08) !important;
+  color: #f0f4ff !important;
+}
+
+[data-theme="cyber"] .account-menu > button {
+  background: #180e3d !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="cyber"] .account-menu > button:hover {
+  background: #25155c !important;
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .login-card-title,
+[data-theme="cyber"] .account-dialog h2 {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.35) !important;
+}
+
+[data-theme="cyber"] .login-card-subtitle,
+[data-theme="cyber"] .account-dialog > p {
+  color: #a5b4fc !important;
 }
 
 [data-theme="cyber"] .quick-tag-chip {
@@ -3448,6 +3597,81 @@
   color: #1e3a27 !important;
 }
 
+/* --- 苍林护眼: 实机操作流水账单 (Audit Trail) 彻底消灭大白块，温润竹玉护眼质感 --- */
+[data-theme="forest"] .audit-item {
+  background: #dbe7d7 !important;
+  border: 1.5px solid #a8c5a5 !important;
+  box-shadow: 0 4px 14px rgba(15, 45, 25, 0.06) !important;
+}
+
+[data-theme="forest"] .audit-time-text {
+  color: #091e11 !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .audit-cat-pill {
+  background: #edf5eb !important;
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .audit-cat-pill.exam {
+  background: #e0ecff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+[data-theme="forest"] .audit-cat-pill.lab {
+  background: #e8f5e5 !important;
+  color: #15803d !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+[data-theme="forest"] .audit-entry-title {
+  color: #091e11 !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .audit-entry-detail {
+  color: #1a3e26 !important;
+}
+
+/* --- 苍林护眼: 靶向错题本统计栏、个人档案中心、登录卡片与弹窗彻底消灭大白块 --- */
+[data-theme="forest"] .mistake-stats-bar,
+[data-theme="forest"] .profile-card,
+[data-theme="forest"] .login-card,
+[data-theme="forest"] .account-dialog,
+[data-theme="forest"] .account-menu,
+[data-theme="forest"] .structure-detail-panel,
+[data-theme="forest"] .tutor-bottom-input-dock,
+[data-theme="forest"] .cache-formula,
+[data-theme="forest"] .sort-control-bar,
+[data-theme="forest"] .sort-practice {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  box-shadow: 0 4px 16px rgba(15, 45, 25, 0.06) !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .account-menu > button {
+  background: #e4eee1 !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .account-menu > button:hover {
+  background: #d5e5d1 !important;
+  color: #15803d !important;
+}
+
+[data-theme="forest"] .login-card-title,
+[data-theme="forest"] .account-dialog h2 {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .login-card-subtitle,
+[data-theme="forest"] .account-dialog > p {
+  color: #1a3e26 !important;
+}
+
 /* 微观仿真工坊：护眼卡片高品质适配 */
 [data-theme="forest"] .workshop-card {
   background: #e4eee1 !important;
@@ -4004,4 +4228,42 @@
 
 [data-theme="light"] .metric-sub-note {
   color: #64748b !important;
+}
+
+/* --- 学术晨曦: 实机操作流水账单 (Audit Trail) 清新高对比度 --- */
+[data-theme="light"] .audit-item {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .audit-time-text {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .audit-cat-pill {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .audit-cat-pill.exam {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+[data-theme="light"] .audit-cat-pill.lab {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+  border: 1px solid #a7f3d0 !important;
+}
+
+[data-theme="light"] .audit-entry-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .audit-entry-detail {
+  color: #475569 !important;
 }

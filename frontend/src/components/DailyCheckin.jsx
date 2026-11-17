@@ -571,13 +571,15 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
           {auditLogs.map((item) => (
             <div key={item.id} className="audit-item">
               <div className="audit-time-col">
-                <strong>{item.timeText}</strong>
-                <span>{item.category}</span>
+                <strong className="audit-time-text">{item.timeText}</strong>
+                <span className={`audit-cat-pill ${item.category === '408 真题测评' ? 'exam' : 'lab'}`}>
+                  {item.category}
+                </span>
               </div>
-              <div className={`audit-dot ${item.dotColor}`} />
+              <div className={`audit-dot ${item.dotColor || 'green'}`} />
               <div className="audit-content">
-                <strong>{item.title}</strong>
-                <p>{item.detail}</p>
+                <strong className="audit-entry-title">{item.title}</strong>
+                <p className="audit-entry-detail">{item.detail}</p>
               </div>
             </div>
           ))}
