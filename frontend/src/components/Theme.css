@@ -755,6 +755,236 @@
   opacity: 0.7 !important;
 }
 
+/* --- 深空暗夜: 25 门微观实验工作台 (Lab Layout / Control & Visual Panels) 彻底消除大白块，统一黑绿极客底色 --- */
+[data-theme="dark"] .experiment-page {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .control-panel,
+[data-theme="dark"] .visual-panel {
+  background: #111a2f !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .panel-title span,
+[data-theme="dark"] .visual-toolbar strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .panel-title i,
+[data-theme="dark"] .source-chip {
+  background: #182642 !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .field-block > span,
+[data-theme="dark"] .process-editor > span,
+[data-theme="dark"] .range-field > span {
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .field-block small,
+[data-theme="dark"] .range-field small,
+[data-theme="dark"] .process-editor > small,
+[data-theme="dark"] .control-help {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .field-block textarea,
+[data-theme="dark"] .field-block select,
+[data-theme="dark"] .process-editor input {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .range-field i {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-theme="dark"] .range-field input,
+[data-theme="dark"] .step-slider {
+  accent-color: #10b981 !important;
+}
+
+[data-theme="dark"] .nn-neuron-tabs {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .nn-neuron-tabs button {
+  background: transparent !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .nn-neuron-tabs button.active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+[data-theme="dark"] .live-explanation {
+  background: #0d1526 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+}
+
+[data-theme="dark"] .live-explanation > span {
+  color: #10b981 !important;
+}
+
+[data-theme="dark"] .live-explanation strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .live-explanation p {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .visual-toolbar div span {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .text-button {
+  background: #182642 !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-theme="dark"] .text-button:hover {
+  background: #1f3256 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .nn-canvas,
+[data-theme="dark"] .graph-canvas,
+[data-theme="dark"] .tree-canvas,
+[data-theme="dark"] .gd-chart {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .nn-layer-label {
+  fill: #94a3b8 !important;
+}
+
+[data-theme="dark"] .nn-formula-panel {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-left: 3.5px solid #10b981 !important;
+}
+
+[data-theme="dark"] .nn-formula-panel span {
+  color: #10b981 !important;
+}
+
+[data-theme="dark"] .nn-formula-panel code {
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .nn-prediction {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .nn-prediction span {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .nn-prediction strong {
+  color: #10b981 !important;
+}
+
+[data-theme="dark"] .nn-prediction p {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .nn-probability-track {
+  background: #182642 !important;
+}
+
+[data-theme="dark"] .nn-probability-track i {
+  background: linear-gradient(90deg, #059669, #10b981) !important;
+}
+
+[data-theme="dark"] .explore-heading > span {
+  color: #10b981 !important;
+}
+
+[data-theme="dark"] .explore-heading h2 {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .explore-heading p {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .step-counter span {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .step-buttons button {
+  background: #182642 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .step-buttons button:hover {
+  background: #1f3256 !important;
+  border-color: #10b981 !important;
+}
+
+[data-theme="dark"] .tip-box,
+[data-theme="dark"] .explanation-box {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-left: 3.5px solid #10b981 !important;
+}
+
+[data-theme="dark"] .tip-box strong,
+[data-theme="dark"] .explanation-box strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .tip-box p,
+[data-theme="dark"] .explanation-box p {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .distance-table div,
+[data-theme="dark"] .metric-grid div {
+  background: #0d1526 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .distance-table span,
+[data-theme="dark"] .metric-grid span {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .distance-table strong,
+[data-theme="dark"] .metric-grid strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .segmented-control {
+  background: #0d1526 !important;
+}
+
+[data-theme="dark"] .segmented-control button {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .segmented-control button.active {
+  background: #162440 !important;
+  color: #10b981 !important;
+}
+
 /* --- 深空暗夜: 实机学时度量 (DailyCheckin) 彻底移除白底 --- */
 [data-theme="dark"] .checkin-card {
   background: #0f182c !important;
@@ -2045,6 +2275,237 @@
   opacity: 0.6 !important;
 }
 
+/* --- 极客赛博: 25 门微观实验工作台 (Lab Layout / Control & Visual Panels) 统一黑紫霓虹底色 --- */
+[data-theme="cyber"] .experiment-page {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .control-panel,
+[data-theme="cyber"] .visual-panel {
+  background: #110e2b !important;
+  border: 1px solid rgba(0, 245, 212, 0.22) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .panel-title span,
+[data-theme="cyber"] .visual-toolbar strong {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .panel-title i,
+[data-theme="cyber"] .source-chip {
+  background: #18143d !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+}
+
+[data-theme="cyber"] .field-block > span,
+[data-theme="cyber"] .process-editor > span,
+[data-theme="cyber"] .range-field > span {
+  color: #f0fdf4 !important;
+}
+
+[data-theme="cyber"] .field-block small,
+[data-theme="cyber"] .range-field small,
+[data-theme="cyber"] .process-editor > small,
+[data-theme="cyber"] .control-help {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .field-block textarea,
+[data-theme="cyber"] .field-block select,
+[data-theme="cyber"] .process-editor input {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .range-field i {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+}
+
+[data-theme="cyber"] .range-field input,
+[data-theme="cyber"] .step-slider {
+  accent-color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .nn-neuron-tabs {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .nn-neuron-tabs button {
+  background: transparent !important;
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .nn-neuron-tabs button.active {
+  background: #00f5d4 !important;
+  color: #08061a !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.5) !important;
+}
+
+[data-theme="cyber"] .live-explanation {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+}
+
+[data-theme="cyber"] .live-explanation > span {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .live-explanation strong {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .live-explanation p {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .visual-toolbar div span {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .text-button {
+  background: #18143d !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+}
+
+[data-theme="cyber"] .text-button:hover {
+  background: #231c58 !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .nn-canvas,
+[data-theme="cyber"] .graph-canvas,
+[data-theme="cyber"] .tree-canvas,
+[data-theme="cyber"] .gd-chart {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.15) !important;
+}
+
+[data-theme="cyber"] .nn-layer-label {
+  fill: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .nn-formula-panel {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.22) !important;
+  border-left: 3.5px solid #00f5d4 !important;
+}
+
+[data-theme="cyber"] .nn-formula-panel span {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .nn-formula-panel code {
+  color: #e2e8f0 !important;
+}
+
+[data-theme="cyber"] .nn-prediction {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.22) !important;
+}
+
+[data-theme="cyber"] .nn-prediction span {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .nn-prediction strong {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .nn-prediction p {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .nn-probability-track {
+  background: #18143d !important;
+}
+
+[data-theme="cyber"] .nn-probability-track i {
+  background: linear-gradient(90deg, #00f5d4, #00bbf9) !important;
+}
+
+[data-theme="cyber"] .explore-heading > span {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .explore-heading h2 {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .explore-heading p {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .step-counter span {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .step-buttons button {
+  background: #18143d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .step-buttons button:hover {
+  background: #231c58 !important;
+  border-color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .tip-box,
+[data-theme="cyber"] .explanation-box {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.22) !important;
+  border-left: 3.5px solid #00f5d4 !important;
+}
+
+[data-theme="cyber"] .tip-box strong,
+[data-theme="cyber"] .explanation-box strong {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .tip-box p,
+[data-theme="cyber"] .explanation-box p {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .distance-table div,
+[data-theme="cyber"] .metric-grid div {
+  background: #09071c !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .distance-table span,
+[data-theme="cyber"] .metric-grid span {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .distance-table strong,
+[data-theme="cyber"] .metric-grid strong {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .segmented-control {
+  background: #09071c !important;
+}
+
+[data-theme="cyber"] .segmented-control button {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .segmented-control button.active {
+  background: #18143d !important;
+  color: #00f5d4 !important;
+}
+
 [data-theme="cyber"] .chip-tag {
   background: rgba(0, 245, 212, 0.15) !important;
   color: #00f5d4 !important;
@@ -2486,6 +2947,242 @@
 
 [data-theme="forest"] .knowledge-card.planned {
   background: #dbe7d7 !important;
+}
+
+/* --- 苍林护眼: 25 门微观实验工作台 (Lab Layout / Control & Visual Panels) 柔和竹玉底色 --- */
+[data-theme="forest"] .experiment-page {
+  background: transparent !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .control-panel,
+[data-theme="forest"] .visual-panel {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  box-shadow: 0 6px 24px rgba(15, 45, 25, 0.06) !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .panel-title span,
+[data-theme="forest"] .visual-toolbar strong {
+  color: #091e11 !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .panel-title i,
+[data-theme="forest"] .source-chip {
+  background: #cbe0c6 !important;
+  color: #091e11 !important;
+  border: 1px solid #a3c49f !important;
+}
+
+[data-theme="forest"] .field-block > span,
+[data-theme="forest"] .process-editor > span,
+[data-theme="forest"] .range-field > span {
+  color: #091e11 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .field-block small,
+[data-theme="forest"] .range-field small,
+[data-theme="forest"] .process-editor > small,
+[data-theme="forest"] .control-help {
+  color: #1a3e26 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="forest"] .field-block textarea,
+[data-theme="forest"] .field-block select,
+[data-theme="forest"] .process-editor input {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="forest"] .range-field i {
+  background: #cbe0c6 !important;
+  color: #15803d !important;
+  border: 1px solid #a3c49f !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .range-field input,
+[data-theme="forest"] .step-slider {
+  accent-color: #15803d !important;
+}
+
+[data-theme="forest"] .nn-neuron-tabs {
+  background: #d5e5d1 !important;
+  border: 1px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .nn-neuron-tabs button {
+  background: transparent !important;
+  color: #1a3e26 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .nn-neuron-tabs button.active {
+  background: #15803d !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .live-explanation {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .live-explanation > span {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .live-explanation strong {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .live-explanation p {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .visual-toolbar div span {
+  color: #1a3e26 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="forest"] .text-button {
+  background: #d5e5d1 !important;
+  color: #15803d !important;
+  border: 1.5px solid #b6ceb4 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .nn-canvas,
+[data-theme="forest"] .graph-canvas,
+[data-theme="forest"] .tree-canvas,
+[data-theme="forest"] .gd-chart {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .nn-layer-label {
+  fill: #15803d !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .nn-formula-panel {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  border-left: 3.5px solid #15803d !important;
+}
+
+[data-theme="forest"] .nn-formula-panel span {
+  color: #15803d !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .nn-formula-panel code {
+  color: #091e11 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .nn-prediction {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .nn-prediction span {
+  color: #1a3e26 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .nn-prediction strong {
+  color: #15803d !important;
+}
+
+[data-theme="forest"] .nn-prediction p {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .nn-probability-track {
+  background: #d5e5d1 !important;
+}
+
+[data-theme="forest"] .nn-probability-track i {
+  background: #15803d !important;
+}
+
+[data-theme="forest"] .explore-heading > span {
+  color: #15803d !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .explore-heading h2 {
+  color: #091e11 !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="forest"] .explore-heading p {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .step-counter span {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .step-buttons button {
+  background: #d5e5d1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .tip-box,
+[data-theme="forest"] .explanation-box {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  border-left: 3.5px solid #15803d !important;
+}
+
+[data-theme="forest"] .tip-box strong,
+[data-theme="forest"] .explanation-box strong {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .tip-box p,
+[data-theme="forest"] .explanation-box p {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .distance-table div,
+[data-theme="forest"] .metric-grid div {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .distance-table span,
+[data-theme="forest"] .metric-grid span {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .distance-table strong,
+[data-theme="forest"] .metric-grid strong {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .segmented-control {
+  background: #d5e5d1 !important;
+}
+
+[data-theme="forest"] .segmented-control button {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .segmented-control button.active {
+  background: #15803d !important;
+  color: #ffffff !important;
 }
 
 [data-theme="forest"] .course-home .course-section-heading h2 {
