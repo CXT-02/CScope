@@ -1074,6 +1074,113 @@
   border: 1px solid rgba(0, 245, 212, 0.35) !important;
 }
 
+[data-theme="cyber"] .nexus-continuation-banner .banner-secondary-btn {
+  background: #141133 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  color: #00f5d4 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="cyber"] .nexus-continuation-banner .banner-secondary-btn:hover {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #ffffff !important;
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.4) !important;
+}
+
+/* 赛博模式：控制台穿透矩阵彻底消除白底并注入赛博霓虹 */
+[data-theme="cyber"] .domain-switch-tabs {
+  background: #110e2b !important;
+  border: 1px solid rgba(0, 245, 212, 0.22) !important;
+}
+
+[data-theme="cyber"] .domain-tab-btn {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .domain-tab-btn:hover {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .domain-tab-btn.active {
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.3), rgba(217, 70, 239, 0.25)) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.5) !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.35) !important;
+}
+
+[data-theme="cyber"] .domain-hero-card {
+  background: #0d0c24 !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .domain-clock-pill {
+  background: rgba(0, 245, 212, 0.12) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .pipeline-flow-box {
+  background: #131033 !important;
+  border: 1px solid rgba(0, 245, 212, 0.22) !important;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="cyber"] .flow-title {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .domain-quick-panel {
+  background: #131033 !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.55) !important;
+}
+
+[data-theme="cyber"] .panel-sub-title {
+  color: #00f5d4 !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.35) !important;
+}
+
+[data-theme="cyber"] .domain-exam-focus-list li {
+  color: #c7d2fe !important;
+}
+
+[data-theme="cyber"] .domain-exam-focus-list li strong {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .domain-enter-exam-btn {
+  background: linear-gradient(135deg, #00f5d4 0%, #06b6d4 100%) !important;
+  color: #080816 !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(0, 245, 212, 0.35) !important;
+}
+
+[data-theme="cyber"] .domain-enter-exam-btn:hover {
+  background: linear-gradient(135deg, #05d5b9 0%, #0891b2 100%) !important;
+  box-shadow: 0 6px 20px rgba(0, 245, 212, 0.5) !important;
+  transform: translateY(-1px);
+}
+
+[data-theme="cyber"] .wb-badge-pill {
+  background: #19163f !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .wb-badge-pill.gold {
+  background: rgba(245, 158, 11, 0.15) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #fbbf24 !important;
+}
+
+[data-theme="cyber"] .focus-dot {
+  background: #00f5d4 !important;
+  box-shadow: 0 0 6px #00f5d4 !important;
+}
+
 [data-theme="cyber"] .nexus-main-title,
 [data-theme="cyber"] .section-heading,
 [data-theme="cyber"] .domain-full-title,
