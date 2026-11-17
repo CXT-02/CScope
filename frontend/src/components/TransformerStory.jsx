@@ -168,7 +168,7 @@ export default function TransformerStory({ tokens = [], weights = [], text = '',
             <p>{stepDescription(step, safeTokens, safeFocus, strongest)}</p>
           </div>
           <aside>
-            <strong>💡 为什么需要它？</strong>
+            <strong>为什么需要它？</strong>
             <p>{STEPS[step].why}</p>
           </aside>
         </div>
@@ -199,7 +199,12 @@ export default function TransformerStory({ tokens = [], weights = [], text = '',
 
       {/* 底部控制台 */}
       <footer className="story-controls">
-        <button type="button" onClick={() => selectStep(Math.max(0, step - 1))} disabled={step === 0}>
+        <button
+          className="story-nav-btn"
+          type="button"
+          onClick={() => selectStep(Math.max(0, step - 1))}
+          disabled={step === 0}
+        >
           ← 上一步
         </button>
 
@@ -224,6 +229,7 @@ export default function TransformerStory({ tokens = [], weights = [], text = '',
         </button>
 
         <button
+          className="story-nav-btn"
           type="button"
           onClick={() => selectStep(Math.min(STEPS.length - 1, step + 1))}
           disabled={step === STEPS.length - 1}
@@ -305,20 +311,6 @@ function ArchitectureMap({ complete, subPhase }) {
             )
           })}
         </div>
-
-        {/* 覆盖在背景上的残差跳跃 SVG 管道 */}
-        <svg className="arch-svg-pipe" viewBox="0 0 760 90">
-          {/* 残差跳跃旁路（从第2步跳到第4步Add&Norm） */}
-          <path
-            d="M 230 45 Q 290 5, 395 45"
-            className="pipe-track"
-          />
-          <path
-            d="M 230 45 Q 290 5, 395 45"
-            className="pipe-stream-residual"
-          />
-          <text x="280" y="20" className="pipe-label">＋ 原始输入残差捷径 (Skip)</text>
-        </svg>
       </div>
 
       <div className="arch-status-banner">

@@ -233,27 +233,26 @@
 
 .story-copy aside {
   margin-top: 28px;
-  padding: 18px 20px;
-  border: 1px solid rgba(255, 179, 64, 0.25);
+  padding: 20px 22px;
+  border: 1px solid rgba(255, 179, 64, 0.22);
   border-left: 4px solid #ffb340;
-  border-radius: 12px;
-  background: rgba(255, 179, 64, 0.06);
+  border-radius: 14px;
+  background: rgba(255, 179, 64, 0.055);
 }
 
 .story-copy aside strong {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #ffc978;
-  font-size: 14px;
-  font-weight: 800;
+  display: block;
+  font-size: 17px;
+  font-weight: 900;
+  color: #ffca7b;
+  letter-spacing: 0.02em;
 }
 
 .story-copy aside p {
-  margin: 8px 0 0;
-  color: #ccd7e8;
-  font-size: 14px;
-  line-height: 1.7;
+  margin-top: 9px;
+  font-size: 16px;
+  line-height: 1.85;
+  color: #dbe4f2;
 }
 
 /* 右侧视效展示区 */
@@ -301,8 +300,7 @@
 
 /* 底部操作与播放控制条 */
 .story-controls {
-  display: grid;
-  grid-template-columns: auto auto auto 1fr auto;
+  display: flex;
   align-items: center;
   gap: 12px;
   padding: 16px 32px;
@@ -313,16 +311,25 @@
 .story-controls button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  height: 40px;
   border: 1px solid #33435b;
   border-radius: 10px;
-  padding: 10px 18px;
+  padding: 0 18px;
   color: #c2cde0;
   background: #141c2c;
   cursor: pointer;
   font-size: 14px;
   font-weight: 700;
   transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* 上一步与下一步按钮严格对齐、相同大小 */
+.story-controls .story-nav-btn {
+  min-width: 96px;
+  text-align: center;
 }
 
 .story-controls button:hover:not(:disabled) {
@@ -361,7 +368,7 @@
 }
 
 .story-controls label {
-  justify-self: end;
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -386,7 +393,7 @@
 /* ---------------- 步骤 01 & 08: 全局总图与数据流管道 ---------------- */
 .architecture-container {
   width: 100%;
-  max-width: 760px;
+  max-width: 820px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -406,26 +413,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   z-index: 2;
+  flex-wrap: nowrap;
 }
 
 .architecture-block {
-  min-width: 92px;
-  min-height: 104px;
+  flex: 1 1 0;
+  min-width: 76px;
+  max-width: 96px;
+  min-height: 98px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: 1.5px solid #2d3b50;
-  border-radius: 14px;
+  border-radius: 13px;
   background: #131c2a;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
   position: relative;
   transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-  padding: 8px;
+  padding: 8px 4px;
 }
 
 .architecture-block span {
@@ -435,7 +445,7 @@
 }
 
 .architecture-block strong {
-  max-width: 78px;
+  max-width: 82px;
   text-align: center;
   font-size: 13px;
   line-height: 1.35;
@@ -476,49 +486,6 @@
   color: #ff6845;
   text-shadow: 0 0 10px #ff6845;
   animation: flow-pulse 1s infinite;
-}
-
-/* SVG 流光管道 */
-.arch-svg-pipe {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 90px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.pipe-track {
-  stroke: #202b3d;
-  stroke-width: 3;
-  fill: none;
-}
-
-.pipe-stream {
-  stroke: #ff6845;
-  stroke-width: 3.5;
-  stroke-dasharray: 12 18;
-  fill: none;
-  filter: drop-shadow(0 0 8px #ff6845);
-  animation: svg-dash-flow 1.2s linear infinite;
-}
-
-.pipe-stream-residual {
-  stroke: #ffb340;
-  stroke-width: 2.5;
-  stroke-dasharray: 8 12;
-  fill: none;
-  filter: drop-shadow(0 0 6px #ffb340);
-  animation: svg-dash-flow 1.5s linear infinite;
-}
-
-.pipe-label {
-  fill: #ffb340;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
 }
 
 .arch-status-banner {
