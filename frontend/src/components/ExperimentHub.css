@@ -322,6 +322,8 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 18px 24px;
+  border-radius: 18px;
 }
 
 .course-home .personal-entry-heading {
@@ -329,41 +331,47 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .course-home .personal-entry-heading .eyebrow {
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   color: #ff9d82;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
 }
 
 .course-home .personal-entry-heading h2 {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 19px;
+  font-weight: 800;
   color: #ffffff;
   margin: 0;
   display: inline-block;
+  vertical-align: middle;
 }
 
 .course-home .personal-entry.signed p {
-  color: #8e9fb7;
-  font-size: 13px;
-  margin: 0 0 0 12px;
+  color: #94a3b8;
+  font-size: 14px;
+  margin: 0 0 0 14px;
   display: inline-block;
+  vertical-align: middle;
 }
 
 .course-home .personal-entry.signed p strong {
   color: #ffb340;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 15px;
 }
 
 .course-home .personal-entry-heading > button {
-  padding: 6px 14px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 9px;
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: #e2eaf5;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
@@ -373,66 +381,71 @@
 .course-home .personal-entry-heading > button:hover {
   background: rgba(255, 255, 255, 0.18);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 /* 推荐实验卡片微型横条 */
 .course-home .home-recommendations {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 14px;
 }
 
 .course-home .home-recommendations > button {
   display: grid;
-  grid-template-columns: 24px 30px 1fr auto;
-  gap: 8px;
+  grid-template-columns: 28px 36px 1fr auto;
+  gap: 12px;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 8px 12px;
+  border-radius: 12px;
+  padding: 12px 16px;
   background: rgba(255, 255, 255, 0.03);
   text-align: left;
   cursor: pointer;
   transition: all 0.25s ease;
+  min-height: 64px;
 }
 
 .course-home .home-recommendations > button:hover {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(255, 255, 255, 0.18);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .course-home .home-recommendations > button > span {
   color: #72849d;
-  font: 11.5px monospace;
-  font-weight: 700;
-}
-
-.course-home .home-recommendations > button > i {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 7px;
-  color: white;
-  background: var(--recommend-accent);
-  font-size: 11px;
-  font-style: normal;
+  font: 13px monospace;
   font-weight: 800;
 }
 
+.course-home .home-recommendations > button > i {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: white;
+  background: var(--recommend-accent);
+  font-size: 12.5px;
+  font-style: normal;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
 .course-home .home-recommendations strong {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 15.5px;
+  font-weight: 800;
   color: #ffffff;
+  line-height: 1.4;
+  display: block;
 }
 
 .course-home .home-recommendations small {
-  margin-top: 2px;
-  color: #8c9cb3;
-  font-size: 11.5px;
+  margin-top: 3px;
+  color: #94a3b8;
+  font-size: 12.5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -441,8 +454,9 @@
 
 .course-home .home-recommendations > button > b {
   color: #ff8a69;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 /* ---------------- 4. 跃升至首屏的「全部课程知识地图」 ---------------- */

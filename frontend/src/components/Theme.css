@@ -1352,6 +1352,46 @@
   color: #0f2818 !important;
 }
 
+[data-theme="forest"] .course-home .personal-entry-heading > button {
+  background: #f4f8f2 !important;
+  border: 1px solid #c8d8c6 !important;
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry-heading > button:hover {
+  background: #e5efe3 !important;
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations > button {
+  background: #fbfdfa !important;
+  border: 1.5px solid #d4e2d3 !important;
+  box-shadow: 0 2px 8px rgba(15, 45, 25, 0.04) !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations > button:hover {
+  background: #ffffff !important;
+  border-color: #15803d !important;
+  box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12) !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations strong {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations small {
+  color: #3b5744 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations > button > span {
+  color: #557560 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations > button > b {
+  color: #15803d !important;
+}
+
 [data-theme="forest"] .course-home .course-section-heading h2 {
   color: #0f2818 !important;
 }
@@ -1559,10 +1599,68 @@
 
 [data-theme="light"] .course-home .personal-entry.signed {
   background: #ffffff !important;
-  border-color: #dce2e8 !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04) !important;
 }
 
-[data-theme="light"] .course-home .personal-entry-heading h2,
+[data-theme="light"] .course-home .personal-entry-heading .eyebrow {
+  color: #ea580c !important;
+}
+
+[data-theme="light"] .course-home .personal-entry-heading h2 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .course-home .personal-entry.signed p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .course-home .personal-entry.signed p strong {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .course-home .personal-entry-heading > button {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #1e293b !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .course-home .personal-entry-heading > button:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+[data-theme="light"] .course-home .home-recommendations > button {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .course-home .home-recommendations > button:hover {
+  background: #ffffff !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.12) !important;
+}
+
+/* 核心修复：白天模式下高反差墨黑标题，绝不隐形！ */
+[data-theme="light"] .course-home .home-recommendations strong {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .course-home .home-recommendations small {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .course-home .home-recommendations > button > span {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .course-home .home-recommendations > button > b {
+  color: #ea580c !important;
+}
+
 [data-theme="light"] .course-home .course-section-heading h2 {
   color: #182238 !important;
 }
