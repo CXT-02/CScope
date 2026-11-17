@@ -61,7 +61,8 @@ def package_project():
                 ext = os.path.splitext(file)[1].lower()
                 if ext in IGNORE_EXTENSIONS:
                     continue
-                if file.startswith('.') and file != '.gitignore':
+                # 保留可公开的环境变量模板，继续排除真实的隐藏配置与密钥文件。
+                if file.startswith('.') and file not in {'.gitignore', '.env.example'}:
                     continue
 
                 full_path = os.path.join(current_root, file)
