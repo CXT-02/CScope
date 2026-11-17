@@ -225,7 +225,8 @@ TCP 是全双工双向传输协议，两端都必须发送自己的随机初始�
               {msg.thought && (
                 <div className="tutor-thought-block">
                   <div className="thought-title">
-                    <span>🧠 AI 深度思维推理链：</span>
+                    <span className="thought-tag">DEEPSEEK REASONING</span>
+                    <span>深度思维推理链：</span>
                   </div>
                   <p>{msg.thought}</p>
                 </div>
@@ -247,7 +248,7 @@ TCP 是全双工双向传输协议，两端都必须发送自己的随机初始�
               {/* 联动仿真实验直达卡片 */}
               {msg.labJump && (
                 <div className="msg-lab-jump-card">
-                  <span className="jump-icon">🧪</span>
+                  <span className="jump-lab-badge">微观仿真</span>
                   <div className="jump-info">
                     <strong>微观实验推演推荐：</strong>
                     <span>{msg.labJump.name}</span>

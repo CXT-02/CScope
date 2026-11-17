@@ -107,18 +107,18 @@ export default function CommunityHub({ onOpenExperiment }) {
           className="publish-post-btn"
           onClick={() => setShowNewPostModal(true)}
         >
-          <span>✍️ 发起研讨 / 提问</span>
+          <span>+ 发起学术研讨</span>
         </button>
       </header>
 
       {/* 选项卡 */}
       <div className="community-tab-bar">
         {[
-          { key: 'all', label: '🔥 综合热门' },
-          { key: 'arch', label: '💻 计组微架构' },
-          { key: 'os', label: '⚙️ 操作系统内核' },
-          { key: 'net', label: '🌐 计算机网络' },
-          { key: 'ds', label: '🌲 算法与数据结构' }
+          { key: 'all', label: '综合热门' },
+          { key: 'arch', label: '计组微架构' },
+          { key: 'os', label: '操作系统内核' },
+          { key: 'net', label: '计算机网络' },
+          { key: 'ds', label: '算法与数据结构' }
         ].map(tab => (
           <button
             key={tab.key}
@@ -152,7 +152,7 @@ export default function CommunityHub({ onOpenExperiment }) {
             {/* 实验直达小插槽 */}
             {post.labId && (
               <div className="post-lab-badge" onClick={() => onOpenExperiment(post.labId)}>
-                <span className="lab-badge-icon">🧪</span>
+                <span className="lab-badge-icon">联动实验</span>
                 <span>相关微观实验：<strong>{post.labName}</strong></span>
                 <span className="lab-badge-arrow">点击去推演 →</span>
               </div>
@@ -164,16 +164,15 @@ export default function CommunityHub({ onOpenExperiment }) {
                 className={`post-action-btn like ${post.isLiked ? 'active' : ''}`}
                 onClick={() => handleLike(post.id)}
               >
-                <span>👍</span>
-                <span>{post.likes} 赞同</span>
+                <span className="action-label">赞同</span>
+                <strong>{post.likes}</strong>
               </button>
               <button type="button" className="post-action-btn comment">
-                <span>💬</span>
-                <span>{post.comments} 讨论</span>
+                <span className="action-label">讨论</span>
+                <strong>{post.comments}</strong>
               </button>
               <button type="button" className="post-action-btn share">
-                <span>↗</span>
-                <span>分享</span>
+                <span className="action-label">分享</span>
               </button>
             </div>
           </article>

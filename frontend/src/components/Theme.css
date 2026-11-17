@@ -1276,6 +1276,518 @@
   color: #94a3b8 !important;
 }
 
+
+/* --- 深空暗夜: 1. AI 伴学私教导师 (AiTutorAgent) 彻底消灭大白块 --- */
+[data-theme="dark"] .ai-tutor-header h1 {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .tutor-desc {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .preset-prompt-btn {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+  color: #f8fafc !important;
+  padding: 12px 16px !important;
+}
+[data-theme="dark"] .preset-prompt-btn:hover {
+  background: #142037 !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.25) !important;
+  transform: translateY(-2px);
+}
+[data-theme="dark"] .preset-prompt-btn strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  line-height: 1.45 !important;
+}
+[data-theme="dark"] .preset-prompt-btn .cat-tag {
+  color: #34d399 !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+}
+[data-theme="dark"] .preset-prompt-btn .arrow-icon {
+  color: #64748b !important;
+}
+[data-theme="dark"] .tutor-chat-stream {
+  background: #0a0f1d !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+}
+[data-theme="dark"] .msg-sender-name {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .msg-time {
+  color: #64748b !important;
+}
+[data-theme="dark"] .msg-markdown-body {
+  color: #e2e8f0 !important;
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+}
+[data-theme="dark"] .msg-markdown-body h3 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .msg-markdown-body h4 {
+  color: #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+[data-theme="dark"] .tutor-thought-block {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .tutor-thought-block .thought-title {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .thought-tag {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+[data-theme="dark"] .msg-lab-jump-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+[data-theme="dark"] .jump-lab-badge {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .jump-info strong {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .jump-info span {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .tutor-bottom-input-dock {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .input-inner-wrap textarea {
+  color: #ffffff !important;
+  background: transparent !important;
+  font-size: 14.5px !important;
+}
+[data-theme="dark"] .tutor-input-footer-note {
+  color: #64748b !important;
+}
+
+/* --- 深空暗夜: 2. 个性化研学画像与突破路径 (LearningDashboard) --- */
+[data-theme="dark"] .profile-page {
+  background: #090d16 !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .profile-top-switcher-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .switcher-tab-btn {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .switcher-tab-btn.active {
+  background: #142037 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.25) !important;
+}
+[data-theme="dark"] .switcher-tab-btn span {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .switcher-tab-btn small {
+  color: #64748b !important;
+}
+[data-theme="dark"] .switcher-tab-btn.active small {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .profile-hero {
+  background: radial-gradient(circle at 80% 15%, rgba(16, 185, 129, 0.15), transparent 25rem), #0d1527 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .profile-welcome h1 {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .profile-welcome p {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .profile-summary > div {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .profile-summary span {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .profile-summary strong {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .profile-summary small {
+  color: #64748b !important;
+}
+[data-theme="dark"] .profile-section-heading h2 {
+  color: #ffffff !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+}
+[data-theme="dark"] .profile-section-heading .eyebrow {
+  color: #10b981 !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .profile-section-heading > p {
+  color: #94a3b8 !important;
+  font-size: 13.5px !important;
+}
+[data-theme="dark"] .recommendation-grid > button {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .recommendation-grid > button:hover {
+  border-color: #10b981 !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5) !important;
+}
+[data-theme="dark"] .recommendation-grid > button > span {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .recommendation-grid strong {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .recommendation-grid p {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+}
+[data-theme="dark"] .recommendation-grid b {
+  color: #34d399 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .course-progress-panel,
+[data-theme="dark"] .recent-panel {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .course-progress-row > div strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+}
+[data-theme="dark"] .course-progress-row > div small {
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+}
+[data-theme="dark"] .course-progress-row > div > i {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .course-progress-row > em {
+  color: #34d399 !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .recent-panel > button {
+  background: #0f182c !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .recent-panel > button:hover {
+  background: #142037 !important;
+}
+[data-theme="dark"] .recent-panel > button span strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+}
+[data-theme="dark"] .recent-panel > button span small {
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+}
+[data-theme="dark"] .recent-panel > button > b {
+  color: #34d399 !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .recent-empty {
+  color: #64748b !important;
+}
+
+/* --- 深空暗夜: 3. 极客学术社区广场 (CommunityHub) --- */
+[data-theme="dark"] .community-hub-page {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .community-header h1 {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .comm-desc {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .comm-badge {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+[data-theme="dark"] .publish-post-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+[data-theme="dark"] .publish-post-btn:hover {
+  background: #047857 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+}
+[data-theme="dark"] .community-tab-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .comm-tab-btn {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .comm-tab-btn.active {
+  background: #142037 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .post-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .author-meta strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+}
+[data-theme="dark"] .author-meta span {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .post-tag-badge {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+}
+[data-theme="dark"] .post-title {
+  color: #ffffff !important;
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .post-body {
+  color: #cbd5e1 !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+[data-theme="dark"] .post-lab-badge {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px dashed rgba(16, 185, 129, 0.35) !important;
+  color: #34d399 !important;
+  font-size: 13px !important;
+}
+[data-theme="dark"] .post-lab-badge strong {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .lab-badge-icon {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+[data-theme="dark"] .post-action-btn {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+  font-size: 12.5px !important;
+}
+[data-theme="dark"] .post-action-btn:hover {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+[data-theme="dark"] .post-action-btn.active {
+  color: #34d399 !important;
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+}
+[data-theme="dark"] .comm-modal-dialog {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .comm-form input,
+[data-theme="dark"] .comm-form select,
+[data-theme="dark"] .comm-form textarea {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+/* --- 深空暗夜: 4. 个人中心与安全管理 (UserProfileManager) 彻底消除白色输入框 --- */
+[data-theme="dark"] .top-breadcrumb .current {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .top-breadcrumb .sep {
+  color: #64748b !important;
+}
+[data-theme="dark"] .model-badge {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .card-header-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .card-eyebrow {
+  color: #10b981 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .card-main-title,
+[data-theme="dark"] .card-sub-title {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+[data-theme="dark"] .form-field-item label {
+  color: #e2e8f0 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .counter-tag {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .sub-field-note {
+  color: #64748b !important;
+}
+[data-theme="dark"] .form-field-item input,
+[data-theme="dark"] .form-field-item textarea,
+[data-theme="dark"] .form-field-item select {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+}
+[data-theme="dark"] .form-field-item input:focus,
+[data-theme="dark"] .form-field-item textarea:focus,
+[data-theme="dark"] .form-field-item select:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+}
+[data-theme="dark"] .readonly-field {
+  background: #0d1527 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: #64748b !important;
+}
+[data-theme="dark"] .readonly-preview-field {
+  background: #0d1527 !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+}
+[data-theme="dark"] .change-avatar-btn {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .change-avatar-btn:hover {
+  background: #1e2d4d !important;
+}
+[data-theme="dark"] .avatar-preset-drawer {
+  background: #0d1527 !important;
+  border: 1px dashed rgba(255, 255, 255, 0.15) !important;
+}
+[data-theme="dark"] .drawer-title {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .sec-icon-badge {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  font-size: 11px !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .sec-subtext {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .save-security-btn,
+[data-theme="dark"] .update-pwd-btn {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .save-security-btn:hover,
+[data-theme="dark"] .update-pwd-btn:hover {
+  background: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .security-note {
+  color: #64748b !important;
+}
+[data-theme="dark"] .service-panel-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .service-title-group h3 {
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
+[data-theme="dark"] .service-title-group p {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+}
+[data-theme="dark"] .pref-box {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .pref-label {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] .pref-desc {
+  color: #94a3b8 !important;
+  font-size: 12.5px !important;
+}
+[data-theme="dark"] .pref-chip-btn {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
+  font-size: 13.5px !important;
+  padding: 7px 15px !important;
+}
+[data-theme="dark"] .pref-chip-btn:hover {
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .pref-chip-btn.active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(5, 150, 105, 0.3) !important;
+}
+[data-theme="dark"] .pref-select {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  padding: 8px 12px !important;
+}
+
 /* --- 深空暗夜: 408 测评中心 (ExamArena) 全面消除白底 --- */
 [data-theme="dark"] .arena-panel,
 [data-theme="dark"] .arena-config-card,
@@ -2485,6 +2997,544 @@
 [data-theme="cyber"] .knowledge-card.planned {
   background: #0c0a20 !important;
   opacity: 0.6 !important;
+}
+
+
+/* --- 极客赛博: 1. AI 伴学私教导师 (AiTutorAgent) 统一夜晶深紫霓虹风格 --- */
+[data-theme="cyber"] .ai-tutor-header h1 {
+  color: #ffffff !important;
+  text-shadow: 0 0 12px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .tutor-desc {
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .preset-prompt-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+  padding: 12px 16px !important;
+}
+[data-theme="cyber"] .preset-prompt-btn:hover {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+  box-shadow: 0 4px 20px rgba(0, 245, 212, 0.35) !important;
+  transform: translateY(-2px);
+}
+[data-theme="cyber"] .preset-prompt-btn strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  line-height: 1.45 !important;
+}
+[data-theme="cyber"] .preset-prompt-btn .cat-tag {
+  color: #00f5d4 !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+  text-shadow: 0 0 6px rgba(0, 245, 212, 0.5) !important;
+}
+[data-theme="cyber"] .preset-prompt-btn .arrow-icon {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .tutor-chat-stream {
+  background: #12082b !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.6) !important;
+}
+[data-theme="cyber"] .msg-sender-name {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .msg-time {
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .msg-markdown-body {
+  color: #f1f5f9 !important;
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+}
+[data-theme="cyber"] .msg-markdown-body h3 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .msg-markdown-body h4 {
+  color: #c4b5fd !important;
+  font-weight: 700 !important;
+}
+[data-theme="cyber"] .tutor-thought-block {
+  background: rgba(0, 245, 212, 0.05) !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .tutor-thought-block .thought-title {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .thought-tag {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .msg-lab-jump-card {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.1) !important;
+}
+[data-theme="cyber"] .jump-lab-badge {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.4) !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .jump-info strong {
+  color: #f1f5f9 !important;
+}
+[data-theme="cyber"] .jump-info span {
+  color: #00f5d4 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .jump-action-btn {
+  background: linear-gradient(135deg, #ff007f, #d946ef) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.35) !important;
+}
+[data-theme="cyber"] .tutor-bottom-input-dock {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 245, 212, 0.1) !important;
+}
+[data-theme="cyber"] .input-inner-wrap textarea {
+  color: #ffffff !important;
+  background: transparent !important;
+  font-size: 14.5px !important;
+}
+[data-theme="cyber"] .tutor-input-footer-note {
+  color: #818cf8 !important;
+}
+
+/* --- 极客赛博: 2. 个性化研学画像与突破路径 (LearningDashboard) --- */
+[data-theme="cyber"] .profile-page {
+  background: #0b051b !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .profile-top-switcher-bar {
+  border-bottom: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .switcher-tab-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .switcher-tab-btn.active {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .switcher-tab-btn span {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .switcher-tab-btn small {
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .switcher-tab-btn.active small {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .profile-hero {
+  background: radial-gradient(circle at 80% 15%, rgba(0, 245, 212, 0.15), transparent 25rem), #150b36 !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .profile-welcome h1 {
+  color: #ffffff !important;
+  text-shadow: 0 0 14px rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .profile-welcome p {
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .profile-summary > div {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .profile-summary span {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .profile-summary strong {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .profile-summary small {
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .profile-section-heading h2 {
+  color: #ffffff !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 12px rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .profile-section-heading .eyebrow {
+  color: #00f5d4 !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.5) !important;
+}
+[data-theme="cyber"] .profile-section-heading > p {
+  color: #c4b5fd !important;
+  font-size: 13.5px !important;
+}
+[data-theme="cyber"] .recommendation-grid > button {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .recommendation-grid > button:hover {
+  border-color: #00f5d4 !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 245, 212, 0.25) !important;
+}
+[data-theme="cyber"] .recommendation-grid > button > span {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .recommendation-grid strong {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .recommendation-grid p {
+  color: #c4b5fd !important;
+  font-size: 13px !important;
+}
+[data-theme="cyber"] .recommendation-grid b {
+  color: #00f5d4 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 6px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .course-progress-panel,
+[data-theme="cyber"] .recent-panel {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .course-progress-row > div strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+}
+[data-theme="cyber"] .course-progress-row > div small {
+  color: #a5b4fc !important;
+  font-size: 12px !important;
+}
+[data-theme="cyber"] .course-progress-row > div > i {
+  background: rgba(0, 245, 212, 0.15) !important;
+}
+[data-theme="cyber"] .course-progress-row > em {
+  color: #00f5d4 !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .recent-panel > button {
+  background: #180e3d !important;
+  border-top: 1px solid rgba(0, 245, 212, 0.15) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .recent-panel > button:hover {
+  background: #25155c !important;
+}
+[data-theme="cyber"] .recent-panel > button span strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+}
+[data-theme="cyber"] .recent-panel > button span small {
+  color: #a5b4fc !important;
+  font-size: 12px !important;
+}
+[data-theme="cyber"] .recent-panel > button > b {
+  color: #00f5d4 !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .recent-empty {
+  color: #818cf8 !important;
+}
+
+/* --- 极客赛博: 3. 极客学术社区广场 (CommunityHub) --- */
+[data-theme="cyber"] .community-hub-page {
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .community-header h1 {
+  color: #ffffff !important;
+  text-shadow: 0 0 12px rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .comm-desc {
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .comm-badge {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .publish-post-btn {
+  background: linear-gradient(135deg, #ff007f, #d946ef) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 14px rgba(255, 0, 127, 0.4) !important;
+}
+[data-theme="cyber"] .community-tab-bar {
+  border-bottom: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .comm-tab-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .comm-tab-btn.active {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .post-card {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .author-meta strong {
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+}
+[data-theme="cyber"] .author-meta span {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .post-tag-badge {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .post-title {
+  color: #ffffff !important;
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .post-body {
+  color: #e2e8f0 !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+[data-theme="cyber"] .post-lab-badge {
+  background: rgba(0, 245, 212, 0.08) !important;
+  border: 1px dashed rgba(0, 245, 212, 0.35) !important;
+  color: #00f5d4 !important;
+  font-size: 13px !important;
+}
+[data-theme="cyber"] .post-lab-badge strong {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .lab-badge-icon {
+  background: rgba(0, 245, 212, 0.2);
+  color: #00f5d4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+[data-theme="cyber"] .post-action-btn {
+  background: #25155c !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #c4b5fd !important;
+  font-size: 12.5px !important;
+}
+[data-theme="cyber"] .post-action-btn:hover {
+  color: #00f5d4 !important;
+  border-color: #00f5d4 !important;
+}
+[data-theme="cyber"] .post-action-btn.active {
+  color: #ffffff !important;
+  border-color: #ff007f !important;
+  background: rgba(255, 0, 127, 0.25) !important;
+}
+[data-theme="cyber"] .comm-modal-dialog {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .comm-form input,
+[data-theme="cyber"] .comm-form select,
+[data-theme="cyber"] .comm-form textarea {
+  background: #25155c !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* --- 极客赛博: 4. 个人中心与安全管理 (UserProfileManager) 彻底消除白色输入框 --- */
+[data-theme="cyber"] .top-breadcrumb .current {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .top-breadcrumb .sep {
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .model-badge {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .card-header-bar {
+  border-bottom: 1px solid rgba(0, 245, 212, 0.18) !important;
+}
+[data-theme="cyber"] .card-eyebrow {
+  color: #00f5d4 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 6px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .card-main-title,
+[data-theme="cyber"] .card-sub-title {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+[data-theme="cyber"] .form-field-item label {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .counter-tag {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .sub-field-note {
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .form-field-item input,
+[data-theme="cyber"] .form-field-item textarea,
+[data-theme="cyber"] .form-field-item select {
+  background: #1e114a !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+}
+[data-theme="cyber"] .form-field-item input:focus,
+[data-theme="cyber"] .form-field-item textarea:focus,
+[data-theme="cyber"] .form-field-item select:focus {
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.25) !important;
+}
+[data-theme="cyber"] .readonly-field {
+  background: #130a33 !important;
+  border-color: rgba(0, 245, 212, 0.15) !important;
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .readonly-preview-field {
+  background: #130a33 !important;
+  border-color: rgba(0, 245, 212, 0.3) !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .change-avatar-btn {
+  background: #1e114a !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .change-avatar-btn:hover {
+  background: #2d1a6c !important;
+}
+[data-theme="cyber"] .avatar-preset-drawer {
+  background: #130a33 !important;
+  border: 1px dashed rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .drawer-title {
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .sec-icon-badge {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  font-size: 11px !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .sec-subtext {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .save-security-btn,
+[data-theme="cyber"] .update-pwd-btn {
+  background: #1e114a !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .save-security-btn:hover,
+[data-theme="cyber"] .update-pwd-btn:hover {
+  background: #00f5d4 !important;
+  border-color: #00f5d4 !important;
+  color: #090317 !important;
+}
+[data-theme="cyber"] .security-note {
+  color: #818cf8 !important;
+}
+[data-theme="cyber"] .service-panel-header {
+  border-bottom: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .service-title-group h3 {
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .service-title-group p {
+  color: #c4b5fd !important;
+  font-size: 13px !important;
+}
+[data-theme="cyber"] .save-pref-btn {
+  background: linear-gradient(135deg, #ff007f, #d946ef) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.4) !important;
+}
+[data-theme="cyber"] .pref-box {
+  background: #1e114a !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .pref-label {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .pref-desc {
+  color: #a5b4fc !important;
+  font-size: 12.5px !important;
+}
+[data-theme="cyber"] .pref-chip-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #c4b5fd !important;
+  font-size: 13.5px !important;
+  padding: 7px 15px !important;
+}
+[data-theme="cyber"] .pref-chip-btn:hover {
+  border-color: #00f5d4 !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .pref-chip-btn.active {
+  background: #ff007f !important;
+  color: #ffffff !important;
+  border-color: #ff007f !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.4) !important;
+}
+[data-theme="cyber"] .pref-select {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  padding: 8px 12px !important;
 }
 
 /* --- 极客赛博: 25 门微观实验工作台 (Lab Layout / Control & Visual Panels) 统一黑紫霓虹底色 --- */
@@ -3861,6 +4911,509 @@
    ===================== 4. ☀️ 学术晨曦 (data-theme="light") ===================
    ========================================================================== */
 
+
+/* --- 仓林护眼: 1. AI 伴学私教导师 (AiTutorAgent) 统一自然温润护眼绿 --- */
+[data-theme="forest"] .ai-tutor-header h1 {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .tutor-desc {
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .preset-prompt-btn {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  box-shadow: 0 2px 8px rgba(15, 45, 25, 0.05) !important;
+  color: #091e11 !important;
+  padding: 12px 16px !important;
+}
+[data-theme="forest"] .preset-prompt-btn:hover {
+  background: #d8e6d5 !important;
+  border-color: #15803d !important;
+  transform: translateY(-2px);
+}
+[data-theme="forest"] .preset-prompt-btn strong {
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+  line-height: 1.45 !important;
+}
+[data-theme="forest"] .preset-prompt-btn .cat-tag {
+  color: #166534 !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+}
+[data-theme="forest"] .preset-prompt-btn .arrow-icon {
+  color: #55695a !important;
+}
+[data-theme="forest"] .tutor-chat-stream {
+  background: #f4faf2 !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .msg-sender-name {
+  color: #091e11 !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .msg-time {
+  color: #64748b !important;
+}
+[data-theme="forest"] .msg-markdown-body {
+  color: #1e293b !important;
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+}
+[data-theme="forest"] .msg-markdown-body h3 {
+  color: #091e11 !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .msg-markdown-body h4 {
+  color: #15803d !important;
+  font-weight: 700 !important;
+}
+[data-theme="forest"] .tutor-thought-block {
+  background: #e4eee1 !important;
+  border: 1px solid #b6ceb4 !important;
+  color: #374151 !important;
+}
+[data-theme="forest"] .tutor-thought-block .thought-title {
+  color: #166534 !important;
+}
+[data-theme="forest"] .thought-tag {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+[data-theme="forest"] .msg-lab-jump-card {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .jump-lab-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .jump-info strong {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .jump-info span {
+  color: #15803d !important;
+}
+[data-theme="forest"] .jump-action-btn {
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+[data-theme="forest"] .tutor-bottom-input-dock {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .input-inner-wrap textarea {
+  color: #091e11 !important;
+  background: transparent !important;
+  font-size: 14.5px !important;
+}
+[data-theme="forest"] .tutor-input-footer-note {
+  color: #55695a !important;
+}
+
+/* --- 仓林护眼: 2. 个性化研学画像与突破路径 (LearningDashboard) --- */
+[data-theme="forest"] .profile-page {
+  background: #edf5eb !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .profile-top-switcher-bar {
+  border-bottom: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .switcher-tab-btn {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .switcher-tab-btn.active {
+  background: #d4e5d0 !important;
+  border-color: #15803d !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .switcher-tab-btn span {
+  color: #091e11 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .switcher-tab-btn small {
+  color: #55695a !important;
+}
+[data-theme="forest"] .profile-hero {
+  background: radial-gradient(circle at 80% 15%, rgba(22, 101, 52, 0.12), transparent 25rem), #d8e6d5 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .profile-welcome h1 {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .profile-welcome p {
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .profile-summary > div {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .profile-summary span {
+  color: #55695a !important;
+}
+[data-theme="forest"] .profile-summary strong {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .profile-summary small {
+  color: #64748b !important;
+}
+[data-theme="forest"] .profile-section-heading h2 {
+  color: #091e11 !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+}
+[data-theme="forest"] .profile-section-heading .eyebrow {
+  color: #166534 !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .profile-section-heading > p {
+  color: #4b6354 !important;
+  font-size: 13.5px !important;
+}
+[data-theme="forest"] .recommendation-grid > button {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .recommendation-grid > button:hover {
+  border-color: #15803d !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 24px rgba(15, 45, 25, 0.12) !important;
+}
+[data-theme="forest"] .recommendation-grid > button > span {
+  color: #55695a !important;
+}
+[data-theme="forest"] .recommendation-grid strong {
+  color: #091e11 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .recommendation-grid p {
+  color: #4b6354 !important;
+  font-size: 13px !important;
+}
+[data-theme="forest"] .recommendation-grid b {
+  color: #15803d !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .course-progress-panel,
+[data-theme="forest"] .recent-panel {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .course-progress-row > div strong {
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+}
+[data-theme="forest"] .course-progress-row > div small {
+  color: #55695a !important;
+  font-size: 12px !important;
+}
+[data-theme="forest"] .course-progress-row > div > i {
+  background: #c5d9c3 !important;
+}
+[data-theme="forest"] .course-progress-row > em {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .recent-panel > button {
+  background: #e4eee1 !important;
+  border-top: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .recent-panel > button:hover {
+  background: #d8e6d5 !important;
+}
+[data-theme="forest"] .recent-panel > button span strong {
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+}
+[data-theme="forest"] .recent-panel > button span small {
+  color: #55695a !important;
+  font-size: 12px !important;
+}
+[data-theme="forest"] .recent-panel > button > b {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .recent-empty {
+  color: #55695a !important;
+}
+
+/* --- 仓林护眼: 3. 极客学术社区广场 (CommunityHub) --- */
+[data-theme="forest"] .community-hub-page {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .community-header h1 {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .comm-desc {
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .comm-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+[data-theme="forest"] .publish-post-btn {
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+[data-theme="forest"] .community-tab-bar {
+  border-bottom: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .comm-tab-btn {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .comm-tab-btn.active {
+  background: #d4e5d0 !important;
+  border-color: #15803d !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .post-card {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  box-shadow: 0 4px 14px rgba(15, 45, 25, 0.06) !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .author-meta strong {
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+}
+[data-theme="forest"] .author-meta span {
+  color: #55695a !important;
+}
+[data-theme="forest"] .post-tag-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+[data-theme="forest"] .post-title {
+  color: #091e11 !important;
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .post-body {
+  color: #334155 !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+[data-theme="forest"] .post-lab-badge {
+  background: #d8e6d5 !important;
+  border: 1px dashed #9dc299 !important;
+  color: #166534 !important;
+  font-size: 13px !important;
+}
+[data-theme="forest"] .post-lab-badge strong {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .lab-badge-icon {
+  background: #cde0ca;
+  color: #166534;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+[data-theme="forest"] .post-action-btn {
+  background: #edf5eb !important;
+  border: 1px solid #b6ceb4 !important;
+  color: #4b6354 !important;
+  font-size: 12.5px !important;
+}
+[data-theme="forest"] .post-action-btn:hover {
+  color: #091e11 !important;
+  border-color: #15803d !important;
+}
+[data-theme="forest"] .post-action-btn.active {
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  background: #15803d !important;
+}
+[data-theme="forest"] .comm-modal-dialog {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .comm-form input,
+[data-theme="forest"] .comm-form select,
+[data-theme="forest"] .comm-form textarea {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+
+/* --- 仓林护眼: 4. 个人中心与安全管理 (UserProfileManager) 彻底消除白色输入框 --- */
+[data-theme="forest"] .top-breadcrumb .current {
+  color: #091e11 !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .top-breadcrumb .sep {
+  color: #8b9c8d !important;
+}
+[data-theme="forest"] .model-badge {
+  color: #166534 !important;
+}
+[data-theme="forest"] .card-header-bar {
+  border-bottom: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .card-eyebrow {
+  color: #166534 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .card-main-title,
+[data-theme="forest"] .card-sub-title {
+  color: #091e11 !important;
+  font-weight: 900 !important;
+}
+[data-theme="forest"] .form-field-item label {
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .counter-tag {
+  color: #55695a !important;
+}
+[data-theme="forest"] .sub-field-note {
+  color: #64748b !important;
+}
+[data-theme="forest"] .form-field-item input,
+[data-theme="forest"] .form-field-item textarea,
+[data-theme="forest"] .form-field-item select {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+}
+[data-theme="forest"] .form-field-item input:focus,
+[data-theme="forest"] .form-field-item textarea:focus,
+[data-theme="forest"] .form-field-item select:focus {
+  border-color: #166534 !important;
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.15) !important;
+}
+[data-theme="forest"] .readonly-field {
+  background: #dbe7d7 !important;
+  border-color: #b6ceb4 !important;
+  color: #55695a !important;
+}
+[data-theme="forest"] .readonly-preview-field {
+  background: #dbe7d7 !important;
+  border-color: #9dc299 !important;
+  color: #15803d !important;
+}
+[data-theme="forest"] .change-avatar-btn {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .avatar-preset-drawer {
+  background: #dbe7d7 !important;
+  border: 1px dashed #9dc299 !important;
+}
+[data-theme="forest"] .drawer-title {
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .sec-icon-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+  font-size: 11px !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .sec-subtext {
+  color: #55695a !important;
+}
+[data-theme="forest"] .save-security-btn,
+[data-theme="forest"] .update-pwd-btn {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .save-security-btn:hover,
+[data-theme="forest"] .update-pwd-btn:hover {
+  background: #15803d !important;
+  border-color: #15803d !important;
+  color: #ffffff !important;
+}
+[data-theme="forest"] .security-note {
+  color: #55695a !important;
+}
+[data-theme="forest"] .service-panel-header {
+  border-bottom: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .service-title-group h3 {
+  color: #091e11 !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
+[data-theme="forest"] .service-title-group p {
+  color: #4b6354 !important;
+  font-size: 13px !important;
+}
+[data-theme="forest"] .save-pref-btn {
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+[data-theme="forest"] .pref-box {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .pref-label {
+  color: #091e11 !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .pref-desc {
+  color: #4b6354 !important;
+  font-size: 12.5px !important;
+}
+[data-theme="forest"] .pref-chip-btn {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #1e3a24 !important;
+  font-size: 13.5px !important;
+  padding: 7px 15px !important;
+}
+[data-theme="forest"] .pref-chip-btn:hover {
+  border-color: #15803d !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .pref-chip-btn.active {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  font-weight: 800 !important;
+}
+[data-theme="forest"] .pref-select {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+  padding: 8px 12px !important;
+}
+
+
 [data-theme="light"] {
   --bg-page: #f4f6fa;
   --bg-card: #ffffff;
@@ -4266,4 +5819,175 @@
 
 [data-theme="light"] .audit-entry-detail {
   color: #475569 !important;
+}
+
+
+
+/* --- 极简白昼: 1. AI 伴学私教导师 (AiTutorAgent) --- */
+[data-theme="light"] .ai-tutor-header h1 {
+  color: #0f172a !important;
+}
+[data-theme="light"] .tutor-desc {
+  color: #64748b !important;
+}
+[data-theme="light"] .preset-prompt-btn {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  padding: 12px 16px !important;
+}
+[data-theme="light"] .preset-prompt-btn strong {
+  color: #0f172a !important;
+  font-size: 13.5px !important;
+}
+[data-theme="light"] .preset-prompt-btn .cat-tag {
+  color: #4f46e5 !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+}
+[data-theme="light"] .tutor-chat-stream {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .msg-markdown-body {
+  color: #1e293b !important;
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+}
+[data-theme="light"] .msg-markdown-body h3 {
+  color: #0f172a !important;
+}
+[data-theme="light"] .tutor-thought-block {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
+[data-theme="light"] .thought-tag {
+  background: #e0e7ff !important;
+  color: #4338ca !important;
+  border: 1px solid #c7d2fe !important;
+}
+[data-theme="light"] .tutor-bottom-input-dock {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+[data-theme="light"] .input-inner-wrap textarea {
+  color: #0f172a !important;
+  font-size: 14.5px !important;
+}
+
+/* --- 极简白昼: 2. 个性化研学画像与突破路径 (LearningDashboard) --- */
+[data-theme="light"] .profile-page {
+  background: #f7f8f4 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .profile-top-switcher-bar {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .switcher-tab-btn {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+}
+[data-theme="light"] .switcher-tab-btn.active {
+  background: #f8fafc !important;
+  border-color: #4f46e5 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .switcher-tab-btn span {
+  color: #0f172a !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .profile-section-heading h2 {
+  color: #0f172a !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+}
+[data-theme="light"] .profile-section-heading .eyebrow {
+  color: #4f46e5 !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .profile-section-heading > p {
+  color: #64748b !important;
+  font-size: 13.5px !important;
+}
+[data-theme="light"] .recommendation-grid > button {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .recommendation-grid strong {
+  color: #0f172a !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .course-progress-panel,
+[data-theme="light"] .recent-panel {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* --- 极简白昼: 3. 极客学术社区广场 (CommunityHub) --- */
+[data-theme="light"] .post-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .post-title {
+  color: #0f172a !important;
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .post-body {
+  color: #475569 !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+
+/* --- 极简白昼: 4. 个人中心与安全管理 (UserProfileManager) --- */
+[data-theme="light"] .profile-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .card-main-title,
+[data-theme="light"] .card-sub-title {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+[data-theme="light"] .form-field-item label {
+  color: #0f172a !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .form-field-item input,
+[data-theme="light"] .form-field-item textarea,
+[data-theme="light"] .form-field-item select {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  font-size: 14px !important;
+}
+[data-theme="light"] .pref-box {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .pref-label {
+  color: #0f172a !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .pref-chip-btn {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+  font-size: 13.5px !important;
+  padding: 7px 15px !important;
+}
+[data-theme="light"] .pref-chip-btn.active {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
 }

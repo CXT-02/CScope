@@ -322,7 +322,7 @@ export default function UserProfileManager() {
           <section className="profile-card profile-security-card">
             <div className="card-header-bar">
               <div className="security-title-wrap">
-                <span className="sec-icon">👤</span>
+                <span className="sec-icon-badge">SECURITY</span>
                 <div>
                   <h3 className="card-sub-title">安全问题</h3>
                   <span className="sec-subtext">用于忘记密码时验证身份</span>
@@ -372,7 +372,7 @@ export default function UserProfileManager() {
           <section className="profile-card profile-password-card">
             <div className="card-header-bar">
               <div className="security-title-wrap">
-                <span className="sec-icon">🔒</span>
+                <span className="sec-icon-badge">PASSWORD</span>
                 <div>
                   <h3 className="card-sub-title">修改密码</h3>
                   <span className="sec-subtext">修改后当前登录状态保持有效</span>
@@ -447,7 +447,7 @@ export default function UserProfileManager() {
         <div className="preferences-grid">
           {/* 偏好一：备考冲刺模式 */}
           <div className="pref-box">
-            <label className="pref-label">🎯 当前研学目标模式</label>
+            <label className="pref-label">当前研学目标模式</label>
             <div className="pref-options-row">
               {[
                 '408 统考 125+ 冲刺',
@@ -472,7 +472,7 @@ export default function UserProfileManager() {
 
           {/* 偏好二：每日研习目标时长 */}
           <div className="pref-box">
-            <label className="pref-label">⏱️ 每日定制研习目标</label>
+            <label className="pref-label">每日定制研习目标</label>
             <div className="pref-options-row">
               {[30, 45, 60, 90, 120].map((m) => (
                 <button
@@ -492,7 +492,7 @@ export default function UserProfileManager() {
 
           {/* 偏好三：AI 私教导学风格 */}
           <div className="pref-box">
-            <label className="pref-label">🤖 AI 伴学私教推理风格 (DeepSeek-R1)</label>
+            <label className="pref-label">AI 伴学私教推理风格 (DeepSeek-R1)</label>
             <select
               value={aiPreference}
               onChange={(e) => setAiPreference(e.target.value)}
@@ -516,7 +516,7 @@ export default function UserProfileManager() {
           {/* 偏好四：薄弱项自动置顶 */}
           <div className="pref-box toggle-box">
             <div>
-              <label className="pref-label">🔔 靶向薄弱项动态追踪</label>
+              <label className="pref-label">靶向薄弱项动态追踪</label>
               <span className="pref-desc">
                 根据 408 测评与错题本数据，自动在控制台与首页置顶错题对应的微观实验。
               </span>

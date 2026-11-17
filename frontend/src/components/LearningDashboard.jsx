@@ -30,7 +30,7 @@ export default function LearningDashboard({ experiments, courses, onOpen, onBack
             className={`switcher-tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
             onClick={() => setActiveTab('profile')}
           >
-            <span>👤 个人中心与安全管理</span>
+            <span>个人中心与安全管理</span>
             <small>资料编辑 · 身份预览 · 安全问题 · 偏好定制</small>
           </button>
           <button
@@ -38,7 +38,7 @@ export default function LearningDashboard({ experiments, courses, onOpen, onBack
             className={`switcher-tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
             onClick={() => setActiveTab('analytics')}
           >
-            <span>📊 学情数据与能力画像</span>
+            <span>学情数据与能力画像</span>
             <small>掌握度雷达 · 课程进度 · 连续研习</small>
           </button>
         </div>

@@ -135,7 +135,7 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 
 /* Local accounts and personalized learning */
 .login-trigger{border:1px solid #d9dce3!important;border-radius:10px;background:white!important;padding:9px 14px!important;color:#5147bd!important;font-weight:800;box-shadow:0 4px 14px rgba(38,46,70,.06)}.account-menu-wrap{position:relative}.profile-trigger{display:flex;align-items:center;gap:8px;border:0!important;border-radius:11px;background:#eceaff!important;padding:6px 10px 6px 6px!important;color:#302766!important}.profile-trigger>span{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;color:white;background:linear-gradient(135deg,#6558e8,#8b78ef);font-weight:900}.profile-trigger strong{font-size:13px}.profile-trigger i{color:#766ca6;font-style:normal}.account-menu{position:absolute;right:0;top:48px;width:245px;padding:8px;border:1px solid #e0e2e8;border-radius:13px;background:white;box-shadow:0 18px 50px rgba(30,38,60,.18);z-index:50}.account-menu>button{width:100%;display:flex;gap:10px;align-items:center;border:0;border-radius:9px;padding:11px;background:white;text-align:left;cursor:pointer}.account-menu>button:hover{background:#f5f4ff}.account-menu>button>span{width:29px;height:29px;display:grid;place-items:center;border-radius:8px;color:#6558e8;background:#eceaff}.account-menu strong,.account-menu small{display:block}.account-menu strong{font-size:13px}.account-menu small{margin-top:3px;color:#838a99;font-size:11px}.account-overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(16,22,36,.65);backdrop-filter:blur(8px)}.account-dialog{position:relative;width:min(460px,100%);padding:34px;border-radius:22px;background:white;box-shadow:0 30px 90px rgba(0,0,0,.3)}.account-close{position:absolute;right:18px;top:16px;border:0;background:none;color:#7f8796;font-size:25px;cursor:pointer}.account-mark{width:48px;height:48px;margin-bottom:20px;display:grid;place-items:center;border-radius:14px;color:white;background:#202a44;box-shadow:6px 6px 0 #ded9ff;font:700 22px Georgia,serif}.account-dialog h2{margin:9px 0 7px;font:700 28px Georgia,"Songti SC",serif}.account-dialog>p{margin:0;color:#70798b;font-size:13px;line-height:1.7}.account-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:22px 0 18px;padding:4px;border-radius:10px;background:#f0f1ee}.account-tabs button{border:0;border-radius:7px;padding:9px;background:transparent;color:#747d8c;font-size:13px;cursor:pointer}.account-tabs button.active{color:#5146c0;background:white;box-shadow:0 2px 8px rgba(0,0,0,.08);font-weight:800}.account-dialog form label{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}.account-dialog form label span{color:#5f697a;font-size:12px;font-weight:800}.account-dialog input{width:100%;border:1px solid #dadddf;border-radius:9px;padding:11px;background:#fbfcfa}.account-error{margin-bottom:12px;padding:9px;border-radius:7px;color:#a83e2c;background:#fff0ec;font-size:12px}.account-submit{width:100%;border:0;border-radius:10px;padding:12px;color:white;background:linear-gradient(135deg,#6558e8,#5144c8);font-size:13px;font-weight:800;cursor:pointer}.account-submit:disabled{opacity:.5}.account-privacy{display:block;margin-top:14px;color:#9299a5;font-size:11px;line-height:1.6}.personal-entry{max-width:1240px;margin:0 auto 68px;padding:30px clamp(25px,5vw,54px);border-radius:22px}.personal-entry.guest{display:grid;grid-template-columns:1.2fr 1fr auto;align-items:center;gap:30px;color:white;background:linear-gradient(135deg,#202a44,#303c5b)}.personal-entry h2{margin:9px 0;font:700 26px Georgia,"Songti SC",serif}.personal-entry p{margin:0;color:#b6bfd0;font-size:13px;line-height:1.7}.personal-entry-steps{display:flex;flex-direction:column;gap:8px}.personal-entry-steps span{display:flex;align-items:center;gap:9px;color:#d7ddeb;font-size:12px}.personal-entry-steps b{width:27px;height:27px;display:grid;place-items:center;border-radius:8px;color:#c8c0ff;background:#3d4968;font-size:12px}.personal-entry.guest>button,.personal-entry-heading>button{border:0;border-radius:10px;padding:12px 16px;color:#202a44;background:#fff;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}.personal-entry.signed{background:linear-gradient(135deg,#ebe8ff,#f8f7ff);border:1px solid #ddd8ff}.personal-entry-heading{display:flex;justify-content:space-between;align-items:end;gap:20px}.personal-entry.signed p{color:#666f82}.personal-entry-heading>button{color:white;background:#202a44}.home-recommendations{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}.home-recommendations>button{display:grid;grid-template-columns:30px 38px 1fr auto;gap:10px;align-items:center;min-width:0;border:1px solid white;border-radius:12px;padding:13px;background:rgba(255,255,255,.72);text-align:left;cursor:pointer}.home-recommendations>button>span{color:#8b84b5;font:12px monospace}.home-recommendations>button>i{width:36px;height:36px;display:grid;place-items:center;border-radius:9px;color:white;background:var(--recommend-accent);font-size:12px;font-style:normal;font-weight:800}.home-recommendations>button div{min-width:0}.home-recommendations strong,.home-recommendations small{display:block}.home-recommendations strong{font-size:13px}.home-recommendations small{margin-top:4px;color:#757d8d;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.home-recommendations>button>b{color:#6558e8;font-size:12px}.knowledge-card.learned{border-color:#9ed9c8;background:linear-gradient(90deg,#effaf6,white)}.knowledge-card.learned .knowledge-content>div>span{color:#117b66;background:#dcf4ec}
-.profile-page{min-height:calc(100vh - 86px);background:#f7f8f4}.profile-hero{padding:34px max(25px,calc((100vw - 1180px)/2)) 42px;color:white;background:radial-gradient(circle at 80% 15%,rgba(101,88,232,.45),transparent 25rem),#202a44}.profile-hero .course-back{color:#d0d6e3}.profile-welcome{display:flex;align-items:center;gap:20px;margin-top:30px}.profile-avatar{width:76px;height:76px;display:grid;place-items:center;border-radius:22px;color:white;background:linear-gradient(135deg,#6558e8,#8c7bf1);font-size:30px;font-weight:900;box-shadow:8px 8px 0 rgba(255,255,255,.1)}.profile-welcome h1{margin:8px 0;font:700 38px Georgia,"Songti SC",serif}.profile-welcome p{margin:0;color:#b8c1d2;font-size:13px}.profile-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:32px}.profile-summary>div{padding:17px;border:1px solid #3e4962;border-radius:12px;background:rgba(255,255,255,.04)}.profile-summary span,.profile-summary strong,.profile-summary small{display:block}.profile-summary span{color:#aab4c8;font-size:12px}.profile-summary strong{margin-top:6px;font-size:27px}.profile-summary small{margin-top:3px;color:#7f8ba2;font-size:11px}.profile-content{max-width:1180px;margin:auto;padding:48px 25px 80px}.profile-section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px}.profile-section-heading h2{margin:8px 0 0;font:700 25px Georgia,"Songti SC",serif}.profile-section-heading>p{max-width:430px;margin:0;color:#727b8d;font-size:13px}.recommendation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.recommendation-grid>button{position:relative;min-height:230px;display:flex;flex-direction:column;align-items:flex-start;border:1px solid #dfe2e5;border-radius:16px;padding:20px;background:white;text-align:left;cursor:pointer;overflow:hidden;transition:.2s}.recommendation-grid>button:hover{transform:translateY(-4px);box-shadow:0 14px 35px rgba(35,42,60,.1)}.recommendation-grid>button:after{content:"";position:absolute;width:120px;height:120px;right:-50px;top:-50px;border-radius:50%;background:var(--recommend-accent);opacity:.12}.recommendation-grid>button>span{color:#8991a0;font-size:11px;letter-spacing:.1em}.recommendation-grid>button>i{width:43px;height:43px;margin:15px 0 13px;display:grid;place-items:center;border-radius:11px;color:white;background:var(--recommend-accent);font-size:12px;font-style:normal;font-weight:900}.recommendation-grid strong{font-size:15px}.recommendation-grid p{margin:8px 0;color:#727a89;font-size:12px;line-height:1.6}.recommendation-grid b{margin-top:auto;color:#6558e8;font-size:12px}.profile-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:45px}.course-progress-panel,.recent-panel{padding:22px;border:1px solid #e0e3df;border-radius:16px;background:white}.course-progress-row{display:grid;grid-template-columns:40px 1fr 38px;gap:11px;align-items:center;margin-top:14px}.course-progress-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;color:white;font-size:12px;font-weight:900}.course-progress-row>div strong,.course-progress-row>div small{display:block}.course-progress-row>div strong{font-size:12px}.course-progress-row>div small{margin-top:3px;color:#858d9a;font-size:11px}.course-progress-row>div>i{height:5px;margin-top:7px;display:block;border-radius:99px;background:#eceeeb;overflow:hidden}.course-progress-row>div>i b{height:100%;display:block;border-radius:99px}.course-progress-row>em{color:#6e7686;font-size:12px;font-style:normal;text-align:right}.recent-panel>button{width:100%;display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;border:0;border-top:1px solid #eceeeb;padding:12px 0;background:white;text-align:left;cursor:pointer}.recent-panel>button:first-of-type{margin-top:10px}.recent-panel>button>i{width:36px;height:36px;display:grid;place-items:center;border-radius:9px;color:white;font-size:11px;font-style:normal;font-weight:900}.recent-panel>button span strong,.recent-panel>button span small{display:block}.recent-panel>button span strong{font-size:12px}.recent-panel>button span small{margin-top:4px;color:#878f9c;font-size:11px}.recent-panel>button>b{color:#6558e8;font-size:12px}.recent-empty{padding:45px 10px;color:#8b93a0;text-align:center;font-size:12px}.profile-empty{min-height:65vh;display:grid;place-items:center;align-content:center;text-align:center}.profile-empty>span{font-size:45px;color:#6558e8}.profile-empty h1{font:700 30px Georgia,"Songti SC",serif}.profile-empty p{color:#7b8493}.profile-empty button{border:0;border-radius:9px;padding:11px 16px;color:white;background:#202a44}
+.profile-page{min-height:calc(100vh - 86px);background:transparent}.profile-hero{padding:34px max(25px,calc((100vw - 1180px)/2)) 42px;color:white;background:radial-gradient(circle at 80% 15%,rgba(101,88,232,.45),transparent 25rem),#202a44}.profile-hero .course-back{color:#d0d6e3}.profile-welcome{display:flex;align-items:center;gap:20px;margin-top:30px}.profile-avatar{width:76px;height:76px;display:grid;place-items:center;border-radius:22px;color:white;background:linear-gradient(135deg,#6558e8,#8c7bf1);font-size:30px;font-weight:900;box-shadow:8px 8px 0 rgba(255,255,255,.1)}.profile-welcome h1{margin:8px 0;font:700 38px Georgia,"Songti SC",serif}.profile-welcome p{margin:0;color:#b8c1d2;font-size:13px}.profile-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:32px}.profile-summary>div{padding:17px;border:1px solid #3e4962;border-radius:12px;background:rgba(255,255,255,.04)}.profile-summary span,.profile-summary strong,.profile-summary small{display:block}.profile-summary span{color:#aab4c8;font-size:12px}.profile-summary strong{margin-top:6px;font-size:27px}.profile-summary small{margin-top:3px;color:#7f8ba2;font-size:11px}.profile-content{max-width:1180px;margin:auto;padding:48px 25px 80px}.profile-section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px}.profile-section-heading h2{margin:8px 0 0;font:700 25px Georgia,"Songti SC",serif}.profile-section-heading>p{max-width:430px;margin:0;color:#727b8d;font-size:13px}.recommendation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.recommendation-grid>button{position:relative;min-height:230px;display:flex;flex-direction:column;align-items:flex-start;border:1px solid #dfe2e5;border-radius:16px;padding:20px;background:white;text-align:left;cursor:pointer;overflow:hidden;transition:.2s}.recommendation-grid>button:hover{transform:translateY(-4px);box-shadow:0 14px 35px rgba(35,42,60,.1)}.recommendation-grid>button:after{content:"";position:absolute;width:120px;height:120px;right:-50px;top:-50px;border-radius:50%;background:var(--recommend-accent);opacity:.12}.recommendation-grid>button>span{color:#8991a0;font-size:11px;letter-spacing:.1em}.recommendation-grid>button>i{width:43px;height:43px;margin:15px 0 13px;display:grid;place-items:center;border-radius:11px;color:white;background:var(--recommend-accent);font-size:12px;font-style:normal;font-weight:900}.recommendation-grid strong{font-size:15px}.recommendation-grid p{margin:8px 0;color:#727a89;font-size:12px;line-height:1.6}.recommendation-grid b{margin-top:auto;color:#6558e8;font-size:12px}.profile-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:45px}.course-progress-panel,.recent-panel{padding:22px;border:1px solid #e0e3df;border-radius:16px;background:white}.course-progress-row{display:grid;grid-template-columns:40px 1fr 38px;gap:11px;align-items:center;margin-top:14px}.course-progress-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;color:white;font-size:12px;font-weight:900}.course-progress-row>div strong,.course-progress-row>div small{display:block}.course-progress-row>div strong{font-size:12px}.course-progress-row>div small{margin-top:3px;color:#858d9a;font-size:11px}.course-progress-row>div>i{height:5px;margin-top:7px;display:block;border-radius:99px;background:#eceeeb;overflow:hidden}.course-progress-row>div>i b{height:100%;display:block;border-radius:99px}.course-progress-row>em{color:#6e7686;font-size:12px;font-style:normal;text-align:right}.recent-panel>button{width:100%;display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;border:0;border-top:1px solid #eceeeb;padding:12px 0;background:white;text-align:left;cursor:pointer}.recent-panel>button:first-of-type{margin-top:10px}.recent-panel>button>i{width:36px;height:36px;display:grid;place-items:center;border-radius:9px;color:white;font-size:11px;font-style:normal;font-weight:900}.recent-panel>button span strong,.recent-panel>button span small{display:block}.recent-panel>button span strong{font-size:12px}.recent-panel>button span small{margin-top:4px;color:#878f9c;font-size:11px}.recent-panel>button>b{color:#6558e8;font-size:12px}.recent-empty{padding:45px 10px;color:#8b93a0;text-align:center;font-size:12px}.profile-empty{min-height:65vh;display:grid;place-items:center;align-content:center;text-align:center}.profile-empty>span{font-size:45px;color:#6558e8}.profile-empty h1{font:700 30px Georgia,"Songti SC",serif}.profile-empty p{color:#7b8493}.profile-empty button{border:0;border-radius:9px;padding:11px 16px;color:white;background:#202a44}
 @media(max-width:900px){.personal-entry.guest{grid-template-columns:1fr}.home-recommendations,.recommendation-grid{grid-template-columns:1fr}.profile-columns{grid-template-columns:1fr}.personal-entry{margin-inline:20px}.profile-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.topbar-nav{gap:5px}.topbar-nav>button:first-child{display:none}.profile-trigger strong,.profile-trigger i{display:none}.profile-trigger{padding-right:6px!important}.login-trigger{font-size:12px!important;padding:8px 10px!important}.account-dialog{padding:27px 21px}.personal-entry{margin:0 14px 48px;padding:24px 20px}.personal-entry-heading{align-items:flex-start;flex-direction:column}.home-recommendations>button{grid-template-columns:25px 34px 1fr}.home-recommendations>button>b{display:none}.profile-welcome{align-items:flex-start;flex-direction:column}.profile-welcome h1{font-size:30px}.profile-summary{grid-template-columns:1fr 1fr}.profile-section-heading{align-items:flex-start;flex-direction:column}.recommendation-grid{grid-template-columns:1fr}.course-progress-panel,.recent-panel{padding:17px}.recent-panel>button{grid-template-columns:35px 1fr}.recent-panel>button>b{grid-column:2}.account-menu{right:-5px}}
 
@@ -4723,9 +4723,21 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   color: #64748b;
 }
 .thought-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 800;
   color: #475569;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+}
+.thought-tag {
+  font-size: 10px;
+  font-weight: 900;
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
 }
 .tutor-thought-block p {
   margin: 0;
@@ -4762,6 +4774,15 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   border-radius: 10px;
   padding: 10px 14px;
   margin-top: 6px;
+}
+.jump-lab-badge {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 .jump-info strong { color: #166534; font-size: 13px; }
 .jump-info span { color: #047857; font-size: 13px; font-weight: 700; }
@@ -5902,6 +5923,15 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .sec-icon {
   font-size: 20px;
 }
+.sec-icon-badge {
+  font-size: 10px;
+  font-weight: 900;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 3px 7px;
+  border-radius: 5px;
+  letter-spacing: 0.05em;
+}
 .card-sub-title {
   font-size: 16px;
   font-weight: 800;
@@ -6029,24 +6059,24 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .pref-label {
-  font-size: 13px;
+  font-size: 14.5px;
   font-weight: 800;
   color: #1e293b;
 }
 .pref-options-row {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 .pref-chip-btn {
-  padding: 5px 12px;
-  border-radius: 6px;
+  padding: 7px 15px;
+  border-radius: 8px;
   border: 1px solid #cbd5e1;
   background: #ffffff;
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #475569;
   cursor: pointer;
@@ -6058,16 +6088,18 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   border-color: #0f172a;
 }
 .pref-desc {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: #64748b;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 .pref-select {
-  padding: 6px 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12.5px;
+  padding: 8px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13.5px;
   outline: none;
+  background: #ffffff;
+  color: #0f172a;
 }
 .pref-box.toggle-box {
   display: flex;
