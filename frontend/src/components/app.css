@@ -3632,111 +3632,453 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   font-weight: 700;
 }
 
-/* 右侧图表栏 */
-.checkin-analytics-column {
+/* ==========================================================================
+   现代化实机学时度量与遥测监控看板 (Active Lab Monitor & Visual Charts)
+   ========================================================================== */
+
+.telemetry-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
-.analytics-box {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-}
-.box-header {
+
+.telemetry-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.box-header h4 {
-  font-size: 14.5px;
+
+.telemetry-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulse-kernel 1.6s infinite;
+}
+
+.telemetry-chip-badge {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.telemetry-dashboard-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.telemetry-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .telemetry-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.telemetry-metric-tile {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.metric-tile-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.metric-icon {
+  font-size: 14px;
+}
+
+.metric-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.metric-main-title {
+  font-size: 13.5px;
   font-weight: 800;
   color: #0f172a;
-  margin: 0;
+  line-height: 1.35;
 }
-.box-sub {
+
+.metric-protocol-text {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #059669;
+}
+
+.metric-sub-note {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.telemetry-pipeline-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 2px 0;
+}
+
+.pipe-step {
+  font-family: ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.pipe-step.active {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+.pipe-step.current {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #6ee7b7;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.3);
+}
+
+.pipe-arrow {
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+/* 随堂微笔记表单升级 */
+.modern-form {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notes-heading-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notes-icon {
+  font-size: 20px;
+}
+
+.note-textarea-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-quick-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag-hint {
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.quick-tag-chip {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quick-tag-chip:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.modern-btn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modern-btn:hover:not(:disabled) {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.modern-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 柱状图与饼图视觉升级 */
+.visual-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chart-sub-caption {
+  margin: 3px 0 0;
   font-size: 11.5px;
   color: #94a3b8;
 }
 
-/* 柱状图 */
-.bar-chart-container {
+.modern-bar-chart {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 120px;
-  padding-top: 10px;
-  border-bottom: 1px solid #e2e8f0;
+  height: 150px;
+  padding: 16px 12px 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  gap: 8px;
 }
-.bar-col {
+
+.bar-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   flex: 1;
+  height: 100%;
+  justify-content: flex-end;
 }
-.bar-track {
-  width: 22px;
-  height: 90px;
-  background: #f1f5f9;
-  border-radius: 6px 6px 0 0;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-}
-.bar-fill {
-  width: 100%;
-  background: #10b981;
-  border-radius: 6px 6px 0 0;
-  transition: height 0.3s ease;
-}
-.bar-fill.today {
-  background: #059669;
-  box-shadow: 0 0 10px rgba(5, 150, 105, 0.5);
-}
-.bar-label {
+
+.bar-val-text {
+  font-family: ui-monospace, monospace;
   font-size: 11px;
+  font-weight: 700;
   color: #64748b;
 }
 
-/* 环形图 */
-.pie-summary-wrap {
+.bar-val-text.today-val {
+  color: #059669;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.bar-rail {
+  width: 26px;
+  height: 95px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+}
+
+.bar-fill-body {
+  width: 100%;
+  background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+  border-radius: 6px;
+  transition: height 0.4s ease;
+  position: relative;
+}
+
+.bar-fill-body.today {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
+}
+
+.bar-today-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  font-weight: 900;
+  color: #d97706;
+  letter-spacing: 0.05em;
+}
+
+.bar-date-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.bar-date-label.today-text {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+/* 现代学科投入分布仪表环与进度条 */
+.modern-subject-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
 }
-.pie-visual-ring {
-  width: 100px;
-  height: 100px;
+@media (max-width: 860px) {
+  .modern-subject-row {
+    flex-direction: column;
+  }
+}
+
+.modern-donut {
+  width: 115px;
+  height: 115px;
   position: relative;
   flex-shrink: 0;
 }
-.circular-chart {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  max-height: 100%;
+
+.donut-svg-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
-.circle-bg {
+
+.donut-ring-bg {
   fill: none;
-  stroke: #f1f5f9;
-  stroke-width: 3.8;
+  stroke: #e2e8f0;
+  stroke-width: 11;
 }
-.circle-slice {
+
+.donut-seg {
   fill: none;
-  stroke-width: 3.8;
+  stroke-width: 11;
   stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
 }
-.circle-slice.s1 { stroke: #4f46e5; }
-.circle-slice.s2 { stroke: #0284c7; }
-.circle-slice.s3 { stroke: #10b981; }
-.circle-slice.s4 { stroke: #f59e0b; }
-.pie-center-text {
+
+.donut-seg.seg-co { stroke: #6366f1; }
+.donut-seg.seg-os { stroke: #10b981; }
+.donut-seg.seg-net { stroke: #0284c7; }
+.donut-seg.seg-ds { stroke: #f59e0b; }
+
+.donut-center-info {
   position: absolute;
   inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.donut-center-info .donut-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.donut-center-info .donut-sub {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.modern-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  width: 100%;
+}
+
+.legend-item-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-head-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legend-subject-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-pct {
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.legend-mini-bar {
+  width: 100%;
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.legend-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.legend-fill.bar-co { background: #6366f1; }
+.legend-fill.bar-os { background: #10b981; }
+.legend-fill.bar-net { background: #0284c7; }
+.legend-fill.bar-ds { background: #f59e0b; }
+
+.legend-topics {
+  font-size: 11px;
+  color: #64748b;
+}
+.pie-center-text {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -306,28 +306,57 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
       {/* 中部双列布局：左侧自动追踪与实验心得记录 + 右侧真实数据图表 */}
       <div className="checkin-content-grid">
         {/* 左侧：自动化追踪状态与实验实操笔记 */}
-        <section className="checkin-form-card">
-          <div className="form-card-header">
+        <section className="checkin-form-card telemetry-card">
+          <div className="form-card-header telemetry-header">
             <div className="header-status-line">
-              <span className="pulse-indicator" />
+              <span className="telemetry-live-dot" />
               <h3>当前实验实操监视器 (Active Lab Monitor)</h3>
             </div>
-            <span className="auto-pill">系统内核自动化追踪</span>
+            <span className="telemetry-chip-badge">● KERNEL ACTIVE · 100MHz 自动测速</span>
           </div>
 
-          <div className="active-tracker-box">
-            <div className="tracker-row">
-              <span className="tracker-label">当前活跃实验环境：</span>
-              <strong className="tracker-val">CPU 五级流水线与微架构冒险沙盘</strong>
+          {/* 现代化实机遥测控制仪表板 */}
+          <div className="telemetry-dashboard-panel">
+            <div className="telemetry-metrics-grid">
+              {/* 指标卡 1: 活跃沙盒 */}
+              <div className="telemetry-metric-tile">
+                <div className="metric-tile-head">
+                  <span className="metric-icon">💻</span>
+                  <span className="metric-tag">当前活跃实验沙盒</span>
+                </div>
+                <strong className="metric-main-title">CPU 五级流水线与冒险处理</strong>
+                <span className="metric-sub-note">硬件微架构 · 24 拍推演已就绪</span>
+              </div>
+
+              {/* 指标卡 2: 硬件时序阶段流水线 */}
+              <div className="telemetry-metric-tile">
+                <div className="metric-tile-head">
+                  <span className="metric-icon">⚡</span>
+                  <span className="metric-tag">硬件微时序推演流水线</span>
+                </div>
+                <div className="telemetry-pipeline-strip">
+                  <span className="pipe-step active">T1-IF</span>
+                  <span className="pipe-arrow">➔</span>
+                  <span className="pipe-step active">T2-ID</span>
+                  <span className="pipe-arrow">➔</span>
+                  <span className="pipe-step current">T3-EX</span>
+                  <span className="pipe-arrow">➔</span>
+                  <span className="pipe-step">T4-MEM</span>
+                </div>
+                <span className="metric-sub-note">当前主频 CLK: 100MHz [单步节拍监控]</span>
+              </div>
+
+              {/* 指标卡 3: 度量协议 */}
+              <div className="telemetry-metric-tile">
+                <div className="metric-tile-head">
+                  <span className="metric-icon">📡</span>
+                  <span className="metric-tag">纳秒级内核追踪机制</span>
+                </div>
+                <strong className="metric-protocol-text">前台进入心跳累加 · 离开自动休眠</strong>
+                <span className="metric-sub-note">无侵入防作伪机制，严格锚定真实实验时钟</span>
+              </div>
             </div>
-            <div className="tracker-row">
-              <span className="tracker-label">单步时钟时序计数：</span>
-              <span className="tracker-code">T1-IF ➔ T2-ID ➔ T3-EX [CLK: 100MHz]</span>
-            </div>
-            <div className="tracker-row">
-              <span className="tracker-label">系统度量机制：</span>
-              <span className="tracker-desc">进入实验前台即启动纳秒级心跳累加，离开实验自动休眠切断。</span>
-            </div>
+
             <div className="tracker-action-row">
               <button
                 type="button"
@@ -346,11 +375,16 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
             </div>
           </div>
 
-          {/* 真实有用的功能：实验踩坑与考点心得笔记 */}
-          <form className="lab-notes-form" onSubmit={handleSaveNote}>
+          {/* 实验踩坑与考点随堂微笔记 */}
+          <form className="lab-notes-form modern-form" onSubmit={handleSaveNote}>
             <div className="form-label-line">
-              <strong>随堂实操心得与考点随笔</strong>
-              <span className="note-tip">真实记录单步时序踩坑点，归档到学习画像</span>
+              <div className="notes-heading-group">
+                <span className="notes-icon">📓</span>
+                <div>
+                  <strong>随堂实操心得与考点随笔</strong>
+                  <span className="note-tip">单步时序踩坑点随时记录，自动归档到考点学习画像</span>
+                </div>
+              </div>
             </div>
 
             <div className="note-select-row">
@@ -360,29 +394,37 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
                 onChange={(e) => setSelectedLabForNote(e.target.value)}
                 className="lab-select-input"
               >
-                <option value="cpu-pipeline">CPU 五级流水线与冒险处理</option>
-                <option value="cache-mapping">Cache 组相联映射与颠簸冲突</option>
-                <option value="deadlock">死锁避免银行家算法</option>
-                <option value="tcp-connection">TCP 三次握手与四次挥手</option>
+                <option value="cpu-pipeline">CPU 五级流水线与冒险处理 (计组)</option>
+                <option value="cache-mapping">Cache 组相联映射与颠簸冲突 (计组)</option>
+                <option value="deadlock">死锁避免银行家算法 (操作系统)</option>
+                <option value="tcp-connection">TCP 三次握手与四次挥手 (计网)</option>
               </select>
             </div>
 
-            <textarea
-              className="lab-note-textarea"
-              rows={3}
-              value={labNote}
-              onChange={(e) => setLabNote(e.target.value)}
-              placeholder="例如：单步观察直接映射第 4 行时发生了连续冲突颠簸，改用 2 路组相联后缺失率降低了 50%..."
-            />
+            <div className="note-textarea-wrap">
+              <textarea
+                className="lab-note-textarea"
+                rows={3}
+                value={labNote}
+                onChange={(e) => setLabNote(e.target.value)}
+                placeholder="例如：单步观察直接映射第 4 行时发生了连续冲突颠簸，改用 2 路组相联后缺失率降低了 50%..."
+              />
+              <div className="note-quick-tags">
+                <span className="tag-hint">快捷插入标签：</span>
+                <button type="button" className="quick-tag-chip" onClick={() => setLabNote(prev => prev ? `${prev} #RAW数据冒险` : '#RAW数据冒险')}>#RAW数据冒险</button>
+                <button type="button" className="quick-tag-chip" onClick={() => setLabNote(prev => prev ? `${prev} #Cache组相联` : '#Cache组相联')}>#Cache组相联</button>
+                <button type="button" className="quick-tag-chip" onClick={() => setLabNote(prev => prev ? `${prev} #PV互斥信号量` : '#PV互斥信号量')}>#PV互斥信号量</button>
+              </div>
+            </div>
 
             <div className="note-submit-row">
               {noteSavedToast && <span className="toast-tip">✓ 实验心得已归档至个人档案！</span>}
               <button
                 type="submit"
-                className="save-note-btn"
+                className="save-note-btn modern-btn"
                 disabled={!labNote.trim()}
               >
-                保存实验心得
+                💾 保存实验心得至档案
               </button>
             </div>
           </form>
@@ -390,28 +432,35 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
 
         {/* 右侧：系统真实捕获的学时图表与时间流水 */}
         <section className="checkin-charts-column">
-          {/* 近 7 天真实实操学时 (分钟) */}
-          <div className="chart-panel-card">
+          {/* 近 7 天真实实操学时柱状图 */}
+          <div className="chart-panel-card visual-card">
             <div className="chart-card-header">
-              <h4>近 7 天实机实操学时曲线</h4>
-              <span className="chart-unit-tag">单位: 分钟 (系统自动捕获)</span>
+              <div>
+                <h4>近 7 天实机实操学时曲线</h4>
+                <p className="chart-sub-caption">系统自动精准捕获底层沙盒推演与模考用时</p>
+              </div>
+              <span className="chart-unit-tag">单位: 分钟 (min)</span>
             </div>
 
-            <div className="bar-chart-container">
+            <div className="bar-chart-container modern-bar-chart">
               {recent7Days.map((item, idx) => {
                 const maxMins = 80
-                const heightPercent = Math.min(100, Math.round((item.mins / maxMins) * 100))
+                const heightPercent = Math.max(12, Math.min(100, Math.round((item.mins / maxMins) * 100)))
                 return (
                   <div key={idx} className="bar-column">
-                    <span className="bar-val-text">{item.mins}m</span>
+                    <span className={`bar-val-text ${item.isToday ? 'today-val' : ''}`}>
+                      {item.mins}m
+                    </span>
                     <div className="bar-rail">
                       <div
                         className={`bar-fill-body ${item.isToday ? 'today' : ''}`}
                         style={{ height: `${heightPercent}%` }}
-                      />
+                      >
+                        {item.isToday && <span className="bar-today-badge">TODAY</span>}
+                      </div>
                     </div>
                     <span className={`bar-date-label ${item.isToday ? 'today-text' : ''}`}>
-                      {item.day}
+                      {item.isToday ? '今日' : item.day}
                     </span>
                   </div>
                 )
@@ -420,33 +469,87 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
           </div>
 
           {/* 四门 408 核心学科真实实操投入比 */}
-          <div className="chart-panel-card">
+          <div className="chart-panel-card visual-card">
             <div className="chart-card-header">
-              <h4>408 学科实验实操投入分布</h4>
-              <span className="chart-unit-tag">按真实操作学时计算</span>
+              <div>
+                <h4>408 学科实验实操投入分布</h4>
+                <p className="chart-sub-caption">四大核心专业课底层时钟推演学时占比</p>
+              </div>
+              <span className="chart-unit-tag">真实时序比例</span>
             </div>
 
-            <div className="subject-pie-row">
-              <div className="donut-core-visual">
-                <span className="donut-title">408</span>
-                <span className="donut-sub">全科覆盖</span>
+            <div className="subject-pie-row modern-subject-row">
+              {/* 现代 SVG 环形仪表盘 */}
+              <div className="donut-core-visual modern-donut">
+                <svg viewBox="0 0 100 100" className="donut-svg-ring">
+                  <circle cx="50" cy="50" r="40" className="donut-ring-bg" />
+                  {/* 计组 38% */}
+                  <circle cx="50" cy="50" r="40" className="donut-seg seg-co" strokeDasharray="95.5 251.3" strokeDashoffset="0" />
+                  {/* 系统 28% */}
+                  <circle cx="50" cy="50" r="40" className="donut-seg seg-os" strokeDasharray="70.3 251.3" strokeDashoffset="-95.5" />
+                  {/* 网络 20% */}
+                  <circle cx="50" cy="50" r="40" className="donut-seg seg-net" strokeDasharray="50.2 251.3" strokeDashoffset="-165.8" />
+                  {/* 数据结构 14% */}
+                  <circle cx="50" cy="50" r="40" className="donut-seg seg-ds" strokeDasharray="35.2 251.3" strokeDashoffset="-216" />
+                </svg>
+                <div className="donut-center-info">
+                  <strong className="donut-title">408</strong>
+                  <span className="donut-sub">全科覆盖</span>
+                </div>
               </div>
-              <div className="donut-legend-list">
-                <div className="legend-item">
-                  <span className="dot dot-arch" />
-                  <span>计算机组成原理 (38% · 流水线/Cache/指令周期)</span>
+
+              {/* 四门学科动态进度仪表 */}
+              <div className="donut-legend-list modern-progress-list">
+                <div className="legend-item-card co">
+                  <div className="legend-head-line">
+                    <span className="legend-subject-title">
+                      <span className="dot dot-arch" /> 计算机组成原理
+                    </span>
+                    <strong className="legend-pct">38%</strong>
+                  </div>
+                  <div className="legend-mini-bar">
+                    <div className="legend-fill bar-co" style={{ width: '38%' }} />
+                  </div>
+                  <span className="legend-topics">流水线 · Cache映射 · 指令周期</span>
                 </div>
-                <div className="legend-item">
-                  <span className="dot dot-os" />
-                  <span>操作系统内核 (28% · PV同步/调度/死锁)</span>
+
+                <div className="legend-item-card os">
+                  <div className="legend-head-line">
+                    <span className="legend-subject-title">
+                      <span className="dot dot-os" /> 操作系统内核
+                    </span>
+                    <strong className="legend-pct">28%</strong>
+                  </div>
+                  <div className="legend-mini-bar">
+                    <div className="legend-fill bar-os" style={{ width: '28%' }} />
+                  </div>
+                  <span className="legend-topics">PV同步互斥 · 调度 · 虚拟存储</span>
                 </div>
-                <div className="legend-item">
-                  <span className="dot dot-net" />
-                  <span>计算机网络 (20% · TCP握手/滑动窗口)</span>
+
+                <div className="legend-item-card net">
+                  <div className="legend-head-line">
+                    <span className="legend-subject-title">
+                      <span className="dot dot-net" /> 计算机网络
+                    </span>
+                    <strong className="legend-pct">20%</strong>
+                  </div>
+                  <div className="legend-mini-bar">
+                    <div className="legend-fill bar-net" style={{ width: '20%' }} />
+                  </div>
+                  <span className="legend-topics">TCP三次握手 · 滑动窗口 · 路由</span>
                 </div>
-                <div className="legend-item">
-                  <span className="dot dot-ds" />
-                  <span>数据结构与算法 (14% · 二叉树/Dijkstra)</span>
+
+                <div className="legend-item-card ds">
+                  <div className="legend-head-line">
+                    <span className="legend-subject-title">
+                      <span className="dot dot-ds" /> 数据结构与算法
+                    </span>
+                    <strong className="legend-pct">14%</strong>
+                  </div>
+                  <div className="legend-mini-bar">
+                    <div className="legend-fill bar-ds" style={{ width: '14%' }} />
+                  </div>
+                  <span className="legend-topics">二叉树遍历 · Dijkstra · 排序对比</span>
                 </div>
               </div>
             </div>

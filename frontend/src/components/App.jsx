@@ -43,6 +43,7 @@ import { courseForExperiment, courses, experiments } from '../lib/experimentRegi
 import ThemePicker from './ThemePicker'
 import { useTheme } from './ThemeContext'
 import './app.css'
+import './Theme.css'
 
 const experimentComponents = {
   attention: AttentionExperiment,
