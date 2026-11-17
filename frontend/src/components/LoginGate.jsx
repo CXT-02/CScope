@@ -230,28 +230,7 @@ export default function LoginGate({ onLoginSuccess }) {
                 </button>
               </div>
 
-              {/* 若已有已建立的学者档案，展示快速直通提示条 */}
-              {users.length > 0 && (
-                <div className="landing-quick-hint">
-                  <span className="quick-hint-label">检测到已建立研学档案：</span>
-                  <button
-                    type="button"
-                    className="landing-quick-user-pill"
-                    onClick={() => handleOpenAuth('login', users[0].name)}
-                    title={`以【${users[0].name}】身份直接验证密码进入`}
-                  >
-                    <span className="quick-pill-avatar">
-                      {users[0].avatar ? (
-                        <img src={users[0].avatar} alt={users[0].name} />
-                      ) : (
-                        users[0].name.slice(0, 1)
-                      )}
-                    </span>
-                    <strong>{users[0].name}</strong>
-                    <span className="quick-pill-action">快速验证进入 →</span>
-                  </button>
-                </div>
-              )}
+
             </div>
           </div>
         </div>
