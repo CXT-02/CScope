@@ -1442,61 +1442,104 @@
   color: #0f2818 !important;
 }
 
+/* 苍林护眼：个人续学板块（彻底告别刺眼白底，全面采用温润草木玉翠色与清晰大字体） */
 [data-theme="forest"] .course-home .personal-entry.signed {
-  background: #ffffff !important;
-  border: 1px solid #cadbc8 !important;
+  background: linear-gradient(135deg, #eaf2e8 0%, #e2ece0 100%) !important;
+  border: 1.5px solid #bdd1ba !important;
+  border-radius: 20px !important;
+  padding: 24px 30px !important;
+  box-shadow: 0 6px 20px rgba(15, 45, 25, 0.07) !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry-heading .eyebrow {
+  color: #c2410c !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
 }
 
 [data-theme="forest"] .course-home .personal-entry-heading h2 {
-  color: #0f2818 !important;
+  color: #091e11 !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
 }
 
 [data-theme="forest"] .course-home .personal-entry.signed p {
-  color: #31523c !important;
+  color: #244630 !important;
+  font-size: 14.5px !important;
 }
 
 [data-theme="forest"] .course-home .personal-entry.signed p strong {
-  color: #0f2818 !important;
+  color: #064e3b !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
 }
 
 [data-theme="forest"] .course-home .personal-entry-heading > button {
-  background: #f4f8f2 !important;
-  border: 1px solid #c8d8c6 !important;
-  color: #15803d !important;
+  background: #f2f7f0 !important;
+  border: 1.5px solid #a8c4a5 !important;
+  color: #0f3d1e !important;
   font-weight: 800 !important;
+  font-size: 14px !important;
+  padding: 8px 18px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(15, 45, 25, 0.06) !important;
 }
 
 [data-theme="forest"] .course-home .personal-entry-heading > button:hover {
-  background: #e5efe3 !important;
-  color: #0f2818 !important;
+  background: #ffffff !important;
+  color: #091e11 !important;
+  border-color: #15803d !important;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.18) !important;
+}
+
+/* 推荐实验微型卡片：温润清翠底色 + 墨绿大字，绝不隐形 */
+[data-theme="forest"] .course-home .home-recommendations {
+  gap: 14px !important;
+  margin-top: 16px !important;
 }
 
 [data-theme="forest"] .course-home .home-recommendations > button {
-  background: #fbfdfa !important;
-  border: 1.5px solid #d4e2d3 !important;
-  box-shadow: 0 2px 8px rgba(15, 45, 25, 0.04) !important;
+  background: #f7faf5 !important;
+  border: 1.5px solid #c2d6bf !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  min-height: 68px !important;
+  box-shadow: 0 2px 8px rgba(15, 45, 25, 0.05) !important;
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="forest"] .course-home .home-recommendations > button:hover {
   background: #ffffff !important;
   border-color: #15803d !important;
-  box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12) !important;
-}
-
-[data-theme="forest"] .course-home .home-recommendations strong {
-  color: #0f2818 !important;
-}
-
-[data-theme="forest"] .course-home .home-recommendations small {
-  color: #3b5744 !important;
+  box-shadow: 0 6px 18px rgba(21, 128, 61, 0.16) !important;
+  transform: translateY(-2px) !important;
 }
 
 [data-theme="forest"] .course-home .home-recommendations > button > span {
-  color: #557560 !important;
+  color: #2d5a3a !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations strong {
+  color: #091e11 !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  line-height: 1.4 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations small {
+  color: #254832 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  margin-top: 4px !important;
 }
 
 [data-theme="forest"] .course-home .home-recommendations > button > b {
   color: #15803d !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
 }
 
 [data-theme="forest"] .course-home .course-section-heading h2 {
