@@ -1,0 +1,1335 @@
+/* ==========================================================================
+   TransformerStory.css - 自然流动的 Transformer 科普动画引擎
+   参考: B站知名科普《Transformer到底是个啥？一个动画彻底搞懂》
+   ========================================================================== */
+
+/* ---------------- 基础容器与主题 ---------------- */
+.transformer-story {
+  --story-bg: #0b0f19;
+  --story-panel: #131b2c;
+  --story-border: rgba(255, 255, 255, 0.09);
+  --story-orange: #ff5a32;
+  --story-orange-glow: rgba(255, 90, 50, 0.35);
+  --story-gold: #ffb340;
+  --story-gold-glow: rgba(255, 179, 64, 0.35);
+  --story-violet: #8d7cff;
+  --story-violet-glow: rgba(141, 124, 255, 0.35);
+  --story-teal: #1cd4aa;
+  --story-teal-glow: rgba(28, 212, 170, 0.35);
+  --story-speed-rate: 1;
+
+  position: relative;
+  margin-bottom: 56px;
+  border: 1px solid #243044;
+  border-radius: 28px;
+  overflow: hidden;
+  color: #f6f8fb;
+  background: radial-gradient(circle at 80% 20%, rgba(255, 90, 50, 0.12), transparent 32rem),
+              radial-gradient(circle at 20% 80%, rgba(141, 124, 255, 0.09), transparent 28rem),
+              linear-gradient(150deg, #0b0f18, #131c2c 60%, #0d1421);
+  box-shadow: 0 28px 80px rgba(8, 12, 22, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 顶部介绍与输入 */
+.story-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  gap: 28px;
+  align-items: center;
+  padding: 30px 38px 24px;
+  border-bottom: 1px solid var(--story-border);
+  background: rgba(13, 19, 31, 0.4);
+}
+
+.story-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #ff8a69;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.story-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5a32;
+  box-shadow: 0 0 10px #ff5a32;
+  animation: pulse-dot 1.8s infinite;
+}
+
+.story-intro h2 {
+  margin: 10px 0 8px;
+  font: 700 clamp(26px, 2.8vw, 36px)/1.25 Georgia, "Songti SC", serif;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.story-intro p {
+  margin: 0;
+  color: #a2b0c6;
+  font-size: 14.5px;
+  line-height: 1.68;
+}
+
+.story-input {
+  display: block;
+}
+
+.story-input span {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #8c9bb2;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.story-input input {
+  width: 100%;
+  border: 1px solid #334257;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #ffffff;
+  background: #0b111c;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.story-input input:focus {
+  border-color: #ff6947;
+  box-shadow: 0 0 0 4px rgba(255, 90, 50, 0.18), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  outline: 0;
+}
+
+/* 顶部章节时间线导航 */
+.story-timeline {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--story-border);
+  background: rgba(8, 12, 20, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.story-timeline button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  color: #79869e;
+  background: none;
+  cursor: pointer;
+  font-size: 13.5px;
+  transition: all 0.25s ease;
+}
+
+.story-timeline button:hover {
+  color: #c4d0e3;
+}
+
+.story-timeline button:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 2px;
+  background: #232e42;
+  transition: background 0.3s;
+}
+
+.story-timeline i {
+  z-index: 1;
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid #3a475e;
+  border-radius: 50%;
+  background: #121927;
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.story-timeline .passed i {
+  border-color: #17a988;
+  background: #116854;
+  color: #ffffff;
+}
+
+.story-timeline .passed:not(:last-child)::after {
+  background: linear-gradient(90deg, #17a988, #2a4059);
+}
+
+.story-timeline .active {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.story-timeline .active i {
+  border-color: #ff7655;
+  background: linear-gradient(135deg, #ff6c47, #e0441d);
+  color: #ffffff;
+  box-shadow: 0 0 0 5px rgba(255, 90, 50, 0.22), 0 0 24px rgba(255, 90, 50, 0.45);
+  transform: scale(1.12);
+}
+
+/* 舞台核心区域 */
+.story-stage {
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: minmax(290px, 0.38fr) minmax(0, 0.62fr);
+  animation: story-stage-fade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes story-stage-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.story-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 44px 36px 38px 40px;
+  border-right: 1px solid var(--story-border);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.015), transparent);
+}
+
+.story-copy > span {
+  color: #ff7655;
+  font-size: 13.5px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.story-copy h3 {
+  margin: 14px 0 14px;
+  font: 700 clamp(24px, 2.5vw, 32px)/1.32 Georgia, "Songti SC", serif;
+  color: #ffffff;
+}
+
+.story-copy > p {
+  margin: 0;
+  color: #b5c3d7;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.story-copy aside {
+  margin-top: 28px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 179, 64, 0.25);
+  border-left: 4px solid #ffb340;
+  border-radius: 12px;
+  background: rgba(255, 179, 64, 0.06);
+}
+
+.story-copy aside strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffc978;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.story-copy aside p {
+  margin: 8px 0 0;
+  color: #ccd7e8;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* 右侧视效展示区 */
+.story-visual {
+  position: relative;
+  min-width: 0;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 36px;
+  overflow: hidden;
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px, 28px 28px;
+}
+
+/* 顶部动效微状态条 */
+.visual-subphase-indicator {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  color: #8c9cb3;
+  z-index: 10;
+}
+
+.subphase-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5a32;
+  box-shadow: 0 0 8px #ff5a32;
+  animation: pulse-dot 1.2s infinite;
+}
+
+/* 底部操作与播放控制条 */
+.story-controls {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  border-top: 1px solid var(--story-border);
+  background: #0c121e;
+}
+
+.story-controls button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #33435b;
+  border-radius: 10px;
+  padding: 10px 18px;
+  color: #c2cde0;
+  background: #141c2c;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.story-controls button:hover:not(:disabled) {
+  border-color: #4f6385;
+  background: #1c273c;
+  color: #ffffff;
+}
+
+.story-controls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.story-controls .story-play {
+  border-color: #ff6a47;
+  color: #ffffff;
+  background: linear-gradient(135deg, #f0522b, #d43b16);
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(240, 82, 43, 0.35);
+}
+
+.story-controls .story-play:hover {
+  background: linear-gradient(135deg, #ff633c, #e0441d);
+  box-shadow: 0 6px 20px rgba(240, 82, 43, 0.5);
+  transform: translateY(-1px);
+}
+
+.story-controls .story-replay {
+  border-color: #3f506d;
+  color: #ffb340;
+}
+
+.story-controls .story-replay:hover {
+  border-color: #ffb340;
+  background: rgba(255, 179, 64, 0.1);
+}
+
+.story-controls label {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8c9bb3;
+  font-size: 13.5px;
+}
+
+.story-controls select {
+  border: 1px solid #33435b;
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: #ffffff;
+  background: #131b2a;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   各个步骤的精美自然动画组件（对标 B 站科普视频）
+   ========================================================================== */
+
+/* ---------------- 步骤 01 & 08: 全局总图与数据流管道 ---------------- */
+.architecture-container {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.arch-pipe-visual {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.architecture-map {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.architecture-block {
+  min-width: 92px;
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid #2d3b50;
+  border-radius: 14px;
+  background: #131c2a;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 8px;
+}
+
+.architecture-block span {
+  color: #5d6d87;
+  font: 12px monospace;
+  font-weight: 700;
+}
+
+.architecture-block strong {
+  max-width: 78px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #e2eaf5;
+}
+
+.architecture-block i {
+  color: #1ed4aa;
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* 激活脉冲状态 */
+.architecture-block.active-glow {
+  border-color: #ff6845;
+  background: linear-gradient(145deg, #1f2738, #18202e);
+  box-shadow: 0 0 28px rgba(255, 90, 50, 0.35), inset 0 0 12px rgba(255, 90, 50, 0.2);
+  transform: translateY(-4px) scale(1.05);
+}
+
+.architecture-block.active-glow strong {
+  color: #ffffff;
+}
+
+.architecture-block.complete-badge {
+  border-color: #17a988;
+  box-shadow: 0 0 20px rgba(23, 169, 136, 0.25);
+}
+
+.arch-arrow {
+  color: #4a5c78;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.arch-arrow.active {
+  color: #ff6845;
+  text-shadow: 0 0 10px #ff6845;
+  animation: flow-pulse 1s infinite;
+}
+
+/* SVG 流光管道 */
+.arch-svg-pipe {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pipe-track {
+  stroke: #202b3d;
+  stroke-width: 3;
+  fill: none;
+}
+
+.pipe-stream {
+  stroke: #ff6845;
+  stroke-width: 3.5;
+  stroke-dasharray: 12 18;
+  fill: none;
+  filter: drop-shadow(0 0 8px #ff6845);
+  animation: svg-dash-flow 1.2s linear infinite;
+}
+
+.pipe-stream-residual {
+  stroke: #ffb340;
+  stroke-width: 2.5;
+  stroke-dasharray: 8 12;
+  fill: none;
+  filter: drop-shadow(0 0 6px #ffb340);
+  animation: svg-dash-flow 1.5s linear infinite;
+}
+
+.pipe-label {
+  fill: #ffb340;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.arch-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 99px;
+  background: rgba(255, 90, 50, 0.1);
+  border: 1px solid rgba(255, 90, 50, 0.25);
+  font-size: 13.5px;
+  color: #ffc7b5;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ---------------- 步骤 02: Token 切分（激光刀割与掉落积木） ---------------- */
+.token-stage-v2 {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+
+.raw-sentence-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 18px 30px;
+  border-radius: 16px;
+  background: #111a28;
+  border: 1.5px solid #2e3c52;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.raw-sentence-text {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  display: flex;
+  gap: 2px;
+}
+
+.raw-char-span {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* 激光扫描线 */
+.laser-cutter-beam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #ff5a32;
+  box-shadow: 0 0 16px #ff5a32, 0 0 32px #ff8a69;
+  z-index: 5;
+  animation: laser-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes laser-sweep {
+  0% { left: -5%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: 105%; opacity: 0; }
+}
+
+.cut-slit-line {
+  position: absolute;
+  right: -1px;
+  top: 15%;
+  bottom: 15%;
+  width: 1.5px;
+  background: rgba(255, 179, 64, 0.6);
+  box-shadow: 0 0 6px #ffb340;
+  animation: slit-glow 1s ease infinite alternate;
+}
+
+@keyframes slit-glow {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+.token-drop-zone {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.token-brick {
+  min-width: 68px;
+  padding: 14px 10px;
+  border-radius: 14px;
+  border: 1.5px solid #33445c;
+  background: #131c2b;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.token-brick span {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.token-brick i {
+  font-size: 11.5px;
+  color: #7b8ba3;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.token-brick:hover {
+  border-color: #597094;
+  transform: translateY(-3px);
+}
+
+/* 积木下落弹簧动画 */
+.token-brick.anim-drop {
+  animation: brick-drop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes brick-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-32px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.token-brick.active-focus {
+  border-color: #ff6845;
+  background: linear-gradient(145deg, #222b3d, #1a2333);
+  box-shadow: 0 0 0 4px rgba(255, 90, 50, 0.2), 0 0 28px rgba(255, 90, 50, 0.35);
+  transform: translateY(-6px);
+}
+
+.token-brick.active-focus span {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 106, 71, 0.6);
+}
+
+.token-radar-ring {
+  position: absolute;
+  inset: -6px;
+  border: 1.5px dashed #ff6845;
+  border-radius: 18px;
+  animation: radar-spin 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes radar-spin {
+  100% { transform: rotate(360deg); }
+}
+
+.token-guide-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff9d82;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 90, 50, 0.08);
+}
+
+/* ---------------- 步骤 03: 向量化与位置波浪融合（Embedding & PE） ---------------- */
+.embedding-stage-v2 {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.embedding-flow-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.embed-token-anchor {
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #141c2b;
+  border: 1.5px solid #ff6845;
+  box-shadow: 0 0 24px rgba(255, 90, 50, 0.25);
+  text-align: center;
+}
+
+.embed-token-anchor strong {
+  font-size: 24px;
+  color: #ffffff;
+  display: block;
+}
+
+.embed-token-anchor small {
+  font-size: 11.5px;
+  color: #92a2ba;
+  display: block;
+  margin-top: 4px;
+}
+
+.embed-card {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #121a28;
+  border: 1.5px solid #33435c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s;
+}
+
+.embed-card.word-vec {
+  border-color: #8d7cff;
+  box-shadow: 0 0 24px rgba(141, 124, 255, 0.2);
+}
+
+.embed-card.pos-vec {
+  border-color: #ffb340;
+  box-shadow: 0 0 24px rgba(255, 179, 64, 0.2);
+}
+
+.embed-card.final-vec {
+  border-color: #1ed4aa;
+  box-shadow: 0 0 28px rgba(30, 212, 170, 0.25);
+}
+
+.embed-card-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.embed-card-desc {
+  font-size: 11.5px;
+  color: #8a9bb3;
+}
+
+.operator-icon {
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffb340;
+  text-shadow: 0 0 10px rgba(255, 179, 64, 0.5);
+  animation: pulse-dot 1.5s infinite;
+}
+
+/* 正弦余弦波形动效 */
+.sin-wave-canvas {
+  width: 110px;
+  height: 48px;
+}
+
+.sin-wave-path {
+  fill: none;
+  stroke: #ffb340;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px #ffb340);
+  animation: wave-travel 2s linear infinite;
+}
+
+@keyframes wave-travel {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -40; }
+}
+
+/* 向量特征柱状图 */
+.vector-bars-v2 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  height: 64px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #0d1420;
+  border: 1px solid #233044;
+}
+
+.v-bar-item {
+  width: 8px;
+  border-radius: 4px 4px 1px 1px;
+  transition: height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.v-bar-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ---------------- 步骤 04: Q·K·V 三棱镜分流 ---------------- */
+.qkv-stage-v2 {
+  width: 100%;
+  max-width: 680px;
+  display: grid;
+  grid-template-columns: 140px 100px 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.qkv-source-v2 {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 2px solid #ff6845;
+  background: radial-gradient(circle, rgba(255, 90, 50, 0.25), rgba(255, 90, 50, 0.05) 70%, transparent);
+  box-shadow: 0 0 40px rgba(255, 90, 50, 0.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.qkv-source-v2 strong {
+  font-size: 34px;
+  color: #ffffff;
+}
+
+.qkv-source-v2 small {
+  font-size: 12px;
+  color: #ff987c;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* 三棱镜中心分流管路 */
+.prism-svg-box {
+  width: 100px;
+  height: 240px;
+}
+
+.prism-beam {
+  fill: none;
+  stroke-width: 3;
+  stroke-dasharray: 6 10;
+  animation: svg-dash-flow 1s linear infinite;
+}
+
+.prism-beam.q { stroke: #8d7cff; filter: drop-shadow(0 0 6px #8d7cff); }
+.prism-beam.k { stroke: #ffb340; filter: drop-shadow(0 0 6px #ffb340); }
+.prism-beam.v { stroke: #ff5a32; filter: drop-shadow(0 0 6px #ff5a32); }
+
+.qkv-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.qkv-card-v2 {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1.5px solid #2f3e56;
+  background: #131c2a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: slide-in-left 0.5s ease both;
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.qkv-card-v2:hover {
+  transform: translateX(4px);
+}
+
+.qkv-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.qkv-card-v2.q-card { border-color: rgba(141, 124, 255, 0.4); }
+.qkv-card-v2.q-card .qkv-badge { background: linear-gradient(135deg, #7467e8, #9c91ff); box-shadow: 0 0 16px rgba(141, 124, 255, 0.4); }
+
+.qkv-card-v2.k-card { border-color: rgba(255, 179, 64, 0.4); }
+.qkv-card-v2.k-card .qkv-badge { background: linear-gradient(135deg, #c98818, #ffbd4a); box-shadow: 0 0 16px rgba(255, 179, 64, 0.4); }
+
+.qkv-card-v2.v-card { border-color: rgba(255, 90, 50, 0.4); }
+.qkv-card-v2.v-card .qkv-badge { background: linear-gradient(135deg, #dd4b26, #ff714b); box-shadow: 0 0 16px rgba(255, 90, 50, 0.4); }
+
+.qkv-info b {
+  display: block;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.qkv-info span {
+  display: block;
+  font-size: 13px;
+  color: #92a2ba;
+  margin-top: 4px;
+}
+
+/* ---------------- 步骤 05: 注意力权重计算（聚光灯对眼神） ---------------- */
+.score-stage-v2 {
+  width: 100%;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.spotlight-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: rgba(141, 124, 255, 0.1);
+  border: 1px solid rgba(141, 124, 255, 0.3);
+}
+
+.query-spotlight-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #c4bdff;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.spotlight-formula {
+  font: 12.5px "Cascadia Code", monospace;
+  color: #ff9d82;
+  font-weight: 700;
+}
+
+.attention-pairs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.attention-pair-row {
+  display: grid;
+  grid-template-columns: 56px 60px 1fr 64px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #111926;
+  border: 1.5px solid #29384e;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.attention-pair-row:hover {
+  background: #172233;
+  border-color: #485c7c;
+}
+
+.pair-token-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pair-dot-score {
+  font: 12px monospace;
+  color: #8c9cb3;
+}
+
+.pair-bar-track {
+  height: 12px;
+  border-radius: 99px;
+  background: #1f2b3e;
+  overflow: hidden;
+  position: relative;
+}
+
+.pair-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #7467e8, #a298ff);
+  transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 0 10px rgba(141, 124, 255, 0.4);
+}
+
+.pair-percent {
+  font: 13.5px monospace;
+  font-weight: 800;
+  color: #b5c3d7;
+  text-align: right;
+}
+
+/* 最强注意力高光聚焦行 */
+.attention-pair-row.is-strongest {
+  border-color: #ff6845;
+  background: linear-gradient(90deg, rgba(255, 90, 50, 0.16), rgba(255, 90, 50, 0.05));
+  box-shadow: 0 0 24px rgba(255, 90, 50, 0.2);
+}
+
+.attention-pair-row.is-strongest .pair-bar-fill {
+  background: linear-gradient(90deg, #e0441d, #ff815e);
+  box-shadow: 0 0 14px rgba(255, 90, 50, 0.55);
+}
+
+.attention-pair-row.is-strongest .pair-percent {
+  color: #ff8a69;
+}
+
+/* ---------------- 步骤 06: 信息加权汇聚（多路光束吸附融合） ---------------- */
+.aggregation-stage-v2 {
+  width: 100%;
+  max-width: 680px;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 80px minmax(200px, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.value-sources-cloud {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.value-source-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: #121a28;
+  border: 1.5px solid rgba(255, 90, 50, calc(var(--w-val) * 0.9 + 0.15));
+  box-shadow: 0 0 calc(var(--w-val) * 20px) rgba(255, 90, 50, calc(var(--w-val) * 0.3));
+  transition: all 0.3s;
+}
+
+.value-source-item strong {
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.value-source-item span {
+  font: 12px monospace;
+  color: #ff987c;
+  font-weight: 700;
+}
+
+.merge-focus-core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sigma-symbol {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #ff6845;
+  background: radial-gradient(circle, rgba(255, 90, 50, 0.3), #121926);
+  box-shadow: 0 0 28px rgba(255, 90, 50, 0.35);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffffff;
+  animation: pulse-dot 1.4s infinite;
+}
+
+.merge-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #ff8a69;
+  margin-top: 6px;
+}
+
+.context-output-box {
+  padding: 22px 20px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #162030, #111824);
+  border: 1.5px solid #ff6845;
+  box-shadow: 0 0 32px rgba(255, 90, 50, 0.22);
+}
+
+.context-output-box > span {
+  color: #ff9478;
+  font-size: 13px;
+  font-weight: 800;
+  display: block;
+}
+
+.context-output-box > strong {
+  display: block;
+  margin: 8px 0 14px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+/* ---------------- 步骤 07: 多头与残差前馈（Multi-Head & Skip Connection） ---------------- */
+.module-stage-v2 {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.multi-head-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.head-card-v2 {
+  padding: 12px 10px;
+  border-radius: 12px;
+  background: #121a28;
+  border: 1.5px solid #3d346b;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.head-card-v2:hover {
+  border-color: #8d7cff;
+  transform: translateY(-2px);
+}
+
+.head-card-v2 strong {
+  font-size: 13px;
+  color: #d1caff;
+}
+
+.head-mini-rays {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgba(141, 124, 255, 0.08);
+}
+
+.ray-line {
+  position: absolute;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ff6845, #8d7cff);
+  animation: ray-flicker 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes ray-flicker {
+  0% { opacity: 0.3; transform: scaleX(0.7); }
+  100% { opacity: 1; transform: scaleX(1); }
+}
+
+.concat-linear-banner {
+  padding: 8px 22px;
+  border-radius: 20px;
+  background: rgba(255, 179, 64, 0.12);
+  border: 1px solid rgba(255, 179, 64, 0.3);
+  color: #ffc268;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.residual-ffn-block {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #111826;
+  border: 1.5px solid #2d3b50;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.residual-line-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1ed4aa;
+  font-size: 13.5px;
+  font-weight: 800;
+}
+
+.ffn-layer-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #0d131e;
+  border: 1px dashed #354763;
+  color: #a4b4cb;
+  font-size: 13px;
+}
+
+/* ---------------- 通用关键帧动画 ---------------- */
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.7; }
+}
+
+@keyframes svg-dash-flow {
+  to { stroke-dashoffset: -30; }
+}
+
+@keyframes flow-pulse {
+  50% { transform: translateX(4px); opacity: 0.6; }
+}
+
+/* 响应式调整 */
+@media (max-width: 980px) {
+  .story-intro {
+    grid-template-columns: 1fr;
+  }
+  .story-stage {
+    grid-template-columns: 1fr;
+  }
+  .story-copy {
+    padding: 32px 28px;
+    border-right: 0;
+    border-bottom: 1px solid var(--story-border);
+  }
+  .story-visual {
+    min-height: 440px;
+    padding: 24px 20px;
+  }
+  .story-timeline {
+    overflow-x: auto;
+    grid-template-columns: repeat(8, minmax(78px, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .transformer-story {
+    border-radius: 20px;
+  }
+  .story-intro {
+    padding: 20px 16px;
+  }
+  .story-controls {
+    grid-template-columns: 1fr 1fr;
+    padding: 12px 16px;
+  }
+  .story-controls label {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+  .embedding-flow-grid {
+    flex-direction: column;
+  }
+  .qkv-stage-v2 {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .prism-svg-box {
+    display: none;
+  }
+  .aggregation-stage-v2 {
+    grid-template-columns: 1fr;
+  }
+  .multi-head-grid-v2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
