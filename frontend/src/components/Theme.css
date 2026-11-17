@@ -6706,3 +6706,247 @@
   color: #334155 !important;
   font-size: 13.5px !important;
 }
+
+
+/* [Cyber Theme] AI 私教真实大模型与会话存档全套深紫霓虹风格 */
+[data-theme="cyber"] .tutor-action-pill {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="cyber"] .tutor-action-pill:hover {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+  color: #00f5d4 !important;
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .tutor-action-pill.primary-pill {
+  background: linear-gradient(135deg, #00f5d4, #00bb9d) !important;
+  color: #09031c !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.5) !important;
+}
+[data-theme="cyber"] .tutor-history-drawer {
+  background: #150b36 !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+}
+[data-theme="cyber"] .drawer-head {
+  background: #1a0f44 !important;
+  border-bottom: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .drawer-title {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .drawer-session-card {
+  background: #1a0f44 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .drawer-session-card:hover {
+  background: #231459 !important;
+  border-color: rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .drawer-session-card.active {
+  background: #281766 !important;
+  border: 1px solid #00f5d4 !important;
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.25) !important;
+}
+[data-theme="cyber"] .session-title-text {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .session-count-tag {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .sess-icon-btn {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .sess-icon-btn:hover {
+  background: rgba(0, 245, 212, 0.2) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .msg-copy-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .msg-copy-btn:hover {
+  background: #00f5d4 !important;
+  color: #09031c !important;
+}
+[data-theme="cyber"] .cscope-modal-card {
+  background: #150b36 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .modal-header-row,
+[data-theme="cyber"] .modal-footer-row {
+  background: #1a0f44 !important;
+  border-color: rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .modal-title-group h3 {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .modal-subtitle {
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .form-label {
+  color: #e2e8f0 !important;
+}
+[data-theme="cyber"] .provider-card {
+  background: #1a0f44 !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .provider-card:hover {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+}
+[data-theme="cyber"] .provider-card.active {
+  background: #2a166b !important;
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .prov-name {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .prov-url {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .config-input,
+[data-theme="cyber"] .config-select {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .key-eye-btn {
+  background: #1a0f44 !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .test-conn-btn {
+  background: #1a0f44 !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .modal-cancel-btn {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #cbd5e1 !important;
+}
+[data-theme="cyber"] .modal-save-btn {
+  background: linear-gradient(135deg, #00f5d4, #00bb9d) !important;
+  color: #09031c !important;
+  font-weight: 800 !important;
+}
+
+
+/* [Dark Theme] AI 私教真实大模型与会话存档全套曜石黑绿风格 */
+[data-theme="dark"] .tutor-action-pill {
+  background: #142037 !important;
+  border: 1px solid rgba(5, 150, 105, 0.35) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .tutor-action-pill:hover {
+  background: #1a2947 !important;
+  border-color: #10b981 !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .tutor-action-pill.primary-pill {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+[data-theme="dark"] .tutor-history-drawer {
+  background: #0f182c !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+}
+[data-theme="dark"] .drawer-head {
+  background: #142037 !important;
+  border-bottom: 1px solid rgba(5, 150, 105, 0.2) !important;
+}
+[data-theme="dark"] .drawer-title {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .drawer-session-card {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .drawer-session-card:hover {
+  background: #192845 !important;
+}
+[data-theme="dark"] .drawer-session-card.active {
+  background: #142e3b !important;
+  border-color: #10b981 !important;
+}
+[data-theme="dark"] .session-title-text {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .session-count-tag {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .cscope-modal-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(5, 150, 105, 0.35) !important;
+}
+[data-theme="dark"] .modal-header-row,
+[data-theme="dark"] .modal-footer-row {
+  background: #142037 !important;
+  border-color: rgba(5, 150, 105, 0.2) !important;
+}
+[data-theme="dark"] .modal-title-group h3 {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .modal-subtitle {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .form-label {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .provider-card {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .provider-card:hover {
+  background: #192845 !important;
+  border-color: #059669 !important;
+}
+[data-theme="dark"] .provider-card.active {
+  background: #12303c !important;
+  border-color: #10b981 !important;
+}
+[data-theme="dark"] .prov-name {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .prov-url {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .config-input,
+[data-theme="dark"] .config-select {
+  background: #090d16 !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .key-eye-btn {
+  background: #142037 !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .test-conn-btn {
+  background: #142037 !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .modal-cancel-btn {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] .modal-save-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
