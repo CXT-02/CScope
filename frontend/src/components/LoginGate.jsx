@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react'
 import { useLearningProfile } from './LearningProfileContext'
+import { useTheme } from './ThemeContext'
 import ThemePicker from './ThemePicker'
 
 export default function LoginGate({ onLoginSuccess }) {
-  const { users, login, register, resetPasswordWithSecurity } = useLearningProfile()
+  const { theme } = useTheme()
+  const { users, login, register, resetPasswordWithSecurity, deleteUser } = useLearningProfile()
   const [mode, setMode] = useState('login') // 'login' | 'register' | 'forgot'
-  const [name, setName] = useState('小明同学')
+  const [name, setName] = useState(users[0]?.name || '小明同学')
   const [pin, setPin] = useState('')
   const [confirmPin, setConfirmPin] = useState('')
   const [showPin, setShowPin] = useState(false)
@@ -112,7 +114,7 @@ export default function LoginGate({ onLoginSuccess }) {
   }
 
   return (
-    <div className="login-gate-container">
+    <div className="login-gate-container" data-theme={theme}>
       {/* 顶部右上角主题自由切换 */}
       <div style={{ position: 'absolute', top: 20, right: 28, zIndex: 100 }}>
         <ThemePicker />
@@ -125,14 +127,10 @@ export default function LoginGate({ onLoginSuccess }) {
         {/* 左侧：学术质感展示与实验室亮点 */}
         <div className="login-gate-intro">
           <div className="login-brand-header-block">
-            <div className="login-brand-sub-badge">
-              <span className="brand-dot" />
-              <span>COMPUTATIONAL ARCHITECTURE LAB</span>
-            </div>
             <h1 className="login-platform-brand-name">
               <span className="brand-en">CSCOPE</span>
               <span className="brand-sep">·</span>
-              <span className="brand-cn">计算机微观仿真与 408 测评实验室</span>
+              <span className="brand-cn">计算机微观仿真实验室</span>
             </h1>
           </div>
 
@@ -140,11 +138,6 @@ export default function LoginGate({ onLoginSuccess }) {
             把看不见的计算过程，<br />
             变成<span className="title-highlight">可以操作的实验</span>。
           </h2>
-
-          <p className="login-hero-desc">
-            从 CPU 五级流水线冒险、Cache 组相联颠簸到操作系统死锁与 TCP 状态机，让抽象概念按步骤运行；
-            内置 <strong>105 道历年 408 统考真题</strong> 与精准仿真映射，全时接入真实大模型并建立终身学情档案。
-          </p>
 
           <div className="login-feature-list">
             <div className="feature-item">
@@ -221,12 +214,13 @@ export default function LoginGate({ onLoginSuccess }) {
                   {users.map((u) => {
                     const isSelected = name.trim().toLowerCase() === u.name.trim().toLowerCase()
                     return (
-                      <button
+                      <div
                         key={u.id}
-                        type="button"
                         className={`saved-account-chip ${isSelected ? 'selected' : ''}`}
                         onClick={() => handleSelectAccount(u.name)}
                         title={`点击选择 ${u.name}，随后输入密码完成鉴权`}
+                        role="button"
+                        tabIndex={0}
                       >
                         <div className="chip-avatar">
                           {u.avatar ? (
@@ -240,7 +234,20 @@ export default function LoginGate({ onLoginSuccess }) {
                           <span>{u.targetSchool ? u.targetSchool.slice(0, 8) + '...' : u.major}</span>
                         </div>
                         {isSelected && <span className="chip-active-check">✓</span>}
-                      </button>
+                        {users.length > 1 && (
+                          <button
+                            type="button"
+                            className="chip-delete-btn"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (deleteUser) deleteUser(u.id)
+                            }}
+                            title="从列表中移除此档案"
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
                     )
                   })}
                 </div>

@@ -8,7 +8,22 @@ const LearningProfileContext = createContext(null)
 export function LearningProfileProvider({ children }) {
   const [users, setUsers] = useState(() => {
     const saved = readJson(USERS_KEY, [])
-    if (saved && saved.length > 0) return saved
+    if (saved && saved.length > 0) {
+      // 智能去重：若同时存在“小明”与“小明同学”的冗余演示档案，合并保留“小明同学”
+      const hasMingStudent = saved.some((u) => u.name?.trim() === '小明同学')
+      const deduplicated = []
+      const seenNames = new Set()
+      for (const u of saved) {
+        const norm = u.name?.trim()
+        if (norm === '小明' && hasMingStudent) continue
+        if (!seenNames.has(norm)) {
+          seenNames.add(norm)
+          deduplicated.push(u)
+        }
+      }
+      writeJson(USERS_KEY, deduplicated)
+      return deduplicated
+    }
     // 默认内置演示学者账户（初始密码 123456）
     const initialDemoUser = {
       id: 'u_demo_ming',
@@ -39,6 +54,18 @@ export function LearningProfileProvider({ children }) {
   const [allRecords, setAllRecords] = useState(() => readJson(RECORDS_KEY, {}))
   const user = users.find((item) => item.id === sessionId) || null
   const records = user ? allRecords[user.id] || emptyRecords() : emptyRecords()
+
+  function deleteUser(userId) {
+    const nextUsers = users.filter((u) => u.id !== userId)
+    if (nextUsers.length === 0) return
+    setUsers(nextUsers)
+    writeJson(USERS_KEY, nextUsers)
+    if (sessionId === userId) {
+      const nextSession = nextUsers[0].id
+      setSessionId(nextSession)
+      localStorage.setItem(SESSION_KEY, nextSession)
+    }
+  }
 
   async function register(name, pin, extraConfig = {}) {
     const cleanName = name.trim()
@@ -206,6 +233,7 @@ export function LearningProfileProvider({ children }) {
       register,
       login,
       logout,
+      deleteUser,
       resetPasswordWithSecurity,
       updateUserProfile,
       updatePassword,

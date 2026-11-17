@@ -7426,3 +7426,259 @@
   background: #ffffff !important;
   border: 1px solid #b6ceb4 !important;
 }
+
+/* ======================================================== */
+/* 29. 登录与身份门户 (LoginGate) 全主题彻底统一 (统一左侧背景与右侧卡片) */
+/* ======================================================== */
+
+/* --- 🌙 [Dark Theme] 曜石暗黑模式统一 --- */
+[data-theme="dark"] .login-gate-container,
+.login-gate-container[data-theme="dark"] {
+  background: radial-gradient(circle at 10% 20%, #090d16 0%, #05070c 100%) !important;
+  color: #f1f5f9 !important;
+}
+[data-theme="dark"] .login-gate-bg-glow.glow-1,
+.login-gate-container[data-theme="dark"] .login-gate-bg-glow.glow-1 {
+  background: #1e1b4b !important;
+  opacity: 0.3 !important;
+}
+[data-theme="dark"] .login-gate-bg-glow.glow-2,
+.login-gate-container[data-theme="dark"] .login-gate-bg-glow.glow-2 {
+  background: #064e3b !important;
+  opacity: 0.25 !important;
+}
+[data-theme="dark"] .login-platform-brand-name .brand-en,
+.login-gate-container[data-theme="dark"] .login-platform-brand-name .brand-en {
+  color: #10b981 !important;
+}
+[data-theme="dark"] .login-platform-brand-name .brand-sep,
+.login-gate-container[data-theme="dark"] .login-platform-brand-name .brand-sep {
+  color: #475569 !important;
+}
+[data-theme="dark"] .login-platform-brand-name .brand-cn,
+.login-gate-container[data-theme="dark"] .login-platform-brand-name .brand-cn {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .login-hero-title,
+.login-gate-container[data-theme="dark"] .login-hero-title {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .login-hero-title .title-highlight,
+.login-gate-container[data-theme="dark"] .login-hero-title .title-highlight {
+  color: #10b981 !important;
+}
+[data-theme="dark"] .feature-item,
+.login-gate-container[data-theme="dark"] .feature-item {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .feature-item:hover,
+.login-gate-container[data-theme="dark"] .feature-item:hover {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  background: #142037 !important;
+}
+[data-theme="dark"] .feature-text strong,
+.login-gate-container[data-theme="dark"] .feature-text strong {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .feature-text p,
+.login-gate-container[data-theme="dark"] .feature-text p {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .feature-icon-box,
+.login-gate-container[data-theme="dark"] .feature-icon-box {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .login-card,
+.login-gate-container[data-theme="dark"] .login-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .login-badge-label,
+.login-gate-container[data-theme="dark"] .login-badge-label {
+  color: #34d399 !important;
+}
+
+/* --- ⚡ [Cyber Theme] 极客赛博模式统一 --- */
+[data-theme="cyber"] .login-gate-container,
+.login-gate-container[data-theme="cyber"] {
+  background: radial-gradient(circle at 10% 20%, #100628 0%, #060212 100%) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .login-gate-bg-glow.glow-1,
+.login-gate-container[data-theme="cyber"] .login-gate-bg-glow.glow-1 {
+  background: #7928ca !important;
+  opacity: 0.3 !important;
+}
+[data-theme="cyber"] .login-gate-bg-glow.glow-2,
+.login-gate-container[data-theme="cyber"] .login-gate-bg-glow.glow-2 {
+  background: #00f5d4 !important;
+  opacity: 0.2 !important;
+}
+[data-theme="cyber"] .login-platform-brand-name .brand-en,
+.login-gate-container[data-theme="cyber"] .login-platform-brand-name .brand-en {
+  color: #00f5d4 !important;
+  text-shadow: 0 0 12px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .login-platform-brand-name .brand-sep,
+.login-gate-container[data-theme="cyber"] .login-platform-brand-name .brand-sep {
+  color: #7928ca !important;
+}
+[data-theme="cyber"] .login-platform-brand-name .brand-cn,
+.login-gate-container[data-theme="cyber"] .login-platform-brand-name .brand-cn {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .login-hero-title,
+.login-gate-container[data-theme="cyber"] .login-hero-title {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .login-hero-title .title-highlight,
+.login-gate-container[data-theme="cyber"] .login-hero-title .title-highlight {
+  color: #00f5d4 !important;
+  text-shadow: 0 0 15px rgba(0, 245, 212, 0.4) !important;
+}
+[data-theme="cyber"] .feature-item,
+.login-gate-container[data-theme="cyber"] .feature-item {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+[data-theme="cyber"] .feature-item:hover,
+.login-gate-container[data-theme="cyber"] .feature-item:hover {
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.25) !important;
+  background: #25155c !important;
+}
+[data-theme="cyber"] .feature-text strong,
+.login-gate-container[data-theme="cyber"] .feature-text strong {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .feature-text p,
+.login-gate-container[data-theme="cyber"] .feature-text p {
+  color: #cbd5e1 !important;
+}
+[data-theme="cyber"] .feature-icon-box,
+.login-gate-container[data-theme="cyber"] .feature-icon-box {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .login-card,
+.login-gate-container[data-theme="cyber"] .login-card {
+  background: #180e3d !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.35) !important;
+  box-shadow: 0 0 35px rgba(0, 245, 212, 0.15) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .login-badge-label,
+.login-gate-container[data-theme="cyber"] .login-badge-label {
+  color: #00f5d4 !important;
+}
+
+/* --- 🌲 [Forest Theme] 仓林护眼模式统一 --- */
+[data-theme="forest"] .login-gate-container,
+.login-gate-container[data-theme="forest"] {
+  background: radial-gradient(circle at 10% 20%, #edf5eb 0%, #e2ece0 100%) !important;
+  color: #091e11 !important;
+}
+[data-theme="forest"] .login-platform-brand-name .brand-en,
+.login-gate-container[data-theme="forest"] .login-platform-brand-name .brand-en {
+  color: #166534 !important;
+}
+[data-theme="forest"] .login-platform-brand-name .brand-cn,
+.login-gate-container[data-theme="forest"] .login-platform-brand-name .brand-cn {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .login-hero-title,
+.login-gate-container[data-theme="forest"] .login-hero-title {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .login-hero-title .title-highlight,
+.login-gate-container[data-theme="forest"] .login-hero-title .title-highlight {
+  color: #166534 !important;
+}
+[data-theme="forest"] .feature-item,
+.login-gate-container[data-theme="forest"] .feature-item {
+  background: #ffffff !important;
+  border: 1px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .feature-text strong,
+.login-gate-container[data-theme="forest"] .feature-text strong {
+  color: #091e11 !important;
+}
+[data-theme="forest"] .feature-text p,
+.login-gate-container[data-theme="forest"] .feature-text p {
+  color: #4b6354 !important;
+}
+[data-theme="forest"] .login-card,
+.login-gate-container[data-theme="forest"] .login-card {
+  background: #ffffff !important;
+  border: 1px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+
+/* --- ☀️ [Light Theme] 纯净白昼模式统一 (消除右侧黑色突兀大方块) --- */
+[data-theme="light"] .login-gate-container,
+.login-gate-container[data-theme="light"] {
+  background: radial-gradient(circle at 10% 20%, #f8fafc 0%, #f1f5f9 100%) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .login-card,
+.login-gate-container[data-theme="light"] .login-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .login-card-title,
+.login-gate-container[data-theme="light"] .login-card-title {
+  color: #0f172a !important;
+}
+[data-theme="light"] .login-card-subtitle,
+.login-gate-container[data-theme="light"] .login-card-subtitle {
+  color: #64748b !important;
+}
+[data-theme="light"] .saved-accounts-section,
+.login-gate-container[data-theme="light"] .saved-accounts-section {
+  background: #f8fafc !important;
+  border: 1px dashed #cbd5e1 !important;
+}
+[data-theme="light"] .saved-accounts-label,
+.login-gate-container[data-theme="light"] .saved-accounts-label {
+  color: #059669 !important;
+}
+[data-theme="light"] .saved-account-chip,
+.login-gate-container[data-theme="light"] .saved-account-chip {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .chip-info strong,
+.login-gate-container[data-theme="light"] .chip-info strong {
+  color: #0f172a !important;
+}
+[data-theme="light"] .chip-info span,
+.login-gate-container[data-theme="light"] .chip-info span {
+  color: #64748b !important;
+}
+[data-theme="light"] .login-input-box,
+.login-gate-container[data-theme="light"] .login-input-box {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+}
+[data-theme="light"] .login-input,
+.login-gate-container[data-theme="light"] .login-input {
+  color: #0f172a !important;
+}
+[data-theme="light"] .login-input::placeholder,
+.login-gate-container[data-theme="light"] .login-input::placeholder {
+  color: #94a3b8 !important;
+}
+[data-theme="light"] .login-submit-btn,
+.login-gate-container[data-theme="light"] .login-submit-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
