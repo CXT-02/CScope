@@ -35,3 +35,11 @@ tmp/
 output/
 ~$*
 *.tmp
+
+# LaTeX auxiliary files
+*.aux
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
