@@ -322,13 +322,49 @@
   color: #223f2c !important;
 }
 
+[data-theme="forest"] .point-interactive-btn {
+  background: #f8fbf6 !important;
+  border-color: #d1ded0 !important;
+  color: #1e3827 !important;
+}
+
+[data-theme="forest"] .point-interactive-btn:hover {
+  background: #eaf3e8 !important;
+  border-color: #15803d !important;
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .point-interactive-btn .point-play-tag {
+  color: #15803d !important;
+  background: rgba(21, 128, 61, 0.12) !important;
+}
+
 [data-theme="forest"] .course-home .course-card-footer {
   border-top-color: #e5efe4 !important;
   color: #4b6b55 !important;
 }
 
+[data-theme="forest"] .course-card-footer .footer-workshop-link {
+  background: #f0f7ef !important;
+  border-color: #c7d8c5 !important;
+  color: #1e3827 !important;
+}
+
+[data-theme="forest"] .course-card-footer .footer-workshop-link:hover {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+}
+
 [data-theme="forest"] .course-home .course-card-footer b {
   color: #15803d !important;
+}
+
+[data-theme="forest"] .course-go-workshop-top-btn {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.25) !important;
 }
 
 /* --- 苍林护眼: 控制台总览 (ConsoleDashboard) --- */

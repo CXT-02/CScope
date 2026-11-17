@@ -641,3 +641,125 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------------- 5. 交互式考点预览小按钮与微观仿真工坊直通车 ---------------- */
+.point-interactive-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ccd7e8;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.point-interactive-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--course-accent);
+  transform: translateX(3px);
+  color: #ffffff;
+}
+
+.point-interactive-btn i {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border: 1px solid #6b7d96;
+  border-radius: 50%;
+}
+
+.point-interactive-btn i.ready {
+  border: 0;
+  background: #1ed4aa;
+  box-shadow: 0 0 6px #1ed4aa;
+}
+
+.point-interactive-btn .point-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.point-interactive-btn .point-play-tag {
+  font-size: 10.5px;
+  color: #1ed4aa;
+  background: rgba(30, 212, 170, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* 卡片底部双按钮操作区 */
+.course-card-footer button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.course-card-footer .footer-workshop-link {
+  color: #8c9cb3;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.course-card-footer .footer-workshop-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--course-accent);
+}
+
+.course-card-footer .footer-detail-link b {
+  color: var(--course-accent);
+  font-weight: 700;
+}
+
+.course-card-footer .footer-detail-link:hover b {
+  text-decoration: underline;
+}
+
+/* 单科详情页顶部导航行 */
+.course-detail-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.course-go-workshop-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(101, 88, 232, 0.2), rgba(30, 212, 170, 0.15));
+  border: 1px solid rgba(101, 88, 232, 0.4);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.course-go-workshop-top-btn:hover {
+  background: linear-gradient(135deg, rgba(101, 88, 232, 0.35), rgba(30, 212, 170, 0.25));
+  box-shadow: 0 4px 16px rgba(101, 88, 232, 0.3);
+  transform: translateY(-2px);
+}

@@ -153,7 +153,19 @@ export default function App() {
             {route.kind !== 'console' && <span className="crumb-sep">/</span>}
             {route.kind === 'galaxy' && <span className="crumb-current">3D 思维知识星图 · 三维神经网络</span>}
             {route.kind === 'checkin' && <span className="crumb-current">实机学时度量 · 仿真与模考档案</span>}
-            {route.kind === 'courses' && <span className="crumb-current">课程知识中心 · 专业课大纲</span>}
+            {(route.kind === 'courses' || route.kind === 'course') && (
+              <>
+                {route.kind === 'course' ? (
+                  <>
+                    <button type="button" className="crumb-btn" onClick={openCourses}>课程中心</button>
+                    <span className="crumb-sep">/</span>
+                    <span className="crumb-current">{activeCourse?.title || '专项课程'} · 大纲知识点</span>
+                  </>
+                ) : (
+                  <span className="crumb-current">课程知识中心 · 专业课大纲</span>
+                )}
+              </>
+            )}
             {route.kind === 'workshop' && <span className="crumb-current">微观交互仿真工坊</span>}
             {route.kind === 'exam' && <span className="crumb-current">408 考研真题测评</span>}
             {route.kind === 'mistakes' && <span className="crumb-current">靶向错题本与消错实验</span>}
@@ -162,13 +174,6 @@ export default function App() {
             {route.kind === 'profile' && <span className="crumb-current">个人中心与资料安全管理</span>}
             {route.kind === 'analytics' && <span className="crumb-current">学情数据画像与能力雷达</span>}
             {route.kind === 'community' && <span className="crumb-current">极客学术社区广场</span>}
-            {route.kind === 'course' && (
-              <>
-                <button type="button" className="crumb-btn" onClick={openCourses}>课程中心</button>
-                <span className="crumb-sep">/</span>
-                <span className="crumb-current">{activeCourse?.title || '专项课程'}</span>
-              </>
-            )}
             {route.kind === 'lab' && (
               <>
                 <button type="button" className="crumb-btn" onClick={() => navigate('#/workshop')}>仿真工坊</button>
@@ -242,20 +247,22 @@ export default function App() {
               onOpenExperiment={openExperiment}
               onOpenCourses={openCourses}
             />
-          ) : route.kind === 'courses' ? (
-            /* 4. 课程知识库视图 */
+          ) : (route.kind === 'courses' || route.kind === 'course') ? (
+            /* 4. 课程知识库视图 (总览大纲与单科知识点) */
             <ExperimentHub
               courses={courses}
               activeCourseId={activeCourseId}
               onOpen={openExperiment}
               onSelectCourse={openCourse}
-              onBack={goConsole}
+              onOpenWorkshopSubject={(subjectId) => navigate(`#/workshop?subject=${subjectId}`)}
+              onBack={openCourses}
               onShowProfile={openProfile}
               onLogin={() => {}}
             />
           ) : route.kind === 'workshop' ? (
-            /* 5. 微观仿真工坊分类检索 */
+            /* 5. 微观仿真工坊分类检索 (支持带学科参数直达) */
             <ExperimentWorkshop
+              initialSubject={route.subject || 'all'}
               onOpenExperiment={openExperiment}
             />
           ) : route.kind === 'exam' ? (
@@ -332,7 +339,10 @@ export default function App() {
 function readRouteFromHash() {
   if (window.location.hash === '#/galaxy') return { kind: 'galaxy', id: null }
   if (window.location.hash === '#/checkin') return { kind: 'checkin', id: null }
-  if (window.location.hash === '#/workshop') return { kind: 'workshop', id: null }
+  if (window.location.hash.startsWith('#/workshop')) {
+    const queryMatch = window.location.hash.match(/[?&]subject=([a-z-]+)/)
+    return { kind: 'workshop', id: null, subject: queryMatch?.[1] || 'all' }
+  }
   if (window.location.hash === '#/mistakes') return { kind: 'mistakes', id: null }
   if (window.location.hash === '#/cheatsheet') return { kind: 'cheatsheet', id: null }
   if (window.location.hash === '#/aitutor') return { kind: 'aitutor', id: null }

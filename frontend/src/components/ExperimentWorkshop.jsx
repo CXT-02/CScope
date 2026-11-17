@@ -1,10 +1,16 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { experiments, courses } from '../lib/experimentRegistry'
 
-export default function ExperimentWorkshop({ onOpenExperiment }) {
-  const [subjectFilter, setSubjectFilter] = useState('all')
+export default function ExperimentWorkshop({ onOpenExperiment, initialSubject = 'all' }) {
+  const [subjectFilter, setSubjectFilter] = useState(initialSubject)
   const [difficultyFilter, setDifficultyFilter] = useState('all')
   const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    if (initialSubject) {
+      setSubjectFilter(initialSubject)
+    }
+  }, [initialSubject])
 
   const subjectTabs = useMemo(() => {
     const counts = { all: experiments.length }
