@@ -213,18 +213,43 @@ npm run dev
 * [x] **时钟级微观仿真**：进入【CPU 五级流水线】点击单步打拍，观察 RAW 冒险与前递；进入【Cache 映射】查看 2023 年统考 100% 全颠簸复现；
 * [x] **408 真题联动验证**：进入题库故意做错一道 Cache 计算题，点击下方绿色高亮按钮【立即启动仿真实验推演】，验证题目参数是否一键注入沙盒；
 * [x] **离线 AI 私教答疑**：在断网环境下提问“推导银行家算法”，验证离线知识图谱能否秒级输出规范思维链；
-* [x] **学情画像与研学社区**：查看五维雷达图与目标院校方案，浏览研友讨论区并验证头像零重叠规范。
+* [x] **学情画像与研学社区**：查看五维雷达图与目标院校方案，浏览研友讨论区并验证头像零重叠规范；
+* [x] **AI 协同开发证据链核验**：查阅 [📁 `docs/ai-history/`](./docs/ai-history/) 与 [🖥️ 交互式审计看板](./docs/ai-history/AI_Co-Creation_Audit_Viewer.html)，核验 4 组真实原始 Prompt、现场截图与 Git Commit 映射。
+
+---
+
+## 🤖 2.1 代码仓库与 AI 协同演进真实凭证集
+
+依据传智杯大赛 **“2.1 代码仓库与演进记录”** 规范，本项目坚决杜绝“一次性提交全部代码”与“空洞口头总结”，提供**全套底层可核验证据**：
+
+| 交互链条编号 | 核心迭代主题 | 关联 Commit | 证据要素 | 查验入口 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Chain 1** | **DeepSeek-R1 真实大模型全面接入与多会话记录** | [`3b8fbde`](https://github.com/CXT-02/CScope/commit/3b8fbde) | 用户提问现场截图、原始无删减 Prompt、多会话持久化与离线知识图谱兜底 | [查看凭证](./docs/ai-history/chain-1/) |
+| **Chain 2** | **408 推荐偏航“二叉树 vs 银行家”意图加权修复** | [`db19019`](https://github.com/CXT-02/CScope/commit/db19019) | 用户真实指谬现场截图、词频偏航根因剖析、综合打分竞争模型重构 | [查看凭证](./docs/ai-history/chain-2/) |
+| **Chain 3** | **社区评论区头像 URL 文本横向溢出重叠 Bug 治理** | [`3efb9ac`](https://github.com/CXT-02/CScope/commit/3efb9ac) | 用户现场排版重叠原图、React 文本渲染根因、`AvatarBadge` 防御组件 | [查看凭证](./docs/ai-history/chain-3/) |
+| **Chain 4** | **平台首页极简美学大画幅门禁与去冗余演进** | [`1450339`](https://github.com/CXT-02/CScope/commit/1450339) | 用户现场改版与精简截图、居中 Hero 门禁与平滑登录专区 | [查看凭证](./docs/ai-history/chain-4/) |
+
+👉 **评审专家交互式查看**：可直接在浏览器中打开 **[`docs/ai-history/AI_Co-Creation_Audit_Viewer.html`](./docs/ai-history/AI_Co-Creation_Audit_Viewer.html)**，高保真还原全部对话气泡、现场截图与代码提交！  
+👉 **完整规范快照文档**：详见 **[`docs/AI协同演进与Prompt历史快照.md`](./docs/AI协同演进与Prompt历史快照.md)**。
 
 ---
 ## 📁 目录结构导览
 
 ```
 CScope/
-├── docs/                                  # 核心技术设计文档与参赛资料
-│   ├── CSCOPE_项目设计与开发报告_2026传智杯.md # 传智杯赛事完整立项与技术报告
-│   ├── 演示视频分镜与逐字稿.md                 # 6分45秒竞赛演示视频解说脚本
-│   ├── 答辩PPT核心大纲.md                     # 决赛答辩 PPT 结构与专家问答FAQ
-│   └── 任务交接文档.md                        # 系统开发任务清单与架构宪法
+├── docs/                                  # 核心技术设计文档与参赛材料
+│   ├── ai-history/                        # 【关键】AI 协同开发真实 Prompt 链与原始截图证据
+│   │   ├── chain-1/                       # 链条1: DeepSeek-R1 接入与存档 (Commit 3b8fbde)
+│   │   ├── chain-2/                       # 链条2: 408 推荐偏航意图加权 (Commit db19019)
+│   │   ├── chain-3/                       # 链条3: 社区头像文字重叠修复 (Commit 3efb9ac)
+│   │   ├── chain-4/                       # 链条4: 首页居中门禁演进 (Commit 1450339)
+│   │   ├── AI_Co-Creation_Audit_Viewer.html # 交互式高保真对话与代码审计看板
+│   │   └── README.md                      # AI 证据集导读与核验指南
+│   ├── CSCOPE_官方规范作品介绍文档(对应第6项提纲).md # 【第6项】国奖级作品介绍文档 (20+页)
+│   ├── CSCOPE_作品介绍文档_传智杯提交版.html     # 【第6项】一键另存为 PDF 打印版 (内嵌高清图)
+│   ├── AI协同演进与Prompt历史快照.md             # 【2.1项】核心 Prompt 链与代码印证报告
+│   ├── CSCOPE_演示视频解说词与AI复现脚本.md       # 【2.3项】5-8分钟演示视频分镜与2分钟AI复现脚本
+│   └── CSCOPE_项目设计与开发报告_2026传智杯.md   # 传智杯赛事系统设计报告
 ├── frontend/                              # 前端工程 (React + Vite)
 │   ├── src/
 │   │   ├── components/                    # 25个仿真实验组件与系统核心UI
@@ -238,7 +263,7 @@ CScope/
 │   │   ├── lib/                           # 实验注册表、考题数据与推荐算法
 │   │   │   ├── experimentRegistry.js      # 25门实验全局路由与注册引擎
 │   │   │   ├── examRegistry.js            # 105道历年408全真题库
-│   │   │   └── aiTutorService.js           # AI模型接入、离线知识库与流式响应
+│   │   │   └── aiTutorService.js          # AI模型接入、离线知识库与流式响应
 │   │   └── app/                           # 入口主应用
 │   └── package.json
 ├── backend/                               # 后端工程 (FastAPI + PyTorch)
