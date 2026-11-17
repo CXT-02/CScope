@@ -292,7 +292,7 @@ export default function MistakeNotebook({ onOpenExperiment }) {
               {/* 深入解析 */}
               <div className="mistake-analysis-box">
                 <div className="analysis-title">
-                  <span className="analysis-icon">💡</span>
+                  <span className="analysis-badge">考点剖析</span>
                   <strong>考点深度剖析与防坑指南：</strong>
                 </div>
                 <p>{item.analysis}</p>
@@ -301,7 +301,7 @@ export default function MistakeNotebook({ onOpenExperiment }) {
               {/* 核心亮点：直达微观仿真实验推演 */}
               <div className="mistake-lab-dock">
                 <div className="dock-left">
-                  <span className="dock-icon">🧪</span>
+                  <span className="dock-lab-badge">微观仿真</span>
                   <div>
                     <strong>推演该考点对应的计算机物理时序：</strong>
                     <span>【{item.labTitle}】</span>
@@ -319,7 +319,6 @@ export default function MistakeNotebook({ onOpenExperiment }) {
           ))
         ) : (
           <div className="empty-mistake-state">
-            <span className="empty-icon">🎉</span>
             <h3>暂无符合筛选条件的错题</h3>
             <p>在 408 测评中心完成模考后，系统会自动为您归档做错的考题与仿真实验映射！</p>
           </div>

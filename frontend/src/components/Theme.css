@@ -2109,6 +2109,222 @@
   font-weight: 800 !important;
 }
 
+
+/* --- 深空暗夜: 靶向错题本 (MistakeNotebook) 彻底消除大白块与浅色色块 --- */
+[data-theme="dark"] .subject-filter-group .filter-btn,
+[data-theme="dark"] .mistake-notebook-page .filter-btn {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .subject-filter-group .filter-btn:hover,
+[data-theme="dark"] .mistake-notebook-page .filter-btn:hover {
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .subject-filter-group .filter-btn.active,
+[data-theme="dark"] .mistake-notebook-page .filter-btn.active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .status-tab-group {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .status-tab-group button {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .status-tab-group button.active {
+  background: #142037 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .search-input-wrap input {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .search-input-wrap input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+}
+
+[data-theme="dark"] .exam-year-tag {
+  background: rgba(239, 68, 68, 0.18) !important;
+  color: #fca5a5 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .subject-tag {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .analysis-title {
+  color: #34d399 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .analysis-badge {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+[data-theme="dark"] .mistake-analysis-box {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-left: 4px solid #10b981 !important;
+}
+
+[data-theme="dark"] .mistake-analysis-box p {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+}
+
+[data-theme="dark"] .mistake-lab-dock {
+  background: #0f182c !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-theme="dark"] .mistake-lab-dock .dock-left strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .mistake-lab-dock .dock-left span {
+  color: #34d399 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .dock-lab-badge {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+[data-theme="dark"] .jump-lab-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border: none !important;
+}
+
+/* --- 深空暗夜: 408 速查宝典 (CheatSheetHub) 彻底消除大白块与浅色色块 --- */
+[data-theme="dark"] .sheet-search-wrap input {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .sheet-search-wrap input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+}
+
+[data-theme="dark"] .calc-input-item input,
+[data-theme="dark"] .calc-input-item select {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="dark"] .calc-input-item select option {
+  background: #0f182c !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .calc-badge {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+[data-theme="dark"] .addr-split-bar {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: #0a0f1d !important;
+}
+
+[data-theme="dark"] .addr-split-bar .tag-block {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #fca5a5 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .addr-split-bar .index-block {
+  background: rgba(245, 158, 11, 0.2) !important;
+  color: #fde68a !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .addr-split-bar .offset-block {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #6ee7b7 !important;
+}
+
+[data-theme="dark"] .bit-block strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .sheet-subject-tabs .sheet-tab-btn {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .sheet-subject-tabs .sheet-tab-btn:hover {
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .sheet-subject-tabs .sheet-tab-btn.active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .f-sub-badge {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .f-cat-badge {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .f-lab-link-btn {
+  background: #142037 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  color: #34d399 !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+}
+
+[data-theme="dark"] .f-lab-link-btn:hover {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
+
+
 [data-theme="dark"] .f-lab-link-btn {
   background: rgba(16, 185, 129, 0.15) !important;
   border-color: rgba(16, 185, 129, 0.3) !important;
@@ -2656,6 +2872,230 @@
   font-size: 14px !important;
   line-height: 1.65 !important;
 }
+
+
+/* --- 极客赛博: 靶向错题本 (MistakeNotebook) 彻底消除大白块与浅色色块 --- */
+[data-theme="cyber"] .subject-filter-group .filter-btn,
+[data-theme="cyber"] .mistake-notebook-page .filter-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #c4b5fd !important;
+}
+
+[data-theme="cyber"] .subject-filter-group .filter-btn:hover,
+[data-theme="cyber"] .mistake-notebook-page .filter-btn:hover {
+  border-color: #00f5d4 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .subject-filter-group .filter-btn.active,
+[data-theme="cyber"] .mistake-notebook-page .filter-btn.active {
+  background: #ff007f !important;
+  color: #ffffff !important;
+  border-color: #ff007f !important;
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.45) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .status-tab-group {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .status-tab-group button {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .status-tab-group button.active {
+  background: #25155c !important;
+  color: #00f5d4 !important;
+  box-shadow: 0 0 8px rgba(0, 245, 212, 0.25) !important;
+}
+
+[data-theme="cyber"] .search-input-wrap input {
+  background: #1e114a !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .search-input-wrap input:focus {
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.25) !important;
+}
+
+[data-theme="cyber"] .exam-year-tag {
+  background: rgba(255, 0, 127, 0.2) !important;
+  color: #ff77b4 !important;
+  border: 1px solid rgba(255, 0, 127, 0.4) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .subject-tag {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .analysis-title {
+  color: #00f5d4 !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 6px rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .analysis-badge {
+  background: rgba(0, 245, 212, 0.2) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .mistake-analysis-box {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  border-left: 4px solid #00f5d4 !important;
+}
+
+[data-theme="cyber"] .mistake-analysis-box p {
+  color: #f1f5f9 !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+}
+
+[data-theme="cyber"] .mistake-lab-dock {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="cyber"] .mistake-lab-dock .dock-left strong {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .mistake-lab-dock .dock-left span {
+  color: #00f5d4 !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 6px rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .dock-lab-badge {
+  background: rgba(0, 245, 212, 0.2) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .jump-lab-btn {
+  background: linear-gradient(135deg, #00f5d4, #06b6d4) !important;
+  color: #090317 !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.35) !important;
+}
+
+/* --- 极客赛博: 408 速查宝典 (CheatSheetHub) 彻底消除大白块与浅色色块 --- */
+[data-theme="cyber"] .sheet-search-wrap input {
+  background: #1e114a !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .sheet-search-wrap input:focus {
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.25) !important;
+}
+
+[data-theme="cyber"] .calc-input-item input,
+[data-theme="cyber"] .calc-input-item select {
+  background: #1e114a !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="cyber"] .calc-input-item select option {
+  background: #180e3d !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .calc-badge {
+  background: rgba(0, 245, 212, 0.2) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.4) !important;
+}
+
+[data-theme="cyber"] .addr-split-bar {
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  background: #12082b !important;
+}
+
+[data-theme="cyber"] .addr-split-bar .tag-block {
+  background: rgba(255, 0, 127, 0.25) !important;
+  color: #ff77b4 !important;
+  border-right: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .addr-split-bar .index-block {
+  background: rgba(245, 158, 11, 0.25) !important;
+  color: #fbbf24 !important;
+  border-left: 1px solid rgba(0, 245, 212, 0.2) !important;
+  border-right: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .addr-split-bar .offset-block {
+  background: rgba(0, 245, 212, 0.2) !important;
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .bit-block strong {
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .sheet-subject-tabs .sheet-tab-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #c4b5fd !important;
+}
+
+[data-theme="cyber"] .sheet-subject-tabs .sheet-tab-btn:hover {
+  border-color: #00f5d4 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="cyber"] .sheet-subject-tabs .sheet-tab-btn.active {
+  background: #ff007f !important;
+  color: #ffffff !important;
+  border-color: #ff007f !important;
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.4) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .f-sub-badge {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .f-cat-badge {
+  background: rgba(255, 0, 127, 0.15) !important;
+  color: #ff3399 !important;
+  border: 1px solid rgba(255, 0, 127, 0.35) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .f-lab-link-btn {
+  background: #1e114a !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  color: #00f5d4 !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.12) !important;
+}
+
+[data-theme="cyber"] .f-lab-link-btn:hover {
+  background: #00f5d4 !important;
+  color: #090317 !important;
+}
+
 
 [data-theme="cyber"] .tracker-launch-btn.primary {
   background: #00f5d4 !important;
@@ -5463,6 +5903,207 @@
   color: #2d3748 !important;
   font-size: 13.5px !important;
 }
+
+
+/* --- 仓林护眼: 靶向错题本 (MistakeNotebook) 彻底消除大白块与浅色色块 --- */
+[data-theme="forest"] .subject-filter-group .filter-btn,
+[data-theme="forest"] .mistake-notebook-page .filter-btn {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #1e3a24 !important;
+}
+
+[data-theme="forest"] .subject-filter-group .filter-btn:hover,
+[data-theme="forest"] .mistake-notebook-page .filter-btn:hover {
+  border-color: #15803d !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .subject-filter-group .filter-btn.active,
+[data-theme="forest"] .mistake-notebook-page .filter-btn.active {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .status-tab-group {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .status-tab-group button {
+  color: #4b6354 !important;
+}
+
+[data-theme="forest"] .status-tab-group button.active {
+  background: #d4e5d0 !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .search-input-wrap input {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .exam-year-tag {
+  background: #fde8e8 !important;
+  color: #991b1b !important;
+  border: 1px solid #f8b4b4 !important;
+}
+
+[data-theme="forest"] .subject-tag {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+
+[data-theme="forest"] .analysis-title {
+  color: #166534 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .analysis-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+
+[data-theme="forest"] .mistake-analysis-box {
+  background: #dbe7d7 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  border-left: 4px solid #15803d !important;
+}
+
+[data-theme="forest"] .mistake-analysis-box p {
+  color: #091e11 !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+}
+
+[data-theme="forest"] .mistake-lab-dock {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+}
+
+[data-theme="forest"] .mistake-lab-dock .dock-left strong {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .mistake-lab-dock .dock-left span {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .dock-lab-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+
+[data-theme="forest"] .jump-lab-btn {
+  background: #15803d !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border: none !important;
+}
+
+/* --- 仓林护眼: 408 速查宝典 (CheatSheetHub) 彻底消除大白块与浅色色块 --- */
+[data-theme="forest"] .sheet-search-wrap input {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .calc-input-item input,
+[data-theme="forest"] .calc-input-item select {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #091e11 !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="forest"] .calc-input-item select option {
+  background: #e4eee1 !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .calc-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+}
+
+[data-theme="forest"] .addr-split-bar {
+  border: 1.5px solid #b6ceb4 !important;
+  background: #edf5eb !important;
+}
+
+[data-theme="forest"] .addr-split-bar .tag-block {
+  background: #fde8e8 !important;
+  color: #991b1b !important;
+}
+
+[data-theme="forest"] .addr-split-bar .index-block {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+[data-theme="forest"] .addr-split-bar .offset-block {
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+[data-theme="forest"] .bit-block strong {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .sheet-subject-tabs .sheet-tab-btn {
+  background: #e4eee1 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #1e3a24 !important;
+}
+
+[data-theme="forest"] .sheet-subject-tabs .sheet-tab-btn:hover {
+  border-color: #15803d !important;
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .sheet-subject-tabs .sheet-tab-btn.active {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .f-sub-badge {
+  background: #cde0ca !important;
+  color: #166534 !important;
+  border: 1px solid #9dc299 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .f-cat-badge {
+  background: #e4eee1 !important;
+  color: #2d5a37 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .f-lab-link-btn {
+  background: #edf5eb !important;
+  border: 1.5px solid #b6ceb4 !important;
+  color: #166534 !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+}
+
+[data-theme="forest"] .f-lab-link-btn:hover {
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+
 
 [data-theme="light"] {
   --bg-page: #f4f6fa;

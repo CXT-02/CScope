@@ -200,7 +200,7 @@ export default function CheatSheetHub({ onOpenExperiment }) {
       <section className="interactive-calculator-card">
         <div className="calc-header">
           <div className="calc-title">
-            <span className="calc-icon">⚡</span>
+            <span className="calc-badge">高频测算器</span>
             <strong>408 真题高频测算器：Cache 组相联主存地址划分</strong>
           </div>
           <span className="calc-hint">参数修改后下方地址结构即时重绘</span>
