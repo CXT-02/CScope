@@ -1267,6 +1267,25 @@
   color: #ffffff !important;
 }
 
+[data-theme="cyber"] .sidebar-kernel-monitor-card .kernel-clock-row {
+  background: #08061a !important;
+  border-color: rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .sidebar-kernel-monitor-card .kernel-badge {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+}
+
+[data-theme="cyber"] .sidebar-kernel-monitor-card .clock-freq {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .sidebar-kernel-monitor-card .kernel-meta-info p {
+  color: #a5b4fc !important;
+}
+
 /* 赛博模式：彻底移除白底，全站赛博霓虹风格统一 */
 [data-theme="cyber"] .cscope-nexus-header,
 [data-theme="cyber"] .cscope-domain-matrix-section,
@@ -1903,6 +1922,25 @@
 [data-theme="forest"] .sidebar-user-name,
 [data-theme="forest"] .sidebar-kernel-monitor-card .kernel-meta-info strong {
   color: #091e11 !important;
+}
+
+[data-theme="forest"] .sidebar-kernel-monitor-card .kernel-clock-row {
+  background: #d5e5d1 !important;
+  border-color: #b6ceb4 !important;
+}
+
+[data-theme="forest"] .sidebar-kernel-monitor-card .kernel-badge {
+  background: #cbe0c6 !important;
+  color: #15803d !important;
+  border: 1px solid #a3c49f !important;
+}
+
+[data-theme="forest"] .sidebar-kernel-monitor-card .clock-freq {
+  color: #15803d !important;
+}
+
+[data-theme="forest"] .sidebar-kernel-monitor-card .kernel-meta-info p {
+  color: #1a3e26 !important;
 }
 
 /* 苍林护眼课程知识中心 */

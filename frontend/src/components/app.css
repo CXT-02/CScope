@@ -3130,9 +3130,9 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   justify-content: space-between;
   margin-bottom: 6px;
   padding: 4px 6px;
-  background: #ffffff;
+  background: rgba(16, 185, 129, 0.08);
   border-radius: 6px;
-  border: 1px solid #f1f5f9;
+  border: 1px solid rgba(16, 185, 129, 0.18);
 }
 .clock-wave-svg {
   flex-shrink: 0;
