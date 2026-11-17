@@ -189,58 +189,211 @@ export async function testLlmConnection(config) {
   return { success: true, reply, elapsed }
 }
 
-// 智能匹配对应的微观仿真实验
+// 智能匹配对应的微观仿真实验（高精度多维权重算法：优先匹配提问核心考点，避免通用词盲目抢占）
 export function detectRecommendedExperiment(question = '', content = '') {
-  const text = (question + ' ' + content).toLowerCase()
-  for (const exp of experiments) {
-    // 匹配实验 id
-    if (text.includes(exp.id.toLowerCase())) {
-      return { id: exp.id, name: exp.title }
+  const qLower = (question || '').toLowerCase()
+  const cLower = (content || '').toLowerCase()
+
+  // 1. 25门实验高精度专属规则（区分强特征专有词与辅助加分词）
+  const rules = [
+    {
+      id: 'deadlock',
+      name: '死锁：预防、避免与解除（银行家算法）',
+      strongKeys: ['死锁', '银行家', '安全序列', '资源分配图', 'rag', '死锁避免', '死锁预防', '死锁解除', '破除死锁'],
+      keys: ['循环等待', '不可剥夺', '互斥条件', '请求与保持', '银行家算法']
+    },
+    {
+      id: 'cpu-pipeline',
+      name: 'CPU 流水线与冒险处理',
+      strongKeys: ['流水线', 'load-use', '数据冒险', '结构冒险', '控制冒险', '旁路转发', 'forwarding', '五级流水'],
+      keys: ['气泡', 'stall', '流水停顿', '分支预测', 'if/id', 'id/ex']
+    },
+    {
+      id: 'cache-mapping',
+      name: 'Cache 组相联映射与命中实验',
+      strongKeys: ['cache', '组相联', '直接映射', '全相联', '颠簸', '缺失率', '命中率', '块内偏移'],
+      keys: ['tag标记', '主存地址划分', 'lru替换', '平均访存时间']
+    },
+    {
+      id: 'tcp-connection',
+      name: 'TCP 三次握手与四次挥手状态机',
+      strongKeys: ['三次握手', '四次挥手', '2msl', 'time_wait', 'tcp连接', 'tcp状态机', 'syn+ack'],
+      keys: ['tcp', 'syn', 'fin', 'rst', '序号同步', 'isn']
+    },
+    {
+      id: 'sliding-window',
+      name: '滑动窗口与拥塞控制',
+      strongKeys: ['滑动窗口', '拥塞控制', '慢启动', '快重传', '快恢复', '拥塞避免', 'ssthresh'],
+      keys: ['cwnd', 'rwnd', '累积确认', '超时重传']
+    },
+    {
+      id: 'ip-subnet',
+      name: 'IP 地址与子网划分',
+      strongKeys: ['子网划分', 'cidr', '子网掩码', '斜线记法', '网络地址计算', '广播地址计算'],
+      keys: ['ip地址', '子网', '超网', '可分配主机数']
+    },
+    {
+      id: 'dns-resolution',
+      name: 'DNS 域名解析',
+      strongKeys: ['dns', '域名解析', '递归解析', '迭代解析', '根域名服务器', '权威域名服务器'],
+      keys: ['顶级域名', 'dns缓存', '域名']
+    },
+    {
+      id: 'instruction-cycle',
+      name: '指令执行周期微操作',
+      strongKeys: ['指令周期', '微操作', '取指周期', '译码周期', '执行周期', '节拍脉冲'],
+      keys: ['pc寄存器', 'mar', 'mdr', 'ir寄存器', '微指令']
+    },
+    {
+      id: 'number-representation',
+      name: '补码运算与 IEEE 754 浮点数',
+      strongKeys: ['ieee 754', '补码', '浮点数', '定点数', '阶码', '尾数规格化', '溢出判断'],
+      keys: ['原码', '反码', '移码', '符号位']
+    },
+    {
+      id: 'sync',
+      name: '进程同步与互斥（PV操作与信号量）',
+      strongKeys: ['pv操作', '信号量', '生产者消费者', '读者写者', '哲学家进餐', '互斥锁', '临界区'],
+      keys: ['semaphore', 'wait', 'signal', '同步互斥']
+    },
+    {
+      id: 'scheduling',
+      name: '进程生命周期与 CPU 调度',
+      strongKeys: ['进程调度', 'pcb', '五状态模型', '时间片轮转', 'sjf', 'fcfs', '高响应比优先'],
+      keys: ['周转时间', '带权周转时间', '甘特图', '就绪队列']
+    },
+    {
+      id: 'page-replacement',
+      name: '页面置换算法（LRU/OPT/FIFO）',
+      strongKeys: ['页面置换', '缺页率', '缺页异常', 'opt算法', 'lru算法', 'clock置换', '抖动'],
+      keys: ['fifo', '工作集', '页表', '快表', 'tlb']
+    },
+    {
+      id: 'memory-partition',
+      name: '内存分区管理（连续分配与碎片）',
+      strongKeys: ['动态分区', '首次适应', '最佳适应', '最坏适应', '外部碎片', '内存紧凑'],
+      keys: ['空闲分区', '内部碎片', '内存分配']
+    },
+    {
+      id: 'tree-traversal',
+      name: '二叉树遍历',
+      strongKeys: ['二叉树', '先序遍历', '中序遍历', '后序遍历', '层序遍历', '线索二叉树', '二叉搜索树', '平衡二叉树', 'avl树'],
+      keys: ['树遍历', '前序', '中序', '后序']
+    },
+    {
+      id: 'sorting',
+      name: '排序算法对比（快速/堆/归并）',
+      strongKeys: ['快速排序', '堆排序', '归并排序', '冒泡排序', '插入排序', '希尔排序', '基数排序', '排序稳定性'],
+      keys: ['快排', '大顶堆', '小顶堆', '排序算法']
+    },
+    {
+      id: 'dijkstra',
+      name: 'Dijkstra 最短路径',
+      strongKeys: ['dijkstra', '最短路径', '松弛操作', 'floyd', 'prim', 'kruskal'],
+      keys: ['带权图', '单源最短路', '最小生成树']
+    },
+    {
+      id: 'stack-queue',
+      name: '栈与队列',
+      strongKeys: ['栈与队列', '括号匹配', '表达式求值', '循环队列', '双端队列', '入栈出栈'],
+      keys: ['lifo', 'fifo', '栈顶', '队头']
+    },
+    {
+      id: 'bplus-tree',
+      name: 'B+ 树索引',
+      strongKeys: ['b+树', 'b树', '聚簇索引', '索引页分裂', '非叶子节点'],
+      keys: ['b+ tree', 'b-tree', '多路平衡树']
+    },
+    {
+      id: 'sql-join',
+      name: 'SQL 连接算法',
+      strongKeys: ['sql连接', 'nested loop', 'hash join', 'sort merge', '内连接', '外连接'],
+      keys: ['join', '连接算法', '表关联']
+    },
+    {
+      id: 'transactions',
+      name: '数据库事务与并发控制',
+      strongKeys: ['事务', 'acid', '脏读', '不可重复读', '幻读', 'mvcc', '两段锁', '封锁协议'],
+      keys: ['隔离级别', '排他锁', '共享锁']
+    },
+    {
+      id: 'normalization',
+      name: '关系模型与范式',
+      strongKeys: ['范式', '1nf', '2nf', '3nf', 'bcnf', '函数依赖', '无损连接'],
+      keys: ['完全函数依赖', '部分函数依赖', '传递依赖']
+    },
+    {
+      id: 'attention',
+      name: 'Transformer 注意力机制',
+      strongKeys: ['transformer', '注意力机制', 'self-attention', '多头注意力', 'qkv'],
+      keys: ['softmax', 'query', 'key', 'value']
+    },
+    {
+      id: 'neural-network',
+      name: '神经网络前向传播',
+      strongKeys: ['神经网络', '前向传播', '激活函数', 'relu', 'sigmoid'],
+      keys: ['权重与偏置', '隐藏层', '神经元']
+    },
+    {
+      id: 'gradient-descent',
+      name: '梯度下降与反向传播',
+      strongKeys: ['梯度下降', '反向传播', '学习率', '损失函数'],
+      keys: ['梯度', '参数更新', 'epoch']
+    },
+    {
+      id: 'convolution',
+      name: '卷积神经网络',
+      strongKeys: ['卷积神经网络', 'cnn', '卷积核', '特征图', '池化层'],
+      keys: ['pooling', 'padding', 'stride']
     }
-    // 匹配实验标题
-    if (text.includes(exp.title.toLowerCase())) {
-      return { id: exp.id, name: exp.title }
+  ]
+
+  let bestRule = null
+  let maxScore = 0
+
+  for (const rule of rules) {
+    let score = 0
+
+    // 1. 用户提问命中强特征词：给最高权重 (+100)
+    for (const sk of rule.strongKeys) {
+      if (qLower.includes(sk)) {
+        score += 100
+      }
     }
-    // 匹配实验关键 concepts
-    if (exp.concepts && exp.concepts.some((c) => text.includes(c.toLowerCase()))) {
-      return { id: exp.id, name: exp.title }
+    // 2. 用户提问命中普通关键词 (+40)
+    for (const k of rule.keys) {
+      if (qLower.includes(k)) {
+        score += 40
+      }
+    }
+    // 3. 回答正文命中强特征词 (+20)
+    for (const sk of rule.strongKeys) {
+      if (cLower.includes(sk)) {
+        score += 20
+      }
+    }
+    // 4. 回答正文命中普通关键词 (+4)
+    for (const k of rule.keys) {
+      if (cLower.includes(k)) {
+        score += 4
+      }
+    }
+
+    if (score > maxScore) {
+      maxScore = score
+      bestRule = rule
     }
   }
 
-  // 常见考点关键词硬匹配
-  if (text.includes('流水线') || text.includes('load-use') || text.includes('冒险') || text.includes('forwarding')) {
-    return { id: 'cpu-pipeline', name: 'CPU 五级流水线与冒险处理' }
+  // 只要达到置信度阈值（>= 30分），即判定为有效推荐
+  if (bestRule && maxScore >= 30) {
+    const matchedExp = experiments.find((e) => e.id === bestRule.id)
+    return {
+      id: bestRule.id,
+      name: matchedExp ? matchedExp.title : bestRule.name
+    }
   }
-  if (text.includes('cache') || text.includes('颠簸') || text.includes('相联') || text.includes('命中率')) {
-    return { id: 'cache-mapping', name: 'Cache 组相联映射与命中实验' }
-  }
-  if (text.includes('死锁') || text.includes('银行家') || text.includes('安全序列') || text.includes('资源分配图')) {
-    return { id: 'deadlock', name: '死锁预防、避免（银行家算法）与解除' }
-  }
-  if (text.includes('tcp') || text.includes('握手') || text.includes('挥手') || text.includes('2msl') || text.includes('time_wait')) {
-    return { id: 'tcp-connection', name: 'TCP 三次握手与四次挥手状态机' }
-  }
-  if (text.includes('滑动窗口') || text.includes('拥塞') || text.includes('慢启动') || text.includes('快重传')) {
-    return { id: 'sliding-window', name: '滑动窗口与拥塞控制' }
-  }
-  if (text.includes('子网') || text.includes('cidr') || text.includes('ip地址') || text.includes('广播地址')) {
-    return { id: 'ip-subnet', name: 'IP 地址与子网划分' }
-  }
-  if (text.includes('页面置换') || text.includes('lru') || text.includes('fifo') || text.includes('缺页')) {
-    return { id: 'page-replacement', name: '页面置换算法（LRU/OPT/FIFO）' }
-  }
-  if (text.includes('dijkstra') || text.includes('最短路径') || text.includes('松弛')) {
-    return { id: 'dijkstra', name: 'Dijkstra 单源最短路径算法' }
-  }
-  if (text.includes('二叉树') || text.includes('遍历') || text.includes('前序') || text.includes('后序')) {
-    return { id: 'tree-traversal', name: '二叉树遍历与递归时序' }
-  }
-  if (text.includes('快速排序') || text.includes('冒泡') || text.includes('归并') || text.includes('堆排序')) {
-    return { id: 'sorting', name: '快速/归并/堆排序对比实验' }
-  }
-  if (text.includes('指令周期') || text.includes('pc') || text.includes('mar') || text.includes('mdr') || text.includes('取指')) {
-    return { id: 'instruction-cycle', name: '指令执行微操作周期' }
-  }
+
   return null
 }
 
