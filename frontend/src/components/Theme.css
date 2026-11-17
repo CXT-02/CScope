@@ -7260,3 +7260,169 @@
   background: #dbeef0 !important;
   color: #091e11 !important;
 }
+
+/* ======================================================== */
+/* 28. 学术研讨评论区全主题适配 (Dark, Cyber, Forest) */
+/* ======================================================== */
+
+/* [Dark Theme] 曜石暗黑模式适配 */
+[data-theme="dark"] .community-current-user-strip {
+  background: #0f182c !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+}
+[data-theme="dark"] .strip-label {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .strip-user-badge {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+[data-theme="dark"] .strip-name {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .strip-role {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .post-comments-section {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+[data-theme="dark"] .comments-section-title-row h4 {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .comment-composer-box {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .composer-user-hint {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .composer-user-hint strong {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .composer-textarea {
+  background: #142037 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .composer-textarea:focus {
+  border-color: #10b981 !important;
+}
+[data-theme="dark"] .comment-thread-item {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .comment-author-name {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .comment-role-tag {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+[data-theme="dark"] .comment-body-text {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .comment-sub-btn {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .comment-sub-btn:hover {
+  background: #1e293b !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .comment-sub-btn.like.active {
+  color: #34d399 !important;
+}
+
+/* [Cyber Theme] 极客赛博模式适配 */
+[data-theme="cyber"] .community-current-user-strip {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+}
+[data-theme="cyber"] .strip-label {
+  color: #cbd5e1 !important;
+}
+[data-theme="cyber"] .strip-user-badge {
+  background: #25155c !important;
+  border-color: rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .strip-avatar {
+  background: #ff007f !important;
+}
+[data-theme="cyber"] .strip-name {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .strip-role {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .post-comments-section {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .comments-section-title-row h4 {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .comment-composer-box {
+  border-bottom: 1px solid rgba(0, 245, 212, 0.15) !important;
+}
+[data-theme="cyber"] .composer-avatar {
+  background: #ff007f !important;
+}
+[data-theme="cyber"] .composer-user-hint {
+  color: #cbd5e1 !important;
+}
+[data-theme="cyber"] .composer-user-hint strong {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .composer-textarea {
+  background: #25155c !important;
+  border: 1.5px solid rgba(0, 245, 212, 0.25) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .composer-textarea:focus {
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .composer-submit-btn {
+  background: linear-gradient(135deg, #00f5d4, #00bb9d) !important;
+  color: #09031c !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .comment-thread-item {
+  background: #25155c !important;
+  border: 1px solid rgba(0, 245, 212, 0.15) !important;
+}
+[data-theme="cyber"] .comment-author-name {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .comment-role-tag {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border-color: rgba(0, 245, 212, 0.35) !important;
+}
+[data-theme="cyber"] .comment-body-text {
+  color: #e2e8f0 !important;
+}
+[data-theme="cyber"] .comment-sub-btn {
+  color: #94a3b8 !important;
+}
+[data-theme="cyber"] .comment-sub-btn:hover {
+  background: #381c82 !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .comment-sub-btn.like.active {
+  color: #00f5d4 !important;
+}
+
+/* [Forest Theme] 仓林护眼模式适配 */
+[data-theme="forest"] .community-current-user-strip {
+  background: #edf5eb !important;
+  border: 1px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .post-comments-section {
+  background: #edf5eb !important;
+  border: 1px solid #b6ceb4 !important;
+}
+[data-theme="forest"] .comment-thread-item {
+  background: #ffffff !important;
+  border: 1px solid #b6ceb4 !important;
+}
