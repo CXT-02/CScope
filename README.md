@@ -222,7 +222,7 @@ npm run dev
 CScope/
 ├── docs/                                  # 核心技术设计文档与参赛资料
 │   ├── CSCOPE_项目设计与开发报告_2026传智杯.md # 传智杯赛事完整立项与技术报告
-│   ├── 演示视频分镜与逐字稿.md                 # 3~5分钟竞赛演示视频解说脚本
+│   ├── 演示视频分镜与逐字稿.md                 # 6分45秒竞赛演示视频解说脚本
 │   ├── 答辩PPT核心大纲.md                     # 决赛答辩 PPT 结构与专家问答FAQ
 │   └── 任务交接文档.md                        # 系统开发任务清单与架构宪法
 ├── frontend/                              # 前端工程 (React + Vite)
@@ -231,13 +231,14 @@ CScope/
 │   │   │   ├── LoginGate.jsx              # 居中大画幅门禁与登录注册专区
 │   │   │   ├── LearningDashboard.jsx      # 学情数据画像与掌握度雷达图
 │   │   │   ├── QuestionBankHub.jsx        # 105道统考真题库与错题靶向消灭
-│   │   │   ├── DeepSeekChat.jsx           # AI 计算机私教与 CoT 思维链
+│   │   │   ├── AiTutorAgent.jsx           # AI 计算机私教、流式推理与会话存档
 │   │   │   ├── CommunityHub.jsx           # 极客学术社区与多账号讨论区
 │   │   │   ├── Theme.css / app.css        # 四大主题样式系统
-│   │   │   └── experiments/               # 时钟仿真沙盒组件
+│   │   │   └── *Experiment.jsx            # 25个时钟仿真沙盒组件
 │   │   ├── lib/                           # 实验注册表、考题数据与推荐算法
 │   │   │   ├── experimentRegistry.js      # 25门实验全局路由与注册引擎
-│   │   │   └── questionBankData.js        # 105道历年408全真题库
+│   │   │   ├── examRegistry.js            # 105道历年408全真题库
+│   │   │   └── aiTutorService.js           # AI模型接入、离线知识库与流式响应
 │   │   └── app/                           # 入口主应用
 │   └── package.json
 ├── backend/                               # 后端工程 (FastAPI + PyTorch)
