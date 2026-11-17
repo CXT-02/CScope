@@ -21,8 +21,8 @@ export const THEMES = [
     id: 'cyber',
     name: '极客赛博',
     icon: '🌌',
-    hint: '赛博霓虹 · 极客终端',
-    colorPreview: ['#0b0b1a', '#181232', '#00f5d4'],
+    hint: '赛博霓虹 · 双色电光紫夜',
+    colorPreview: ['#0e0728', '#ff007f', '#00f5d4'],
     type: 'dark'
   },
   {

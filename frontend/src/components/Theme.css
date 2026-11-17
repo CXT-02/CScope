@@ -1537,23 +1537,28 @@
    ========================================================================== */
 
 [data-theme="cyber"] {
-  --bg-page: #080816;
-  --bg-card: #0f0e26;
-  --bg-header: rgba(14, 13, 34, 0.94);
-  --bg-sidebar: #090918;
+  --bg-page: #090317;
+  --bg-card: #180e3d;
+  --bg-card-sub: #221354;
+  --bg-header: rgba(16, 7, 38, 0.94);
+  --bg-sidebar: #0d0526;
   --text-title: #ffffff;
-  --text-body: #e2e8f0;
-  --text-muted: #94a3b8;
-  --border-subtle: rgba(0, 245, 212, 0.22);
+  --text-body: #e0e7ff;
+  --text-muted: #a5b4fc;
+  --border-subtle: rgba(0, 245, 212, 0.32);
   --accent-main: #00f5d4;
-  --accent-soft: rgba(0, 245, 212, 0.15);
+  --accent-secondary: #ff007f;
+  --accent-soft: rgba(0, 245, 212, 0.18);
   --accent-hover: #05d5b9;
 }
 
 [data-theme="cyber"] body,
 [data-theme="cyber"] .cscope-workspace-layout,
 [data-theme="cyber"] .workspace-body-container {
-  background: #080816 !important;
+  background: radial-gradient(ellipse 65% 45% at 88% 8%, rgba(255, 0, 127, 0.18) 0%, transparent 60%),
+              radial-gradient(ellipse 55% 50% at 12% 88%, rgba(0, 245, 212, 0.16) 0%, transparent 55%),
+              radial-gradient(ellipse 40% 40% at 50% 50%, rgba(121, 40, 202, 0.12) 0%, transparent 65%),
+              linear-gradient(175deg, #090317 0%, #11072d 45%, #18093d 75%, #0c0420 100%) !important;
   color: #f0f4ff !important;
 }
 
@@ -1569,9 +1574,9 @@
 }
 
 [data-theme="cyber"] .cscope-sidebar {
-  background: #090918 !important;
-  border-right: 1px solid rgba(0, 245, 212, 0.2) !important;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.6) !important;
+  background: #0d0526 !important;
+  border-right: 1.5px solid rgba(0, 245, 212, 0.28) !important;
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 0, 127, 0.1) !important;
 }
 
 [data-theme="cyber"] .brand-title,
@@ -1597,10 +1602,10 @@
 
 [data-theme="cyber"] .sidebar-nav-item.active,
 [data-theme="cyber"] .sidebar-nav-btn.active {
-  background: linear-gradient(135deg, rgba(0, 245, 212, 0.2), rgba(217, 70, 239, 0.12)) !important;
+  background: linear-gradient(90deg, rgba(255, 0, 127, 0.32) 0%, rgba(0, 245, 212, 0.22) 100%) !important;
   color: #00f5d4 !important;
-  border-left: 3.5px solid #00f5d4 !important;
-  box-shadow: inset 0 0 12px rgba(0, 245, 212, 0.15) !important;
+  border-left: 4px solid #00f5d4 !important;
+  box-shadow: inset 0 0 16px rgba(0, 245, 212, 0.22), 0 0 14px rgba(255, 0, 127, 0.3) !important;
 }
 
 [data-theme="cyber"] .sidebar-nav-item .nav-item-sub {
@@ -1608,14 +1613,14 @@
 }
 
 [data-theme="cyber"] .sidebar-footer {
-  background: #090918 !important;
+  background: #0d0526 !important;
   border-top: 1px solid rgba(0, 245, 212, 0.2) !important;
 }
 
 [data-theme="cyber"] .sidebar-kernel-monitor-card,
 [data-theme="cyber"] .sidebar-collapse-toggle,
 [data-theme="cyber"] .sidebar-user-card {
-  background: #110e2b !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.25) !important;
   color: #f0fdf4 !important;
 }
@@ -1626,7 +1631,7 @@
 }
 
 [data-theme="cyber"] .sidebar-kernel-monitor-card .kernel-clock-row {
-  background: #08061a !important;
+  background: #0a041f !important;
   border-color: rgba(0, 245, 212, 0.2) !important;
 }
 
@@ -1667,19 +1672,19 @@
 [data-theme="cyber"] .interactive-calculator-card,
 [data-theme="cyber"] .formula-card,
 [data-theme="cyber"] .galaxy-discipline-bar {
-  background: #0f0e26 !important;
+  background: #180e3d !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6) !important;
   color: #f0f4ff !important;
 }
 
 [data-theme="cyber"] .nexus-continuation-banner {
-  background: linear-gradient(135deg, rgba(0, 245, 212, 0.15), #161138) !important;
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.15), #25155c) !important;
   border: 1px solid rgba(0, 245, 212, 0.35) !important;
 }
 
 [data-theme="cyber"] .nexus-continuation-banner .banner-secondary-btn {
-  background: #141133 !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.35) !important;
   color: #00f5d4 !important;
   font-weight: 700 !important;
@@ -1694,7 +1699,7 @@
 
 /* 赛博模式：控制台穿透矩阵彻底消除白底并注入赛博霓虹 */
 [data-theme="cyber"] .domain-switch-tabs {
-  background: #110e2b !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
 }
 
@@ -1714,7 +1719,7 @@
 }
 
 [data-theme="cyber"] .domain-hero-card {
-  background: #0d0c24 !important;
+  background: #150a36 !important;
   border: 1px solid rgba(0, 245, 212, 0.2) !important;
 }
 
@@ -1726,7 +1731,7 @@
 }
 
 [data-theme="cyber"] .pipeline-flow-box {
-  background: #131033 !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4) !important;
 }
@@ -1736,7 +1741,7 @@
 }
 
 [data-theme="cyber"] .domain-quick-panel {
-  background: #131033 !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.25) !important;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.55) !important;
 }
@@ -1756,7 +1761,7 @@
 
 [data-theme="cyber"] .domain-enter-exam-btn {
   background: linear-gradient(135deg, #00f5d4 0%, #06b6d4 100%) !important;
-  color: #080816 !important;
+  color: #090317 !important;
   font-weight: 800 !important;
   border: none !important;
   box-shadow: 0 4px 16px rgba(0, 245, 212, 0.35) !important;
@@ -1789,13 +1794,13 @@
 [data-theme="cyber"] .telemetry-dashboard-panel,
 [data-theme="cyber"] .modern-bar-chart,
 [data-theme="cyber"] .modern-subject-row {
-  background: #110e2b !important;
+  background: #1e114a !important;
   border-color: rgba(0, 245, 212, 0.22) !important;
 }
 
 [data-theme="cyber"] .telemetry-metric-tile,
 [data-theme="cyber"] .legend-item-card {
-  background: #16143c !important;
+  background: #25155c !important;
   border-color: rgba(0, 245, 212, 0.2) !important;
 }
 
@@ -1812,8 +1817,8 @@
 [data-theme="cyber"] .bar-rail,
 [data-theme="cyber"] .legend-mini-bar,
 [data-theme="cyber"] .donut-ring-bg {
-  background: #1c184c !important;
-  stroke: #1c184c !important;
+  background: #2c1868 !important;
+  stroke: #2c1868 !important;
 }
 
 [data-theme="cyber"] .donut-center-info .donut-title {
@@ -1821,7 +1826,7 @@
 }
 
 [data-theme="cyber"] .pipe-step {
-  background: #16143c !important;
+  background: #25155c !important;
   color: #cbd5e1 !important;
   border-color: rgba(0, 245, 212, 0.2) !important;
 }
@@ -1834,14 +1839,14 @@
 }
 
 [data-theme="cyber"] .quick-tag-chip {
-  background: #16143c !important;
+  background: #25155c !important;
   border-color: rgba(0, 245, 212, 0.25) !important;
   color: #00f5d4 !important;
 }
 
 [data-theme="cyber"] .modern-btn {
   background: linear-gradient(135deg, #00f5d4, #06b6d4) !important;
-  color: #080816 !important;
+  color: #090317 !important;
   font-weight: 800 !important;
 }
 
@@ -1903,14 +1908,14 @@
 [data-theme="cyber"] .active-tracker-box,
 [data-theme="cyber"] .lab-select-input,
 [data-theme="cyber"] .lab-note-textarea {
-  background: #16143c !important;
+  background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.18) !important;
   color: #e2e8f0 !important;
 }
 
 [data-theme="cyber"] .tracker-launch-btn.primary {
   background: #00f5d4 !important;
-  color: #080816 !important;
+  color: #090317 !important;
   font-weight: 800 !important;
   border: none !important;
 }
@@ -1946,7 +1951,7 @@
 /* 赛博模式：微观仿真工坊卡片与全套检索 */
 [data-theme="cyber"] .workshop-hero-pills,
 [data-theme="cyber"] .workshop-stats-pill {
-  background: #110e2b !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
 }
 
@@ -1959,13 +1964,13 @@
 }
 
 [data-theme="cyber"] .workshop-filter-bar {
-  background: #0f0e26 !important;
+  background: #180e3d !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
 }
 
 [data-theme="cyber"] .filter-subject-tabs .filter-btn {
-  background: #121032 !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.18) !important;
   color: #cbd5e1 !important;
 }
@@ -1978,28 +1983,29 @@
 
 [data-theme="cyber"] .filter-subject-tabs .filter-btn.active {
   background: #00f5d4 !important;
-  color: #080816 !important;
+  color: #090317 !important;
   font-weight: 900 !important;
   box-shadow: 0 0 12px rgba(0, 245, 212, 0.45) !important;
 }
 
 [data-theme="cyber"] .difficulty-select,
 [data-theme="cyber"] .workshop-search-box input {
-  background: #121032 !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.25) !important;
   color: #ffffff !important;
 }
 
 [data-theme="cyber"] .workshop-card {
-  background: #0f0e26 !important;
+  background: #180e3d !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 [data-theme="cyber"] .workshop-card:hover {
-  background: #151336 !important;
+  background: #221354 !important;
   border-color: #00f5d4 !important;
-  box-shadow: 0 0 20px rgba(0, 245, 212, 0.35) !important;
+  box-shadow: 0 0 25px rgba(0, 245, 212, 0.45), 0 0 45px rgba(255, 0, 127, 0.25) !important;
+  transform: translateY(-3px) !important;
 }
 
 [data-theme="cyber"] .workshop-card-title {
@@ -2023,14 +2029,14 @@
 }
 
 [data-theme="cyber"] .concept-pill {
-  background: #16143c !important;
+  background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.18) !important;
   color: #cbd5e1 !important;
 }
 
 [data-theme="cyber"] .start-lab-btn {
   background: #00f5d4 !important;
-  color: #080816 !important;
+  color: #090317 !important;
   font-weight: 900 !important;
   box-shadow: 0 0 10px rgba(0, 245, 212, 0.35) !important;
 }
@@ -2043,12 +2049,12 @@
 [data-theme="cyber"] .course-home {
   background: radial-gradient(circle at 85% 15%, rgba(217, 70, 239, 0.14), transparent 32rem),
               radial-gradient(circle at 15% 45%, rgba(0, 245, 212, 0.1), transparent 28rem),
-              linear-gradient(175deg, #080816 0%, #0d0c24 35%, #100f2e 70%, #090918 100%) !important;
+              linear-gradient(175deg, #090317 0%, #150a36 35%, #100f2e 70%, #0d0526 100%) !important;
   color: #f0f4ff !important;
 }
 
 [data-theme="cyber"] .course-home .course-card {
-  background: #0f0e26 !important;
+  background: #180e3d !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
 }
@@ -2067,31 +2073,31 @@
 }
 
 [data-theme="cyber"] .course-home .point-interactive-btn {
-  background: #16143c !important;
+  background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.18) !important;
   color: #e2e8f0 !important;
 }
 
 [data-theme="cyber"] .course-home .point-interactive-btn:hover {
-  background: #1f1b50 !important;
+  background: #2d186b !important;
   border-color: #00f5d4 !important;
   color: #00f5d4 !important;
 }
 
 [data-theme="cyber"] .course-home .footer-workshop-link {
   background: linear-gradient(135deg, #00f5d4, #06b6d4) !important;
-  color: #080816 !important;
+  color: #090317 !important;
   font-weight: 800 !important;
 }
 
 [data-theme="cyber"] .course-home .footer-detail-link {
-  background: #16143c !important;
+  background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.25) !important;
   color: #00f5d4 !important;
 }
 
 [data-theme="cyber"] .course-home .personal-entry.signed {
-  background: #0f0e26 !important;
+  background: #180e3d !important;
   border: 1.5px solid rgba(0, 245, 212, 0.3) !important;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6) !important;
   padding: 24px 30px !important;
@@ -2117,19 +2123,19 @@
 }
 
 [data-theme="cyber"] .course-home .personal-entry-heading > button {
-  background: #16143c !important;
+  background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.35) !important;
   color: #00f5d4 !important;
   font-weight: 800 !important;
 }
 
 [data-theme="cyber"] .course-home .home-recommendations > button {
-  background: #16143c !important;
+  background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
 }
 
 [data-theme="cyber"] .course-home .home-recommendations > button:hover {
-  background: #201a4e !important;
+  background: #2d186b !important;
   border-color: #00f5d4 !important;
   box-shadow: 0 0 16px rgba(0, 245, 212, 0.35) !important;
 }
@@ -2152,7 +2158,7 @@
 
 /* --- 极客赛博: 单科考点知识大纲 (CourseDetail) 彻底消除大白块，统一黑紫霓虹色 --- */
 [data-theme="cyber"] .course-detail {
-  background: #08061a !important;
+  background: #0a041f !important;
   color: #ffffff !important;
 }
 
@@ -2216,7 +2222,7 @@
 }
 
 [data-theme="cyber"] .knowledge-card {
-  background: #110e2b !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
 }
@@ -2256,7 +2262,7 @@
 
 [data-theme="cyber"] .knowledge-card > button {
   background: linear-gradient(135deg, #00f5d4 0%, #00bbf9 100%) !important;
-  color: #08061a !important;
+  color: #0a041f !important;
   font-weight: 900 !important;
   box-shadow: 0 4px 15px rgba(0, 245, 212, 0.4) !important;
 }
@@ -2283,7 +2289,7 @@
 
 [data-theme="cyber"] .control-panel,
 [data-theme="cyber"] .visual-panel {
-  background: #110e2b !important;
+  background: #1e114a !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
   color: #ffffff !important;
@@ -2345,7 +2351,7 @@
 
 [data-theme="cyber"] .nn-neuron-tabs button.active {
   background: #00f5d4 !important;
-  color: #08061a !important;
+  color: #0a041f !important;
   font-weight: 900 !important;
   box-shadow: 0 0 14px rgba(0, 245, 212, 0.5) !important;
 }
