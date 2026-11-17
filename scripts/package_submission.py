@@ -24,7 +24,10 @@ IGNORE_DIRS = {
     '.runtime',
     '.vscode',
     '.idea',
-    'dist'
+    'dist',
+    'tmp',
+    'temp',
+    'output'
 }
 
 IGNORE_EXTENSIONS = {

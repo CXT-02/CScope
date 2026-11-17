@@ -31,3 +31,7 @@ Thumbs.db
 *.log
 npm-debug.log*
 .runtime/
+tmp/
+output/
+~$*
+*.tmp

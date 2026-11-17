@@ -62,6 +62,43 @@
     color: #0f172a;
     background: #f1f5f9;
   }
+  .cover-page {
+    min-height: 245mm;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+  }
+  .cover-meta {
+    margin-top: 38px;
+    font-size: 14px;
+    line-height: 2.1;
+    color: #334155;
+  }
+  .cover-meta strong { color: #0f172a; }
+  .toc-page {
+    page-break-after: always;
+  }
+  .toc-page h3 {
+    border-left: 0;
+    padding-left: 0;
+    text-align: center;
+    font-size: 22px;
+    margin-top: 0;
+  }
+  .toc-list {
+    columns: 2;
+    column-gap: 36px;
+    padding-left: 24px;
+  }
+  .toc-list li {
+    break-inside: avoid;
+    margin-bottom: 7px;
+    text-align: left;
+  }
   h3 {
     font-size: 17px;
     color: #0f172a;
@@ -187,30 +224,45 @@
 
 <button class="print-btn no-print" onclick="window.print()">🖨️ 一键导出 / 另存为 PDF</button>
 
-<h1>CSCOPE · 计算机微观仿真与 408 统考全真研学平台</h1>
-<h2 class="sub">面向高校计算机教育与考研备考的物理时钟级仿真与 AI 伴学系统</h2>
-<h3 class="award-tag">2026年传智杯全国 IT 技能大赛 · 软件设计赛道国赛作品交付材料</h3>
+<section class="cover-page">
+  <h1>CSCOPE 计算机微观仿真与 408 统考全真研学平台</h1>
+  <h2 class="sub">面向高校计算机教育与考研备考的微观仿真与 AI 伴学系统</h2>
+  <h3 class="award-tag">2026年传智杯全国 IT 技能大赛 软件设计赛道作品介绍文档</h3>
+  <div class="cover-meta">
+    <div><strong>参赛者</strong> 程馨婷</div>
+    <div><strong>学校</strong> 云南大学</div>
+    <div><strong>团队</strong> 个人</div>
+    <div><strong>指导教师</strong> 袁国武</div>
+    <div><strong>开源仓库</strong> https://github.com/CXT-02/CScope</div>
+    <div><strong>日期</strong> 2026年11月18日</div>
+  </div>
+</section>
 
-<table class="meta-table">
-  <tr>
-    <td class="label">作品名称</td>
-    <td><strong>CSCOPE · 计算机微观仿真与 408 统考全真研学平台</strong></td>
-    <td class="label">赛题方向</td>
-    <td>软件设计赛道 / 计算机系统教育 / 408 考研微观仿真与 AI 伴学</td>
-  </tr>
-  <tr>
-    <td class="label">必选能力</td>
-    <td>物理时钟单步仿真沙盒、105道统考真题评测、做错一键唤醒实验联动引擎、DeepSeek-R1 AI 计算机私教</td>
-    <td class="label">扩展能力</td>
-    <td>考点意图优先加权推荐算法、终身学情五维雷达画像、极客学术社区、SHA-256 安全哈希沙盒、四套全景多主题系统</td>
-  </tr>
-  <tr>
-    <td class="label">技术路线</td>
-    <td>React 18 + Vite 5 + FastAPI + Transformers + PyTorch + Web Crypto API + CSS Variables</td>
-    <td class="label">开源仓库</td>
-    <td><a href="https://github.com/CXT-02/CScope" target="_blank">https://github.com/CXT-02/CScope.git</a></td>
-  </tr>
-</table>
+<section class="toc-page">
+  <h3>目录</h3>
+  <ol class="toc-list">
+    <li>摘要与关键词</li>
+    <li>文档说明与立项意义</li>
+    <li>项目概述
+      <ol><li>项目名称与核心定位</li><li>目标用户与应用场景</li><li>核心痛点与价值闭环</li><li>核心功能总览</li></ol>
+    </li>
+    <li>系统架构与原理设计
+      <ol><li>系统总体分层架构</li><li>仿真引擎与状态机</li><li>题目 实验 AI 学情闭环</li><li>核心状态结构</li></ol>
+    </li>
+    <li>项目详情及使用方式
+      <ol><li>部署环境与技术栈</li><li>启动与系统入口</li><li>用户使用流程</li><li>核心功能模块</li></ol>
+    </li>
+    <li>项目核心亮点</li>
+    <li>AI 测试技术落地与工程验证</li>
+    <li>关键技术与数学建模</li>
+    <li>核心界面图文展示</li>
+    <li>参赛声明与原创性承诺</li>
+    <li>项目优化说明与演进历程</li>
+    <li>可推广价值与社会效益</li>
+    <li>后续优化与演进路线</li>
+    <li>附录 系统配置与常见问题</li>
+  </ol>
+</section>
 
 <h3>摘要与关键词</h3>
 <p>本项目面向高校计算机教育与全国计算机学科专业基础统考（408 统考）中“底层时钟不可见、真题解析与实验割裂、死锁并发抽象难懂、学情盲区难以量化”的普遍痛点，自主研发了 <strong>CSCOPE（计算机微观仿真与 408 统考全真研学平台）</strong>。系统将抽象晦涩的计算机物理硬件时序、操作系统并发互斥和协议状态机转化为可操作、可单步打拍观测、可交互验证的动态实验；首创<strong>“做错真题 ➔ 一键唤醒仿真沙盘”</strong>的教学闭环，覆盖 105 道历年统考真题；全时接入 DeepSeek-R1 深度思考推理链与 408 离线精编知识图谱双重智库；依托五维能力雷达图为考生定制个性化提分方案。</p>
