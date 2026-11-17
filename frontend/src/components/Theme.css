@@ -138,6 +138,11 @@
 }
 
 /* 侧边栏底部折叠按钮与用户卡片：杜绝白块！ */
+[data-theme="dark"] .sidebar-footer {
+  background: #090e1a !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
 [data-theme="dark"] .sidebar-collapse-toggle {
   background: #121c32 !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -430,31 +435,75 @@
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4) !important;
 }
 
+/* --- 深空暗夜: 微观仿真工坊 (ExperimentWorkshop) 彻底消除白底 --- */
+[data-theme="dark"] .workshop-filter-bar {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .workshop-stats-pill {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .workshop-stats-pill .pill-item strong {
+  color: #34d399 !important;
+}
+
 [data-theme="dark"] .difficulty-select,
 [data-theme="dark"] .workshop-search-box input {
-  background: #0f182c !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   color: #ffffff !important;
 }
 
-[data-theme="dark"] .experiment-workshop-card {
+[data-theme="dark"] .workshop-card {
   background: #0f182c !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
-[data-theme="dark"] .experiment-workshop-card:hover {
-  background: #142037 !important;
+[data-theme="dark"] .workshop-card:hover {
+  background: #131f37 !important;
   border-color: #10b981 !important;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
-[data-theme="dark"] .experiment-workshop-card h3 {
+[data-theme="dark"] .workshop-card-title {
   color: #ffffff !important;
 }
 
-[data-theme="dark"] .experiment-workshop-card p {
+[data-theme="dark"] .workshop-card-desc {
   color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .course-tag {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .concept-pill {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .workshop-card-footer {
+  border-top-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .stars-rate {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .start-lab-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .start-lab-btn:hover {
+  background: #047857 !important;
 }
 
 /* --- 深空暗夜: 实机学时度量 (DailyCheckin) 彻底移除白底 --- */
@@ -475,7 +524,8 @@
 
 [data-theme="dark"] .checkin-form-card,
 [data-theme="dark"] .chart-panel-card,
-[data-theme="dark"] .checkin-audit-section {
+[data-theme="dark"] .checkin-audit-section,
+[data-theme="dark"] .audit-card {
   background: #0f182c !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
@@ -489,14 +539,49 @@
 
 [data-theme="dark"] .active-tracker-box {
   background: #142037 !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 [data-theme="dark"] .tracker-val {
   color: #ffffff !important;
 }
 
+[data-theme="dark"] .tracker-label {
+  color: #cbd5e1 !important;
+}
+
 [data-theme="dark"] .tracker-desc {
+  color: #94a3b8 !important;
+}
+
+/* 消除实机度量监视器中的刺眼白色操作按钮 */
+[data-theme="dark"] .tracker-launch-btn.primary {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+[data-theme="dark"] .tracker-launch-btn.primary:hover {
+  background: #047857 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+}
+
+[data-theme="dark"] .tracker-launch-btn.secondary {
+  background: #1e3a8a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .tracker-launch-btn.secondary:hover {
+  background: #1d4ed8 !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5) !important;
+}
+
+[data-theme="dark"] .lab-notes-form .form-label-line strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .lab-notes-form .note-tip {
   color: #94a3b8 !important;
 }
 
@@ -519,18 +604,105 @@
   color: #94a3b8 !important;
 }
 
-/* --- 深空暗夜: 408 测评中心 (ExamArena) 彻底移除白底 --- */
-[data-theme="dark"] .exam-config-card,
+/* --- 深空暗夜: 408 测评中心 (ExamArena) 全面消除白底 --- */
+[data-theme="dark"] .arena-panel,
+[data-theme="dark"] .arena-config-card,
+[data-theme="dark"] .exam-status-bar,
 [data-theme="dark"] .exam-question-card,
-[data-theme="dark"] .exam-summary-card,
-[data-theme="dark"] .mistake-card {
+[data-theme="dark"] .exam-sheet-card,
+[data-theme="dark"] .exam-review-card,
+[data-theme="dark"] .arena-history-panel {
   background: #0f182c !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
-[data-theme="dark"] .exam-question-title,
-[data-theme="dark"] .mistake-card h3 {
+[data-theme="dark"] .arena-panel-title,
+[data-theme="dark"] .exam-sheet-title,
+[data-theme="dark"] .exam-review-heading {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .arena-panel-desc,
+[data-theme="dark"] .exam-status-text,
+[data-theme="dark"] .exam-topic-text {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .arena-field-label {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .exam-scope-btn {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .exam-scope-btn:hover {
+  background: #1a2947 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .exam-scope-btn.selected {
+  background: rgba(37, 99, 235, 0.25) !important;
+  border-color: #3b82f6 !important;
+  color: #60a5fa !important;
+}
+
+[data-theme="dark"] .exam-chip-btn {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .exam-chip-btn:hover {
+  background: #1a2947 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .exam-chip-btn.selected {
+  background: rgba(37, 99, 235, 0.25) !important;
+  border-color: #3b82f6 !important;
+  color: #60a5fa !important;
+}
+
+[data-theme="dark"] .exam-slider-box {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .exam-slider-label {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .exam-duration-box {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .exam-duration-box.auto {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+[data-theme="dark"] .exam-duration-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .exam-custom-input {
+  background: #0f182c !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .exam-countdown-pill {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e2eaf5 !important;
+}
+
+[data-theme="dark"] .exam-question-text {
   color: #ffffff !important;
 }
 
@@ -542,14 +714,248 @@
 
 [data-theme="dark"] .exam-option-item:hover {
   background: #1b2c4a !important;
-  border-color: #059669 !important;
+  border-color: #3b82f6 !important;
   color: #ffffff !important;
 }
 
 [data-theme="dark"] .exam-option-item.selected {
+  background: rgba(37, 99, 235, 0.28) !important;
+  border-color: #3b82f6 !important;
+  color: #93c5fd !important;
+}
+
+[data-theme="dark"] .exam-option-badge {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .exam-nav-bar {
+  border-top-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .exam-nav-btn.prev {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .exam-sheet-btn {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .exam-sheet-btn.answered {
+  background: rgba(37, 99, 235, 0.3) !important;
+  border-color: #3b82f6 !important;
+  color: #60a5fa !important;
+}
+
+[data-theme="dark"] .exam-review-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .exam-review-analysis {
+  background: #142037 !important;
+  border-left-color: #3b82f6 !important;
+}
+
+[data-theme="dark"] .exam-analysis-content {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .exam-review-lab-dock {
+  background: rgba(37, 99, 235, 0.15) !important;
+  border-color: rgba(37, 99, 235, 0.3) !important;
+}
+
+[data-theme="dark"] .arena-stat-box,
+[data-theme="dark"] .arena-history-item {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .history-course-title {
+  color: #ffffff !important;
+}
+
+/* --- 深空暗夜: 靶向错题本 (MistakeNotebook) 解决字看不见与大白块 --- */
+[data-theme="dark"] .mistake-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* 核心修复：高反差纯白题干，彻底消灭黑字看不清！ */
+[data-theme="dark"] .mistake-question-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .option-compare-item {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .option-compare-item .opt-letter {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .option-compare-item .opt-text {
+  color: #e2eaf5 !important;
+}
+
+[data-theme="dark"] .option-compare-item.correct-opt {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #34d399 !important;
+}
+
+[data-theme="dark"] .option-compare-item.wrong-opt {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: #f87171 !important;
+}
+
+[data-theme="dark"] .mistake-analysis-box {
+  background: #142037 !important;
+  border-left-color: #6366f1 !important;
+}
+
+[data-theme="dark"] .mistake-analysis-box p {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .analysis-title {
+  color: #818cf8 !important;
+}
+
+[data-theme="dark"] .mistake-lab-dock {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-theme="dark"] .mistake-lab-dock .dock-left strong {
+  color: #34d399 !important;
+}
+
+[data-theme="dark"] .mistake-lab-dock .dock-left span {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .star-btn,
+[data-theme="dark"] .master-btn {
+  background: #142037 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .star-btn:hover,
+[data-theme="dark"] .master-btn:hover {
+  background: #1a2947 !important;
+  color: #ffffff !important;
+}
+
+/* --- 深空暗夜: 408 速查宝典 (CheatSheetHub) 彻底消除白底 --- */
+[data-theme="dark"] .interactive-calculator-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .calc-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .calc-hint {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .calc-input-item label {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .calc-input-item input,
+[data-theme="dark"] .calc-input-item select {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .calc-result-strip {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .formula-card {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .formula-card:hover {
+  background: #131f37 !important;
+  border-color: #10b981 !important;
+}
+
+[data-theme="dark"] .formula-name {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .formula-points-list {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .formula-example-box {
+  background: #142037 !important;
+  border-left-color: #059669 !important;
+}
+
+[data-theme="dark"] .formula-example-box p {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .ex-title {
+  color: #34d399 !important;
+}
+
+[data-theme="dark"] .f-lab-link-btn {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #34d399 !important;
+}
+
+[data-theme="dark"] .f-cat-badge {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+/* --- 深空暗夜: 3D 思维知识星图 (KnowledgeGalaxy3D) 消除大白横条 --- */
+[data-theme="dark"] .galaxy-discipline-bar {
+  background: #0f182c !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .discipline-bar-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .discipline-pill {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .discipline-pill:hover {
+  background: #1a2947 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .discipline-pill.active {
   background: rgba(5, 150, 105, 0.25) !important;
   border-color: #10b981 !important;
-  color: #10b981 !important;
+  color: #34d399 !important;
 }
 
 
@@ -616,6 +1022,11 @@
   box-shadow: inset 0 0 12px rgba(0, 245, 212, 0.15) !important;
 }
 
+[data-theme="cyber"] .sidebar-footer {
+  background: #090918 !important;
+  border-top: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+
 [data-theme="cyber"] .sidebar-kernel-monitor-card,
 [data-theme="cyber"] .sidebar-collapse-toggle,
 [data-theme="cyber"] .sidebar-user-card {
@@ -629,18 +1040,29 @@
   color: #ffffff !important;
 }
 
-/* 赛博模式控制台：彻底移除白底 */
+/* 赛博模式：彻底移除白底，全站赛博霓虹风格统一 */
 [data-theme="cyber"] .cscope-nexus-header,
 [data-theme="cyber"] .cscope-domain-matrix-section,
 [data-theme="cyber"] .domain-hero-card,
 [data-theme="cyber"] .workbench-card,
-[data-theme="cyber"] .experiment-workshop-card,
+[data-theme="cyber"] .workshop-card,
+[data-theme="cyber"] .workshop-filter-bar,
 [data-theme="cyber"] .checkin-card,
 [data-theme="cyber"] .checkin-form-card,
 [data-theme="cyber"] .chart-panel-card,
 [data-theme="cyber"] .checkin-audit-section,
-[data-theme="cyber"] .exam-config-card,
-[data-theme="cyber"] .exam-question-card {
+[data-theme="cyber"] .audit-card,
+[data-theme="cyber"] .arena-panel,
+[data-theme="cyber"] .arena-config-card,
+[data-theme="cyber"] .exam-status-bar,
+[data-theme="cyber"] .exam-question-card,
+[data-theme="cyber"] .exam-sheet-card,
+[data-theme="cyber"] .exam-review-card,
+[data-theme="cyber"] .arena-history-panel,
+[data-theme="cyber"] .mistake-card,
+[data-theme="cyber"] .interactive-calculator-card,
+[data-theme="cyber"] .formula-card,
+[data-theme="cyber"] .galaxy-discipline-bar {
   background: #0f0e26 !important;
   border: 1px solid rgba(0, 245, 212, 0.22) !important;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6) !important;
@@ -660,14 +1082,27 @@
 [data-theme="cyber"] .telemetry-num,
 [data-theme="cyber"] .test-scope-title,
 [data-theme="cyber"] .checkin-form-card h3,
-[data-theme="cyber"] .exam-question-title {
+[data-theme="cyber"] .arena-panel-title,
+[data-theme="cyber"] .exam-question-text,
+[data-theme="cyber"] .exam-sheet-title,
+[data-theme="cyber"] .exam-review-heading,
+[data-theme="cyber"] .exam-review-title,
+[data-theme="cyber"] .mistake-question-title,
+[data-theme="cyber"] .calc-title,
+[data-theme="cyber"] .formula-name,
+[data-theme="cyber"] .workshop-card-title,
+[data-theme="cyber"] .discipline-bar-title,
+[data-theme="cyber"] .history-course-title {
   color: #ffffff !important;
 }
 
 [data-theme="cyber"] .nexus-subtitle,
 [data-theme="cyber"] .banner-desc,
 [data-theme="cyber"] .domain-desc-text,
-[data-theme="cyber"] .test-meta-line {
+[data-theme="cyber"] .test-meta-line,
+[data-theme="cyber"] .arena-panel-desc,
+[data-theme="cyber"] .workshop-card-desc,
+[data-theme="cyber"] .formula-points-list {
   color: #a5b4fc !important;
 }
 
@@ -676,10 +1111,65 @@
 [data-theme="cyber"] .stage-block,
 [data-theme="cyber"] .exp-shortcut-chip,
 [data-theme="cyber"] .wb-test-row,
-[data-theme="cyber"] .exam-option-item {
+[data-theme="cyber"] .exam-option-item,
+[data-theme="cyber"] .exam-scope-btn,
+[data-theme="cyber"] .exam-chip-btn,
+[data-theme="cyber"] .exam-slider-box,
+[data-theme="cyber"] .exam-duration-box,
+[data-theme="cyber"] .exam-countdown-pill,
+[data-theme="cyber"] .exam-sheet-btn,
+[data-theme="cyber"] .exam-review-analysis,
+[data-theme="cyber"] .arena-stat-box,
+[data-theme="cyber"] .arena-history-item,
+[data-theme="cyber"] .option-compare-item,
+[data-theme="cyber"] .mistake-analysis-box,
+[data-theme="cyber"] .star-btn,
+[data-theme="cyber"] .master-btn,
+[data-theme="cyber"] .calc-result-strip,
+[data-theme="cyber"] .formula-example-box,
+[data-theme="cyber"] .discipline-pill,
+[data-theme="cyber"] .concept-pill,
+[data-theme="cyber"] .active-tracker-box,
+[data-theme="cyber"] .lab-select-input,
+[data-theme="cyber"] .lab-note-textarea {
   background: #16143c !important;
   border: 1px solid rgba(0, 245, 212, 0.18) !important;
+  color: #e2e8f0 !important;
+}
+
+[data-theme="cyber"] .tracker-launch-btn.primary {
+  background: #00f5d4 !important;
+  color: #080816 !important;
+  font-weight: 800 !important;
+  border: none !important;
+}
+
+[data-theme="cyber"] .tracker-launch-btn.secondary {
+  background: #d946ef !important;
   color: #ffffff !important;
+  font-weight: 800 !important;
+  border: none !important;
+}
+
+[data-theme="cyber"] .exam-option-item.selected,
+[data-theme="cyber"] .exam-scope-btn.selected,
+[data-theme="cyber"] .exam-chip-btn.selected,
+[data-theme="cyber"] .discipline-pill.active {
+  background: rgba(0, 245, 212, 0.2) !important;
+  border-color: #00f5d4 !important;
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .option-compare-item.correct-opt {
+  background: rgba(0, 245, 212, 0.15) !important;
+  border-color: #00f5d4 !important;
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .option-compare-item.wrong-opt {
+  background: rgba(244, 63, 94, 0.2) !important;
+  border-color: #f43f5e !important;
+  color: #fb7185 !important;
 }
 
 
@@ -769,6 +1259,11 @@
   color: #15803d !important;
   border-left: 3.5px solid #15803d !important;
   font-weight: 800 !important;
+}
+
+[data-theme="forest"] .sidebar-footer {
+  background: #f4f8f2 !important;
+  border-top: 1px solid #d4e2d3 !important;
 }
 
 [data-theme="forest"] .sidebar-kernel-monitor-card,
@@ -889,11 +1384,35 @@
 [data-theme="forest"] .checkin-form-card,
 [data-theme="forest"] .chart-panel-card,
 [data-theme="forest"] .checkin-audit-section,
-[data-theme="forest"] .exam-config-card,
-[data-theme="forest"] .exam-question-card {
+[data-theme="forest"] .audit-card,
+[data-theme="forest"] .workshop-card,
+[data-theme="forest"] .workshop-filter-bar,
+[data-theme="forest"] .arena-panel,
+[data-theme="forest"] .arena-config-card,
+[data-theme="forest"] .exam-status-bar,
+[data-theme="forest"] .exam-question-card,
+[data-theme="forest"] .exam-sheet-card,
+[data-theme="forest"] .exam-review-card,
+[data-theme="forest"] .arena-history-panel,
+[data-theme="forest"] .mistake-card,
+[data-theme="forest"] .interactive-calculator-card,
+[data-theme="forest"] .formula-card,
+[data-theme="forest"] .galaxy-discipline-bar {
   background: #ffffff !important;
   border-color: #cadbc8 !important;
   color: #24402e !important;
+}
+
+[data-theme="forest"] .workshop-card-title,
+[data-theme="forest"] .mistake-question-title,
+[data-theme="forest"] .exam-question-text,
+[data-theme="forest"] .exam-review-heading,
+[data-theme="forest"] .exam-review-title,
+[data-theme="forest"] .calc-title,
+[data-theme="forest"] .formula-name,
+[data-theme="forest"] .discipline-bar-title,
+[data-theme="forest"] .history-course-title {
+  color: #0f2818 !important;
 }
 
 [data-theme="forest"] .nexus-continuation-banner {

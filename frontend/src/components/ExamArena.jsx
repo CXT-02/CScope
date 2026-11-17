@@ -286,18 +286,12 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
 
       {/* ================= 视图 1: 组卷配置面板 ================= */}
       {viewState === 'config' && (
-        <div style={{
-          background: '#ffffff',
-          borderRadius: '16px',
-          border: '1px solid #e2e8f0',
-          padding: '32px',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
-        }}>
-          <div style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '16px', marginBottom: '24px' }}>
-            <h2 style={{ margin: 0, fontSize: '1.3rem', color: '#0f172a', fontWeight: 800 }}>
+        <div className="arena-config-card arena-panel">
+          <div className="arena-panel-header">
+            <h2 className="arena-panel-title">
               🛠 自定义组卷与考场规则配置
             </h2>
-            <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '0.88rem' }}>
+            <p className="arena-panel-desc">
               请根据您的当前复习进度选择评测学科、题量与考试时长，系统将从 408 经典真题库中随机抽取组合试卷。
             </p>
           </div>
@@ -305,7 +299,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
             {/* 1. 学科范围选择 */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 700, color: '#1e293b', marginBottom: '10px' }}>
+              <label className="arena-field-label">
                 1. 选择测评科目范围：
               </label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: '10px' }}>
@@ -315,18 +309,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                     <button
                       key={opt.id}
                       onClick={() => setConfigCourse(opt.id)}
-                      style={{
-                        padding: '12px 16px',
-                        borderRadius: '8px',
-                        border: isSelected ? '2px solid #2563eb' : '1px solid #e2e8f0',
-                        background: isSelected ? '#eff6ff' : '#f8fafc',
-                        color: isSelected ? '#1d4ed8' : '#334155',
-                        fontWeight: isSelected ? 800 : 500,
-                        fontSize: '0.9rem',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s'
-                      }}
+                      className={`exam-scope-btn ${isSelected ? 'selected' : ''}`}
                     >
                       {opt.label}
                     </button>
@@ -338,7 +321,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
             {/* 2. 自由选择每次要考多少题 */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <label style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b' }}>
+                <label className="arena-field-label" style={{ marginBottom: 0 }}>
                   2. 每次测评题目数量：
                 </label>
                 <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
@@ -358,16 +341,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                   <button
                     key={item.count}
                     onClick={() => setQuestionCount(item.count)}
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: '8px',
-                      border: questionCount === item.count ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                      background: questionCount === item.count ? '#dbeafe' : '#fff',
-                      color: questionCount === item.count ? '#1e40af' : '#475569',
-                      fontWeight: questionCount === item.count ? 800 : 600,
-                      cursor: 'pointer',
-                      fontSize: '0.88rem'
-                    }}
+                    className={`exam-chip-btn ${questionCount === item.count ? 'selected' : ''}`}
                   >
                     {item.label}
                   </button>
@@ -375,8 +349,8 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
               </div>
 
               {/* 自定义滑块/数字微调 */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', background: '#f8fafc', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <span style={{ fontSize: '0.88rem', color: '#475569' }}>精细调整题数：</span>
+              <div className="exam-slider-box">
+                <span className="exam-slider-label">精细调整题数：</span>
                 <input
                   type="range"
                   min={1}
@@ -394,7 +368,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
             {/* 3. 自动定义与自定义考试时长 */}
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <label style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1e293b' }}>
+                <label className="arena-field-label" style={{ marginBottom: 0 }}>
                   3. 考试倒计时时长设置：
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -411,18 +385,10 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                 </div>
               </div>
 
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '14px',
-                background: autoDuration ? '#f0fdf4' : '#f8fafc',
-                padding: '14px 18px',
-                borderRadius: '8px',
-                border: autoDuration ? '1.5px solid #86efac' : '1px solid #cbd5e1'
-              }}>
+              <div className={`exam-duration-box ${autoDuration ? 'auto' : 'manual'}`}>
                 <span style={{ fontSize: '1.2rem' }}>⏱</span>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#1e293b' }}>
+                  <div className="exam-duration-title">
                     本次考试时长：<span style={{ color: '#16a34a', fontSize: '1.15rem' }}>{durationMinutes} 分钟</span>
                     {autoDuration && <span style={{ color: '#15803d', fontSize: '0.8rem', marginLeft: '8px' }}>(智能自动计算: {questionCount} 题 × 2 分钟)</span>}
                   </div>
@@ -439,15 +405,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                       max={180}
                       value={durationMinutes}
                       onChange={(e) => setDurationMinutes(Math.max(1, Number(e.target.value)))}
-                      style={{
-                        width: '70px',
-                        padding: '6px 8px',
-                        borderRadius: '6px',
-                        border: '1px solid #cbd5e1',
-                        textAlign: 'center',
-                        fontWeight: 800,
-                        fontSize: '1rem'
-                      }}
+                      className="exam-custom-input"
                     />
                     <span style={{ fontSize: '0.9rem', color: '#475569' }}>分钟</span>
                   </div>
@@ -488,53 +446,24 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
       {viewState === 'testing' && currentQ && (
         <div>
           {/* 考场状态条 */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            background: '#ffffff',
-            padding: '12px 18px',
-            borderRadius: '10px',
-            border: '1px solid #e2e8f0',
-            marginBottom: '20px',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}>
+          <div className="exam-status-bar arena-panel">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe', padding: '3px 10px', borderRadius: '6px', fontSize: '0.82rem', fontWeight: 800 }}>
                 {configCourse === 'all' ? '全科综合模考' : currentQ.courseName}
               </span>
-              <span style={{ color: '#64748b', fontSize: '0.85rem' }}>
+              <span className="exam-status-text">
                 随机抽题 · 第 <strong>{currentIndex + 1}</strong> / {quizQuestions.length} 题
               </span>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <span style={{
-                background: timeLeft < 120 ? '#fee2e2' : '#f1f5f9',
-                color: timeLeft < 120 ? '#dc2626' : '#1e293b',
-                padding: '4px 14px',
-                borderRadius: '6px',
-                fontFamily: 'monospace',
-                fontWeight: 800,
-                fontSize: '1.05rem',
-                border: timeLeft < 120 ? '1px solid #f87171' : '1px solid #e2e8f0'
-              }}>
+              <span className={`exam-countdown-pill ${timeLeft < 120 ? 'urgent' : ''}`}>
                 ⏱ 考场倒计时: {formatTime(timeLeft)}
               </span>
 
               <button
                 onClick={handleSubmitPrompt}
-                style={{
-                  background: '#16a34a',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '6px 16px',
-                  borderRadius: '6px',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  cursor: 'pointer'
-                }}
+                className="exam-submit-header-btn"
               >
                 交卷
               </button>
@@ -544,7 +473,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
           {/* 做题主视窗与答题卡 */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '20px', alignItems: 'start' }}>
             {/* 左侧：题目交互卡片 */}
-            <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }}>
+            <div className="exam-question-card arena-panel">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ background: '#dbeafe', color: '#1d4ed8', padding: '3px 8px', borderRadius: '4px', fontSize: '0.78rem', fontWeight: 800 }}>
@@ -554,11 +483,11 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                     {currentQ.source}
                   </span>
                 </div>
-                <span style={{ fontSize: '0.82rem', color: '#64748b' }}>考点：<strong>{currentQ.topic}</strong></span>
+                <span className="exam-topic-text">考点：<strong>{currentQ.topic}</strong></span>
               </div>
 
               {/* 题干 */}
-              <h3 style={{ fontSize: '1.05rem', lineHeight: '1.7', color: '#0f172a', margin: '0 0 20px', whiteSpace: 'pre-line' }}>
+              <h3 className="exam-question-text">
                 {currentQ.question}
               </h3>
 
@@ -570,35 +499,9 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                     <button
                       key={oIdx}
                       onClick={() => handleSelectOption(oIdx)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        textAlign: 'left',
-                        padding: '12px 16px',
-                        borderRadius: '8px',
-                        border: isSelected ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                        background: isSelected ? '#eff6ff' : '#f8fafc',
-                        color: isSelected ? '#1e40af' : '#334155',
-                        fontWeight: isSelected ? 700 : 500,
-                        cursor: 'pointer',
-                        fontSize: '0.92rem',
-                        transition: 'all 0.15s',
-                        gap: '12px'
-                      }}
+                      className={`exam-option-item ${isSelected ? 'selected' : ''}`}
                     >
-                      <span style={{
-                        width: '26px',
-                        height: '26px',
-                        borderRadius: '50%',
-                        background: isSelected ? '#2563eb' : '#e2e8f0',
-                        color: isSelected ? '#fff' : '#64748b',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.85rem',
-                        fontWeight: 800,
-                        flexShrink: 0
-                      }}>
+                      <span className="exam-option-badge">
                         {['A', 'B', 'C', 'D'][oIdx]}
                       </span>
                       <span>{opt}</span>
@@ -608,18 +511,11 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
               </div>
 
               {/* 翻题导航栏 */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+              <div className="exam-nav-bar">
                 <button
                   disabled={currentIndex === 0}
                   onClick={() => setCurrentIndex(i => i - 1)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '6px',
-                    border: '1px solid #cbd5e1',
-                    background: '#fff',
-                    cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
-                    color: currentIndex === 0 ? '#94a3b8' : '#334155'
-                  }}
+                  className="exam-nav-btn prev"
                 >
                   ← 上一题
                 </button>
@@ -628,31 +524,14 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                   {currentIndex < quizQuestions.length - 1 ? (
                     <button
                       onClick={() => setCurrentIndex(i => i + 1)}
-                      style={{
-                        padding: '8px 20px',
-                        borderRadius: '6px',
-                        background: '#2563eb',
-                        color: '#fff',
-                        border: 'none',
-                        fontWeight: 'bold',
-                        cursor: 'pointer'
-                      }}
+                      className="exam-nav-btn next"
                     >
                       下一题 →
                     </button>
                   ) : (
                     <button
                       onClick={handleSubmitPrompt}
-                      style={{
-                        padding: '8px 24px',
-                        borderRadius: '6px',
-                        background: '#16a34a',
-                        color: '#fff',
-                        border: 'none',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        fontSize: '0.95rem'
-                      }}
+                      className="exam-nav-btn submit"
                     >
                       ✔ 交卷并查看诊断
                     </button>
@@ -662,8 +541,8 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
             </div>
 
             {/* 右侧：答题卡 */}
-            <aside style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '18px', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }}>
-              <h4 style={{ margin: '0 0 12px', fontSize: '0.95rem', color: '#1e293b' }}>试题答题卡</h4>
+            <aside className="exam-sheet-card arena-panel">
+              <h4 className="exam-sheet-title">试题答题卡</h4>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '20px' }}>
                 {quizQuestions.map((q, idx) => {
                   const isAnswered = userAnswers[q.id] !== undefined
@@ -672,17 +551,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                     <button
                       key={q.id}
                       onClick={() => setCurrentIndex(idx)}
-                      style={{
-                        width: '100%',
-                        padding: '8px 0',
-                        borderRadius: '6px',
-                        border: isCurrent ? '2px solid #2563eb' : '1px solid #cbd5e1',
-                        background: isAnswered ? '#dbeafe' : '#f8fafc',
-                        color: isAnswered ? '#1d4ed8' : '#64748b',
-                        fontWeight: 'bold',
-                        fontSize: '0.85rem',
-                        cursor: 'pointer'
-                      }}
+                      className={`exam-sheet-btn ${isCurrent ? 'current' : ''} ${isAnswered ? 'answered' : ''}`}
                     >
                       {idx + 1}
                     </button>
@@ -690,30 +559,20 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                 })}
               </div>
 
-              <div style={{ fontSize: '0.8rem', color: '#64748b', lineHeight: '1.6', marginBottom: '16px' }}>
+              <div className="exam-sheet-legend">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#dbeafe', display: 'inline-block' }}></span>
+                  <span className="sheet-legend-dot answered"></span>
                   <span>已作答：{Object.keys(userAnswers).length} 题</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
-                  <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f8fafc', border: '1px solid #cbd5e1', display: 'inline-block' }}></span>
+                  <span className="sheet-legend-dot unanswered"></span>
                   <span>未作答：{quizQuestions.length - Object.keys(userAnswers).length} 题</span>
                 </div>
               </div>
 
               <button
                 onClick={handleSubmitPrompt}
-                style={{
-                  width: '100%',
-                  padding: '11px',
-                  borderRadius: '8px',
-                  background: '#16a34a',
-                  color: '#fff',
-                  border: 'none',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  fontSize: '0.92rem'
-                }}
+                className="exam-sheet-submit-btn"
               >
                 提交试卷
               </button>
@@ -811,7 +670,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
           {/* 逐题全解与可视化仿真验证 */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: '4px 0', fontSize: '1.2rem', color: '#1e293b' }}>
+              <h3 className="exam-review-heading">
                 试卷真题深度剖析与实验推演验证
               </h3>
               <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
@@ -822,13 +681,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
             {viewingRecord.questions.map((q, idx) => {
               const isCorrect = q.isCorrect
               return (
-                <div key={q.id} style={{
-                  background: '#ffffff',
-                  borderRadius: '12px',
-                  border: isCorrect ? '1.5px solid #bbf7d0' : '1.5px solid #fecaca',
-                  padding: '20px',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
-                }}>
+                <div key={q.id} className={`exam-review-card arena-panel ${isCorrect ? 'correct' : 'wrong'}`}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{
@@ -854,50 +707,28 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                     </div>
                   </div>
 
-                  <p style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: 600, margin: '8px 0 14px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
+                  <p className="exam-review-title">
                     {q.question}
                   </p>
 
                   {/* 详尽名师解析卡片 */}
-                  <div style={{ background: '#f8fafc', padding: '12px 16px', borderRadius: '8px', borderLeft: '4px solid #3b82f6', marginBottom: '12px' }}>
+                  <div className="exam-review-analysis">
                     <strong style={{ color: '#1d4ed8', fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>
                       【考点剖析与名师全解】
                     </strong>
-                    <div style={{ fontSize: '0.85rem', color: '#334155', lineHeight: '1.6' }}>
+                    <div className="exam-analysis-content">
                       {q.explanation}
                     </div>
                   </div>
 
                   {/* 核心联动：一键直达可视化仿真 */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    background: '#eff6ff',
-                    padding: '10px 14px',
-                    borderRadius: '8px',
-                    border: '1px solid #bfdbfe',
-                    flexWrap: 'wrap',
-                    gap: '10px'
-                  }}>
-                    <div style={{ fontSize: '0.82rem', color: '#1e40af' }}>
+                  <div className="exam-review-lab-dock">
+                    <div className="dock-tip">
                       💡 <strong>仍有疑惑？</strong>{q.labTip}
                     </div>
                     <button
                       onClick={() => onOpenExperiment(q.experimentId)}
-                      style={{
-                        background: '#2563eb',
-                        color: '#fff',
-                        padding: '6px 14px',
-                        borderRadius: '6px',
-                        border: 'none',
-                        fontWeight: 'bold',
-                        fontSize: '0.85rem',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
+                      className="dock-launch-btn"
                     >
                       🔬 打开【{q.courseName}】仿真实验验证 ➔
                     </button>
@@ -911,19 +742,13 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
 
       {/* ================= 视图 4: 历次模考档案与成长轨迹 ================= */}
       {viewState === 'history' && (
-        <div style={{
-          background: '#ffffff',
-          borderRadius: '16px',
-          border: '1px solid #e2e8f0',
-          padding: '28px',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
-        }}>
+        <div className="arena-history-panel arena-panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '16px', marginBottom: '20px' }}>
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.3rem', color: '#0f172a', fontWeight: 800 }}>
+              <h2 className="arena-panel-title">
                 📜 408 测评历史档案与成长轨迹
               </h2>
-              <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: '0.85rem' }}>
+              <p className="arena-panel-desc">
                 系统自动持久化记录您的每一次真题模拟测试，支持随时重查错题与复盘。
               </p>
             </div>
@@ -973,21 +798,21 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
                 </div>
               </div>
 
-              <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+              <div className="arena-stat-box">
                 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>历次平均得分</span>
                 <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#2563eb', marginTop: '4px' }}>
                   {historyStats.avgScore} <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>分</span>
                 </div>
               </div>
 
-              <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+              <div className="arena-stat-box">
                 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>历史最高记录</span>
                 <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#16a34a', marginTop: '4px' }}>
                   {historyStats.maxScore} <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>分</span>
                 </div>
               </div>
 
-              <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+              <div className="arena-stat-box">
                 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>累计刷题量</span>
                 <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#7c3aed', marginTop: '4px' }}>
                   {historyStats.totalQuestionsDone} <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>道</span>
@@ -1007,17 +832,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
               {examHistory.map((rec, rIdx) => (
                 <div
                   key={rec.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '14px 18px',
-                    borderRadius: '8px',
-                    border: '1px solid #e2e8f0',
-                    background: '#f8fafc',
-                    flexWrap: 'wrap',
-                    gap: '12px'
-                  }}
+                  className="arena-history-item"
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                     <div style={{
@@ -1038,7 +853,7 @@ export default function ExamArena({ onOpenExperiment, onBackHome }) {
 
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.95rem' }}>{rec.courseScope}</span>
+                        <span className="history-course-title">{rec.courseScope}</span>
                         <span style={{ background: '#e2e8f0', color: '#475569', padding: '1px 6px', borderRadius: '4px', fontSize: '0.75rem' }}>
                           {rec.questionCount} 题
                         </span>
