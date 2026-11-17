@@ -997,8 +997,34 @@
   border-color: #10b981 !important;
 }
 
+[data-theme="dark"] .checkin-card .card-label {
+  color: #cbd5e1 !important;
+  font-weight: 800 !important;
+}
+
 [data-theme="dark"] .checkin-card .card-number-row strong {
   color: #ffffff !important;
+}
+
+[data-theme="dark"] .checkin-card .card-number-row .card-unit {
+  color: #10b981 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .checkin-card .card-footer-tip {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .checkin-desc {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .metric-tag {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .metric-sub-note {
+  color: #64748b !important;
 }
 
 [data-theme="dark"] .checkin-form-card,
@@ -1802,6 +1828,37 @@
 [data-theme="cyber"] .legend-item-card {
   background: #25155c !important;
   border-color: rgba(0, 245, 212, 0.2) !important;
+}
+
+[data-theme="cyber"] .checkin-card .card-label {
+  color: #e0e7ff !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="cyber"] .checkin-card .card-number-row strong {
+  color: #ffffff !important;
+  text-shadow: 0 0 14px rgba(0, 245, 212, 0.45) !important;
+}
+
+[data-theme="cyber"] .checkin-card .card-number-row .card-unit {
+  color: #00f5d4 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="cyber"] .checkin-card .card-footer-tip {
+  color: #a5b4fc !important;
+}
+
+[data-theme="cyber"] .checkin-desc {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="cyber"] .metric-tag {
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .metric-sub-note {
+  color: #a5b4fc !important;
 }
 
 [data-theme="cyber"] .metric-main-title,
@@ -3355,6 +3412,42 @@
   border: 1px dashed #b6ceb4 !important;
 }
 
+/* 苍林护眼：实机学时度量 (DailyCheckin) 大字号高清晰度 */
+[data-theme="forest"] .checkin-card .card-label {
+  color: #091e11 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .checkin-card .card-number-row strong {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .checkin-card .card-number-row .card-unit {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .checkin-card .card-footer-tip {
+  color: #1e3a27 !important;
+}
+
+[data-theme="forest"] .checkin-desc {
+  color: #1a3e26 !important;
+}
+
+[data-theme="forest"] .metric-tag {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .metric-main-title {
+  color: #091e11 !important;
+}
+
+[data-theme="forest"] .metric-sub-note {
+  color: #1e3a27 !important;
+}
+
 /* 微观仿真工坊：护眼卡片高品质适配 */
 [data-theme="forest"] .workshop-card {
   background: #e4eee1 !important;
@@ -3875,4 +3968,40 @@
 
 [data-theme="light"] .metric-protocol-text {
   color: #059669 !important;
+}
+
+/* 学术晨曦模式：实机学时度量 (DailyCheckin) 大字号高清晰度 */
+[data-theme="light"] .checkin-card .card-label {
+  color: #1e293b !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .checkin-card .card-number-row strong {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .checkin-card .card-number-row .card-unit {
+  color: #475569 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .checkin-card .card-footer-tip {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .checkin-desc {
+  color: #334155 !important;
+}
+
+[data-theme="light"] .metric-tag {
+  color: #475569 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .metric-main-title {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .metric-sub-note {
+  color: #64748b !important;
 }

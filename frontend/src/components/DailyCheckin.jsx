@@ -255,11 +255,11 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
         <div className="checkin-card highlight">
           <div className="card-top">
             <span className="card-label">今日实机学时</span>
-            <span className="card-icon">⏱️</span>
+            <span className="card-status-dot active" title="系统自动化实时追踪中" />
           </div>
           <div className="card-number-row">
             <strong>{todayActiveMinutes}</strong>
-            <span>分钟</span>
+            <span className="card-unit">分钟</span>
           </div>
           <div className="card-footer-tip">
             <span className="auto-signed-tag">✓ 今日已自动完成签到</span>
@@ -269,11 +269,11 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
         <div className="checkin-card">
           <div className="card-top">
             <span className="card-label">连续实操活跃</span>
-            <span className="card-icon trophy">🏆</span>
+            <span className="card-status-dot streak" title="连续实验日活跃" />
           </div>
           <div className="card-number-row">
             <strong>{streakDays}</strong>
-            <span>天</span>
+            <span className="card-unit">天</span>
           </div>
           <div className="card-footer-tip">系统依据真实实验访问自动判定</div>
         </div>
@@ -281,11 +281,11 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
         <div className="checkin-card">
           <div className="card-top">
             <span className="card-label">微观实验实操总时长</span>
-            <span className="card-icon">🔬</span>
+            <span className="card-status-dot total" title="25 门时钟仿真累计" />
           </div>
           <div className="card-number-row">
             <strong>{totalLabMinutes}</strong>
-            <span>分钟</span>
+            <span className="card-unit">分钟</span>
           </div>
           <div className="card-footer-tip">折合约 {(totalLabMinutes / 60).toFixed(1)} 小时底层硬件时序推演</div>
         </div>
@@ -293,11 +293,11 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
         <div className="checkin-card">
           <div className="card-top">
             <span className="card-label">408 真题模考总用时</span>
-            <span className="card-icon">📝</span>
+            <span className="card-status-dot exam" title="408 统考真题自测答题" />
           </div>
           <div className="card-number-row">
             <strong>{totalExamMinutes}</strong>
-            <span>分钟</span>
+            <span className="card-unit">分钟</span>
           </div>
           <div className="card-footer-tip">历经 {Math.max(1, examRecords.length)} 轮真题自测答题计时</div>
         </div>
@@ -321,7 +321,7 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
               {/* 指标卡 1: 活跃沙盒 */}
               <div className="telemetry-metric-tile">
                 <div className="metric-tile-head">
-                  <span className="metric-icon">💻</span>
+                  <span className="metric-status-pip" />
                   <span className="metric-tag">当前活跃实验沙盒</span>
                 </div>
                 <strong className="metric-main-title">CPU 五级流水线与冒险处理</strong>
@@ -331,7 +331,7 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
               {/* 指标卡 2: 硬件时序阶段流水线 */}
               <div className="telemetry-metric-tile">
                 <div className="metric-tile-head">
-                  <span className="metric-icon">⚡</span>
+                  <span className="metric-status-pip" />
                   <span className="metric-tag">硬件微时序推演流水线</span>
                 </div>
                 <div className="telemetry-pipeline-strip">
@@ -349,7 +349,7 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
               {/* 指标卡 3: 度量协议 */}
               <div className="telemetry-metric-tile">
                 <div className="metric-tile-head">
-                  <span className="metric-icon">📡</span>
+                  <span className="metric-status-pip" />
                   <span className="metric-tag">纳秒级内核追踪机制</span>
                 </div>
                 <strong className="metric-protocol-text">前台进入心跳累加 · 离开自动休眠</strong>
@@ -363,14 +363,14 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
                 className="tracker-launch-btn primary"
                 onClick={() => onOpenExperiment('cpu-pipeline')}
               >
-                🔬 继续该实验微观推演 →
+                继续该实验微观推演 →
               </button>
               <button
                 type="button"
                 className="tracker-launch-btn secondary"
                 onClick={onOpenExam}
               >
-                📝 开始一组 408 计时测评 →
+                开始一组 408 计时测评 →
               </button>
             </div>
           </div>
@@ -379,7 +379,7 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
           <form className="lab-notes-form modern-form" onSubmit={handleSaveNote}>
             <div className="form-label-line">
               <div className="notes-heading-group">
-                <span className="notes-icon">📓</span>
+                <span className="notes-status-badge">NOTE</span>
                 <div>
                   <strong>随堂实操心得与考点随笔</strong>
                   <span className="note-tip">单步时序踩坑点随时记录，自动归档到考点学习画像</span>
@@ -424,7 +424,7 @@ export default function DailyCheckin({ onOpenExperiment, onOpenCourses, onOpenEx
                 className="save-note-btn modern-btn"
                 disabled={!labNote.trim()}
               >
-                💾 保存实验心得至档案
+                保存实验心得至档案
               </button>
             </div>
           </form>

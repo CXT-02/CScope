@@ -3340,29 +3340,31 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 .checkin-date-text {
-  font-size: 13px;
+  font-size: 14px;
   color: #64748b;
   font-weight: 600;
 }
 .checkin-title-block h1 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 900;
   color: #0f172a;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
 }
 .checkin-desc {
-  font-size: 13.5px;
+  font-size: 15px;
   color: #64748b;
+  line-height: 1.6;
   margin: 0;
+  font-weight: 500;
 }
 .checkin-header-stat-pill {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  padding: 8px 16px;
-  border-radius: 12px;
+  padding: 10px 18px;
+  border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 .checkin-header-stat-pill .fire-icon {
@@ -3370,19 +3372,21 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 .checkin-header-stat-pill .stat-text span {
   display: block;
-  font-size: 11px;
+  font-size: 12.5px;
+  font-weight: 600;
   color: #64748b;
 }
 .checkin-header-stat-pill .stat-text strong {
-  font-size: 18px;
+  font-size: 19px;
+  font-weight: 900;
   color: #0f172a;
 }
 
-/* 四指标卡片 */
+/* 四指标卡片：全新大字号大方排版，杜绝单薄孤立小 emoji */
 .checkin-summary-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  gap: 16px;
 }
 @media (max-width: 960px) {
   .checkin-summary-cards {
@@ -3392,12 +3396,14 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .checkin-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 16px;
+  padding: 22px 24px;
+  min-height: 160px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
 }
 .checkin-card.highlight {
   background: #f0fdf4;
@@ -3413,31 +3419,59 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   justify-content: space-between;
 }
 .checkin-card .card-label {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #475569;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #334155;
+  letter-spacing: -0.01em;
 }
-.checkin-card .card-icon {
-  font-size: 18px;
+.card-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #94a3b8;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.card-status-dot.active {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+.card-status-dot.streak {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+.card-status-dot.total {
+  background: #6366f1;
+  box-shadow: 0 0 8px #6366f1;
+}
+.card-status-dot.exam {
+  background: #06b6d4;
+  box-shadow: 0 0 8px #06b6d4;
 }
 .checkin-card .card-number-row {
-  margin: 8px 0 4px;
+  margin: 14px 0 8px;
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 6px;
 }
 .checkin-card .card-number-row strong {
-  font-size: 28px;
+  font-size: 42px;
   font-weight: 900;
   color: #0f172a;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
+.checkin-card .card-number-row .card-unit,
 .checkin-card .card-number-row span {
-  font-size: 12px;
+  font-size: 15px;
+  font-weight: 700;
   color: #64748b;
 }
 .checkin-card .card-footer-tip {
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 600;
   color: #64748b;
+  line-height: 1.45;
 }
 
 /* 打卡主工作区 */
@@ -3663,9 +3697,9 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 
 .telemetry-chip-badge {
   font-family: ui-monospace, SFMono-Regular, monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  padding: 3px 10px;
+  padding: 5px 12px;
   border-radius: 20px;
   background: #ecfdf5;
   color: #059669;
@@ -3676,16 +3710,16 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 14px;
-  padding: 16px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .telemetry-metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 14px;
 }
 @media (max-width: 900px) {
   .telemetry-metrics-grid {
@@ -3696,62 +3730,70 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .telemetry-metric-tile {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
 .metric-tile-head {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
-.metric-icon {
-  font-size: 14px;
+.metric-status-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00f5d4;
+  box-shadow: 0 0 6px #00f5d4;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .metric-tag {
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #64748b;
 }
 
 .metric-main-title {
-  font-size: 13.5px;
-  font-weight: 800;
+  font-size: 17px;
+  font-weight: 900;
   color: #0f172a;
   line-height: 1.35;
 }
 
 .metric-protocol-text {
-  font-size: 12.5px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   color: #059669;
 }
 
 .metric-sub-note {
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 500;
   color: #94a3b8;
+  line-height: 1.45;
 }
 
 .telemetry-pipeline-strip {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin: 2px 0;
+  margin: 4px 0;
 }
 
 .pipe-step {
   font-family: ui-monospace, monospace;
-  font-size: 10.5px;
+  font-size: 13px;
   font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
   background: #f1f5f9;
   color: #475569;
   border: 1px solid #e2e8f0;
@@ -3771,17 +3813,17 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 
 .pipe-arrow {
-  font-size: 9px;
+  font-size: 13px;
   color: #94a3b8;
 }
 
-/* 随堂微笔记表单升级 */
+/* 随堂微笔记表单升级：大字体、无突兀 emoji */
 .modern-form {
   border-top: 1px solid #f1f5f9;
-  padding-top: 16px;
+  padding-top: 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .notes-heading-group {
@@ -3790,14 +3832,69 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   gap: 10px;
 }
 
-.notes-icon {
-  font-size: 20px;
+.notes-status-badge {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 900;
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+}
+
+.notes-heading-group strong {
+  font-size: 17.5px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.note-tip {
+  font-size: 13.5px;
+  color: #64748b;
+  margin-top: 3px;
+  display: block;
+}
+
+.note-select-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.note-select-row label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.lab-select-input {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
 }
 
 .note-textarea-wrap {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+}
+
+.lab-note-textarea {
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  background: #ffffff;
+  resize: vertical;
 }
 
 .note-quick-tags {
@@ -3808,19 +3905,19 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 
 .tag-hint {
-  font-size: 11.5px;
+  font-size: 13px;
   color: #64748b;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .quick-tag-chip {
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
   color: #475569;
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 11.5px;
-  font-weight: 600;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -3834,9 +3931,9 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   background: #0f172a;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 9px 18px;
-  font-size: 13px;
+  border-radius: 10px;
+  padding: 11px 22px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.16s ease;
@@ -3863,27 +3960,28 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 
 .chart-sub-caption {
   margin: 3px 0 0;
-  font-size: 11.5px;
+  font-size: 13.5px;
   color: #94a3b8;
+  font-weight: 500;
 }
 
 .modern-bar-chart {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 150px;
-  padding: 16px 12px 6px;
+  height: 160px;
+  padding: 18px 14px 10px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  gap: 8px;
+  gap: 10px;
 }
 
 .bar-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   height: 100%;
   justify-content: flex-end;
@@ -3891,19 +3989,19 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 
 .bar-val-text {
   font-family: ui-monospace, monospace;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   color: #64748b;
 }
 
 .bar-val-text.today-val {
   color: #059669;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .bar-rail {
-  width: 26px;
+  width: 28px;
   height: 95px;
   background: #e2e8f0;
   border-radius: 6px;
@@ -3927,24 +4025,25 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 
 .bar-today-badge {
   position: absolute;
-  top: -14px;
+  top: -16px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 900;
   color: #d97706;
   letter-spacing: 0.05em;
 }
 
 .bar-date-label {
-  font-size: 11px;
+  font-size: 13px;
   color: #64748b;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .bar-date-label.today-text {
   color: #0f172a;
-  font-weight: 800;
+  font-weight: 900;
+  font-size: 14px;
 }
 
 /* 现代学科投入分布仪表环与进度条 */
@@ -3955,7 +4054,7 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 16px;
+  padding: 18px 20px;
 }
 @media (max-width: 860px) {
   .modern-subject-row {
@@ -3964,8 +4063,8 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 
 .modern-donut {
-  width: 115px;
-  height: 115px;
+  width: 120px;
+  height: 120px;
   position: relative;
   flex-shrink: 0;
 }
@@ -4005,13 +4104,13 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 
 .donut-center-info .donut-title {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .donut-center-info .donut-sub {
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 700;
   color: #64748b;
 }
@@ -4019,7 +4118,7 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .modern-progress-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
   width: 100%;
 }
@@ -4027,11 +4126,11 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .legend-item-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 8px 12px;
+  border-radius: 10px;
+  padding: 10px 14px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .legend-head-line {
@@ -4041,24 +4140,24 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 }
 
 .legend-subject-title {
-  font-size: 12px;
+  font-size: 14.5px;
   font-weight: 800;
   color: #0f172a;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .legend-pct {
   font-family: ui-monospace, monospace;
-  font-size: 12.5px;
+  font-size: 15.5px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .legend-mini-bar {
   width: 100%;
-  height: 5px;
+  height: 6px;
   background: #e2e8f0;
   border-radius: 3px;
   overflow: hidden;
@@ -4075,7 +4174,8 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .legend-fill.bar-ds { background: #f59e0b; }
 
 .legend-topics {
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 500;
   color: #64748b;
 }
 .pie-center-text {
