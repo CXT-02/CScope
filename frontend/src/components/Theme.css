@@ -2087,20 +2087,26 @@
 }
 
 [data-theme="dark"] .formula-points-list {
-  color: #94a3b8 !important;
+  color: #cbd5e1 !important;
+  font-size: 13.5px !important;
 }
 
 [data-theme="dark"] .formula-example-box {
   background: #142037 !important;
-  border-left-color: #059669 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-left: 4px solid #10b981 !important;
 }
 
 [data-theme="dark"] .formula-example-box p {
-  color: #cbd5e1 !important;
+  color: #f1f5f9 !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
 }
 
 [data-theme="dark"] .ex-title {
   color: #34d399 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
 }
 
 [data-theme="dark"] .f-lab-link-btn {
@@ -2620,7 +2626,6 @@
 [data-theme="cyber"] .star-btn,
 [data-theme="cyber"] .master-btn,
 [data-theme="cyber"] .calc-result-strip,
-[data-theme="cyber"] .formula-example-box,
 [data-theme="cyber"] .discipline-pill,
 [data-theme="cyber"] .concept-pill,
 [data-theme="cyber"] .active-tracker-box,
@@ -2629,6 +2634,27 @@
   background: #25155c !important;
   border: 1px solid rgba(0, 245, 212, 0.18) !important;
   color: #e2e8f0 !important;
+}
+
+[data-theme="cyber"] .formula-example-box {
+  background: #25155c !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  border-left: 4px solid #00f5d4 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 245, 212, 0.1) !important;
+}
+
+[data-theme="cyber"] .ex-title {
+  color: #00f5d4 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 212, 0.5) !important;
+  margin-bottom: 5px !important;
+}
+
+[data-theme="cyber"] .formula-example-box p {
+  color: #f1f5f9 !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
 }
 
 [data-theme="cyber"] .tracker-launch-btn.primary {
@@ -5414,6 +5440,30 @@
 }
 
 
+[data-theme="forest"] .formula-example-box {
+  background: #dbe7d7 !important;
+  border: 1.5px solid #b6ceb4 !important;
+  border-left: 4px solid #15803d !important;
+}
+
+[data-theme="forest"] .ex-title {
+  color: #166534 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  margin-bottom: 5px !important;
+}
+
+[data-theme="forest"] .formula-example-box p {
+  color: #091e11 !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+}
+
+[data-theme="forest"] .formula-points-list {
+  color: #2d3748 !important;
+  font-size: 13.5px !important;
+}
+
 [data-theme="light"] {
   --bg-page: #f4f6fa;
   --bg-card: #ffffff;
@@ -5990,4 +6040,28 @@
   background: #0f172a !important;
   color: #ffffff !important;
   border-color: #0f172a !important;
+}
+
+[data-theme="light"] .formula-example-box {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 4px solid #059669 !important;
+}
+
+[data-theme="light"] .ex-title {
+  color: #065f46 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  margin-bottom: 5px !important;
+}
+
+[data-theme="light"] .formula-example-box p {
+  color: #0f172a !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+}
+
+[data-theme="light"] .formula-points-list {
+  color: #334155 !important;
+  font-size: 13.5px !important;
 }

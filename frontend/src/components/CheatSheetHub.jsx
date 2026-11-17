@@ -338,7 +338,7 @@ export default function CheatSheetHub({ onOpenExperiment }) {
                 className="f-lab-link-btn"
                 onClick={() => onOpenExperiment(f.labId)}
               >
-                🔬 打开对应仿真：{f.labName} →
+                进入微观实验推演：{f.labName} →
               </button>
             </div>
           </div>
