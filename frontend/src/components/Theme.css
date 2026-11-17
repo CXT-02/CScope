@@ -1,27 +1,536 @@
 /* ==========================================================================
-   Theme.css - 全局多配色主题切换系统
-   支持: 🌙 深空暗夜 / ☀️ 学术晨曦 / 🌌 极客赛博 / 🍵 苍林护眼
+   Theme.css - 全站多配色主题系统 (深度联动全站模块)
+   支持 4 套高品质主题体系:
+   1. 🍵 苍林护眼 (forest) - 柔和米翠底色 + 刚劲墨绿文字 + 翡翠罗盘，考研防疲劳护眼首选
+   2. ☀️ 学术晨曦 (light)  - 极简明朗白底 + 藏青学术墨色 + 现代沉稳
+   3. 🌌 极客赛博 (cyber)  - 暗黑赛博终端 + 荧光青粉霓虹 + 极客光晕
+   4. 🌙 深空暗夜 (dark)   - 沉浸科技星空 + 宇宙藏蓝 + 经典暗调
    ========================================================================== */
 
-/* ---------------- 1. ☀️ 学术晨曦 (Light Mode - 白天明亮清爽) ---------------- */
-[data-theme="light"] {
-  --bg-primary: #f4f6fa;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f8fafc;
-  --text-main: #182238;
-  --text-muted: #5e6b82;
-  --border-subtle: #dbe2ea;
-  --accent-primary: #6558e8;
-  --accent-light: rgba(101, 88, 232, 0.1);
+/* ==========================================================================
+   ===================== 1. 🍵 苍林护眼 (data-theme="forest") ===================
+   ========================================================================== */
+
+[data-theme="forest"] {
+  --bg-page: #f1f6ee;
+  --bg-card: #ffffff;
+  --bg-header: rgba(247, 251, 245, 0.96);
+  --bg-sidebar: #f4f8f2;
+  --text-title: #0f2818;
+  --text-body: #24402e;
+  --text-muted: #4b6654;
+  --border-subtle: #d0ded0;
+  --border-card: #c8d8c6;
+  --accent-main: #15803d;
+  --accent-soft: rgba(21, 128, 61, 0.12);
+  --accent-hover: #166534;
 }
 
-[data-theme="light"] body {
+[data-theme="forest"] body,
+[data-theme="forest"] .cscope-workspace-layout,
+[data-theme="forest"] .workspace-body-container {
+  background: #f1f6ee !important;
+  color: #24402e !important;
+}
+
+/* --- 苍林护眼: 顶栏 --- */
+[data-theme="forest"] .workspace-header {
+  background: rgba(247, 251, 245, 0.96) !important;
+  border-bottom: 1px solid #d4e2d3 !important;
+  box-shadow: 0 2px 12px rgba(24, 60, 36, 0.05) !important;
+}
+
+[data-theme="forest"] .breadcrumb-nav .crumb-btn,
+[data-theme="forest"] .breadcrumb-nav .crumb-current {
+  color: #12331f !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .breadcrumb-nav .crumb-sep {
+  color: #7b9984 !important;
+}
+
+[data-theme="forest"] .header-user-badge {
+  background: #ffffff !important;
+  border: 1px solid #c8d8c6 !important;
+  color: #12331f !important;
+}
+
+[data-theme="forest"] .header-name {
+  color: #12331f !important;
+}
+
+[data-theme="forest"] .header-logout-btn {
+  background: #ffffff !important;
+  border-color: #c8d8c6 !important;
+  color: #3b5744 !important;
+}
+
+[data-theme="forest"] .header-logout-btn:hover {
+  background: #eaf3e8 !important;
+  color: #15803d !important;
+}
+
+/* --- 苍林护眼: 左侧功能栏 (SidebarNav) 深度联动 --- */
+[data-theme="forest"] .cscope-sidebar {
+  background: #f4f8f2 !important;
+  border-right: 1px solid #d4e2d3 !important;
+  box-shadow: 2px 0 16px rgba(20, 50, 30, 0.04) !important;
+}
+
+[data-theme="forest"] .sidebar-brand-name {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .sidebar-brand-logo {
+  background: linear-gradient(135deg, #15803d, #22c55e) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="forest"] .sidebar-section-title {
+  color: #557560 !important;
+  letter-spacing: 0.06em !important;
+}
+
+[data-theme="forest"] .sidebar-nav-btn {
+  color: #2b4735 !important;
+}
+
+[data-theme="forest"] .sidebar-nav-btn:hover {
+  background: #e6efe4 !important;
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .sidebar-nav-btn.active {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.16), rgba(34, 197, 94, 0.08)) !important;
+  color: #15803d !important;
+  border-left: 3.5px solid #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .sidebar-nav-btn.active .sidebar-btn-sub {
+  color: #2e6844 !important;
+}
+
+[data-theme="forest"] .sidebar-btn-sub {
+  color: #63826e !important;
+}
+
+[data-theme="forest"] .sidebar-toggle-btn {
+  background: #eaf2e8 !important;
+  border: 1px solid #cadbc9 !important;
+  color: #284c35 !important;
+}
+
+[data-theme="forest"] .sidebar-toggle-btn:hover {
+  background: #d8e8d5 !important;
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .sidebar-user-card {
+  background: #ffffff !important;
+  border-color: #c8d8c6 !important;
+}
+
+[data-theme="forest"] .sidebar-user-name {
+  color: #0f2818 !important;
+}
+
+/* --- 苍林护眼: 课程知识中心 (CourseHome) 高对比度墨绿排版 --- */
+[data-theme="forest"] .course-home {
+  background: radial-gradient(circle at 82% 18%, rgba(21, 128, 61, 0.09), transparent 32rem),
+              radial-gradient(circle at 18% 75%, rgba(34, 197, 94, 0.06), transparent 30rem),
+              linear-gradient(175deg, #f2f7ef 0%, #eaf2e7 45%, #e2ede0 100%) !important;
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .course-home .eyebrow {
+  color: #15803d !important;
+  background: rgba(21, 128, 61, 0.1) !important;
+  border-color: rgba(21, 128, 61, 0.25) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .course-home .course-hero h1 {
+  color: #0f2818 !important;
+  text-shadow: none !important;
+}
+
+[data-theme="forest"] .course-home .course-hero h1 em {
+  color: #15803d !important;
+  text-shadow: none !important;
+}
+
+[data-theme="forest"] .course-home .course-hero-copy > p {
+  color: #2e4a37 !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="forest"] .course-home .course-search {
+  background: #ffffff !important;
+  border-color: #b7ccb5 !important;
+  box-shadow: 0 8px 24px rgba(25, 60, 35, 0.08) !important;
+}
+
+[data-theme="forest"] .course-home .course-search input {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .course-home .course-search input::placeholder {
+  color: #63826e !important;
+}
+
+/* 苍林护眼: 右侧同心圆环形与翡翠罗盘 (curriculum-map) */
+[data-theme="forest"] .course-home .curriculum-map::before,
+[data-theme="forest"] .course-home .curriculum-map::after {
+  border: 1.5px dashed rgba(21, 128, 61, 0.32) !important;
+}
+
+[data-theme="forest"] .course-home .map-core {
+  background: linear-gradient(145deg, #133821, #1e5332) !important;
+  border: 2px solid rgba(134, 239, 172, 0.45) !important;
+  box-shadow: 0 0 0 10px rgba(34, 197, 94, 0.12), 0 14px 32px rgba(15, 45, 25, 0.28) !important;
+}
+
+[data-theme="forest"] .course-home .map-core strong {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="forest"] .course-home .map-core span {
+  color: #a7f3d0 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .course-home .map-course {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid #bfd6be !important;
+  box-shadow: 0 8px 20px rgba(20, 50, 30, 0.1) !important;
+}
+
+[data-theme="forest"] .course-home .map-course span {
+  color: #0f2818 !important;
+  font-weight: 800 !important;
+}
+
+/* 五个知识模块小徽章配色（苍林山水森系） */
+[data-theme="forest"] .course-home .map-course-1 i { background: #0d9488 !important; } /* AI 翠湖天青 */
+[data-theme="forest"] .course-home .map-course-2 i { background: #b45309 !important; } /* CPU 琥珀松木 */
+[data-theme="forest"] .course-home .map-course-3 i { background: #be123c !important; } /* OS 苍林枫红 */
+[data-theme="forest"] .course-home .map-course-4 i { background: #0369a1 !important; } /* NET 碧水深澜 */
+[data-theme="forest"] .course-home .map-course-5 i { background: #15803d !important; } /* DS 苍翠竹青 */
+
+/* 苍林护眼: 个人学习板块（小明，继续上次的学习）- 告别看不清的白色字体 */
+[data-theme="forest"] .course-home .personal-entry.signed {
+  background: #ffffff !important;
+  border: 1px solid #cadbc8 !important;
+  box-shadow: 0 8px 24px rgba(25, 60, 35, 0.06) !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry-heading h2 {
+  color: #0f2818 !important; /* 刚劲墨绿，清晰显著 */
+  text-shadow: none !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry.signed p {
+  color: #31523c !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry.signed p strong {
+  color: #0f2818 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry-heading > button {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.3) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="forest"] .course-home .personal-entry-heading > button:hover {
+  background: #166534 !important;
+  transform: translateY(-1px) !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations > button {
+  background: #f8fbf6 !important;
+  border-color: #d2e2cf !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations > button:hover {
+  background: #ffffff !important;
+  border-color: #15803d !important;
+  box-shadow: 0 6px 16px rgba(21, 128, 61, 0.12) !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations strong {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .course-home .home-recommendations small {
+  color: #4b6b55 !important;
+}
+
+/* 苍林护眼: 全部课程知识地图板块 - 彻底解决标题白色隐形问题 */
+[data-theme="forest"] .course-home .course-section-heading {
+  border-top-color: #d1ded0 !important;
+}
+
+[data-theme="forest"] .course-home .course-section-heading h2 {
+  color: #0f2818 !important; /* 关键：墨绿标题，绝对不准用白色！ */
+  text-shadow: none !important;
+}
+
+[data-theme="forest"] .course-home .course-section-heading > p {
+  color: #3b5744 !important;
+}
+
+[data-theme="forest"] .course-home .course-section-heading > p strong {
+  color: #0f2818 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .course-home .course-card {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 8px 24px rgba(25, 60, 35, 0.06) !important;
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .course-home .course-card:hover {
+  background: #ffffff !important;
+  border-color: #15803d !important;
+  box-shadow: 0 16px 36px rgba(21, 128, 61, 0.15) !important;
+}
+
+[data-theme="forest"] .course-home .course-card-top .course-number {
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="forest"] .course-home .course-card h3 {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .course-home .course-card > p {
+  color: #385642 !important;
+}
+
+[data-theme="forest"] .course-home .course-point-preview span {
+  color: #223f2c !important;
+}
+
+[data-theme="forest"] .course-home .course-card-footer {
+  border-top-color: #e5efe4 !important;
+  color: #4b6b55 !important;
+}
+
+[data-theme="forest"] .course-home .course-card-footer b {
+  color: #15803d !important;
+}
+
+/* --- 苍林护眼: 控制台总览 (ConsoleDashboard) --- */
+[data-theme="forest"] .console-page {
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .dashboard-hero-card,
+[data-theme="forest"] .stat-card,
+[data-theme="forest"] .action-card,
+[data-theme="forest"] .quick-nav-card,
+[data-theme="forest"] .recent-activity-panel {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 6px 20px rgba(20, 50, 30, 0.05) !important;
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .stat-card strong,
+[data-theme="forest"] .dashboard-hero-title,
+[data-theme="forest"] .section-head-title {
+  color: #0f2818 !important;
+}
+
+/* --- 苍林护眼: 微观仿真工坊 (ExperimentWorkshop) --- */
+[data-theme="forest"] .workshop-page {
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .workshop-hero-title {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .workshop-hero-subtitle {
+  color: #385642 !important;
+}
+
+[data-theme="forest"] .workshop-hero-pills {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+}
+
+[data-theme="forest"] .workshop-hero-pills strong {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .filter-subject-tabs .filter-btn {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  color: #2b4735 !important;
+}
+
+[data-theme="forest"] .filter-subject-tabs .filter-btn:hover {
+  background: #eaf3e8 !important;
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .filter-subject-tabs .filter-btn.active {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.25) !important;
+}
+
+[data-theme="forest"] .difficulty-select,
+[data-theme="forest"] .workshop-search-box input {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .experiment-workshop-card {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 6px 18px rgba(20, 50, 30, 0.05) !important;
+}
+
+[data-theme="forest"] .experiment-workshop-card:hover {
+  border-color: #15803d !important;
+  box-shadow: 0 14px 30px rgba(21, 128, 61, 0.12) !important;
+}
+
+[data-theme="forest"] .experiment-workshop-card h3 {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .experiment-workshop-card p {
+  color: #385642 !important;
+}
+
+/* --- 苍林护眼: 实机学时度量 (DailyCheckin) --- */
+[data-theme="forest"] .daily-checkin-page {
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .checkin-top-header h1 {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .checkin-card {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 6px 18px rgba(20, 50, 30, 0.05) !important;
+}
+
+[data-theme="forest"] .checkin-card.highlight {
+  border-color: #15803d !important;
+  background: linear-gradient(175deg, #ffffff 0%, #f4faf2 100%) !important;
+}
+
+[data-theme="forest"] .checkin-card .card-number-row strong {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .checkin-form-card,
+[data-theme="forest"] .chart-panel-card,
+[data-theme="forest"] .checkin-audit-section {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 6px 20px rgba(20, 50, 30, 0.05) !important;
+}
+
+[data-theme="forest"] .checkin-form-card h3,
+[data-theme="forest"] .chart-card-header h4,
+[data-theme="forest"] .audit-header h3 {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .audit-item {
+  border-bottom-color: #e5efe4 !important;
+}
+
+[data-theme="forest"] .audit-time-col strong {
+  color: #15803d !important;
+}
+
+[data-theme="forest"] .audit-content strong {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .audit-content p {
+  color: #385642 !important;
+}
+
+/* --- 苍林护眼: 408 测评 (ExamArena) 与 错题本 --- */
+[data-theme="forest"] .exam-config-card,
+[data-theme="forest"] .exam-question-card,
+[data-theme="forest"] .exam-summary-card,
+[data-theme="forest"] .mistake-card {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 6px 18px rgba(20, 50, 30, 0.05) !important;
+  color: #24402e !important;
+}
+
+[data-theme="forest"] .exam-question-title,
+[data-theme="forest"] .mistake-card h3 {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .exam-option-item {
+  background: #f8fbf6 !important;
+  border-color: #d2e2cf !important;
+  color: #1f3b28 !important;
+}
+
+[data-theme="forest"] .exam-option-item:hover {
+  background: #eaf3e8 !important;
+  border-color: #15803d !important;
+}
+
+[data-theme="forest"] .exam-option-item.selected {
+  background: #e1efe0 !important;
+  border-color: #15803d !important;
+  color: #15803d !important;
+  font-weight: 800 !important;
+}
+
+
+/* ==========================================================================
+   ===================== 2. ☀️ 学术晨曦 (data-theme="light") ===================
+   ========================================================================== */
+
+[data-theme="light"] {
+  --bg-page: #f4f6fa;
+  --bg-card: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-sidebar: #ffffff;
+  --text-title: #182238;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --border-subtle: #dbe2ea;
+  --accent-main: #6558e8;
+  --accent-soft: rgba(101, 88, 232, 0.1);
+  --accent-hover: #5044cb;
+}
+
+[data-theme="light"] body,
+[data-theme="light"] .cscope-workspace-layout,
+[data-theme="light"] .workspace-body-container {
   background: #f4f6fa !important;
   color: #182238 !important;
-}
-
-[data-theme="light"] .cscope-workspace-layout {
-  background: #f4f6fa !important;
 }
 
 [data-theme="light"] .workspace-header {
@@ -33,6 +542,7 @@
 [data-theme="light"] .breadcrumb-nav .crumb-btn,
 [data-theme="light"] .breadcrumb-nav .crumb-current {
   color: #1e293b !important;
+  font-weight: 700 !important;
 }
 
 [data-theme="light"] .breadcrumb-nav .crumb-sep {
@@ -55,11 +565,18 @@
   color: #475569 !important;
 }
 
-/* 侧边栏在 Light 模式下 */
 [data-theme="light"] .cscope-sidebar {
   background: #ffffff !important;
   border-right: 1px solid #dce2e8 !important;
-  color: #1e293b !important;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .sidebar-brand-name {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .sidebar-section-title {
+  color: #94a3b8 !important;
 }
 
 [data-theme="light"] .sidebar-nav-btn {
@@ -74,15 +591,8 @@
 [data-theme="light"] .sidebar-nav-btn.active {
   background: linear-gradient(135deg, rgba(101, 88, 232, 0.12), rgba(101, 88, 232, 0.05)) !important;
   color: #6558e8 !important;
-  border-color: #6558e8 !important;
-}
-
-[data-theme="light"] .sidebar-brand-name {
-  color: #0f172a !important;
-}
-
-[data-theme="light"] .sidebar-section-title {
-  color: #94a3b8 !important;
+  border-left: 3.5px solid #6558e8 !important;
+  font-weight: 800 !important;
 }
 
 [data-theme="light"] .sidebar-user-card {
@@ -94,7 +604,7 @@
   color: #0f172a !important;
 }
 
-/* 课程知识中心在 Light 模式下的美学调整（优雅白底高对比度） */
+/* 课程知识中心在 Light 模式下 */
 [data-theme="light"] .course-home {
   background: radial-gradient(circle at 85% 15%, rgba(101, 88, 232, 0.08), transparent 30rem),
               linear-gradient(175deg, #f4f6fb 0%, #edf1f8 40%, #e8edf5 100%) !important;
@@ -128,10 +638,15 @@
   color: #94a3b8 !important;
 }
 
+[data-theme="light"] .course-home .curriculum-map::before,
+[data-theme="light"] .course-home .curriculum-map::after {
+  border: 1.5px dashed rgba(100, 116, 139, 0.3) !important;
+}
+
 [data-theme="light"] .course-home .map-core {
-  background: linear-gradient(145deg, #202a44, #32436d) !important;
+  background: linear-gradient(145deg, #1e293b, #334155) !important;
   color: #ffffff !important;
-  border-color: #cbd5e1 !important;
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
   box-shadow: 0 0 0 10px rgba(101, 88, 232, 0.08), 0 12px 28px rgba(32, 42, 68, 0.16) !important;
 }
 
@@ -166,7 +681,6 @@
 [data-theme="light"] .course-home .personal-entry-heading > button {
   background: #1e293b !important;
   color: #ffffff !important;
-  border-color: transparent !important;
 }
 
 [data-theme="light"] .course-home .home-recommendations > button {
@@ -174,18 +688,8 @@
   border-color: #e2e8f0 !important;
 }
 
-[data-theme="light"] .course-home .home-recommendations > button:hover {
-  background: #ffffff !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
-}
-
 [data-theme="light"] .course-home .home-recommendations strong {
   color: #182238 !important;
-}
-
-[data-theme="light"] .course-home .home-recommendations small {
-  color: #64748b !important;
 }
 
 [data-theme="light"] .course-home .course-section-heading {
@@ -211,12 +715,6 @@
   color: #182238 !important;
 }
 
-[data-theme="light"] .course-home .course-card:hover {
-  background: #ffffff !important;
-  border-color: var(--course-accent) !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1) !important;
-}
-
 [data-theme="light"] .course-home .course-card h3 {
   color: #182238 !important;
 }
@@ -229,34 +727,63 @@
   color: #334155 !important;
 }
 
-[data-theme="light"] .course-home .course-card-footer {
-  border-top-color: #edf2f7 !important;
-  color: #64748b !important;
-}
 
-/* ---------------- 2. 🌌 极客赛博 (Cyber Neon) ---------------- */
+/* ==========================================================================
+   ===================== 3. 🌌 极客赛博 (data-theme="cyber") ===================
+   ========================================================================== */
+
 [data-theme="cyber"] {
-  --bg-primary: #070712;
-  --bg-secondary: #100f24;
-  --text-main: #f0f4ff;
-  --accent-primary: #00f5d4;
+  --bg-page: #080816;
+  --bg-card: #0f0e26;
+  --bg-header: rgba(14, 13, 34, 0.94);
+  --bg-sidebar: #090918;
+  --text-title: #ffffff;
+  --text-body: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(0, 245, 212, 0.22);
+  --accent-main: #00f5d4;
+  --accent-soft: rgba(0, 245, 212, 0.15);
+  --accent-hover: #05d5b9;
 }
 
 [data-theme="cyber"] body,
-[data-theme="cyber"] .cscope-workspace-layout {
+[data-theme="cyber"] .cscope-workspace-layout,
+[data-theme="cyber"] .workspace-body-container {
   background: #080816 !important;
   color: #f0f4ff !important;
 }
 
 [data-theme="cyber"] .workspace-header {
   background: rgba(14, 13, 34, 0.94) !important;
-  border-bottom: 1px solid rgba(0, 245, 212, 0.25) !important;
+  border-bottom: 1px solid rgba(0, 245, 212, 0.28) !important;
   box-shadow: 0 4px 20px rgba(0, 245, 212, 0.08) !important;
 }
 
 [data-theme="cyber"] .breadcrumb-nav .crumb-btn,
 [data-theme="cyber"] .breadcrumb-nav .crumb-current {
   color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .cscope-sidebar {
+  background: #090918 !important;
+  border-right: 1px solid rgba(0, 245, 212, 0.2) !important;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="cyber"] .sidebar-nav-btn {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="cyber"] .sidebar-nav-btn:hover {
+  background: rgba(0, 245, 212, 0.08) !important;
+  color: #00f5d4 !important;
+}
+
+[data-theme="cyber"] .sidebar-nav-btn.active {
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.2), rgba(217, 70, 239, 0.12)) !important;
+  color: #00f5d4 !important;
+  border-left: 3.5px solid #00f5d4 !important;
+  box-shadow: inset 0 0 12px rgba(0, 245, 212, 0.15) !important;
 }
 
 [data-theme="cyber"] .course-home {
@@ -271,12 +798,44 @@
 }
 
 [data-theme="cyber"] .course-home .course-search {
-  border-color: rgba(0, 245, 212, 0.35) !important;
+  background: rgba(16, 15, 40, 0.85) !important;
+  border-color: rgba(0, 245, 212, 0.4) !important;
   box-shadow: 0 0 25px rgba(0, 245, 212, 0.15) !important;
 }
 
+[data-theme="cyber"] .course-home .curriculum-map::before,
+[data-theme="cyber"] .course-home .curriculum-map::after {
+  border: 1.5px dashed rgba(0, 245, 212, 0.45) !important;
+}
+
+[data-theme="cyber"] .course-home .map-core {
+  background: linear-gradient(145deg, #090918, #181135) !important;
+  border: 2px solid #00f5d4 !important;
+  box-shadow: 0 0 25px rgba(0, 245, 212, 0.35), 0 0 0 8px rgba(217, 70, 239, 0.15) !important;
+}
+
+[data-theme="cyber"] .course-home .map-core strong {
+  color: #00f5d4 !important;
+  text-shadow: 0 0 10px #00f5d4 !important;
+}
+
+[data-theme="cyber"] .course-home .map-core span {
+  color: #d946ef !important;
+}
+
+[data-theme="cyber"] .course-home .map-course {
+  background: rgba(14, 13, 34, 0.92) !important;
+  border: 1px solid rgba(0, 245, 212, 0.35) !important;
+  box-shadow: 0 0 15px rgba(0, 245, 212, 0.15) !important;
+}
+
+[data-theme="cyber"] .course-home .map-course span {
+  color: #f0fdf4 !important;
+}
+
 [data-theme="cyber"] .course-home .course-card {
-  border-color: rgba(217, 70, 239, 0.25) !important;
+  background: rgba(15, 14, 38, 0.8) !important;
+  border-color: rgba(217, 70, 239, 0.28) !important;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
 }
 
@@ -285,67 +844,23 @@
   box-shadow: 0 0 28px rgba(0, 245, 212, 0.35) !important;
 }
 
-/* ---------------- 3. 🍵 苍林松石 (Forest Paper - 考研防疲劳护眼) ---------------- */
-[data-theme="forest"] {
-  --bg-primary: #f3f6f0;
-  --bg-secondary: #ffffff;
-  --text-main: #142419;
-  --accent-primary: #15803d;
+
+/* ==========================================================================
+   ===================== 4. 🌙 深空暗夜 (默认基础) ==============================
+   ========================================================================== */
+
+[data-theme="dark"] .cscope-sidebar {
+  background: #0d1424 !important;
+  border-right: 1px solid #1a253e !important;
 }
 
-[data-theme="forest"] body,
-[data-theme="forest"] .cscope-workspace-layout {
-  background: #f1f5ee !important;
-  color: #172b1d !important;
+[data-theme="dark"] .sidebar-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
 }
 
-[data-theme="forest"] .workspace-header {
-  background: rgba(255, 255, 255, 0.94) !important;
-  border-bottom: 1px solid #d5dfd1 !important;
-}
-
-[data-theme="forest"] .breadcrumb-nav .crumb-btn,
-[data-theme="forest"] .breadcrumb-nav .crumb-current {
-  color: #166534 !important;
-}
-
-[data-theme="forest"] .cscope-sidebar {
-  background: #ffffff !important;
-  border-right: 1px solid #dce5da !important;
-}
-
-[data-theme="forest"] .sidebar-nav-btn.active {
-  background: rgba(21, 128, 61, 0.12) !important;
-  color: #15803d !important;
-  border-color: #15803d !important;
-}
-
-[data-theme="forest"] .course-home {
-  background: radial-gradient(circle at 80% 20%, rgba(21, 128, 61, 0.08), transparent 30rem),
-              linear-gradient(175deg, #f2f6ef 0%, #e9f0e5 45%, #e1ebe0 100%) !important;
-  color: #162a1c !important;
-}
-
-[data-theme="forest"] .course-home .course-hero h1 {
-  color: #162a1c !important;
-}
-
-[data-theme="forest"] .course-home .course-hero h1 em {
-  color: #15803d !important;
-  text-shadow: none !important;
-}
-
-[data-theme="forest"] .course-home .course-search {
-  background: #ffffff !important;
-  border-color: #c2d4be !important;
-}
-
-[data-theme="forest"] .course-home .course-card {
-  background: #ffffff !important;
-  border-color: #d1ded0 !important;
-  color: #162a1c !important;
-}
-
-[data-theme="forest"] .course-home .course-card h3 {
-  color: #162a1c !important;
+[data-theme="dark"] .sidebar-nav-btn.active {
+  background: linear-gradient(135deg, rgba(255, 104, 69, 0.18), rgba(255, 104, 69, 0.05)) !important;
+  color: #ff6845 !important;
+  border-left: 3.5px solid #ff6845 !important;
 }
