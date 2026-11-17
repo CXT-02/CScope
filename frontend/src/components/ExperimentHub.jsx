@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { useLearningProfile } from './LearningProfileContext'
 import { getPersonalRecommendations } from './LearningDashboard'
 import { experiments } from '../lib/experimentRegistry'
+import './ExperimentHub.css'
 
 export default function ExperimentHub({ courses, activeCourseId, onOpen, onSelectCourse, onBack, onShowProfile, onLogin }) {
   const { user, records } = useLearningProfile()

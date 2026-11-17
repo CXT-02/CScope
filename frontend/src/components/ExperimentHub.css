@@ -1,0 +1,643 @@
+/* ==========================================================================
+   ExperimentHub.css - 紧凑沉浸式课程知识中心（深色夜空科技风格）
+   解决高度过高需要多次滚动的痛点，并完美统一为高质感深色主题
+   ========================================================================== */
+
+.course-home {
+  min-height: 100vh;
+  background: radial-gradient(circle at 85% 15%, rgba(101, 88, 232, 0.16), transparent 32rem),
+              radial-gradient(circle at 15% 45%, rgba(28, 212, 170, 0.08), transparent 28rem),
+              linear-gradient(175deg, #0c1322 0%, #111a2e 30%, #121d37 60%, #15223c 100%);
+  color: #f6f8fb;
+  padding-bottom: 40px;
+}
+
+/* ---------------- 1. 紧凑型顶部 Hero 导学区 ---------------- */
+.course-home .course-hero {
+  min-height: auto;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 28px clamp(20px, 3.5vw, 40px) 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  align-items: center;
+  gap: 36px;
+}
+
+.course-home .course-hero-copy {
+  position: relative;
+  z-index: 3;
+}
+
+.course-home .eyebrow {
+  display: inline-block;
+  color: #a79cff;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.course-home .course-hero h1 {
+  margin: 4px 0 8px;
+  font: 700 clamp(26px, 2.5vw, 36px)/1.22 Georgia, "Songti SC", serif;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.course-home .course-hero h1 em {
+  color: #8e83ff;
+  text-shadow: 0 0 24px rgba(142, 131, 255, 0.5);
+  font-style: normal;
+}
+
+.course-home .course-hero-copy > p {
+  max-width: 620px;
+  margin: 0;
+  color: #9bb0ce;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+/* 紧凑搜索框 */
+.course-home .course-search {
+  position: relative;
+  max-width: 580px;
+  height: 46px;
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 38px 1fr 34px;
+  align-items: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: 13px;
+  background: rgba(18, 27, 44, 0.75);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
+}
+
+.course-home .course-search:focus-within,
+.course-home .course-search.has-query {
+  border-color: #8e83ff;
+  box-shadow: 0 0 0 4px rgba(142, 131, 255, 0.22), 0 10px 30px rgba(0, 0, 0, 0.45);
+  background: rgba(23, 34, 56, 0.9);
+}
+
+.course-home .course-search > span {
+  padding-left: 14px;
+  color: #a79cff;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.course-home .course-search input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.course-home .course-search input::placeholder {
+  color: #697a95;
+}
+
+.course-home .course-search button {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  color: #90a1bc;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.course-home .course-search button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* 搜索下拉结果 */
+.course-home .search-results {
+  position: absolute;
+  z-index: 25;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-height: 380px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: #131c2d;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  overflow-y: auto;
+}
+
+.course-home .search-summary {
+  padding: 6px 10px 8px;
+  color: #8c9cb3;
+  font-size: 12px;
+}
+
+.course-home .search-results > button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 9px;
+  padding: 8px 10px;
+  text-align: left;
+  background: transparent;
+  color: #f6f8fb;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.course-home .search-results > button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.course-home .search-course-dot {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: white;
+  font-size: 11.5px;
+  font-weight: 900;
+}
+
+.course-home .search-results strong {
+  font-size: 13.5px;
+  color: #ffffff;
+}
+
+.course-home .search-results small {
+  margin-top: 3px;
+  color: #8e9fb7;
+  font-size: 12px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-home .search-results i.ready {
+  color: #1ed4aa;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 12px;
+}
+
+/* ---------------- 2. 精致小巧的雷达同心圆 (curriculum-map) ---------------- */
+.course-home .curriculum-map {
+  position: relative;
+  height: 180px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.course-home .map-core {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border-radius: 50%;
+  color: white;
+  background: linear-gradient(145deg, #18233a, #26385a);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 10px rgba(101, 88, 232, 0.12), 0 12px 30px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+}
+
+.course-home .map-core strong {
+  font: 700 22px Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+.course-home .map-core span {
+  margin-top: 2px;
+  color: #9ab0d2;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.course-home .curriculum-map::before,
+.course-home .curriculum-map::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 1.5px dashed rgba(142, 131, 255, 0.22);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.course-home .curriculum-map::before {
+  width: 130px;
+  height: 130px;
+}
+
+.course-home .curriculum-map::after {
+  width: 185px;
+  height: 185px;
+}
+
+/* 5 个环绕课程小气泡胶囊 */
+.course-home .map-course {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px 4px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  background: rgba(18, 26, 42, 0.88);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  animation: map-float-compact 3.5s ease-in-out infinite;
+}
+
+.course-home .map-course i {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  background: var(--course-accent);
+  font-size: 9.5px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.course-home .map-course span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #e2eaf5;
+  white-space: nowrap;
+}
+
+.course-home .map-course-1 { left: 4%; top: 8%; }
+.course-home .map-course-2 { right: 2%; top: 12%; animation-delay: -0.7s; }
+.course-home .map-course-3 { right: 5%; bottom: 8%; animation-delay: -1.4s; }
+.course-home .map-course-4 { left: 6%; bottom: 6%; animation-delay: -2.1s; }
+.course-home .map-course-5 { left: 44%; top: 0%; animation-delay: -2.8s; }
+
+@keyframes map-float-compact {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ---------------- 3. 紧凑型「继续上次学习」条带 ---------------- */
+.course-home .personal-entry {
+  max-width: 1360px;
+  margin: 0 auto 18px;
+  padding: 12px 24px;
+  border-radius: 16px;
+}
+
+.course-home .personal-entry.signed {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.course-home .personal-entry-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.course-home .personal-entry-heading .eyebrow {
+  margin-bottom: 2px;
+  color: #ff9d82;
+  font-size: 11px;
+}
+
+.course-home .personal-entry-heading h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  display: inline-block;
+}
+
+.course-home .personal-entry.signed p {
+  color: #8e9fb7;
+  font-size: 13px;
+  margin: 0 0 0 12px;
+  display: inline-block;
+}
+
+.course-home .personal-entry.signed p strong {
+  color: #ffb340;
+  font-weight: 700;
+}
+
+.course-home .personal-entry-heading > button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2eaf5;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.course-home .personal-entry-heading > button:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* 推荐实验卡片微型横条 */
+.course-home .home-recommendations {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.course-home .home-recommendations > button {
+  display: grid;
+  grid-template-columns: 24px 30px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.course-home .home-recommendations > button:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+.course-home .home-recommendations > button > span {
+  color: #72849d;
+  font: 11.5px monospace;
+  font-weight: 700;
+}
+
+.course-home .home-recommendations > button > i {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: white;
+  background: var(--recommend-accent);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.course-home .home-recommendations strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.course-home .home-recommendations small {
+  margin-top: 2px;
+  color: #8c9cb3;
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.course-home .home-recommendations > button > b {
+  color: #ff8a69;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------------- 4. 跃升至首屏的「全部课程知识地图」 ---------------- */
+.course-home .course-library {
+  padding: 24px max(20px, calc((100vw - 1360px)/2)) 60px;
+  color: white;
+  background: transparent; /* 融为一体 */
+}
+
+.course-home .course-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 20px;
+}
+
+.course-home .course-section-heading .eyebrow {
+  color: #ff8a69;
+}
+
+.course-home .course-section-heading h2 {
+  margin: 4px 0 0;
+  font: 700 clamp(24px, 2.5vw, 32px) Georgia, "Songti SC", serif;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.course-home .course-section-heading > p {
+  margin: 0;
+  color: #8c9cb3;
+  font-size: 13.5px;
+}
+
+.course-home .course-section-heading > p strong {
+  color: #ffb340;
+  font-size: 15px;
+}
+
+/* 6 门核心课程卡片网格 */
+.course-home .course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.course-home .course-card {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  text-align: left;
+  color: white;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.course-home .course-card::after {
+  content: "";
+  position: absolute;
+  right: -45px;
+  top: -45px;
+  width: 135px;
+  height: 135px;
+  border-radius: 50%;
+  background: var(--course-accent);
+  opacity: 0.14;
+}
+
+.course-home .course-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--course-accent);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 20px color-mix(in srgb, var(--course-accent) 25%, transparent);
+}
+
+.course-home .course-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.course-home .course-number {
+  color: #7b8ca3;
+  font: 12px monospace;
+  letter-spacing: 0.12em;
+}
+
+.course-home .course-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: white;
+  background: var(--course-accent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--course-accent) 35%, transparent);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.course-home .course-english {
+  margin-top: 20px;
+  color: var(--course-accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.course-home .course-card h3 {
+  margin: 6px 0 8px;
+  font: 700 22px Georgia, "Songti SC", serif;
+  color: #ffffff;
+}
+
+.course-home .course-card > p {
+  margin: 0;
+  color: #9ab0cf;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.course-home .course-point-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 16px 0;
+}
+
+.course-home .course-point-preview span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccd7e8;
+  font-size: 13px;
+}
+
+.course-home .course-point-preview i {
+  width: 6px;
+  height: 6px;
+  border: 1px solid #6b7d96;
+  border-radius: 50%;
+}
+
+.course-home .course-point-preview i.ready {
+  border: 0;
+  background: #1ed4aa;
+  box-shadow: 0 0 6px #1ed4aa;
+}
+
+.course-home .course-card-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #8c9cb3;
+  font-size: 12.5px;
+}
+
+.course-home .course-card-footer b {
+  color: var(--course-accent);
+  font-size: 13px;
+}
+
+/* 响应式适配 */
+@media (max-width: 980px) {
+  .course-home .course-hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .course-home .curriculum-map {
+    height: 150px;
+  }
+  .course-home .course-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .course-home .home-recommendations {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .course-home .course-grid {
+    grid-template-columns: 1fr;
+  }
+}
