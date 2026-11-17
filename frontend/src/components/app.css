@@ -8419,3 +8419,40 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   background: #ef4444;
   color: #ffffff;
 }
+
+/* 研学社区头像防护与图片渲染安全规范 */
+.author-avatar,
+.strip-avatar,
+.composer-avatar,
+.comment-author-avatar {
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  user-select: none;
+}
+
+.author-avatar img,
+.strip-avatar img,
+.composer-avatar img,
+.comment-author-avatar img,
+.avatar-img-badge {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.avatar-char-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  text-align: center;
+  font-weight: 800;
+}

@@ -162,6 +162,39 @@ const INITIAL_POSTS = [
   }
 ]
 
+// 头像渲染安全组件：如果是图片链接则优雅渲染为圆角图片，若是纯字符/名称则提取精简单字徽章，彻底避免 URL 字符串溢出重叠
+function AvatarBadge({ avatar, name, className = '' }) {
+  const [imgError, setImgError] = useState(false)
+
+  useEffect(() => {
+    setImgError(false)
+  }, [avatar])
+
+  const isUrl = typeof avatar === 'string' && (
+    avatar.startsWith('http://') ||
+    avatar.startsWith('https://') ||
+    avatar.startsWith('data:') ||
+    avatar.startsWith('/') ||
+    avatar.includes('unsplash.com') ||
+    avatar.length > 30
+  )
+
+  if (isUrl && !imgError) {
+    return (
+      <img
+        src={avatar}
+        alt={name || 'avatar'}
+        className={`avatar-img-badge ${className}`.trim()}
+        onError={() => setImgError(true)}
+      />
+    )
+  }
+
+  const fallbackText = (avatar && !isUrl ? avatar : (name || '研')).trim()
+  const displayChar = fallbackText.length > 2 ? fallbackText.slice(0, 1) : fallbackText
+  return <span className={`avatar-char-badge ${className}`.trim()}>{displayChar}</span>
+}
+
 export default function CommunityHub({ onOpenExperiment }) {
   const { user } = useLearningProfile()
   const currentUserId = user?.id || 'guest_user'
@@ -445,7 +478,7 @@ ${post.labName ? `🔬 联动微观仿真：${post.labName} (http://localhost:51
       <div className="community-current-user-strip">
         <span className="strip-label">当前讨论发言身份：</span>
         <div className="strip-user-badge">
-          <span className="strip-avatar">{currentUserAvatar}</span>
+          <span className="strip-avatar"><AvatarBadge avatar={currentUserAvatar} name={currentUserName} /></span>
           <strong className="strip-name">{currentUserName}</strong>
           <span className="strip-role">({currentUserRole})</span>
         </div>
@@ -464,7 +497,7 @@ ${post.labName ? `🔬 联动微观仿真：${post.labName} (http://localhost:51
             <article key={post.id} className="post-card">
               <div className="post-header">
                 <div className="post-author-box">
-                  <div className="author-avatar">{post.avatar}</div>
+                  <div className="author-avatar"><AvatarBadge avatar={post.avatar} name={post.author} /></div>
                   <div className="author-meta">
                     <strong>{post.author}</strong>
                     <span>{post.time} {post.role ? `· ${post.role}` : ''}</span>
@@ -530,7 +563,7 @@ ${post.labName ? `🔬 联动微观仿真：${post.labName} (http://localhost:51
 
                   {/* 评论发布输入区 */}
                   <div className="comment-composer-box">
-                    <div className="composer-avatar">{currentUserAvatar}</div>
+                    <div className="composer-avatar"><AvatarBadge avatar={currentUserAvatar} name={currentUserName} /></div>
                     <div className="composer-main">
                       <div className="composer-user-hint">
                         <span>作为 <strong>{currentUserName}</strong> 发表研学见解：</span>
@@ -566,7 +599,7 @@ ${post.labName ? `🔬 联动微观仿真：${post.labName} (http://localhost:51
                         const isCommLiked = comm.likedUserIds?.includes(currentUserId)
                         return (
                           <div key={comm.id} className="comment-thread-item">
-                            <div className="comment-author-avatar">{comm.avatar || '研'}</div>
+                            <div className="comment-author-avatar"><AvatarBadge avatar={comm.avatar} name={comm.author} /></div>
                             <div className="comment-content-col">
                               <div className="comment-head-line">
                                 <strong className="comment-author-name">{comm.author}</strong>
