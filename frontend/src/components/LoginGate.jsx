@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useLearningProfile } from './LearningProfileContext'
+import ThemePicker from './ThemePicker'
 
 export default function LoginGate({ onLoginSuccess }) {
   const { users, login, register } = useLearningProfile()
@@ -81,6 +82,11 @@ export default function LoginGate({ onLoginSuccess }) {
 
   return (
     <div className="login-gate-container">
+      {/* 顶部右上角主题自由切换 */}
+      <div style={{ position: 'absolute', top: 20, right: 28, zIndex: 100 }}>
+        <ThemePicker />
+      </div>
+
       <div className="login-gate-bg-glow glow-1" />
       <div className="login-gate-bg-glow glow-2" />
 

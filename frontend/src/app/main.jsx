@@ -2,6 +2,8 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from '../components/App'
 import { LearningProfileProvider } from '../components/LearningProfileContext'
+import { ThemeProvider } from '../components/ThemeContext'
+import '../components/Theme.css'
 import '../lib/attentionService'
 
 function init() {
@@ -9,7 +11,11 @@ function init() {
   if (!el) return
   createRoot(el).render(
     <React.StrictMode>
-      <LearningProfileProvider><App /></LearningProfileProvider>
+      <LearningProfileProvider>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </LearningProfileProvider>
     </React.StrictMode>
   )
 }

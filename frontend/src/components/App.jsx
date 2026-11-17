@@ -40,6 +40,8 @@ import StackQueueExperiment from './StackQueueExperiment'
 import TcpConnectionExperiment from './TcpConnectionExperiment'
 import SlidingWindowExperiment from './SlidingWindowExperiment'
 import { courseForExperiment, courses, experiments } from '../lib/experimentRegistry'
+import ThemePicker from './ThemePicker'
+import { useTheme } from './ThemeContext'
 import './app.css'
 
 const experimentComponents = {
@@ -71,6 +73,7 @@ const experimentComponents = {
 }
 
 export default function App() {
+  const { theme } = useTheme()
   const [route, setRoute] = useState(readRouteFromHash)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { user, logout, recordVisit } = useLearningProfile()
@@ -112,7 +115,7 @@ export default function App() {
 
   // 2. 登录后进入现代化控制台工作台（左侧常驻功能侧边栏 + 右侧主工作区）
   return (
-    <div className={`cscope-workspace-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+    <div className={`cscope-workspace-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-theme={theme}>
       {/* 最左侧展示全部功能入口：切换其他功能无需返回首页 */}
       <SidebarNav
         activeKey={route.kind}
@@ -180,6 +183,9 @@ export default function App() {
           </div>
 
           <div className="header-right">
+            {/* 主题自主切换选择器 */}
+            <ThemePicker />
+
             <div
               className="header-user-badge"
               onClick={openProfile}
