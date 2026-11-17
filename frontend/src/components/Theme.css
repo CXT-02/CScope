@@ -368,10 +368,15 @@
 }
 
 /* --- 苍林护眼: 控制台总览 (ConsoleDashboard) --- */
+[data-theme="forest"] .cscope-console-nexus,
 [data-theme="forest"] .console-page {
   color: #24402e !important;
 }
 
+[data-theme="forest"] .cscope-nexus-header,
+[data-theme="forest"] .cscope-domain-matrix-section,
+[data-theme="forest"] .domain-hero-card,
+[data-theme="forest"] .workbench-card,
 [data-theme="forest"] .dashboard-hero-card,
 [data-theme="forest"] .stat-card,
 [data-theme="forest"] .action-card,
@@ -383,9 +388,57 @@
   color: #24402e !important;
 }
 
+[data-theme="forest"] .nexus-continuation-banner {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.1), rgba(34, 197, 94, 0.04)) !important;
+  border-color: #cadbc8 !important;
+  box-shadow: 0 6px 18px rgba(20, 50, 30, 0.04) !important;
+}
+
+[data-theme="forest"] .nexus-continuation-banner .banner-title,
+[data-theme="forest"] .nexus-main-title,
+[data-theme="forest"] .domain-full-title,
+[data-theme="forest"] .wb-title,
+[data-theme="forest"] .section-heading,
+[data-theme="forest"] .telemetry-num,
 [data-theme="forest"] .stat-card strong,
 [data-theme="forest"] .dashboard-hero-title,
 [data-theme="forest"] .section-head-title {
+  color: #0f2818 !important;
+}
+
+[data-theme="forest"] .nexus-subtitle,
+[data-theme="forest"] .banner-desc,
+[data-theme="forest"] .domain-desc-text,
+[data-theme="forest"] .telemetry-desc {
+  color: #385642 !important;
+}
+
+[data-theme="forest"] .telemetry-cell {
+  background: #f8fbf7 !important;
+  border-color: #d8e5d6 !important;
+}
+
+[data-theme="forest"] .domain-tab-btn {
+  background: #ffffff !important;
+  border-color: #cadbc8 !important;
+  color: #2b4735 !important;
+}
+
+[data-theme="forest"] .domain-tab-btn.active {
+  background: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+}
+
+[data-theme="forest"] .exp-shortcut-chip {
+  background: #f8fbf7 !important;
+  border-color: #d2e2cf !important;
+  color: #1e3827 !important;
+}
+
+[data-theme="forest"] .exp-shortcut-chip:hover {
+  background: #eaf3e8 !important;
+  border-color: #15803d !important;
   color: #0f2818 !important;
 }
 

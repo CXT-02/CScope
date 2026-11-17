@@ -2426,6 +2426,95 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   color: #94a3b8;
 }
 
+/* 智能学习续航条带 */
+.nexus-continuation-banner {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(16, 185, 129, 0.03));
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  border-radius: 16px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.04);
+}
+@media (max-width: 860px) {
+  .nexus-continuation-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.nexus-continuation-banner .banner-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #059669;
+  margin-bottom: 6px;
+}
+.nexus-continuation-banner .live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #059669;
+  box-shadow: 0 0 6px #059669;
+  animation: pulse-kernel 1.8s infinite;
+}
+.nexus-continuation-banner .banner-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+.nexus-continuation-banner .banner-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  max-width: 780px;
+}
+.nexus-continuation-banner .banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.nexus-continuation-banner .banner-resume-btn {
+  background: #059669;
+  color: #ffffff;
+  border: 1px solid #059669;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nexus-continuation-banner .banner-resume-btn:hover {
+  background: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
+}
+.nexus-continuation-banner .banner-secondary-btn {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nexus-continuation-banner .banner-secondary-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
 /* 核心第一板块：408 体系结构微观穿透矩阵 */
 .cscope-domain-matrix-section {
   background: #ffffff;

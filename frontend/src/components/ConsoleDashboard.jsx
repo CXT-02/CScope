@@ -4,10 +4,13 @@ import { courses, experiments } from '../lib/experimentRegistry'
 
 export default function ConsoleDashboard({
   onOpenCourses,
+  onOpenWorkshop,
   onOpenExam,
+  onOpenCheckin,
+  onOpenGalaxy,
+  onOpenMistakes,
   onOpenProfile,
-  onOpenExperiment,
-  onOpenGalaxy
+  onOpenExperiment
 }) {
   const { user, records } = useLearningProfile()
   const [refreshSeed, setRefreshSeed] = useState(0)
@@ -60,6 +63,20 @@ export default function ConsoleDashboard({
     }
   }, [records, refreshSeed])
 
+  // 最近一次学习的实验或推荐首个核心实验
+  const lastActiveExperiment = useMemo(() => {
+    const expEntries = records?.experiments || {}
+    const keys = Object.keys(expEntries)
+    if (keys.length > 0) {
+      // 找访问次数最多的或者最近的
+      const mostVisited = keys.sort((a, b) => (expEntries[b]?.visits || 0) - (expEntries[a]?.visits || 0))[0]
+      const found = experiments.find(e => e.id === mostVisited)
+      if (found) return found
+    }
+    // 默认推荐经典压轴
+    return experiments.find(e => e.id === 'cpu-pipeline') || experiments[0]
+  }, [records])
+
   // 408 四大微观体系结构领域拓扑数据
   const architectureDomains = [
     {
@@ -67,6 +84,7 @@ export default function ConsoleDashboard({
       badge: 'ARCH · 计组',
       name: '微处理器与指令流水线',
       fullTitle: '计算机组成原理 · 硬件微架构层',
+      courseId: 'computer-organization',
       pipelineStages: ['IF 取指', 'ID 译码', 'EX 执行', 'MEM 访存', 'WB 写回'],
       clockFreq: '100 MHz 虚拟时钟',
       hazardStatus: 'RAW 数据相关旁路转发就绪',
@@ -83,6 +101,7 @@ export default function ConsoleDashboard({
       badge: 'KERNEL · 系统',
       name: '进程并发与虚拟存储内核',
       fullTitle: '操作系统 · 系统软件与调度层',
+      courseId: 'operating-systems',
       pipelineStages: ['创建态', '就绪队列', '运行态 (CPU)', '阻塞等待', '终止态'],
       clockFreq: '时间片轮转 10ms',
       hazardStatus: '银行家安全序列判定引擎就绪',
@@ -99,6 +118,7 @@ export default function ConsoleDashboard({
       badge: 'STACK · 网络',
       name: '全双工协议栈与网络拓扑',
       fullTitle: '计算机网络 · 协议分层与传输层',
+      courseId: 'networks',
       pipelineStages: ['应用层', '传输层 (TCP/UDP)', '网络层 (IP)', '链路层', '物理层'],
       clockFreq: 'RTT 往返时延测算',
       hazardStatus: 'TCP 三次握手状态机已联通',
@@ -115,6 +135,7 @@ export default function ConsoleDashboard({
       badge: 'ALGO · 结构',
       name: '抽象数据拓扑与算法渐近',
       fullTitle: '数据结构与算法 · 计算模型层',
+      courseId: 'data-structures',
       pipelineStages: ['问题建模', '状态空间树', '渐近分析 O(N)', '代码实现', '时空测算'],
       clockFreq: '渐进时间复杂度 O(N log N)',
       hazardStatus: '二叉树遍历与图寻路沙盒就绪',
@@ -141,47 +162,61 @@ export default function ConsoleDashboard({
         </div>
         <div className="nexus-title-row">
           <div>
-            <h1 className="nexus-main-title">计算机全栈体系结构仿真与 408 统考中枢</h1>
+            <h1 className="nexus-main-title">计算机核心课微观可视化教学平台 · 控制台总览</h1>
             <p className="nexus-subtitle">
-              穿透教科书的抽象枯燥文字 · 从晶体管时钟脉冲、五级指令流水线到 TCP 协议栈双工时序 · 105 题历年 408 真题智能闭环
+              穿透教科书的抽象枯燥文字 · 从晶体管时序节拍、CPU 五级流水线到 TCP 状态机 · 25 门微观仿真实验与 105 题 408 统考真题双向对齐
             </p>
           </div>
+          {/* 全局核心四大功能支柱直达快捷操作条 */}
           <div className="nexus-quick-actions">
             <button
               type="button"
               className="cscope-btn cscope-btn-outline"
               onClick={onOpenCourses}
-              title="浏览 8 门专业课教学大纲与知识点"
+              title="浏览 8 门专业课知识地图与考点大纲"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
-              <span>课程知识中心</span>
+              <span>📚 课程知识中心</span>
             </button>
             <button
               type="button"
               className="cscope-btn cscope-btn-outline"
-              onClick={() => setRefreshSeed(s => s + 1)}
-              title="刷新内核时钟与数据"
+              onClick={onOpenWorkshop}
+              title="进入 25 门底层微架构时钟实验全景工坊"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M23 4v6h-6M1 20v-6h6" />
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0" />
+                <path d="M5.52 16h12.96" />
               </svg>
-              <span>刷新内核</span>
+              <span>🔬 微观仿真工坊</span>
             </button>
             <button
               type="button"
               className="cscope-btn cscope-btn-primary"
               onClick={onOpenExam}
+              title="开启 408 历年统考真题智能计时抽测"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10" />
                 <circle cx="12" cy="12" r="6" />
                 <circle cx="12" cy="12" r="2" />
               </svg>
-              <span>408 智能模考</span>
+              <span>📝 408 智能模考</span>
+            </button>
+            <button
+              type="button"
+              className="cscope-btn cscope-btn-outline"
+              onClick={onOpenCheckin}
+              title="查看系统实时自动捕获的学时流水与考研签到档案"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>⏱️ 实机学时度量</span>
             </button>
           </div>
         </div>
@@ -194,15 +229,15 @@ export default function ConsoleDashboard({
               <strong className="telemetry-num">100</strong>
               <span className="telemetry-unit">MHz CLK</span>
             </div>
-            <span className="telemetry-desc">WASM 纳秒级时序沙盒</span>
+            <span className="telemetry-desc">纳秒级硬件时序推演沙盒</span>
           </div>
           <div className="telemetry-cell">
             <span className="telemetry-label">微观仿真实验</span>
             <div className="telemetry-val-group">
               <strong className="telemetry-num">25</strong>
-              <span className="telemetry-unit">个底层沙盘</span>
+              <span className="telemetry-unit">门底层沙盘</span>
             </div>
-            <span className="telemetry-desc">已探索 {expStats.visitedExpCount} 门 · 完成 {expStats.completedCount} 项</span>
+            <span className="telemetry-desc">已探索 {expStats.visitedExpCount} 门 · 完成 {expStats.completedCount} 项验证</span>
           </div>
           <div className="telemetry-cell">
             <span className="telemetry-label">408 统考真题库</span>
@@ -213,15 +248,47 @@ export default function ConsoleDashboard({
             <span className="telemetry-desc">已测 {examStats.count} 轮 · 均分 {examStats.avgScore || '--'} 分</span>
           </div>
           <div className="telemetry-cell">
-            <span className="telemetry-label">3D 神经网络拓扑</span>
+            <span className="telemetry-label">实机实操学时</span>
             <div className="telemetry-val-group">
-              <strong className="telemetry-num">25</strong>
-              <span className="telemetry-unit">核心神经元</span>
+              <strong className="telemetry-num">{Math.max(1, expStats.streak)}</strong>
+              <span className="telemetry-unit">天连续活跃</span>
             </div>
-            <span className="telemetry-desc">29 组语义时序关联超边</span>
+            <span className="telemetry-desc">内核真实心跳防伪记录</span>
           </div>
         </div>
       </header>
+
+      {/* 智能学习续航条带：小明同学，继续上次的推演 */}
+      <section className="nexus-continuation-banner">
+        <div className="banner-left">
+          <div className="banner-badge-pill">
+            <span className="live-dot" />
+            <span>LEARNING CONTINUATION // 智能学习续航</span>
+          </div>
+          <h2 className="banner-title">
+            {user?.name || '同学'}，准备好继续推演 <strong>【{lastActiveExperiment.title}】</strong> 了吗？
+          </h2>
+          <p className="banner-desc">
+            {lastActiveExperiment.description} · 可视化单步观察硬件状态机，改变参数完成真题考点验证。
+          </p>
+        </div>
+        <div className="banner-actions">
+          <button
+            type="button"
+            className="banner-resume-btn"
+            onClick={() => onOpenExperiment(lastActiveExperiment.id)}
+          >
+            ▶ 继续该实验推演
+          </button>
+          <button
+            type="button"
+            className="banner-secondary-btn"
+            onClick={onOpenCourses}
+          >
+            浏览全部课程大纲 →
+          </button>
+        </div>
+      </section>
 
       {/* 核心第一板块：408 四大底层核心域交互拓扑中枢 */}
       <section className="cscope-domain-matrix-section">
@@ -341,26 +408,31 @@ export default function ConsoleDashboard({
 
           <div className="wb-tests-list">
             {examRecords.length > 0 ? (
-              examRecords.slice(0, 4).map((rec) => (
-                <div key={rec.id} className="wb-test-row">
-                  <div className="test-row-main">
-                    <strong className="test-scope-title">{rec.courseScopeName}</strong>
-                    <span className="test-meta-line">
-                      {rec.date ? new Date(rec.date).toLocaleDateString() : '近期'} · {rec.totalQuestions} 道真题 · 用时 {Math.round((rec.timeUsedSec || 60) / 60)} 分钟
-                    </span>
+              examRecords.slice(0, 4).map((rec) => {
+                const count = rec.questionCount || rec.totalQuestions || 5
+                const scopeTitle = rec.courseScope || rec.courseScopeName || '408 专业课测评'
+                const timeMin = Math.max(1, Math.round((rec.timeUsedSec || 60) / 60))
+                return (
+                  <div key={rec.id} className="wb-test-row">
+                    <div className="test-row-main">
+                      <strong className="test-scope-title">{scopeTitle}</strong>
+                      <span className="test-meta-line">
+                        {rec.dateStr || '近期'} · {count} 道全真试题 · 耗时 {timeMin} 分钟
+                      </span>
+                    </div>
+                    <div className={`test-score-pill ${
+                      (rec.score || 0) >= 80 ? 'good' : (rec.score || 0) >= 60 ? 'pass' : 'warn'
+                    }`}>
+                      {rec.score} 分
+                    </div>
                   </div>
-                  <div className={`test-score-pill ${
-                    (rec.score || 0) >= 80 ? 'good' : (rec.score || 0) >= 60 ? 'pass' : 'warn'
-                  }`}>
-                    {rec.score} 分
-                  </div>
-                </div>
-              ))
+                )
+              })
             ) : (
               <div className="wb-empty-state">
                 <p>当前尚未进行 408 统考真题摸底测试</p>
                 <button type="button" className="wb-start-eval-btn" onClick={onOpenExam}>
-                  立即开启 10 题快速测评
+                  立即开启 10 题快速自测
                 </button>
               </div>
             )}
@@ -374,7 +446,7 @@ export default function ConsoleDashboard({
               <span className="wb-code-tag">[MASTERY DIAGNOSTICS]</span>
               <h3 className="wb-title">408 学科掌握度实时画像</h3>
             </div>
-            <span className="wb-badge-pill">自适应推演</span>
+            <span className="wb-badge-pill">系统实测推演</span>
           </div>
 
           <div className="wb-mastery-list">
@@ -422,7 +494,7 @@ export default function ConsoleDashboard({
           <div className="wb-target-advice">
             <span className="advice-tag">靶向提分建议</span>
             <p>
-              重点突破：<strong>【Cache 映射直接冲突】</strong>与<strong>【虚拟存储 TLB+页表访存时序】</strong>，做错真题可直接在沙盘中进行微秒级单步推演！
+              重点突破：<strong>【Cache 映射直接冲突】</strong>与<strong>【虚拟存储 TLB+页表访存时序】</strong>，做错真题可直接在微观工坊沙盘中单步复盘！
             </p>
           </div>
         </section>

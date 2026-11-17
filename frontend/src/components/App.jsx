@@ -231,10 +231,13 @@ export default function App() {
             /* 1. 控制台主页面 */
             <ConsoleDashboard
               onOpenCourses={openCourses}
+              onOpenWorkshop={() => navigate('#/workshop')}
               onOpenExam={openExam}
+              onOpenCheckin={() => navigate('#/checkin')}
+              onOpenGalaxy={() => navigate('#/galaxy')}
+              onOpenMistakes={() => navigate('#/mistakes')}
               onOpenProfile={openProfile}
               onOpenExperiment={openExperiment}
-              onOpenGalaxy={() => navigate('#/galaxy')}
             />
           ) : route.kind === 'galaxy' ? (
             /* 2. 3D 思维知识星图 (空间三维神经网络与交互) */
@@ -325,7 +328,11 @@ export default function App() {
           ) : (
             <ConsoleDashboard
               onOpenCourses={openCourses}
+              onOpenWorkshop={() => navigate('#/workshop')}
               onOpenExam={openExam}
+              onOpenCheckin={() => navigate('#/checkin')}
+              onOpenGalaxy={() => navigate('#/galaxy')}
+              onOpenMistakes={() => navigate('#/mistakes')}
               onOpenProfile={openProfile}
               onOpenExperiment={openExperiment}
             />
