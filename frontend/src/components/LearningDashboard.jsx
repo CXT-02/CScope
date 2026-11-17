@@ -46,7 +46,7 @@ export default function LearningDashboard({ experiments, courses, onOpen, onBack
 
       {activeTab === 'profile' ? (
         /* 1. 深度对标参考图的个人中心与信息管理面板 */
-        <UserProfileManager />
+        <UserProfileManager onOpenExperiment={onOpen} />
       ) : (
         /* 2. 学情画像与研习报告 */
         <div className="learning-analytics-container">

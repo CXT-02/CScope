@@ -6950,3 +6950,256 @@
   background: #059669 !important;
   color: #ffffff !important;
 }
+
+
+/* [Theme Overrides] 登录门禁已有学者档案与考研规划全套暗色适配 */
+[data-theme="cyber"] .saved-accounts-section {
+  background: #150b36 !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+}
+[data-theme="cyber"] .saved-accounts-label {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .saved-account-chip {
+  background: #1a0f44 !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .saved-account-chip:hover {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+}
+[data-theme="cyber"] .saved-account-chip.selected {
+  background: #2a166b !important;
+  border-color: #00f5d4 !important;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .chip-info strong {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .chip-info span {
+  color: #a5b4fc !important;
+}
+[data-theme="cyber"] .forgot-pwd-link {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .reg-chip {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #c4b5fd !important;
+}
+[data-theme="cyber"] .reg-chip.active {
+  background: #281766 !important;
+  border-color: #00f5d4 !important;
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .reg-select,
+[data-theme="cyber"] .reg-input {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .hot-school-btn {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+  color: #cbd5e1 !important;
+}
+[data-theme="cyber"] .hot-school-btn:hover {
+  background: #25155c !important;
+  border-color: #00f5d4 !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .hot-school-btn.selected {
+  background: #2a166b !important;
+  border-color: #00f5d4 !important;
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .custom-school-input {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="cyber"] .no-exam-tips-banner {
+  background: rgba(0, 245, 212, 0.1) !important;
+  border: 1px solid rgba(0, 245, 212, 0.3) !important;
+  color: #f1f5f9 !important;
+}
+[data-theme="cyber"] .tailored-study-plan-card {
+  background: #150b36 !important;
+  border: 2px solid #00f5d4 !important;
+  box-shadow: 0 0 25px rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .plan-main-title {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.3) !important;
+}
+[data-theme="cyber"] .plan-goal-tag {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .plan-analysis-box {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .analysis-head {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .analysis-text {
+  color: #e2e8f0 !important;
+}
+[data-theme="cyber"] .sub-section-title {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .roadmap-stage-card {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .stage-name {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .stage-desc {
+  color: #94a3b8 !important;
+}
+[data-theme="cyber"] .must-lab-card {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.2) !important;
+}
+[data-theme="cyber"] .lab-title {
+  color: #ffffff !important;
+}
+[data-theme="cyber"] .lab-reason-tag {
+  color: #00f5d4 !important;
+}
+[data-theme="cyber"] .launch-lab-btn {
+  background: linear-gradient(135deg, #00f5d4, #00bb9d) !important;
+  color: #09031c !important;
+  font-weight: 800 !important;
+}
+[data-theme="cyber"] .plan-footer-routine {
+  background: #180e3d !important;
+  border: 1px solid rgba(0, 245, 212, 0.25) !important;
+  color: #00f5d4 !important;
+}
+
+/* [Dark Theme] 曜石暗黑模式适配 */
+[data-theme="dark"] .saved-accounts-section {
+  background: #0f182c !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+}
+[data-theme="dark"] .saved-accounts-label {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .saved-account-chip {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .saved-account-chip:hover {
+  background: #192845 !important;
+  border-color: #059669 !important;
+}
+[data-theme="dark"] .saved-account-chip.selected {
+  background: #12303c !important;
+  border-color: #10b981 !important;
+}
+[data-theme="dark"] .chip-info strong {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .chip-info span {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .forgot-pwd-link {
+  color: #10b981 !important;
+}
+[data-theme="dark"] .reg-chip {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] .reg-chip.active {
+  background: #12303c !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .reg-select,
+[data-theme="dark"] .reg-input {
+  background: #090d16 !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .hot-school-btn {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] .hot-school-btn:hover {
+  background: #192845 !important;
+  border-color: #059669 !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .hot-school-btn.selected {
+  background: #12303c !important;
+  border-color: #10b981 !important;
+  color: #34d399 !important;
+}
+[data-theme="dark"] .custom-school-input {
+  background: #090d16 !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .no-exam-tips-banner {
+  background: rgba(5, 150, 105, 0.15) !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+  color: #f1f5f9 !important;
+}
+[data-theme="dark"] .tailored-study-plan-card {
+  background: #0f182c !important;
+  border: 2px solid #059669 !important;
+}
+[data-theme="dark"] .plan-main-title {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .plan-goal-tag {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .plan-analysis-box {
+  background: #142037 !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+}
+[data-theme="dark"] .analysis-head {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .analysis-text {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .sub-section-title {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .roadmap-stage-card {
+  background: #142037 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .stage-name {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .stage-desc {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .must-lab-card {
+  background: #142037 !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+}
+[data-theme="dark"] .lab-title {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .lab-reason-tag {
+  color: #34d399 !important;
+}
+[data-theme="dark"] .launch-lab-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .plan-footer-routine {
+  background: #142037 !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+  color: #34d399 !important;
+}

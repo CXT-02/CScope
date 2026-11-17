@@ -7647,3 +7647,425 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .modal-save-btn:hover {
   background: #047857;
 }
+
+
+/* --- 登录门禁已有学者档案选择与密码强化 --- */
+.saved-accounts-section {
+  margin-bottom: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.saved-accounts-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+.saved-accounts-grid {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.saved-account-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  flex-shrink: 0;
+  text-align: left;
+}
+.saved-account-chip:hover {
+  border-color: #059669;
+  background: #f0fdf4;
+}
+.saved-account-chip.selected {
+  border-color: #059669;
+  background: #ecfdf5;
+  box-shadow: 0 0 0 1px #059669;
+}
+.chip-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #059669;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  overflow: hidden;
+}
+.chip-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.chip-info {
+  display: flex;
+  flex-direction: column;
+}
+.chip-info strong {
+  font-size: 12px;
+  color: #0f172a;
+}
+.chip-info span {
+  font-size: 10px;
+  color: #64748b;
+}
+.chip-active-check {
+  color: #059669;
+  font-weight: 900;
+  margin-left: 4px;
+}
+.form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.forgot-pwd-link {
+  background: none;
+  border: none;
+  color: #059669;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.forgot-pwd-link:hover {
+  text-decoration: underline;
+}
+.pwd-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 6px;
+  color: #64748b;
+}
+.reg-goal-chips {
+  display: flex;
+  gap: 8px;
+}
+.reg-chip {
+  flex: 1;
+  padding: 8px 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.reg-chip.active {
+  background: #ecfdf5;
+  border-color: #059669;
+  color: #065f46;
+}
+.form-dual-row-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.reg-select, .reg-input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  outline: none;
+  width: 100%;
+}
+.login-alert-box {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.login-alert-box.success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+.login-alert-box.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+.forgot-action-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.forgot-back-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* --- 考研意向与个性化方案规划样式 --- */
+.exam-target-settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+.exam-settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.exam-setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.large-chip {
+  padding: 10px 16px !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+.hot-schools-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.hot-school-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.hot-school-btn:hover {
+  border-color: #059669;
+  background: #f0fdf4;
+  color: #059669;
+}
+.hot-school-btn.selected {
+  background: #ecfdf5;
+  border-color: #059669;
+  color: #065f46;
+  font-weight: 800;
+}
+.custom-school-input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 13.5px;
+  outline: none;
+  color: #0f172a;
+}
+.exam-dual-options-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 860px) {
+  .exam-dual-options-row {
+    grid-template-columns: 1fr;
+  }
+}
+.exam-sub-setting {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.no-exam-tips-banner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #166534;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 专属研学方案推荐卡片 */
+.tailored-study-plan-card {
+  margin-top: 20px;
+  border: 2px solid #059669;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.plan-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.plan-badge-pill {
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.plan-main-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+}
+.plan-goal-tag {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #059669;
+}
+.plan-analysis-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.analysis-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+.analysis-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #475569;
+}
+.sub-section-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 10px;
+}
+.roadmap-stages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 860px) {
+  .roadmap-stages-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.roadmap-stage-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stage-num-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #059669;
+}
+.stage-name {
+  font-size: 13px;
+  color: #0f172a;
+}
+.stage-desc {
+  margin: 0;
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.5;
+}
+.labs-head-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.labs-subtext {
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+.must-labs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 860px) {
+  .must-labs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.must-lab-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.must-lab-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lab-id-code {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #94a3b8;
+  font-family: monospace;
+}
+.lab-title {
+  font-size: 13.5px;
+  color: #0f172a;
+}
+.lab-reason-tag {
+  font-size: 11.5px;
+  color: #059669;
+  font-weight: 600;
+}
+.launch-lab-btn {
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.16s ease;
+}
+.launch-lab-btn:hover {
+  background: #047857;
+  transform: translateX(2px);
+}
+.plan-footer-routine {
+  background: #f0fdf4;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #166534;
+}

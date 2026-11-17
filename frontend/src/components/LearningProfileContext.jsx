@@ -6,33 +6,65 @@ const RECORDS_KEY = 'cscope-learning-records-v1'
 const LearningProfileContext = createContext(null)
 
 export function LearningProfileProvider({ children }) {
-  const [users, setUsers] = useState(() => readJson(USERS_KEY, []))
+  const [users, setUsers] = useState(() => {
+    const saved = readJson(USERS_KEY, [])
+    if (saved && saved.length > 0) return saved
+    // 默认内置演示学者账户（初始密码 123456）
+    const initialDemoUser = {
+      id: 'u_demo_ming',
+      name: '小明同学',
+      account: 'cs_xiaoming',
+      email: 'xiaoming@cscope.edu.cn',
+      major: '计算机科学与技术',
+      grade: '本科三年级',
+      targetSchool: '浙江大学 · 计算机科学与技术 (408专硕)',
+      isTakingExam: 'yes',
+      examYear: '2026',
+      examCategory: '408',
+      prepStage: 'breakthrough',
+      bio: '热爱微观计算底层，构建学-练-测-诊一体化能力！',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+      securityQuestion: '我最喜欢的计算机先驱是谁？',
+      securityAnswerHash: 'b52044813589b27464010a30b05b8a6a68393e8e2fa516089bbbf8c2576b2e35', // 图灵
+      studyGoal: '408 统考 125+ 冲刺',
+      dailyGoalMinutes: 60,
+      aiPreference: '严谨推导型 (深入微架构硬件细节与状态机)',
+      pinHash: '38a7c2966144e39665651ab36b5676751e18ec332463e2714fa4f86d8b96574f', // 123456
+      createdAt: new Date().toISOString()
+    }
+    writeJson(USERS_KEY, [initialDemoUser])
+    return [initialDemoUser]
+  })
   const [sessionId, setSessionId] = useState(() => localStorage.getItem(SESSION_KEY) || '')
   const [allRecords, setAllRecords] = useState(() => readJson(RECORDS_KEY, {}))
   const user = users.find((item) => item.id === sessionId) || null
   const records = user ? allRecords[user.id] || emptyRecords() : emptyRecords()
 
-  async function register(name, pin) {
+  async function register(name, pin, extraConfig = {}) {
     const cleanName = name.trim()
     if (cleanName.length < 2) throw new Error('昵称至少需要 2 个字符')
     if (!/^\d{4,8}$/.test(pin)) throw new Error('学习密码需为 4～8 位数字')
     if (users.some((item) => item.name.toLocaleLowerCase() === cleanName.toLocaleLowerCase())) {
-      throw new Error('这个昵称已经存在，请直接登录或更换昵称')
+      throw new Error('这个昵称已经存在，请直接输入密码登录')
     }
     const nextUser = {
       id: `u_${Date.now().toString(36)}`,
       name: cleanName,
       account: `cs_${cleanName.toLowerCase().replace(/[^a-z0-9]/g, '') || Date.now().toString(36).slice(-4)}`,
       email: `${cleanName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'learner'}@cscope.edu.cn`,
-      major: '计算机科学与技术',
-      grade: '本科三年级',
-      targetSchool: '408 统考名校冲刺',
-      bio: '热爱微观计算底层，构建学-练-测-诊一体化能力！',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+      major: extraConfig.major || '计算机科学与技术',
+      grade: extraConfig.grade || '本科三年级',
+      isTakingExam: extraConfig.isTakingExam || 'yes',
+      examYear: extraConfig.examYear || '2026',
+      targetSchool: extraConfig.targetSchool || '浙江大学 · 计算机科学与技术 (408专硕)',
+      examCategory: extraConfig.examCategory || '408',
+      prepStage: extraConfig.prepStage || 'breakthrough',
+      bio: extraConfig.bio || '热爱微观计算底层，构建学-练-测-诊一体化能力！',
+      avatar: extraConfig.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
       securityQuestion: '我最喜欢的计算机先驱是谁？',
       securityAnswerHash: await hashText('图灵'),
-      studyGoal: '408 统考 125+ 冲刺',
-      dailyGoalMinutes: 60,
+      studyGoal: extraConfig.studyGoal || '408 统考 125+ 冲刺',
+      dailyGoalMinutes: extraConfig.dailyGoalMinutes || 60,
       aiPreference: '严谨推导型 (深入微架构硬件细节与状态机)',
       pinHash: await hashText(pin),
       createdAt: new Date().toISOString()
@@ -50,7 +82,11 @@ export function LearningProfileProvider({ children }) {
 
   async function login(name, pin) {
     const target = users.find((item) => item.name.toLocaleLowerCase() === name.trim().toLocaleLowerCase())
-    if (!target || target.pinHash !== await hashText(pin)) throw new Error('昵称或学习密码不正确')
+    if (!target) throw new Error('该学习昵称尚未注册，请核对输入或点击“新建学籍档案”')
+    const calculatedHash = await hashText(pin)
+    if (target.pinHash !== calculatedHash) {
+      throw new Error('学习密码错误，请输入您在个人中心设置的正确密码（默认密码是 123456）')
+    }
     setSessionId(target.id)
     localStorage.setItem(SESSION_KEY, target.id)
     touchRecord(target.id, (record) => ({ ...record, loginCount: (record.loginCount || 0) + 1, lastLoginAt: new Date().toISOString() }))
@@ -60,6 +96,27 @@ export function LearningProfileProvider({ children }) {
   function logout() {
     setSessionId('')
     localStorage.removeItem(SESSION_KEY)
+  }
+
+  // 通过安全问题重置密码
+  async function resetPasswordWithSecurity(name, answer, newPin) {
+    const target = users.find((item) => item.name.toLocaleLowerCase() === name.trim().toLocaleLowerCase())
+    if (!target) throw new Error('该学习昵称不存在')
+    const cleanAns = answer.trim().toLowerCase()
+    const ansHash = await hashText(cleanAns)
+    if (target.securityAnswerHash && target.securityAnswerHash !== ansHash) {
+      throw new Error('安全问题答案验证失败，请确认后重试')
+    }
+    if (!/^\d{4,8}$/.test(newPin)) throw new Error('新密码需为 4～8 位数字')
+    const newHash = await hashText(newPin)
+    const updatedUsers = users.map((u) => {
+      if (u.id === target.id) {
+        return { ...u, pinHash: newHash }
+      }
+      return u
+    })
+    setUsers(updatedUsers)
+    writeJson(USERS_KEY, updatedUsers)
   }
 
   // 更新个人资料与个性化配置
@@ -78,8 +135,9 @@ export function LearningProfileProvider({ children }) {
   // 修改密码
   async function updatePassword(oldPin, newPin) {
     if (!user) throw new Error('用户未登录')
-    if (user.pinHash !== await hashText(oldPin)) {
-      throw new Error('当前密码不正确，请重新输入')
+    const oldHash = await hashText(oldPin)
+    if (user.pinHash && user.pinHash !== oldHash) {
+      throw new Error('当前旧密码不正确，请重新输入')
     }
     if (!/^\d{4,8}$/.test(newPin)) {
       throw new Error('新密码需为 4～8 位数字')
@@ -148,6 +206,7 @@ export function LearningProfileProvider({ children }) {
       register,
       login,
       logout,
+      resetPasswordWithSecurity,
       updateUserProfile,
       updatePassword,
       setSecurityQuestion,

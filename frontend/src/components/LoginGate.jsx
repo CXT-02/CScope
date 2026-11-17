@@ -1,80 +1,111 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useLearningProfile } from './LearningProfileContext'
 import ThemePicker from './ThemePicker'
 
 export default function LoginGate({ onLoginSuccess }) {
-  const { users, login, register } = useLearningProfile()
-  const [mode, setMode] = useState('login') // 'login' | 'register'
-  const [name, setName] = useState('')
+  const { users, login, register, resetPasswordWithSecurity } = useLearningProfile()
+  const [mode, setMode] = useState('login') // 'login' | 'register' | 'forgot'
+  const [name, setName] = useState('小明同学')
   const [pin, setPin] = useState('')
+  const [confirmPin, setConfirmPin] = useState('')
+  const [showPin, setShowPin] = useState(false)
   const [error, setError] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
   const [busy, setBusy] = useState(false)
 
+  // 忘记密码找回表单
+  const [securityAnswer, setSecurityAnswer] = useState('')
+  const [newResetPin, setNewResetPin] = useState('')
+
+  // 注册拓展字段
+  const [regIsTakingExam, setRegIsTakingExam] = useState('yes')
+  const [regExamYear, setRegExamYear] = useState('2026')
+  const [regTargetSchool, setRegTargetSchool] = useState('浙江大学 · 计算机科学与技术 (408专硕)')
+
+  const pinInputRef = useRef(null)
+
+  // 点击已有学者档案卡片，自动填入姓名并聚焦密码输入框
+  const handleSelectAccount = (userName) => {
+    setName(userName)
+    setPin('')
+    setError('')
+    setSuccessMsg('')
+    if (pinInputRef.current) {
+      pinInputRef.current.focus()
+    }
+  }
+
+  // 提交登录 / 注册
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccessMsg('')
+
     if (!name.trim()) {
       setError('请输入学习昵称或学号')
       return
     }
     if (!pin) {
-      setError('请输入 4～8 位学习密码')
+      setError('请输入学习密码（必填项，初始密码默认为 123456）')
       return
     }
 
     setBusy(true)
     try {
       if (mode === 'login') {
-        // 尝试登录；如果用户尚未注册且仅有该输入，智能提示或辅助注册
-        const userExists = users.some(u => u.name.toLocaleLowerCase() === name.trim().toLocaleLowerCase())
-        if (!userExists) {
-          // 提示用户或引导注册
-          try {
-            await register(name, pin)
-            if (onLoginSuccess) onLoginSuccess()
-            return
-          } catch (regErr) {
-            setError(regErr.message || '该账号尚未注册，已尝试为您快速创建账户失败，请检查输入')
-            return
-          }
-        }
+        // 严格密码校验
         await login(name, pin)
-      } else {
-        await register(name, pin)
+        if (onLoginSuccess) onLoginSuccess()
+      } else if (mode === 'register') {
+        if (pin.length < 4) {
+          setError('学习密码至少需要 4 位数字')
+          setBusy(false)
+          return
+        }
+        if (pin !== confirmPin) {
+          setError('两次输入的新密码不一致，请核对')
+          setBusy(false)
+          return
+        }
+        await register(name, pin, {
+          isTakingExam: regIsTakingExam,
+          examYear: regExamYear,
+          targetSchool: regTargetSchool
+        })
+        if (onLoginSuccess) onLoginSuccess()
       }
-      if (onLoginSuccess) onLoginSuccess()
     } catch (err) {
-      setError(err.message || '操作失败，请重试')
+      setError(err.message || '操作失败，请核对后重试')
     } finally {
       setBusy(false)
     }
   }
 
-  // 快捷示范账户一键登入
-  const handleQuickLogin = async (demoName, demoPin) => {
+  // 安全问题找回密码
+  const handleForgotSubmit = async (e) => {
+    e.preventDefault()
     setError('')
+    setSuccessMsg('')
+    if (!name.trim()) {
+      setError('请输入要找回密码的学者昵称')
+      return
+    }
+    if (!securityAnswer.trim()) {
+      setError('请输入安全问题答案（默认问题为“我最喜欢的计算机先驱是谁？”，答案“图灵”）')
+      return
+    }
+    if (!newResetPin || newResetPin.length < 4) {
+      setError('新密码需为 4～8 位数字')
+      return
+    }
     setBusy(true)
     try {
-      const userExists = users.some(u => u.name.toLocaleLowerCase() === demoName.toLocaleLowerCase())
-      if (userExists) {
-        try {
-          await login(demoName, demoPin)
-        } catch {
-          // 若之前密码被修改，直接用新名字注册
-          await login(demoName, demoPin)
-        }
-      } else {
-        await register(demoName, demoPin)
-      }
-      if (onLoginSuccess) onLoginSuccess()
+      await resetPasswordWithSecurity(name, securityAnswer, newResetPin)
+      setSuccessMsg('密码重置成功！请使用新密码立即登录')
+      setPin(newResetPin)
+      setMode('login')
     } catch (err) {
-      // 容错处理
-      try {
-        await register(`${demoName}_${Math.floor(Math.random() * 900 + 100)}`, demoPin)
-        if (onLoginSuccess) onLoginSuccess()
-      } catch (err2) {
-        setError(err2.message || '快捷登录异常')
-      }
+      setError(err.message || '找回失败，请检查答案')
     } finally {
       setBusy(false)
     }
@@ -111,8 +142,8 @@ export default function LoginGate({ onLoginSuccess }) {
           </h2>
 
           <p className="login-hero-desc">
-            从注意力机制、数据结构到操作系统与计算机网络，让抽象概念按步骤运行；
-            内置 <strong>105 道历年 408 统考真题</strong> 与精准仿真映射，登录后为您建立终身学情画像与靶向诊断。
+            从 CPU 五级流水线冒险、Cache 组相联颠簸到操作系统死锁与 TCP 状态机，让抽象概念按步骤运行；
+            内置 <strong>105 道历年 408 统考真题</strong> 与精准仿真映射，全时接入真实大模型并建立终身学情档案。
           </p>
 
           <div className="login-feature-list">
@@ -124,8 +155,8 @@ export default function LoginGate({ onLoginSuccess }) {
                 </svg>
               </div>
               <div className="feature-text">
-                <strong>25 个深度交互仿真实验</strong>
-                <p>五级时钟流水线、Cache 组相联映射、死锁银行家推演、TCP 拥塞滑动窗口</p>
+                <strong>25 个底层时钟微观仿真沙盒</strong>
+                <p>单步观察晶振打拍、RAW 数据冒险前递停顿、银行家算法安全序列</p>
               </div>
             </div>
 
@@ -138,8 +169,8 @@ export default function LoginGate({ onLoginSuccess }) {
                 </svg>
               </div>
               <div className="feature-text">
-                <strong>105 道 408 历年考研统考真题库</strong>
-                <p>覆盖计组、操作系统、计网、数据结构，智能答题计时，错题一键直达实验验证</p>
+                <strong>105 道 408 统考全真题库</strong>
+                <p>覆盖计组、操作系统、计网、数据结构，做错题目直接一键唤醒实验验证</p>
               </div>
             </div>
 
@@ -150,8 +181,8 @@ export default function LoginGate({ onLoginSuccess }) {
                 </svg>
               </div>
               <div className="feature-text">
-                <strong>个性化智能学情看板</strong>
-                <p>知识点掌握度雷达、历史模考记录复盘、AI 靶向薄弱点学习建议</p>
+                <strong>个性化考研目标与专属研学方案</strong>
+                <p>智能定制考情画像、目标院校专属提分路线、AI 私教 DeepSeek-R1 深度伴学</p>
               </div>
             </div>
           </div>
@@ -165,133 +196,315 @@ export default function LoginGate({ onLoginSuccess }) {
                 <span className="avatar-core">CS</span>
                 <span className="avatar-status-dot" />
               </div>
-              <div className="login-badge-label">PERSONAL LEARNING GATEWAY</div>
+              <div className="login-badge-label">AUTHENTICATION & SECURITY GATEWAY</div>
               <h2 className="login-card-title">
-                {mode === 'login' ? '开启您的个性化学习工作台' : '注册专属学情档案'}
+                {mode === 'login'
+                  ? '登录您的专属研学档案'
+                  : mode === 'register'
+                  ? '注册专属学籍档案'
+                  : '安全问题找回学习密码'}
               </h2>
               <p className="login-card-subtitle">
-                登录后将持续记录您的实验推演、408 测评成绩与个性化推荐路径。
+                {mode === 'login'
+                  ? '系统已严密加密保存您的密码。请输入密码以恢复您的学习进度与测评记录。'
+                  : '建立您的终身学情画像，定制考研目标院校与个性化实验方案。'}
               </p>
             </div>
 
-            {/* 快速体验通道 */}
-            <div className="quick-demo-section">
-              <div className="quick-demo-title">
-                <span>⚡ 评审与快速体验通道（免手动输入）</span>
+            {/* 已保存档案快捷选择条（点击后自动填入账号并聚焦密码框，必须输入密码） */}
+            {mode === 'login' && users.length > 0 && (
+              <div className="saved-accounts-section">
+                <div className="saved-accounts-label">
+                  <span>选择已建立的研学档案（点击填入并验证密码）：</span>
+                </div>
+                <div className="saved-accounts-grid">
+                  {users.map((u) => {
+                    const isSelected = name.trim().toLowerCase() === u.name.trim().toLowerCase()
+                    return (
+                      <button
+                        key={u.id}
+                        type="button"
+                        className={`saved-account-chip ${isSelected ? 'selected' : ''}`}
+                        onClick={() => handleSelectAccount(u.name)}
+                        title={`点击选择 ${u.name}，随后输入密码完成鉴权`}
+                      >
+                        <div className="chip-avatar">
+                          {u.avatar ? (
+                            <img src={u.avatar} alt={u.name} />
+                          ) : (
+                            u.name.slice(0, 1).toUpperCase()
+                          )}
+                        </div>
+                        <div className="chip-info">
+                          <strong>{u.name}</strong>
+                          <span>{u.targetSchool ? u.targetSchool.slice(0, 8) + '...' : u.major}</span>
+                        </div>
+                        {isSelected && <span className="chip-active-check">✓</span>}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
-              <div className="quick-demo-buttons">
-                <button
-                  type="button"
-                  className="quick-demo-btn primary"
-                  disabled={busy}
-                  onClick={() => handleQuickLogin('小明同学', '123456')}
-                >
-                  <span className="btn-role">408 研习学者</span>
-                  <strong>小明同学</strong>
-                  <span className="btn-action">一键登入 →</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="login-divider">
-              <span>或输入个人账号与密码</span>
-            </div>
+            )}
 
             {/* 切换登录 / 注册 Tab */}
             <div className="login-mode-tabs">
               <button
                 type="button"
                 className={`tab-btn ${mode === 'login' ? 'active' : ''}`}
-                onClick={() => { setMode('login'); setError('') }}
+                onClick={() => {
+                  setMode('login')
+                  setError('')
+                  setSuccessMsg('')
+                }}
               >
-                账号登录
+                账号密码登录
               </button>
               <button
                 type="button"
                 className={`tab-btn ${mode === 'register' ? 'active' : ''}`}
-                onClick={() => { setMode('register'); setError('') }}
+                onClick={() => {
+                  setMode('register')
+                  setError('')
+                  setSuccessMsg('')
+                }}
               >
                 新建学籍档案
               </button>
             </div>
 
-            {/* 表单 */}
-            <form className="login-form" onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="userNameInput">
-                  <span>学习昵称 / 学号</span>
-                  <span className="field-hint">用于生成专属分析看板</span>
-                </label>
-                <div className="input-wrap">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
+            {/* 找回密码提示条 */}
+            {successMsg && <div className="login-alert-box success">{successMsg}</div>}
+            {error && <div className="login-alert-box error">{error}</div>}
+
+            {/* 登录 / 注册 表单 */}
+            {mode !== 'forgot' ? (
+              <form className="login-form" onSubmit={handleSubmit}>
+                {/* 账号/昵称输入 */}
+                <div className="form-group">
+                  <label className="form-label" htmlFor="userNameInput">
+                    <span>学习昵称 / 学号 *</span>
+                    <span className="field-hint">用于绑定个人学情与考研档案</span>
+                  </label>
+                  <div className="input-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <input
+                      id="userNameInput"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="例如：小明同学"
+                      maxLength={20}
+                      autoComplete="username"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* 学习密码输入（强制输入与验证） */}
+                <div className="form-group">
+                  <div className="form-label-row">
+                    <label className="form-label" htmlFor="userPinInput">
+                      <span>学习密码 *</span>
+                      <span className="field-hint">4～8 位数字（初始默认密码：123456）</span>
+                    </label>
+                    {mode === 'login' && (
+                      <button
+                        type="button"
+                        className="forgot-pwd-link"
+                        onClick={() => {
+                          setMode('forgot')
+                          setError('')
+                          setSuccessMsg('')
+                        }}
+                      >
+                        忘记密码？
+                      </button>
+                    )}
+                  </div>
+                  <div className="input-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    <input
+                      ref={pinInputRef}
+                      id="userPinInput"
+                      type={showPin ? 'text' : 'password'}
+                      inputMode="numeric"
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                      placeholder="请输入 4~8 位数字密码"
+                      autoComplete="current-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="pwd-toggle-btn"
+                      onClick={() => setShowPin(!showPin)}
+                      title={showPin ? '隐藏密码' : '显示密码'}
+                    >
+                      {showPin ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 注册专属表单项：确认密码与考研意向初设 */}
+                {mode === 'register' && (
+                  <>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="userConfirmPinInput">
+                        <span>确认学习密码 *</span>
+                        <span className="field-hint">请再次输入密码进行确认</span>
+                      </label>
+                      <div className="input-wrap">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input
+                          id="userConfirmPinInput"
+                          type={showPin ? 'text' : 'password'}
+                          inputMode="numeric"
+                          value={confirmPin}
+                          onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                          placeholder="请再次确认 4~8 位数字密码"
+                          autoComplete="new-password"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">
+                        <span>是否考研规划</span>
+                      </label>
+                      <div className="reg-goal-chips">
+                        <button
+                          type="button"
+                          className={`reg-chip ${regIsTakingExam === 'yes' ? 'active' : ''}`}
+                          onClick={() => setRegIsTakingExam('yes')}
+                        >
+                          🎓 我要考研 (408/自命题)
+                        </button>
+                        <button
+                          type="button"
+                          className={`reg-chip ${regIsTakingExam === 'no' ? 'active' : ''}`}
+                          onClick={() => setRegIsTakingExam('no')}
+                        >
+                          💼 暂不考研 (期末通关/工程实操)
+                        </button>
+                      </div>
+                    </div>
+
+                    {regIsTakingExam === 'yes' && (
+                      <div className="form-dual-row-compact">
+                        <div className="form-group">
+                          <label className="form-label">考研届次</label>
+                          <select
+                            className="reg-select"
+                            value={regExamYear}
+                            onChange={(e) => setRegExamYear(e.target.value)}
+                          >
+                            <option value="2025">2025届 (复试冲刺)</option>
+                            <option value="2026">2026届 (统考备战)</option>
+                            <option value="2027">2027届 (提前打底)</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">目标院校</label>
+                          <input
+                            type="text"
+                            className="reg-input"
+                            value={regTargetSchool}
+                            onChange={(e) => setRegTargetSchool(e.target.value)}
+                            placeholder="如：浙江大学 / 清华大学"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                <button
+                  type="submit"
+                  className="login-submit-btn"
+                  disabled={busy || !name.trim() || !pin}
+                >
+                  {busy
+                    ? '正在严密核验中...'
+                    : mode === 'login'
+                    ? '验证密码并进入实验室 →'
+                    : '创建档案并立即开启研学 →'}
+                </button>
+              </form>
+            ) : (
+              /* 找回密码表单 */
+              <form className="login-form forgot-form" onSubmit={handleForgotSubmit}>
+                <div className="form-group">
+                  <label className="form-label">学者昵称 *</label>
                   <input
-                    id="userNameInput"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="例如：小明同学 或 20260408"
-                    maxLength={20}
-                    autoComplete="username"
+                    placeholder="输入要找回的昵称"
+                    required
                   />
                 </div>
-              </div>
 
-              <div className="form-group">
-                <label className="form-label" htmlFor="userPinInput">
-                  <span>学习密码</span>
-                  <span className="field-hint">4～8 位数字</span>
-                </label>
-                <div className="input-wrap">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
+                <div className="form-group">
+                  <label className="form-label">
+                    <span>安全问题答案 *</span>
+                    <span className="field-hint">默认问题：“我最喜欢的计算机先驱是谁？”</span>
+                  </label>
                   <input
-                    id="userPinInput"
+                    type="text"
+                    value={securityAnswer}
+                    onChange={(e) => setSecurityAnswer(e.target.value)}
+                    placeholder="输入答案（默认答案：图灵）"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">设置新密码 *</label>
+                  <input
                     type="password"
                     inputMode="numeric"
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 8))}
-                    placeholder="请输入 4~8 位数字密码"
-                    autoComplete="current-password"
+                    value={newResetPin}
+                    onChange={(e) => setNewResetPin(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                    placeholder="输入新的 4～8 位数字密码"
+                    required
                   />
                 </div>
-              </div>
 
-              {error && (
-                <div className="login-error-alert">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                  <span>{error}</span>
+                <div className="forgot-action-row">
+                  <button
+                    type="button"
+                    className="forgot-back-btn"
+                    onClick={() => {
+                      setMode('login')
+                      setError('')
+                      setSuccessMsg('')
+                    }}
+                  >
+                    ← 返回登录
+                  </button>
+                  <button type="submit" className="login-submit-btn flex-1" disabled={busy}>
+                    {busy ? '正在重置...' : '重置密码并返回登录'}
+                  </button>
                 </div>
-              )}
+              </form>
+            )}
 
-              <button
-                type="submit"
-                className="login-submit-btn"
-                disabled={busy || !name.trim() || !pin}
-              >
-                {busy ? (
-                  <span className="btn-loading">正在核验学情档案...</span>
-                ) : mode === 'login' ? (
-                  <span>进入 CSCOPE 学习控制台 →</span>
-                ) : (
-                  <span>创建专属档案并登录 →</span>
-                )}
-              </button>
-            </form>
-
-            <div className="login-security-notice">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>本地安全沙箱存储 · 保持登录态直至主动登出 · 保护隐私不上传外网</span>
+            <div className="login-card-footer">
+              <span className="security-icon-dot">🛡️</span>
+              <span>
+                密码采用 SHA-256 哈希加密存储于当前浏览器沙盒，严格密码认证保护您的研学档案。
+              </span>
             </div>
           </div>
         </div>
