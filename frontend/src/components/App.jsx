@@ -290,23 +290,15 @@ export default function App() {
             <AiTutorAgent
               onOpenExperiment={openExperiment}
             />
-          ) : route.kind === 'profile' ? (
-            /* 10. 个人中心与资料、安全问题管理（参考图 127.0.0.1:5173/profile） */
+          ) : route.kind === 'profile' || route.kind === 'analytics' ? (
+            /* 10 & 11. 个人中心与资料设置 / 学情数据能力画像（支持互相直接点击无缝即时切换） */
             <LearningDashboard
+              key={route.kind}
               experiments={experiments}
               courses={courses}
               onOpen={openExperiment}
               onBack={goConsole}
-              initialTab="profile"
-            />
-          ) : route.kind === 'analytics' ? (
-            /* 11. 学情数据与能力画像 */
-            <LearningDashboard
-              experiments={experiments}
-              courses={courses}
-              onOpen={openExperiment}
-              onBack={goConsole}
-              initialTab="analytics"
+              initialTab={route.kind === 'analytics' ? 'analytics' : 'profile'}
             />
           ) : route.kind === 'community' ? (
             /* 12. 极客学术社区广场 */

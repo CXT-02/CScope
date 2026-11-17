@@ -1,10 +1,17 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { calculateStreak, useLearningProfile } from './LearningProfileContext'
 import UserProfileManager from './UserProfileManager'
 
 export default function LearningDashboard({ experiments, courses, onOpen, onBack, initialTab = 'profile' }) {
   const { user, records } = useLearningProfile()
   const [activeTab, setActiveTab] = useState(initialTab) // 'profile' (个人中心与设置) | 'analytics' (学情画像与数据)
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab)
+    }
+  }, [initialTab])
+
   const stats = useMemo(() => buildStats(records, experiments, courses), [records, experiments, courses])
 
   if (!user) {
@@ -28,7 +35,12 @@ export default function LearningDashboard({ experiments, courses, onOpen, onBack
           <button
             type="button"
             className={`switcher-tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
+            onClick={() => {
+              setActiveTab('profile')
+              if (window.location.hash !== '#/profile') {
+                window.location.hash = '#/profile'
+              }
+            }}
           >
             <span>个人中心与安全管理</span>
             <small>资料编辑 · 身份预览 · 安全问题 · 偏好定制</small>
@@ -36,7 +48,12 @@ export default function LearningDashboard({ experiments, courses, onOpen, onBack
           <button
             type="button"
             className={`switcher-tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
-            onClick={() => setActiveTab('analytics')}
+            onClick={() => {
+              setActiveTab('analytics')
+              if (window.location.hash !== '#/analytics') {
+                window.location.hash = '#/analytics'
+              }
+            }}
           >
             <span>学情数据与能力画像</span>
             <small>掌握度雷达 · 课程进度 · 连续研习</small>
