@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bg-fox" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="fur-fox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#c2410c" />
+    </linearGradient>
+    <filter id="shadow-fox" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="60" cy="60" r="56" fill="url(#bg-fox)" />
+  <circle cx="60" cy="60" r="54" fill="none" stroke="#fed7aa" stroke-width="2" stroke-opacity="0.4" />
+
+  <!-- Fox Ears -->
+  <polygon points="34,46 38,18 56,36" fill="url(#fur-fox)" filter="url(#shadow-fox)" />
+  <polygon points="38,40 42,24 52,36" fill="#fef3c7" />
+  <polygon points="86,46 82,18 64,36" fill="url(#fur-fox)" filter="url(#shadow-fox)" />
+  <polygon points="82,40 78,24 68,36" fill="#fef3c7" />
+
+  <!-- Graduation Cap -->
+  <polygon points="60,18 80,25 60,32 40,25" fill="#1e1b4b" filter="url(#shadow-fox)" />
+  <rect x="52" y="27" width="16" height="6" fill="#0f172a" />
+  <circle cx="60" cy="25" r="2" fill="#fbbf24" />
+  <line x1="60" y1="25" x2="76" y2="33" stroke="#fbbf24" stroke-width="1.8" />
+  <circle cx="76" cy="34" r="1.8" fill="#fbbf24" />
+
+  <!-- Body -->
+  <path d="M 30 112 C 32 88, 44 82, 60 82 C 76 82, 88 88, 90 112 Z" fill="#0f172a" filter="url(#shadow-fox)" />
+  <!-- Bow Tie -->
+  <polygon points="54,84 66,90 54,90" fill="#dc2626" />
+  <polygon points="66,84 54,90 66,90" fill="#dc2626" />
+  <circle cx="60" cy="87" r="2" fill="#ef4444" />
+
+  <!-- Head Base -->
+  <ellipse cx="60" cy="56" rx="25" ry="22" fill="url(#fur-fox)" filter="url(#shadow-fox)" />
+
+  <!-- White Cheeks / Muzzle -->
+  <path d="M 40 54 C 44 68, 56 74, 60 74 C 64 74, 76 68, 80 54 C 76 60, 68 64, 60 64 C 52 64, 44 60, 40 54 Z" fill="#ffffff" />
+
+  <!-- Smart Scholar Glasses -->
+  <circle cx="49" cy="52" r="7.5" fill="#e0f2fe" fill-opacity="0.3" stroke="#1e293b" stroke-width="2" />
+  <circle cx="71" cy="52" r="7.5" fill="#e0f2fe" fill-opacity="0.3" stroke="#1e293b" stroke-width="2" />
+  <line x1="56.5" y1="52" x2="63.5" y2="52" stroke="#1e293b" stroke-width="2" />
+
+  <!-- Clever Eyes -->
+  <ellipse cx="49" cy="52" rx="2.5" ry="3.5" fill="#0f172a" />
+  <circle cx="48" cy="50" r="1" fill="#ffffff" />
+  <ellipse cx="71" cy="52" rx="2.5" ry="3.5" fill="#0f172a" />
+  <circle cx="70" cy="50" r="1" fill="#ffffff" />
+
+  <!-- Nose & Smile -->
+  <ellipse cx="60" cy="65" rx="2.5" ry="1.8" fill="#0f172a" />
+  <path d="M 57 68 Q 60 71 63 68" fill="none" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" />
+</svg>

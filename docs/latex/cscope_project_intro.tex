@@ -15,6 +15,9 @@
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{setspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc,backgrounds}
+\usepackage[most]{tcolorbox}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
 
 % ==================== 格式配置 ====================
@@ -37,6 +40,35 @@
 \definecolor{codecomment}{rgb}{0.3,0.5,0.3}
 \definecolor{codekeyword}{rgb}{0.1,0.1,0.7}
 \definecolor{codestring}{rgb}{0.6,0.2,0.1}
+\definecolor{brandgreen}{HTML}{059669}
+\definecolor{brandteal}{HTML}{0F766E}
+\definecolor{brandblue}{HTML}{2563EB}
+\definecolor{brandpurple}{HTML}{7C3AED}
+\definecolor{brandorange}{HTML}{EA580C}
+\definecolor{softgreen}{HTML}{ECFDF5}
+\definecolor{softblue}{HTML}{EFF6FF}
+\definecolor{softpurple}{HTML}{F5F3FF}
+\definecolor{softorange}{HTML}{FFF7ED}
+
+\tikzset{
+    flowbox/.style={rounded corners=3pt, draw=#1, fill=#1!8, very thick,
+        minimum height=1.05cm, text width=2.7cm, align=center, inner sep=6pt},
+    layerbox/.style={rounded corners=4pt, draw=#1, fill=#1!7, very thick,
+        minimum height=1.08cm, text width=12.8cm, align=left, inner xsep=10pt},
+    flowarrow/.style={-{Latex[length=3mm]}, very thick, draw=gray!70},
+    feedbackarrow/.style={-{Latex[length=3mm]}, thick, dashed, draw=brandorange}
+}
+
+\newtcolorbox{keypointbox}[1]{
+    colback=softgreen,
+    colframe=brandgreen,
+    coltitle=white,
+    title={#1},
+    fonttitle=\bfseries,
+    boxrule=0.8pt,
+    arc=3pt,
+    left=8pt,right=8pt,top=6pt,bottom=6pt
+}
 
 \lstset{
     backgroundcolor=\color{codebg},
@@ -91,7 +123,6 @@
     \vspace{1.5cm}
     {\Large \textbf{2026年传智杯全国 IT 技能大赛 · 官方规范作品介绍文档} \par}
     \vspace{0.4cm}
-    {\large （对应赛事第 6 项提交材料 · 严格控制在 30 页规范之内） \par}
     
     \vspace{2.5cm}
     \begin{minipage}{0.75\textwidth}
@@ -245,6 +276,30 @@ AI 推理服务层 & DeepSeek-R1, FastAPI, Transformers, PyTorch & 流式输出�
 \end{tabularx}
 \end{table}
 
+为了避免“功能很多但彼此割裂”，CSCOPE 将所有模块组织为由交互事件驱动的统一系统。学生的点击、拖动、参数修改与单步操作首先进入表现交互层；状态仿真引擎把操作转换为可重复的离散时钟事件；推荐桥接层负责把题目、实验和考点对应起来；AI 推理层提供解释与追问；最终形成的答题记录、实验轨迹和掌握度变化再写入个人学情档案。图~\ref{fig:architecture} 展示了该系统从“人的操作”到“机器反馈”再回到“学习决策”的完整路径。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=2.5mm]
+    \node[layerbox=brandblue] (ui) {\textbf{表现交互层}\quad 登录与主题切换、课程地图、真题作答、参数控制、单步/自动演示、代码同步高亮};
+    \node[layerbox=brandteal, below=of ui] (sim) {\textbf{状态仿真引擎层}\quad 离散时钟、状态机、位运算拆解、动画帧生成、可逆步骤记录};
+    \node[layerbox=brandorange, below=of sim] (bridge) {\textbf{推荐与桥接层}\quad 考点意图识别、题目参数结构化、实验路由、错题与沙盘双向关联};
+    \node[layerbox=brandpurple, below=of bridge] (ai) {\textbf{AI 混合推理层}\quad DeepSeek-R1 在线推理、离线知识图谱、解释生成、追问与实验建议};
+    \node[layerbox=brandgreen, below=of ai] (data) {\textbf{数据与安全层}\quad 多账号档案、学习轨迹、掌握度画像、会话存档、SHA-256 鉴权};
+    \draw[flowarrow] (ui) -- (sim);
+    \draw[flowarrow] (sim) -- (bridge);
+    \draw[flowarrow] (bridge) -- (ai);
+    \draw[flowarrow] (ai) -- (data);
+    \draw[feedbackarrow] ([xshift=6.7cm]data.north) -- ++(0.9,0) |- node[pos=0.25,right,align=left,font=\small]{画像更新与\\个性化反馈} ([xshift=6.7cm]ui.south);
+\end{tikzpicture}
+\caption{CSCOPE 面向人机交互闭环的五层系统架构}
+\label{fig:architecture}
+\end{figure}
+
+\begin{keypointbox}{架构重点：不是“播放动画”，而是“操作改变模型”}
+平台中的图形并非固定视频或装饰性动效。用户每一次参数输入、按钮点击与步骤推进都会改变统一状态模型；画布、文字解释、代码高亮、复杂度提示和学习记录均由同一状态派生。因此，学生能够通过“提出假设--执行操作--观察反馈--修正理解”完成真正的交互式实验。
+\end{keypointbox}
+
 \subsection{主控调度优先级与状态协同流程}
 系统设计了严格的优先级调度器，确保事件处理具备确定性：
 
@@ -273,6 +328,28 @@ P3: AI 意图分类答疑 & 用户在私教提问框输入考点疑难 & 自适�
     \item \textbf{AI 深度强化}：若仍有疑问，私教调取 DeepSeek-R1 深度思维链或离线知识图谱进行公式级剖析；
     \item \textbf{动态画像升维}：强化测试通过后，五维雷达图相应学科分值动态提升，实时更新距目标名校的提分路径。
 \end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=9mm and 8mm, every node/.style={font=\small}]
+    \node[flowbox=brandblue] (q) {\textbf{1. 真题诊断}\\答题并暴露认知盲区};
+    \node[flowbox=brandorange, right=of q] (map) {\textbf{2. 考点映射}\\识别题眼并带参路由};
+    \node[flowbox=brandteal, right=of map] (lab) {\textbf{3. 动手实验}\\单步操作观察状态变化};
+    \node[flowbox=brandpurple, below=of lab] (ai) {\textbf{4. AI 解释}\\追问原因与验证假设};
+    \node[flowbox=brandgreen, left=of ai] (test) {\textbf{5. 迁移测试}\\换参数再次独立推演};
+    \node[flowbox=brandblue, left=of test] (profile) {\textbf{6. 画像更新}\\记录掌握度与下一任务};
+    \draw[flowarrow] (q) -- (map);
+    \draw[flowarrow] (map) -- (lab);
+    \draw[flowarrow] (lab) -- (ai);
+    \draw[flowarrow] (ai) -- (test);
+    \draw[flowarrow] (test) -- (profile);
+    \draw[feedbackarrow] (profile.west) -- ++(-0.7,0) |- node[pos=0.25,left,align=right]{个性化推荐\\进入下一轮} (q.west);
+\end{tikzpicture}
+\caption{“诊断--操作--解释--迁移--画像”主动学习闭环}
+\label{fig:learning-loop}
+\end{figure}
+
+该闭环突出“人始终掌握操作权”。AI 不直接替学生完成实验，而是在学生操作之后解释现象、指出可能的误区，并建议下一次可验证的参数。系统也不会仅以“看过页面”作为掌握证据，而是综合答题正确性、单步操作轨迹、是否完成迁移测试以及重复错误次数更新画像。这种设计把人机交互从界面点击提升为可观察、可解释、可复盘的学习过程。
 
 % -------------------- 3. 项目详情及使用方式 --------------------
 \section{项目详情及使用方式}
@@ -324,7 +401,7 @@ npm run dev
 \midrule
 研学平台控制台主站 & \texttt{http://127.0.0.1:5173/} & 首页居中门禁、25 门时钟实验、408 题库大厅、AI 私教 \\
 后端 API 交互文档 & \texttt{http://127.0.0.1:8000/docs} & FastAPI 自动生成的 Swagger 交互式接口文档 \\
-GitHub 公共代码仓库 & \url{https://github.com/CXT-02/CScope} & 专家核验 120+ 次真实 Git 提交历史与完整源码 \\
+GitHub 公共代码仓库 & \url{https://github.com/CXT-02/CScope} & 专家核验截至提交日的 123 次细粒度 Git 提交历史与完整源码 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -337,6 +414,29 @@ GitHub 公共代码仓库 & \url{https://github.com/CXT-02/CScope} & 专家核�
     \item \textbf{408 统考真题演练}：进入题库大厅自测，做错题目后点击高亮绿色通道，一键将真题参数灌入微观实验沙盒复现；
     \item \textbf{AI 思维链伴学}：向私教提问疑难考点，展开 Thinking Process 查验严密推导；在学情中心根据五维雷达图量化弱项。
 \end{enumerate}
+
+\subsection{人机交互设计：让每一次操作都“有回应、有解释、有后续”}
+CSCOPE 的交互设计遵循“先建立理论预期，再允许用户操作，随后立即解释变化”的顺序。每个实验首先给出问题背景、变量含义和观察目标；进入操作区后，用户既可以观看自动演示，也可以切换到逐步模式自行推进；每一步执行后，系统同步更新图形状态、当前语句、数据结构内容、时间复杂度提示和自然语言解释，避免学生只看到图形变化却不知道变化原因。
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{核心人机交互原则及其在系统中的落地}
+\begin{tabularx}{\textwidth}{p{3.1cm}Xp{5.2cm}}
+\toprule
+\textbf{交互原则} & \textbf{用户能够进行的操作} & \textbf{系统提供的即时反馈} \\
+\midrule
+渐进式认知支架 & 先阅读理论说明，再选择自动演示或自由探索 & 通过步骤标题、当前目标和关键概念提示控制信息密度，避免一次呈现过多内容 \\
+状态可见性 & 单步、暂停、回退、调整速度、修改输入数据 & 当前节点/指令高亮、数据通路着色、队列或递归栈实时更新，并说明“这一步发生了什么” \\
+操作与代码对应 & 在动画中执行比较、交换、入栈、出栈、访问节点等动作 & 同步高亮正式代码语句，显示变量值变化，并给出该步骤对时间复杂度的贡献 \\
+可恢复与可验证 & 重置实验、切换算法、使用新参数重新运行 & 保留操作轨迹与结果对比，支持用第二组数据验证结论是否仍然成立 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{keypointbox}{典型交互案例：为什么 Load-Use 冒险仍需停顿一个周期}
+学生先在代码区选择一条加载指令和紧随其后的依赖指令，再点击“下一周期”。系统将两条指令分别推进到 MEM 与 EX 前的对应位置，同时高亮依赖寄存器；当学生尝试继续执行时，冒险检测器把 PC 和 IF/ID 寄存器冻结，并在 EX 段插入一个气泡。右侧解释区同步指出：加载数据直到 MEM 末尾才有效，即便存在前递通路，也赶不上下一条指令当前周期的 EX 输入。随后学生更换为普通算术依赖再次运行，可观察到前递能够消除停顿，从对比中形成稳定概念。
+\end{keypointbox}
 
 \subsection{核心功能模块深度解析}
 
@@ -420,6 +520,31 @@ Load-Use 冲突冒险 & 目标数据必须在 MEM 阶段结束时才从内存读
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\subsection{人机协同边界与可信交互机制}
+项目将 AI 明确定位为“解释者、建议者和测试助手”，而不是替代教师或替代学生作答的黑箱。运行阶段，学生先完成选择、推演或提问，AI 再根据当前实验状态给出可核验的解释；开发阶段，AI 产生方案和代码建议，参赛者负责需求判断、代码审查、运行验证与最终取舍。所有关键修改均通过 Git Commit 与 Prompt 证据链留痕，从而同时体现人的主体决策与 AI 的增效作用。
+
+为降低生成式模型可能出现的事实偏差，系统将答案约束在“三重证据”内：其一是当前沙盘可观测状态，其二是内置 408 精编知识图谱，其三是可执行的公式或代码验证。若在线模型不可用，系统自动降级至离线知识图谱；若问题超出知识范围，则提示用户缩小问题或转入对应实验，而非编造结论。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=7mm and 7mm, every node/.style={font=\small}]
+    \node[flowbox=brandblue] (human) {\textbf{人的目标与判断}\\提出需求/指出问题};
+    \node[flowbox=brandpurple, right=of human] (ai) {\textbf{AI 生成建议}\\方案、代码与测试点};
+    \node[flowbox=brandorange, right=of ai] (review) {\textbf{人工审查}\\核对逻辑与教学价值};
+    \node[flowbox=brandteal, below=of review] (impl) {\textbf{工程实现}\\组件、算法与交互落地};
+    \node[flowbox=brandgreen, left=of impl] (verify) {\textbf{运行验证}\\构建、回归与边界测试};
+    \node[flowbox=brandblue, left=of verify] (evidence) {\textbf{证据归档}\\Prompt、截图、Commit};
+    \draw[flowarrow] (human) -- (ai);
+    \draw[flowarrow] (ai) -- (review);
+    \draw[flowarrow] (review) -- (impl);
+    \draw[flowarrow] (impl) -- (verify);
+    \draw[flowarrow] (verify) -- (evidence);
+    \draw[feedbackarrow] (verify.north) -- node[right,font=\scriptsize,align=left]{未通过：\\修正方案} (ai.south);
+\end{tikzpicture}
+\caption{以人工决策为核心的 AI 协同开发与审计流程}
+\label{fig:ai-cocreation}
+\end{figure}
 
 \subsection{AI 辅助软件测试与模糊测试工程落地}
 
@@ -544,7 +669,7 @@ Load-Use 冲突冒险 & 目标数据必须在 MEM 阶段结束时才从内存读
 \begin{enumerate}
     \item \textbf{自主研发性承诺}：本项目为 2026 年传智杯全国 IT 技能大赛专属全新设计与自主研发的原创作品，核心仿真引擎、真题联动桥接器、加权推荐算法及 UI 交互体系均由参赛者独立完成；
     \item \textbf{未发表与未获奖承诺}：在本次参赛提交截止时间之前，本项目未曾以任何形式在任何学术期刊、国际会议发表过学术论文，亦未曾参加过其他各级各类竞赛或获得任何奖项；
-    \item \textbf{知识产权与真实性承诺}：本项目拥有完整的自主知识产权，Git 仓库保留了 120 余次细粒度的原子级提交历史与真实 AI 协同审计日志，代码原创度 100\%。
+    \item \textbf{知识产权与真实性承诺}：本项目拥有完整的自主知识产权，Git 仓库截至提交日保留了 123 次细粒度的原子级提交历史与真实 AI 协同审计日志，代码原创度 100\%。
 \end{enumerate}
 
 % -------------------- 9. 项目优化说明与演进历程 --------------------
@@ -572,7 +697,7 @@ AI 伴学与容灾能力 & 普通聊天机器人无深度推导，断网或无 A
 \end{table}
 
 \subsection{细粒度 Git Commit 协同进化印证}
-仓库完整保留了 120 余次细粒度的原子级 Git Commit，真实记录了每一个功能落地与 Bug 修复的过程（如 \texttt{feat(ai-tutor)}、\texttt{fix(tutor): upgrade experiment recommendation}、\texttt{fix(community): render avatar as image} 等），坚决杜绝一次性搬运。
+仓库截至提交日完整保留了 123 次细粒度的原子级 Git Commit，真实记录了每一个功能落地与 Bug 修复的过程（如 \texttt{feat(ai-tutor)}、\texttt{fix(tutor): upgrade experiment recommendation}、\texttt{fix(community): render avatar as image} 等），坚决杜绝一次性搬运。
 
 % -------------------- 10. 项目可推广价值与社会效益 --------------------
 \section{项目可推广价值与社会效益}
@@ -617,7 +742,10 @@ CSCOPE 以极度轻量的 Web 交付形态，让全国数十万备考 408 的学
 \end{table}
 
 % -------------------- 附录 --------------------
+\clearpage
 \appendix
+\section*{附录}
+\addcontentsline{toc}{section}{附录}
 \section{系统环境变量与配置项说明}
 系统根目录下提供标准环境变量模板 \texttt{.env.example}。通常无需修改即可直接启动（系统自动启动三级降级自洽运行）；如需外接商业大模型 API，可配置：
 \begin{itemize}

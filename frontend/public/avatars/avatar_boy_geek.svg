@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bg-boy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="hair-boy" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="hoodie-boy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <filter id="shadow-boy" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="56" fill="url(#bg-boy)" />
+  <circle cx="60" cy="60" r="54" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.4" />
+
+  <!-- Body / Hoodie -->
+  <path d="M 26 112 C 28 88, 44 82, 60 82 C 76 82, 92 88, 94 112 Z" fill="url(#hoodie-boy)" filter="url(#shadow-boy)" />
+  <path d="M 52 83 L 60 96 L 68 83 Z" fill="#38bdf8" opacity="0.9" />
+  <circle cx="56" cy="98" r="2" fill="#94a3b8" />
+  <circle cx="64" cy="98" r="2" fill="#94a3b8" />
+
+  <!-- Neck -->
+  <rect x="53" y="72" width="14" height="15" rx="4" fill="#fbcfe8" opacity="0.4" />
+  <rect x="53" y="70" width="14" height="15" rx="4" fill="#fed7aa" />
+
+  <!-- Head / Face -->
+  <ellipse cx="60" cy="54" rx="23" ry="24" fill="#fed7aa" />
+
+  <!-- Ears -->
+  <circle cx="37" cy="54" r="5.5" fill="#fed7aa" />
+  <circle cx="83" cy="54" r="5.5" fill="#fed7aa" />
+
+  <!-- Hair (Back & Front Bangs) -->
+  <path d="M 37 50 C 36 34, 46 22, 60 22 C 74 22, 84 34, 83 50 C 80 43, 76 34, 60 34 C 44 34, 40 43, 37 50 Z" fill="url(#hair-boy)" />
+  <path d="M 40 37 C 48 30, 56 38, 62 33 C 68 38, 76 33, 80 42 C 74 38, 67 40, 60 38 C 51 41, 45 36, 40 37 Z" fill="url(#hair-boy)" />
+
+  <!-- Cheeks Blush -->
+  <ellipse cx="46" cy="60" rx="3.5" ry="2" fill="#fb7185" opacity="0.5" />
+  <ellipse cx="74" cy="60" rx="3.5" ry="2" fill="#fb7185" opacity="0.5" />
+
+  <!-- Big Geek Glasses -->
+  <rect x="42" y="47" width="15" height="12" rx="4" fill="#e0f2fe" fill-opacity="0.3" stroke="#0f172a" stroke-width="2.2" />
+  <rect x="63" y="47" width="15" height="12" rx="4" fill="#e0f2fe" fill-opacity="0.3" stroke="#0f172a" stroke-width="2.2" />
+  <path d="M 57 53 L 63 53" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" />
+  <path d="M 37 52 L 42 52" stroke="#0f172a" stroke-width="1.8" />
+  <path d="M 78 52 L 83 52" stroke="#0f172a" stroke-width="1.8" />
+
+  <!-- Eyes behind glasses -->
+  <circle cx="49.5" cy="53" r="2.5" fill="#0f172a" />
+  <circle cx="50.5" cy="52" r="1" fill="#ffffff" />
+  <circle cx="70.5" cy="53" r="2.5" fill="#0f172a" />
+  <circle cx="71.5" cy="52" r="1" fill="#ffffff" />
+
+  <!-- Smile -->
+  <path d="M 56 64 Q 60 68 64 64" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Headphone around neck -->
+  <path d="M 36 70 C 36 84, 84 84, 84 70" fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" />
+  <rect x="33" y="65" width="7" height="12" rx="3" fill="#0284c7" />
+  <rect x="80" y="65" width="7" height="12" rx="3" fill="#0284c7" />
+</svg>

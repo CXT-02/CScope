@@ -5851,34 +5851,68 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   background: #f8fafc;
   border: 1px dashed #cbd5e1;
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: 14px 16px;
 }
 .drawer-title {
   display: block;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
-  color: #475569;
-  margin-bottom: 8px;
+  color: #334155;
+  margin-bottom: 12px;
 }
 .preset-avatar-list {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 14px;
 }
-.preset-thumb {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+.preset-thumb-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.preset-thumb-wrapper:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+}
+.preset-thumb-wrapper .preset-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   object-fit: cover;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
-.preset-thumb:hover {
+.preset-thumb-wrapper:hover .preset-thumb {
   transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-.preset-thumb.selected {
+.preset-thumb-wrapper.selected {
+  border-color: rgba(136, 19, 55, 0.2);
+  background: rgba(136, 19, 55, 0.04);
+}
+.preset-thumb-wrapper.selected .preset-thumb {
   border-color: #881337;
-  box-shadow: 0 0 8px rgba(136, 19, 55, 0.4);
+  box-shadow: 0 0 0 3px rgba(136, 19, 55, 0.35);
+}
+.preset-thumb-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  transition: color 0.15s ease;
+}
+.preset-thumb-wrapper.selected .preset-thumb-label {
+  color: #881337;
+  font-weight: 700;
 }
 
 /* 主表单控件 */

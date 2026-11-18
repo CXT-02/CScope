@@ -9,11 +9,15 @@ export function LearningProfileProvider({ children }) {
   const [users, setUsers] = useState(() => {
     const saved = readJson(USERS_KEY, [])
     if (saved && saved.length > 0) {
-      // 智能去重：若同时存在“小明”与“小明同学”的冗余演示档案，合并保留“小明同学”
+      // 智能去重与头像平滑升级：将旧版外部图库链接无缝升级为精美本地卡通头像
       const hasMingStudent = saved.some((u) => u.name?.trim() === '小明同学')
       const deduplicated = []
       const seenNames = new Set()
-      for (const u of saved) {
+      for (const rawUser of saved) {
+        const u = { ...rawUser }
+        if (!u.avatar || u.avatar.includes('images.unsplash.com')) {
+          u.avatar = '/avatars/avatar_boy_geek.svg'
+        }
         const norm = u.name?.trim()
         if (norm === '小明' && hasMingStudent) continue
         if (!seenNames.has(norm)) {
@@ -38,7 +42,7 @@ export function LearningProfileProvider({ children }) {
       examCategory: '408',
       prepStage: 'breakthrough',
       bio: '热爱微观计算底层，构建学-练-测-诊一体化能力！',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+      avatar: '/avatars/avatar_boy_geek.svg',
       securityQuestion: '我最喜欢的计算机先驱是谁？',
       securityAnswerHash: 'b52044813589b27464010a30b05b8a6a68393e8e2fa516089bbbf8c2576b2e35', // 图灵
       studyGoal: '408 统考 125+ 冲刺',
@@ -87,7 +91,7 @@ export function LearningProfileProvider({ children }) {
       examCategory: extraConfig.examCategory || '408',
       prepStage: extraConfig.prepStage || 'breakthrough',
       bio: extraConfig.bio || '热爱微观计算底层，构建学-练-测-诊一体化能力！',
-      avatar: extraConfig.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+      avatar: extraConfig.avatar || '/avatars/avatar_boy_geek.svg',
       securityQuestion: '我最喜欢的计算机先驱是谁？',
       securityAnswerHash: await hashText('图灵'),
       studyGoal: extraConfig.studyGoal || '408 统考 125+ 冲刺',

@@ -2,13 +2,26 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useLearningProfile } from './LearningProfileContext'
 
 const PRESET_AVATARS = [
-  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=150&auto=format&fit=crop&q=80'
+  '/avatars/avatar_boy_geek.svg',
+  '/avatars/avatar_girl_coder.svg',
+  '/avatars/avatar_cat_hacker.svg',
+  '/avatars/avatar_astro_geek.svg',
+  '/avatars/avatar_robot_ai.svg',
+  '/avatars/avatar_fox_scholar.svg',
+  '/avatars/avatar_panda_dev.svg',
+  '/avatars/avatar_wizard_coder.svg'
 ]
+
+const AVATAR_NAMES = {
+  '/avatars/avatar_boy_geek.svg': '极客小明',
+  '/avatars/avatar_girl_coder.svg': '编程少女',
+  '/avatars/avatar_cat_hacker.svg': '算法猫猫',
+  '/avatars/avatar_astro_geek.svg': '赛博宇航员',
+  '/avatars/avatar_robot_ai.svg': '智研机器人',
+  '/avatars/avatar_fox_scholar.svg': '智慧狐狸',
+  '/avatars/avatar_panda_dev.svg': '架构国宝',
+  '/avatars/avatar_wizard_coder.svg': '算法法师'
+}
 
 // 热门高频考研目标院校预设
 const HOT_TARGET_SCHOOLS = [
@@ -33,7 +46,8 @@ export default function UserProfileManager({ onOpenExperiment }) {
   const [major, setMajor] = useState(user?.major || '网络工程')
   const [grade, setGrade] = useState(user?.grade || '本科三年级')
   const [bio, setBio] = useState(user?.bio || '热爱微观计算底层，构建学-练-测-诊一体化能力！')
-  const [avatar, setAvatar] = useState(user?.avatar || PRESET_AVATARS[0])
+  const cleanAvatar = (raw) => (!raw || raw.includes('images.unsplash.com') ? PRESET_AVATARS[0] : raw)
+  const [avatar, setAvatar] = useState(() => cleanAvatar(user?.avatar))
   const [showAvatarPicker, setShowAvatarPicker] = useState(false)
   const [profileSavedToast, setProfileSavedToast] = useState(false)
 
@@ -71,7 +85,7 @@ export default function UserProfileManager({ onOpenExperiment }) {
       setMajor(user.major || '计算机科学与技术')
       setGrade(user.grade || '本科三年级')
       setBio(user.bio || '热爱微观计算底层，构建学-练-测-诊一体化能力！')
-      if (user.avatar) setAvatar(user.avatar)
+      if (user.avatar) setAvatar(cleanAvatar(user.avatar))
       if (user.isTakingExam) setIsTakingExam(user.isTakingExam)
       if (user.examYear) setExamYear(user.examYear)
       if (user.targetSchool) setTargetSchool(user.targetSchool)
@@ -284,7 +298,15 @@ export default function UserProfileManager({ onOpenExperiment }) {
             {/* 头像区域 */}
             <div className="profile-avatar-row">
               <div className="avatar-img-box">
-                <img src={avatar} alt="用户头像" className="user-avatar-preview" />
+                <img
+                  src={avatar}
+                  alt="用户头像"
+                  className="user-avatar-preview"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null
+                    e.currentTarget.src = PRESET_AVATARS[0]
+                  }}
+                />
               </div>
               <div className="avatar-action-box">
                 <button
@@ -292,28 +314,40 @@ export default function UserProfileManager({ onOpenExperiment }) {
                   className="change-avatar-btn"
                   onClick={() => setShowAvatarPicker(!showAvatarPicker)}
                 >
-                  更换头像
+                  {showAvatarPicker ? '收起头像库' : '更换头像'}
                 </button>
-                <span className="avatar-hint-text">支持精选学者与极客头像库</span>
+                <span className="avatar-hint-text">
+                  支持精选卡通极客头像库（8 款原创矢量卡通形象）
+                </span>
               </div>
             </div>
 
             {/* 头像选择抽屉 */}
             {showAvatarPicker && (
               <div className="avatar-preset-drawer">
-                <span className="drawer-title">精选学者与极客头像库：</span>
+                <span className="drawer-title">精选卡通极客头像库（点击直接切换）：</span>
                 <div className="preset-avatar-list">
                   {PRESET_AVATARS.map((url, i) => (
-                    <img
+                    <div
                       key={i}
-                      src={url}
-                      alt="可选头像"
-                      className={`preset-thumb ${avatar === url ? 'selected' : ''}`}
+                      className={`preset-thumb-wrapper ${avatar === url ? 'selected' : ''}`}
+                      title={AVATAR_NAMES[url] || `卡通形象 ${i + 1}`}
                       onClick={() => {
                         setAvatar(url)
                         setShowAvatarPicker(false)
                       }}
-                    />
+                    >
+                      <img
+                        src={url}
+                        alt={AVATAR_NAMES[url] || `卡通头像 ${i + 1}`}
+                        className="preset-thumb"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null
+                          e.currentTarget.src = PRESET_AVATARS[0]
+                        }}
+                      />
+                      <span className="preset-thumb-label">{AVATAR_NAMES[url]}</span>
+                    </div>
                   ))}
                 </div>
               </div>
