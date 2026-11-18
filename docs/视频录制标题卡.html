@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSCOPE 演示视频标题卡</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: #f7fbff;
+      background: #061321;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 6.5vh 7vw;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(16,185,129,.22), transparent 33%),
+        radial-gradient(circle at 8% 92%, rgba(37,99,235,.22), transparent 32%),
+        linear-gradient(135deg, #071522 0%, #0b1f34 52%, #082b2d 100%);
+    }
+    .slide.active { display: flex; flex-direction: column; }
+    .eyebrow {
+      color: #5ee4b6;
+      font-size: 1.2vw;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 2.8vh 0 1.8vh;
+      font-size: 4.2vw;
+      line-height: 1.12;
+      letter-spacing: -.04em;
+    }
+    h2 {
+      margin: 1.6vh 0 2.5vh;
+      font-size: 3vw;
+      line-height: 1.2;
+    }
+    .lead {
+      max-width: 78vw;
+      margin: 0;
+      color: #b9cbe0;
+      font-size: 1.55vw;
+      line-height: 1.7;
+    }
+    .accent { color: #47e3ac; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4vw;
+      margin-top: 5vh;
+    }
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    .card {
+      min-height: 19vh;
+      padding: 2.1vw;
+      border: 1px solid rgba(148, 213, 255, .18);
+      border-radius: 1.1vw;
+      background: rgba(7, 24, 41, .72);
+      box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    }
+    .card .num { color: #52e4b0; font-size: 2.4vw; font-weight: 900; }
+    .card h3 { margin: .8vh 0 1vh; font-size: 1.45vw; }
+    .card p { margin: 0; color: #aebfd2; font-size: 1.05vw; line-height: 1.6; }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: .7vw;
+      margin-top: 7vh;
+    }
+    .step {
+      flex: 1;
+      padding: 2.5vh 1vw;
+      text-align: center;
+      font-size: 1.2vw;
+      font-weight: 800;
+      border: 1px solid rgba(94,228,182,.42);
+      border-radius: .8vw;
+      background: rgba(11,45,55,.78);
+    }
+    .arrow { color: #5ee4b6; font-size: 1.8vw; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.2vw;
+      margin-top: 7vh;
+    }
+    .stat {
+      padding: 2.2vh 1vw;
+      text-align: center;
+      border-radius: 1vw;
+      background: rgba(7, 24, 41, .75);
+      border: 1px solid rgba(148,213,255,.18);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .stat strong { display: block; color: #52e4b0; font-size: 3vw; line-height: 1.1; }
+    .stat span { display: block; margin-top: .8vh; color: #bdcadd; font-size: 1.05vw; }
+    .stat small { display: block; margin-top: .45vh; color: #8da3ba; font-size: .8vw; letter-spacing: .02em; }
+    .footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      color: #7890a9;
+      font-size: .9vw;
+    }
+    .counter {
+      position: fixed;
+      right: 2vw;
+      bottom: 1.5vh;
+      z-index: 10;
+      color: #7890a9;
+      font-size: .9vw;
+    }
+    .hint {
+      position: fixed;
+      left: 2vw;
+      bottom: 1.5vh;
+      z-index: 10;
+      color: #526a82;
+      font-size: .75vw;
+    }
+    .pill {
+      display: inline-block;
+      padding: .6vh .8vw;
+      margin: .4vh .35vw .4vh 0;
+      border-radius: 999px;
+      color: #8ff0ce;
+      background: rgba(16,185,129,.12);
+      border: 1px solid rgba(94,228,182,.28);
+      font-size: 1vw;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <section class="slide active">
+    <div class="eyebrow">2026 传智杯 · Vibe Coding</div>
+    <h1><span class="accent">CSCOPE</span><br />计算机微观仿真实验室</h1>
+    <p class="lead">把看不见的计算过程，变成可以操作、可以解释、可以验证的实验。</p>
+    <div class="footer">
+      <span>参赛者：程馨婷｜云南大学｜个人参赛</span>
+      <span>github.com/CXT-02/CScope</span>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">Why CSCOPE</div>
+    <h2>计算机理论学习的三个断点</h2>
+    <div class="grid">
+      <div class="card"><div class="num">01</div><h3>底层过程不可见</h3><p>流水线、Cache、递归栈和协议状态只能靠静态图想象。</p></div>
+      <div class="card"><div class="num">02</div><h3>做题与实验割裂</h3><p>做错以后只看文字答案，无法用新参数重新验证结论。</p></div>
+      <div class="card"><div class="num">03</div><h3>学习数据不闭环</h3><p>答题、实验与追问没有汇总为个性化学习路径。</p></div>
+    </div>
+    <div class="flow">
+      <div class="step">理论</div><div class="arrow">→</div>
+      <div class="step">操作</div><div class="arrow">→</div>
+      <div class="step">解释</div><div class="arrow">→</div>
+      <div class="step">迁移</div><div class="arrow">→</div>
+      <div class="step">画像</div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">Project Overview</div>
+    <h2>一条完整的计算机学习实验链</h2>
+    <div class="stats">
+      <div class="stat"><strong>6</strong><span>门课程</span></div>
+      <div class="stat"><strong>25</strong><span>个交互实验</span></div>
+      <div class="stat"><strong>105</strong><span>道 408 真题</span><small>（持续上传中）</small></div>
+      <div class="stat"><strong>4</strong><span>条 AI 证据链</span></div>
+      <div class="stat"><strong>125</strong><span>次 Git 提交</span></div>
+    </div>
+    <div style="margin-top:5vh">
+      <span class="pill">微观仿真实验</span><span class="pill">真题联动</span>
+      <span class="pill">AI 计算机私教</span><span class="pill">错题本</span>
+      <span class="pill">学情画像</span><span class="pill">研学社区</span>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">AI Co-Creation Replay · 02:30</div>
+    <h2>AI 协同不是一句口号</h2>
+    <p class="lead">保留输入、响应、人工判断、修改、验证与提交，让评委能看到一次真实的人机协作。</p>
+    <div class="flow">
+      <div class="step">发现问题</div><div class="arrow">→</div>
+      <div class="step">输入 Prompt</div><div class="arrow">→</div>
+      <div class="step">AI 分析</div><div class="arrow">→</div>
+      <div class="step">人工审查</div><div class="arrow">→</div>
+      <div class="step">验证留痕</div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">AI Collaboration · Case 01</div>
+    <h2>“银行家算法”为什么被推荐成“二叉树遍历”？</h2>
+    <div class="grid two">
+      <div class="card"><div class="num">Before</div><h3>通用词抢先命中</h3><p>回答正文中的“递归检查”触发了排在前面的二叉树实验，程序立即返回。</p></div>
+      <div class="card"><div class="num">After</div><h3>意图优先全局评分</h3><p>提问专有词权重最高，遍历 25 个实验后选择最高分，并加入回归测试。</p></div>
+    </div>
+    <div class="footer"><span>Prompt → AI 分析 → 人工确认 → 回归验证</span><span>Commit db19019</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">AI Collaboration · Case 02</div>
+    <h2>长头像 URL 为什么会穿透评论输入框？</h2>
+    <div class="grid two">
+      <div class="card"><div class="num">Before</div><h3>URL 被当成纯文本</h3><p>一百多个字符被直接输出到 32px 圆形容器，导致横向溢出与遮挡。</p></div>
+      <div class="card"><div class="num">After</div><h3>统一 AvatarBadge</h3><p>图片语义渲染、加载失败降级、首字徽章与 CSS 容器防御。</p></div>
+    </div>
+    <div class="footer"><span>问题截图 → Prompt → 组件重构 → 三类用例验证</span><span>Commit 3efb9ac</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">CSCOPE · Final</div>
+    <h1>让抽象原理<br /><span class="accent">真正可以动手验证</span></h1>
+    <p class="lead">可操作 · 可解释 · 可复盘 · 可公开核验</p>
+    <div class="footer">
+      <span>参赛者：程馨婷｜指导教师：袁国武｜云南大学</span>
+      <span>github.com/CXT-02/CScope</span>
+    </div>
+  </section>
+
+  <div class="hint">← → 或空格切换｜F11 全屏｜录制时可裁掉底部提示</div>
+  <div class="counter" id="counter"></div>
+  <script>
+    var slides = Array.from(document.querySelectorAll(".slide"));
+    var current = 0;
+    var counter = document.getElementById("counter");
+    function show(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach(function (slide, i) {
+        slide.classList.toggle("active", i === current);
+      });
+      counter.textContent = String(current + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0");
+    }
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowRight" || event.key === " " || event.key === "PageDown") show(current + 1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") show(current - 1);
+      if (event.key === "Home") show(0);
+      if (event.key === "End") show(slides.length - 1);
+    });
+    show(0);
+  </script>
+</body>
+</html>
