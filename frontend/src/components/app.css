@@ -5824,7 +5824,13 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .avatar-action-box {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+.avatar-btn-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 .change-avatar-btn {
   background: #ffffff;
@@ -5841,9 +5847,38 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .change-avatar-btn:hover {
   background: #f1f5f9;
 }
+.upload-avatar-btn {
+  display: inline-flex;
+  align-items: center;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #166534;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.upload-avatar-btn:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(22, 101, 52, 0.12);
+}
 .avatar-hint-text {
   font-size: 11.5px;
   color: #94a3b8;
+}
+.avatar-upload-success-toast {
+  font-size: 12px;
+  font-weight: 600;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  width: max-content;
 }
 
 /* 头像抽屉 */
@@ -5853,12 +5888,36 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
   border-radius: 12px;
   padding: 14px 16px;
 }
+.drawer-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
 .drawer-title {
   display: block;
   font-size: 12.5px;
   font-weight: 700;
   color: #334155;
-  margin-bottom: 12px;
+}
+.drawer-quick-upload-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  transition: all 0.15s ease;
+}
+.drawer-quick-upload-link:hover {
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 .preset-avatar-list {
   display: flex;
@@ -5902,6 +5961,45 @@ button,input,textarea,select{font-size:1rem}button:focus-visible,input:focus-vis
 .preset-thumb-wrapper.selected .preset-thumb {
   border-color: #881337;
   box-shadow: 0 0 0 3px rgba(136, 19, 55, 0.35);
+}
+.upload-thumb-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 2px dashed #94a3b8 !important;
+  position: relative;
+  overflow: hidden;
+}
+.upload-card:hover .upload-thumb-inner {
+  border-color: #2563eb !important;
+  background: #eff6ff !important;
+}
+.upload-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.upload-icon-sym {
+  font-size: 20px;
+}
+.upload-plus-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  width: 15px;
+  height: 15px;
+  line-height: 14px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
 }
 .preset-thumb-label {
   font-size: 11px;

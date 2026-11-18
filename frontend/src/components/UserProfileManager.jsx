@@ -98,6 +98,59 @@ export default function UserProfileManager({ onOpenExperiment }) {
     }
   }, [user])
 
+  // 本地自定义照片头像上传与智能压缩裁剪
+  const [avatarUploadMsg, setAvatarUploadMsg] = useState('')
+  const handleCustomAvatarUpload = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('请选择有效的图片文件（支持 PNG、JPG、JPEG、WEBP、SVG 等格式）')
+      return
+    }
+
+    if (file.size > 15 * 1024 * 1024) {
+      alert('所选照片过大，请选择 15MB 以内的图片')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const img = new Image()
+      img.onload = () => {
+        try {
+          // 创建离屏 Canvas 进行正方形居中裁剪与高保真压缩（256x256，JPEG 0.88）
+          // 将高像素照片智能压缩至 ~20KB，既保证高清视网膜显示，又绝不撑爆 localStorage 存储配额
+          const canvas = document.createElement('canvas')
+          const targetSize = 256
+          canvas.width = targetSize
+          canvas.height = targetSize
+          const ctx = canvas.getContext('2d')
+
+          const minDim = Math.min(img.width, img.height)
+          const sx = (img.width - minDim) / 2
+          const sy = (img.height - minDim) / 2
+
+          ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, targetSize, targetSize)
+          const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.88)
+          setAvatar(optimizedDataUrl)
+          setAvatarUploadMsg('自定义照片已成功上传并居中裁剪！请点击右上角“保存资料”生效')
+          setTimeout(() => setAvatarUploadMsg(''), 4500)
+        } catch {
+          setAvatar(event.target.result)
+          setAvatarUploadMsg('自定义照片已加载！请点击右上角“保存资料”生效')
+          setTimeout(() => setAvatarUploadMsg(''), 4500)
+        }
+      }
+      img.onerror = () => {
+        alert('图片解析失败，请尝试其他格式的照片')
+      }
+      img.src = event.target.result
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+
   // 保存资料与考研个性化偏好
   const handleSaveProfile = (e) => {
     if (e && e.preventDefault) e.preventDefault()
@@ -309,24 +362,93 @@ export default function UserProfileManager({ onOpenExperiment }) {
                 />
               </div>
               <div className="avatar-action-box">
-                <button
-                  type="button"
-                  className="change-avatar-btn"
-                  onClick={() => setShowAvatarPicker(!showAvatarPicker)}
-                >
-                  {showAvatarPicker ? '收起头像库' : '更换头像'}
-                </button>
+                <div className="avatar-btn-row">
+                  <button
+                    type="button"
+                    className="change-avatar-btn"
+                    onClick={() => setShowAvatarPicker(!showAvatarPicker)}
+                  >
+                    {showAvatarPicker ? '收起预设头像' : '选择预设头像'}
+                  </button>
+
+                  <label className="upload-avatar-btn" title="从电脑本地上传自定义照片作为头像">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    <span>📷 上传本地照片</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleCustomAvatarUpload}
+                    />
+                  </label>
+                </div>
                 <span className="avatar-hint-text">
-                  支持精选卡通极客头像库（8 款原创矢量卡通形象）
+                  支持 8 款原创矢量卡通形象，亦支持本地照片上传（系统自动居中裁剪与高保真优化）
                 </span>
+                {avatarUploadMsg && (
+                  <div className="avatar-upload-success-toast">
+                    ✓ {avatarUploadMsg}
+                  </div>
+                )}
               </div>
             </div>
 
             {/* 头像选择抽屉 */}
             {showAvatarPicker && (
               <div className="avatar-preset-drawer">
-                <span className="drawer-title">精选卡通极客头像库（点击直接切换）：</span>
+                <div className="drawer-header-row">
+                  <span className="drawer-title">精选卡通极客头像库（点击直接切换）：</span>
+                  <label className="drawer-quick-upload-link" title="从本地上传自定义图片">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    <span>本地照片上传</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleCustomAvatarUpload}
+                    />
+                  </label>
+                </div>
+
                 <div className="preset-avatar-list">
+                  {/* 本地上传快捷格子 */}
+                  <label
+                    className={`preset-thumb-wrapper upload-card ${!PRESET_AVATARS.includes(avatar) ? 'selected' : ''}`}
+                    title="点击从电脑本地选取自定义照片"
+                  >
+                    <div className="preset-thumb upload-thumb-inner">
+                      {!PRESET_AVATARS.includes(avatar) && avatar ? (
+                        <img
+                          src={avatar}
+                          alt="自定义照片"
+                          style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div className="upload-placeholder">
+                          <span className="upload-icon-sym">📷</span>
+                          <span className="upload-plus-badge">+</span>
+                        </div>
+                      )}
+                    </div>
+                    <span className="preset-thumb-label">
+                      {!PRESET_AVATARS.includes(avatar) ? '当前自定义' : '本地上传'}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleCustomAvatarUpload}
+                    />
+                  </label>
+
                   {PRESET_AVATARS.map((url, i) => (
                     <div
                       key={i}

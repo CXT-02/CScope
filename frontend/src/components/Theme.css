@@ -7843,3 +7843,17 @@
 [data-theme="cyber"] .preset-thumb-wrapper.selected { border-color: rgba(0, 245, 212, 0.5) !important; background: rgba(0, 245, 212, 0.15) !important; }
 [data-theme="cyber"] .preset-thumb-wrapper.selected .preset-thumb-label { color: #00f5d4 !important; }
 
+
+/* Custom avatar upload theme adaptations */
+[data-theme="dark"] .upload-avatar-btn { background: rgba(16, 185, 129, 0.12) !important; border-color: rgba(16, 185, 129, 0.3) !important; color: #6ee7b7 !important; }
+[data-theme="dark"] .upload-avatar-btn:hover { background: rgba(16, 185, 129, 0.22) !important; }
+[data-theme="dark"] .upload-thumb-inner { background: #142037 !important; border-color: #475569 !important; }
+[data-theme="dark"] .drawer-quick-upload-link { background: rgba(59, 130, 246, 0.15) !important; border-color: rgba(59, 130, 246, 0.3) !important; color: #93c5fd !important; }
+[data-theme="dark"] .avatar-upload-success-toast { background: rgba(16, 185, 129, 0.15) !important; border-color: rgba(16, 185, 129, 0.3) !important; color: #34d399 !important; }
+
+[data-theme="cyber"] .upload-avatar-btn { background: rgba(0, 245, 212, 0.12) !important; border-color: rgba(0, 245, 212, 0.4) !important; color: #00f5d4 !important; }
+[data-theme="cyber"] .upload-avatar-btn:hover { background: rgba(0, 245, 212, 0.25) !important; }
+[data-theme="cyber"] .upload-thumb-inner { background: #130a33 !important; border-color: rgba(0, 245, 212, 0.4) !important; }
+[data-theme="cyber"] .drawer-quick-upload-link { background: rgba(0, 245, 212, 0.15) !important; border-color: rgba(0, 245, 212, 0.4) !important; color: #00f5d4 !important; }
+[data-theme="cyber"] .avatar-upload-success-toast { background: rgba(0, 245, 212, 0.15) !important; border-color: rgba(0, 245, 212, 0.4) !important; color: #00f5d4 !important; }
+
